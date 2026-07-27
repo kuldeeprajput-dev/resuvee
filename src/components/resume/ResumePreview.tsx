@@ -113,10 +113,10 @@ function ContactList({
   horizontal?: boolean;
 }) {
   const items = [
-    { icon: Mail, value: data.basics.email },
-    { icon: Phone, value: data.basics.phone },
-    { icon: MapPin, value: data.basics.location },
-    { icon: Globe2, value: data.basics.website },
+    { id: "email", icon: Mail, value: data.basics.email },
+    { id: "phone", icon: Phone, value: data.basics.phone },
+    { id: "location", icon: MapPin, value: data.basics.location },
+    { id: "website", icon: Globe2, value: data.basics.website },
   ].filter((item) => item.value.trim());
 
   return (
@@ -130,7 +130,7 @@ function ContactList({
       )}
     >
       {items.map((item) => (
-        <div key={item.value} className="flex items-center gap-1.5">
+        <div key={item.id} className="flex items-center gap-1.5">
           <item.icon className="size-2.5 shrink-0 opacity-70" />
           <span className="break-all">{item.value}</span>
         </div>
