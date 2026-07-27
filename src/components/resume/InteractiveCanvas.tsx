@@ -21,12 +21,15 @@ import {
   MousePointer,
   Palette,
   Plus,
+  Redo2,
   RotateCcw,
   Trash2,
   Type,
+  Undo2,
   X,
 } from "lucide-react";
 import type { BuilderSection, ResumeData, ResumeTemplate } from "@/types/resume";
+import { useResumeBuilderStore } from "@/stores/useResumeBuilderStore";
 import { ResumePreview } from "./ResumePreview";
 import { resumeFontClass, type ResumeStyle } from "./CustomizePanel";
 import { cn } from "@/lib/utils";
@@ -57,6 +60,10 @@ interface InteractiveCanvasProps {
   onUpdateData?: (data: ResumeData) => void;
   onUpdateStyle?: (style: ResumeStyle) => void;
   onSelectSection?: (section: BuilderSection) => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  onUndo?: () => void;
+  onRedo?: () => void;
 }
 
 const ZOOM_PRESETS = [
@@ -95,7 +102,21 @@ export function InteractiveCanvas({
   onUpdateData,
   onUpdateStyle,
   onSelectSection,
+  canUndo: propCanUndo,
+  canRedo: propCanRedo,
+  onUndo,
+  onRedo,
 }: InteractiveCanvasProps) {
+  const storeUndo = useResumeBuilderStore((state) => state.undo);
+  const storeRedo = useResumeBuilderStore((state) => state.redo);
+  const history = useResumeBuilderStore((state) => state.history);
+  const future = useResumeBuilderStore((state) => state.future);
+
+  const canUndo = propCanUndo || history.length > 0;
+  const canRedo = propCanRedo || future.length > 0;
+  const handleUndo = onUndo ?? storeUndo;
+  const handleRedo = onRedo ?? storeRedo;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const selectedDomRef = useRef<HTMLElement | null>(null);
@@ -190,6 +211,16 @@ export function InteractiveCanvas({
       } else if ((e.ctrlKey || e.metaKey) && e.key === "0") {
         e.preventDefault();
         resetPanAndZoom();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) {
+        e.preventDefault();
+        if (e.shiftKey) {
+          if (canRedo) handleRedo();
+        } else {
+          if (canUndo) handleUndo();
+        }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "y" || e.key === "Y")) {
+        e.preventDefault();
+        if (canRedo) handleRedo();
       } else if (e.key === "Escape") {
         clearSelection();
       }
@@ -207,7 +238,7 @@ export function InteractiveCanvas({
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [isSpacePressed, zoom, onZoomChange, resetPanAndZoom, clearSelection]);
+  }, [isSpacePressed, zoom, onZoomChange, resetPanAndZoom, clearSelection, canUndo, canRedo, handleUndo, handleRedo]);
 
   // Wheel zoom & pan
   const handleWheel = useCallback(
@@ -630,6 +661,7 @@ export function InteractiveCanvas({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
+
           {/* Template Selector Button */}
           <button
             type="button"
@@ -1018,6 +1050,30 @@ export function InteractiveCanvas({
           title="Reset Pan & Zoom (Ctrl + 0)"
         >
           <RotateCcw className="size-3.5" />
+        </button>
+
+        {/* Undo Button */}
+        <button
+          type="button"
+          onClick={handleUndo}
+          disabled={!canUndo}
+          className="builder-icon-button disabled:opacity-30"
+          title="Undo (Ctrl + Z)"
+          aria-label="Undo"
+        >
+          <Undo2 className="size-3.5" />
+        </button>
+
+        {/* Redo Button */}
+        <button
+          type="button"
+          onClick={handleRedo}
+          disabled={!canRedo}
+          className="builder-icon-button disabled:opacity-30"
+          title="Redo (Ctrl + Y)"
+          aria-label="Redo"
+        >
+          <Redo2 className="size-3.5" />
         </button>
 
         {/* Canvas Background Theme Selector */}

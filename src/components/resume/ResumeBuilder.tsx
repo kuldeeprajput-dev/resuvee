@@ -16,8 +16,6 @@ import {
   ScanSearch,
   Palette,
   SpellCheck2,
-  Redo2,
-  Undo2,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -303,26 +301,6 @@ export function ResumeBuilder({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <div className="mr-1 hidden items-center gap-1 sm:flex">
-            <button
-              type="button"
-              onClick={undo}
-              disabled={!history.length}
-              aria-label="Undo"
-              className="builder-icon-button"
-            >
-              <Undo2 className="size-4" />
-            </button>
-            <button
-              type="button"
-              onClick={redo}
-              disabled={!future.length}
-              aria-label="Redo"
-              className="builder-icon-button"
-            >
-              <Redo2 className="size-4" />
-            </button>
-          </div>
           <Button
             type="button"
             variant="outline"

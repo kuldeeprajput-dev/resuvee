@@ -101,6 +101,13 @@ function firstAllowedSection(templateId: ResumeTemplateId) {
   );
 }
 
+function cloneData(data: ResumeData): ResumeData {
+  if (typeof structuredClone === "function") {
+    return structuredClone(data);
+  }
+  return JSON.parse(JSON.stringify(data));
+}
+
 export const useResumeBuilderStore = create<ResumeBuilderState>()(
   persist(
     (set, get) => ({
@@ -168,9 +175,11 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
 
       updateData: (data) => {
         const current = get().data;
+        const snapshot = cloneData(current);
+        const nextData = cloneData(data);
         set((state) => ({
-          data,
-          history: [...state.history.slice(-39), current],
+          data: nextData,
+          history: [...state.history.slice(-39), snapshot],
           future: [],
           saveLabel: "Saved locally",
         }));
@@ -205,10 +214,11 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         const state = get();
         const previous = state.history.at(-1);
         if (!previous) return;
+        const currentSnapshot = cloneData(state.data);
         set({
-          data: previous,
+          data: cloneData(previous),
           history: state.history.slice(0, -1),
-          future: [state.data, ...state.future].slice(0, 40),
+          future: [currentSnapshot, ...state.future].slice(0, 40),
           saveLabel: "Undo applied",
         });
       },
@@ -217,9 +227,10 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         const state = get();
         const next = state.future[0];
         if (!next) return;
+        const currentSnapshot = cloneData(state.data);
         set({
-          data: next,
-          history: [...state.history.slice(-39), state.data],
+          data: cloneData(next),
+          history: [...state.history.slice(-39), currentSnapshot],
           future: state.future.slice(1),
           saveLabel: "Redo applied",
         });
