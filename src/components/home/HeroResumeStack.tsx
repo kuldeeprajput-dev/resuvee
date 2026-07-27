@@ -34,21 +34,21 @@ const resumeSheets = [
     src: "/assets/hero-resumes/daniel-kim.webp",
     alt: "Daniel Kim engineering director resume template",
     className:
-      "pointer-events-auto left-[8%] top-[16%] z-10 w-[42%] -rotate-[7deg] cursor-zoom-in group-hover:-translate-x-6 group-hover:-rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:left-[10%] sm:w-[39%]",
+      "pointer-events-auto left-[8%] top-[16%] z-10 w-[42%] -rotate-[7deg] cursor-default group-hover:-translate-x-6 group-hover:-rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:left-[10%] sm:w-[39%]",
   },
   {
     id: "noah-bennett",
     src: "/assets/hero-resumes/noah-bennett.webp",
     alt: "Noah Bennett full-stack software engineer resume template",
     className:
-      "pointer-events-none right-[7%] top-[14%] z-20 w-[42%] rotate-[7deg] group-hover:translate-x-6 group-hover:rotate-[10deg] sm:right-[9%] sm:w-[39%]",
+      "pointer-events-auto right-[7%] top-[14%] z-20 w-[42%] rotate-[7deg] cursor-default group-hover:translate-x-6 group-hover:rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:right-[9%] sm:w-[39%]",
   },
   {
     id: "ethan-brooks",
     src: "/assets/hero-resumes/ethan-brooks.webp",
     alt: "Ethan Brooks product strategy lead resume template",
     className:
-      "pointer-events-auto left-1/2 top-[10%] z-30 w-[46%] -translate-x-1/2 cursor-zoom-in shadow-[0_30px_80px_rgba(22,32,28,0.24)] group-hover:-translate-y-3 hover:z-50 hover:scale-[1.055] sm:w-[43%]",
+      "pointer-events-auto left-1/2 top-[10%] z-30 w-[46%] -translate-x-1/2 cursor-default shadow-[0_30px_80px_rgba(22,32,28,0.24)] group-hover:-translate-y-3 hover:z-50 hover:scale-[1.055] sm:w-[43%]",
     preload: true,
   },
 ] as const;
