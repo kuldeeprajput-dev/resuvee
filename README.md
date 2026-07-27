@@ -1,47 +1,108 @@
-# Resume Analyzer
+# Resumix
 
-AI-powered resume analysis tool that evaluates your resume against ATS (Applicant Tracking Systems) and provides actionable feedback to improve your chances of landing your dream job.
+Resumix is a resume product that combines a guided resume builder with the
+existing AI-powered ATS analyzer. Users can create a resume, switch between
+original templates, export to PDF, and review an existing resume from the same
+product.
 
-## Features
+This version intentionally uses local browser storage. Authentication and
+database persistence can be added later without changing the resume document
+model or editor structure.
 
-- **File Upload**: Drag & drop or click to upload PDF or DOCX resume files
-- **Text Extraction**: Automatic extraction of text from PDF and DOCX files
-- **AI Analysis**: Powered by Groq's high-speed AI models
-- **ATS Scoring**: Get an ATS compatibility score (0-100)
-- **Tech Stack Detection**: Identify skills and technologies in your resume
-- **Strengths & Weaknesses**: Detailed breakdown of what's working and what needs improvement
-- **Missing Keywords**: Keywords commonly requested but missing from your resume
-- **Suggestions**: Actionable recommendations to improve your resume
-- **Career Advice**: Personalized career guidance
+## Product features
 
-## Tech Stack
+### Resume builder
 
-- **Framework**: Next.js 16
-- **UI**: React 19 + Tailwind CSS
-- **AI**: OpenAI SDK + Groq API
-- **File Parsing**: pdf-parse (PDF), mammoth (DOCX)
-- **Icons**: Lucide React
+- Six original, copyright-safe resume templates
+- Guided editing for personal details, summary, work, education, projects, and
+  skills
+- Live document preview while editing
+- Template switching without losing content
+- Resume strength indicator
+- Undo and redo history
+- Local draft autosave
+- Start-fresh flow for a blank resume
+- Responsive editing and preview experience
+- A4 print and save-as-PDF export
 
-## Getting Started
+### ATS analyzer
+
+- Drag-and-drop PDF and DOCX upload
+- Client-side PDF text extraction
+- Server-side DOCX extraction
+- AI-powered ATS scoring
+- Keyword gap identification
+- Strengths and weaknesses
+- Prioritized improvement suggestions
+- Direct route back into the resume builder
+
+### Product experience
+
+- Product landing page with clear builder and analyzer entry points
+- Shared brand, navigation, and footer
+- Responsive layouts for desktop and mobile
+- Route-specific metadata
+- Copyright-safe template messaging
+
+## Templates
+
+All templates were designed specifically for this project. They use common
+resume structures and typography conventions rather than copying third-party
+template artwork.
+
+| Template | Style | Best suited for |
+| --- | --- | --- |
+| Nova | Modern sidebar | Product, engineering, and design |
+| Cambridge | Classic single column | Academia, law, and consulting |
+| Avenue | Executive | Leadership and management |
+| Mono | Minimal | ATS-first applications |
+| Saffron | Creative sidebar | Brand, media, and creative roles |
+| Kernel | Technical sidebar | Software and data roles |
+
+## Application routes
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Product landing page and template gallery |
+| `/builder` | Interactive resume builder |
+| `/builder?template=nova` | Builder with a selected template |
+| `/analyzer` | Existing ATS analyzer |
+| `/api/analyze` | Resume analysis API |
+
+## Tech stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Lucide icons
+- OpenAI SDK with Groq
+- PDF.js and Mammoth document extraction
+- Browser `localStorage` for temporary draft persistence
+
+## Getting started
 
 ### Prerequisites
 
-- Node.js 18+
-- Groq API Key
+- Node.js 18 or newer
+- A Groq API key for analyzer requests
 
-### Installation
+### Install
 
 ```bash
 npm install
 ```
 
-### Environment Variables
+### Environment
 
-Create a `.env.local` file in the project root:
+Create `.env.local` in the project root:
 
 ```env
 GROQ_API_KEY=your_groq_api_key_here
 ```
+
+The builder and all template features run without an API key. The key is only
+required when using the ATS analyzer.
 
 ### Development
 
@@ -49,11 +110,12 @@ GROQ_API_KEY=your_groq_api_key_here
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
-### Build
+### Verification
 
 ```bash
+npm run lint
 npm run build
 ```
 
@@ -63,70 +125,49 @@ npm run build
 npm start
 ```
 
-## Project Structure
+## Project structure
 
-```
+```text
 src/
 ├── app/
-│   ├── api/analyze/route.ts    # POST /api/analyze endpoint
-│   ├── page.tsx              # Main landing page
-│   ├── layout.tsx            # Root layout
-│   └── globals.css          # Global styles
+│   ├── analyzer/page.tsx
+│   ├── api/analyze/route.ts
+│   ├── builder/page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
 ├── components/
-│   ├── ui/                 # Reusable UI components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   ├── label.tsx
-│   │   ├── badge.tsx
-│   │   ├── progress.tsx
-│   │   └── circular-progress.tsx
-│   └── home/
-│       ├── ResumeAnalyzer.tsx    # Main upload component
-│       ├── ATSDashboard.tsx      # Results dashboard
-│       ├── LoadingState.tsx       # Loading animation
-│       └── ErrorState.tsx         # Error handling
+│   ├── home/
+│   │   ├── ATSDashboard.tsx
+│   │   ├── ErrorState.tsx
+│   │   ├── LoadingState.tsx
+│   │   └── ResumeAnalyzer.tsx
+│   ├── layout/
+│   │   ├── SiteFooter.tsx
+│   │   └── SiteHeader.tsx
+│   ├── resume/
+│   │   ├── EditorFields.tsx
+│   │   ├── ResumeBuilder.tsx
+│   │   ├── ResumeEditor.tsx
+│   │   ├── ResumePreview.tsx
+│   │   └── TemplateThumbnail.tsx
+│   └── ui/
 ├── lib/
 │   ├── extractors/
-│   │   ├── pdf.ts         # PDF text extraction
-│   │   ├── docx.ts       # DOCX text extraction
-│   │   └── index.ts     # Extractor factory
 │   ├── services/
-│   │   ├── ai-analyzer.ts    # AI resume analysis
-│   │   └── file-analyzer.ts # File handling
-│   └── utils.ts           # Utility functions
+│   └── resume-data.ts
 └── types/
-    └── index.ts          # TypeScript types
+    ├── index.ts
+    └── resume.ts
 ```
 
-## API
+## Persistence upgrade path
 
-### POST /api/analyze
-
-Analyze a resume file.
-
-**Request**: `multipart/form-data`
-
-- `file`: Resume file (PDF or DOCX, max 10MB)
-
-**Response**: `application/json`
-
-```json
-{
-  "success": true,
-  "data": {
-    "role": "Software Engineer",
-    "level": "Mid-Level",
-    "score": 75,
-    "techStack": ["React", "Node.js", "TypeScript"],
-    "strengths": ["Strong technical skills", "Good project descriptions"],
-    "weaknesses": ["Missing ATS keywords", "No quantified results"],
-    "missingKeywords": ["AWS", "CI/CD", "Docker"],
-    "suggestions": ["Add quantifiable metrics", "Include AWS experience"],
-    "advice": "Focus on adding cloud technologies..."
-  }
-}
-```
+The builder reads and writes a single versioned local draft under
+`resumix-draft-v1`. When database and authentication work begins, the
+`ResumeData` type in `src/types/resume.ts` can be used as the stored document
+shape. Replace the local save/load effects in `ResumeBuilder.tsx` with
+authenticated API calls while preserving the editor and preview components.
 
 ## License
 
