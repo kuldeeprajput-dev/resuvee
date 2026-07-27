@@ -76,7 +76,7 @@ export function LandingTemplateShowcase() {
         ))}
       </div>
 
-      <div className="grid grid-flow-col grid-rows-2 auto-cols-[86%] gap-5 overflow-x-auto pb-5 sm:auto-cols-[48%] lg:auto-cols-[31.8%]">
+      <div className="grid grid-flow-col grid-rows-2 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[48%] lg:auto-cols-[31.8%] [&::-webkit-scrollbar]:hidden">
         {visibleTemplates.map((template, index) => (
           <Link
             key={template.id}
