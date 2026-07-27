@@ -445,25 +445,25 @@ export function ResumeBuilder({
             })}
           </nav>
 
-          <div className="border-t border-black/10 p-3">
+          <div className="flex h-[64px] shrink-0 items-center border-t border-black/10 bg-white/80 px-3 backdrop-blur">
             <button
               type="button"
               onClick={() => setShowTemplates(true)}
-              className="flex w-full items-center gap-3 rounded-xl bg-white/70 p-3 text-left shadow-sm transition hover:bg-white"
+              className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-black/[0.08] bg-white px-2.5 text-left shadow-2xs transition hover:bg-black/5"
             >
               <span
-                className="size-9 rounded-lg border border-black/10"
+                className="size-7 shrink-0 rounded-md border border-black/10"
                 style={{ backgroundColor: template.background }}
               />
               <span className="min-w-0 flex-1">
-                <span className="block text-[10px] font-semibold text-[var(--brand-muted)]">
+                <span className="block text-[9px] font-semibold leading-tight text-[var(--brand-muted)]">
                   Template
                 </span>
-                <span className="block truncate text-xs font-bold">
+                <span className="block truncate text-xs font-bold leading-tight">
                   {template.name}
                 </span>
               </span>
-              <LayoutTemplate className="size-4 text-[var(--brand-muted)]" />
+              <LayoutTemplate className="size-4 shrink-0 text-[var(--brand-muted)]" />
             </button>
           </div>
         </aside>
@@ -595,18 +595,18 @@ export function ResumeBuilder({
               />
             </div>
 
-            <div className="flex items-center justify-between border-t border-black/10 bg-white/80 px-3.5 py-2.5 backdrop-blur sm:px-7 sm:py-3">
+            <div className="flex h-[64px] shrink-0 items-center justify-between border-t border-black/10 bg-white/80 px-3.5 backdrop-blur sm:px-7">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => goToRelativeSection(-1)}
                 disabled={activeIndex === 0}
-                className="h-9 rounded-xl px-2.5 text-xs font-bold sm:h-10 sm:px-3 sm:text-sm"
+                className="h-10 rounded-xl px-3 text-xs font-bold sm:text-sm"
               >
-                <ChevronLeft className="size-3.5 sm:size-4" />
+                <ChevronLeft className="size-4" />
                 Back
               </Button>
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)] sm:text-[10px]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
                 {activeIndex + 1} / {visibleSections.length}
               </span>
               <Button
@@ -618,15 +618,15 @@ export function ResumeBuilder({
                     goToRelativeSection(1);
                   }
                 }}
-                className="h-9 rounded-xl bg-[var(--brand-ink)] px-3 text-xs font-bold text-white hover:bg-[#293630] sm:h-10 sm:px-4 sm:text-sm"
+                className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 text-xs font-bold text-white hover:bg-[#293630] sm:text-sm"
               >
                 {activeIndex === visibleSections.length - 1
                   ? "Preview"
                   : "Continue"}
                 {activeIndex === visibleSections.length - 1 ? (
-                  <Eye className="size-3.5 sm:size-4" />
+                  <Eye className="size-4" />
                 ) : (
-                  <ChevronRight className="size-3.5 sm:size-4" />
+                  <ChevronRight className="size-4" />
                 )}
               </Button>
             </div>
