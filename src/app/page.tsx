@@ -67,7 +67,7 @@ const productTools = [
     icon: PenLine,
     title: "Resume Builder",
     description:
-      "Write section by section, choose an original template, tune the design, and export a clean PDF.",
+      "Write section by section, check spelling and grammar with AI, tune the design, and export a clean PDF.",
     href: "/builder",
     action: "Build a resume",
   },

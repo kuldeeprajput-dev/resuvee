@@ -14,6 +14,7 @@ import {
   LayoutTemplate,
   ScanSearch,
   Palette,
+  SpellCheck2,
   Minus,
   Plus,
   Redo2,
@@ -45,6 +46,7 @@ import { ResumeEditor } from "./ResumeEditor";
 import { ResumePreview } from "./ResumePreview";
 import { TemplateThumbnail } from "./TemplateThumbnail";
 import { TailorPanel } from "./TailorPanel";
+import { WritingCheckPanel } from "./WritingCheckPanel";
 import {
   CustomizePanel,
   defaultResumeStyle,
@@ -85,6 +87,7 @@ export function ResumeBuilder({
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [showTailor, setShowTailor] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
+  const [showWritingCheck, setShowWritingCheck] = useState(false);
   const [templateFilter, setTemplateFilter] = useState<
     "all" | "popular" | "fresher" | "professional"
   >("popular");
@@ -323,6 +326,15 @@ export function ResumeBuilder({
               <Redo2 className="size-4" />
             </button>
           </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowWritingCheck(true)}
+            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold lg:inline-flex"
+          >
+            <SpellCheck2 className="size-4" />
+            Writing
+          </Button>
           <Button
             type="button"
             variant="outline"
@@ -707,6 +719,13 @@ export function ResumeBuilder({
           supportsPhoto={template.supportsPhoto}
           onChange={setResumeStyle}
           onClose={() => setShowCustomize(false)}
+        />
+      )}
+      {showWritingCheck && (
+        <WritingCheckPanel
+          data={data}
+          onChange={updateData}
+          onClose={() => setShowWritingCheck(false)}
         />
       )}
     </div>
