@@ -89,6 +89,13 @@
   --premium-teal: #0f766e;
   --premium-mist: #f7f8f4;
   --premium-veil: #eef3ef;
+  --brand-ink: #16201c;
+  --brand-muted: #626963;
+  --brand-canvas: #f4f2eb;
+  --brand-paper: #fffefa;
+  --brand-lime: #c8f169;
+  --brand-orange: #f4865f;
+  --brand-blue: #9fc9f0;
 }
 
 .dark {
@@ -131,6 +138,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: var(--brand-canvas);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -138,5 +146,41 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+}
+
+@layer components {
+  .footer-link {
+    color: var(--brand-muted);
+    transition: color 150ms ease;
+  }
+
+  .footer-link:hover {
+    color: var(--brand-ink);
+  }
+
+  .paper-grid {
+    background-image:
+      linear-gradient(rgba(22, 32, 28, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22, 32, 28, 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .resume-print-area {
+    margin: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
   }
 }
