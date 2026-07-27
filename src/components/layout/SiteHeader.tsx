@@ -3,9 +3,11 @@ import { ArrowUpRight, FileCheck2, Layers3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { href: "/builder", label: "Resume builder" },
-  { href: "/analyzer", label: "ATS analyzer" },
-  { href: "/#templates", label: "Templates" },
+  { href: "/builder", label: "Build" },
+  { href: "/analyzer", label: "Analyze" },
+  { href: "/cover-letter", label: "Letters" },
+  { href: "/job-tracker", label: "Tracker" },
+  { href: "/examples", label: "Examples" },
 ];
 
 export function Brand() {
@@ -40,7 +42,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-4 py-2 text-[13px] font-semibold text-[var(--brand-muted)] transition-colors hover:bg-white hover:text-[var(--brand-ink)]"
+              className="rounded-full px-3 py-2 text-[12px] font-semibold text-[var(--brand-muted)] transition-colors hover:bg-white hover:text-[var(--brand-ink)] lg:px-4 lg:text-[13px]"
             >
               {item.label}
             </Link>

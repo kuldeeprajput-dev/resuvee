@@ -198,8 +198,12 @@
     margin: 0;
   }
 
+  html,
   body {
     background: white !important;
+    height: 297mm !important;
+    width: 210mm !important;
+    overflow: hidden !important;
   }
 
   body * {

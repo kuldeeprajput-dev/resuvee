@@ -25,6 +25,18 @@ export function SiteFooter() {
           <Link className="footer-link" href="/#how-it-works">
             How it works
           </Link>
+          <Link className="footer-link" href="/cover-letter">
+            Cover letter studio
+          </Link>
+          <Link className="footer-link" href="/job-tracker">
+            Application board
+          </Link>
+          <Link className="footer-link" href="/examples">
+            Resume examples
+          </Link>
+          <Link className="footer-link" href="/builder">
+            Role match
+          </Link>
         </div>
       </div>
       <div className="border-t border-black/[0.07]">

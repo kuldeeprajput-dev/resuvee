@@ -3,9 +3,12 @@ import {
   ArrowRight,
   Check,
   ClipboardCheck,
+  BriefcaseBusiness,
+  Files,
   FileSearch,
   LayoutTemplate,
   PenLine,
+  ScanSearch,
   Sparkles,
   WandSparkles,
   Zap,
@@ -46,6 +49,41 @@ const workflow = [
   },
 ];
 
+const productTools = [
+  {
+    icon: PenLine,
+    title: "Resume Builder",
+    description:
+      "Write section by section, choose an original template, tune the design, and export a clean PDF.",
+    href: "/builder",
+    action: "Build a resume",
+  },
+  {
+    icon: FileSearch,
+    title: "ATS Analyzer",
+    description:
+      "Review an existing resume for structure, clarity, keyword coverage, and practical improvements.",
+    href: "/analyzer",
+    action: "Check a resume",
+  },
+  {
+    icon: Files,
+    title: "Letter Studio",
+    description:
+      "Create a focused cover letter that reuses your local resume details and matches your visual direction.",
+    href: "/cover-letter",
+    action: "Write a letter",
+  },
+  {
+    icon: BriefcaseBusiness,
+    title: "Application Board",
+    description:
+      "Track saved roles, applications, interviews, offers, notes, due dates, and every next action.",
+    href: "/job-tracker",
+    action: "Track applications",
+  },
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden bg-[var(--brand-canvas)] text-[var(--brand-ink)]">
@@ -58,7 +96,7 @@ export default function Home() {
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] shadow-sm">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
-                Resume builder + ATS analyzer
+                Your complete application workspace
               </div>
 
               <h1 className="text-balance text-[clamp(3.5rem,7.1vw,7.1rem)] font-bold leading-[0.88] tracking-[-0.075em]">
@@ -166,7 +204,7 @@ export default function Home() {
           <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               ["6", "original templates"],
-              ["2", "tools in one product"],
+                ["4", "connected career tools"],
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
               <div
@@ -245,6 +283,80 @@ export default function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        <section className="border-y border-black/[0.08] bg-[#e9e7df]">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-20 sm:px-8 md:py-28 lg:px-12">
+            <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+                  The Resulyra toolkit
+                </p>
+                <h2 className="mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
+                  More than a resume builder.
+                </h2>
+                <p className="mt-5 max-w-md text-base leading-7 text-[var(--brand-muted)]">
+                  Move from first draft to active job search in one
+                  privacy-friendly workspace. Everything saves in your
+                  browser for now.
+                </p>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="mt-7 h-11 rounded-full border-black/15 bg-white px-5 font-bold"
+                >
+                  <Link href="/examples">
+                    Explore resume examples
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="grid gap-px overflow-hidden rounded-[26px] border border-black/10 bg-black/10 sm:grid-cols-2">
+                {productTools.map((tool) => (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    className="group bg-[var(--brand-paper)] p-7 transition hover:bg-white sm:p-8"
+                  >
+                    <div className="flex items-start justify-between">
+                      <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--brand-lime)]">
+                        <tool.icon className="size-5" />
+                      </span>
+                      <ArrowRight className="size-4 -rotate-45 text-black/25 transition group-hover:rotate-0 group-hover:text-black/70" />
+                    </div>
+                    <h3 className="mt-9 text-xl font-bold tracking-[-0.03em]">
+                      {tool.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
+                      {tool.description}
+                    </p>
+                    <p className="mt-5 text-xs font-bold text-[#4f7242]">
+                      {tool.action}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-4 rounded-2xl bg-[var(--brand-ink)] p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div className="flex items-center gap-3">
+                <ScanSearch className="size-5 text-[var(--brand-lime)]" />
+                <p className="text-sm font-bold">
+                  Applying to a specific role?
+                </p>
+                <p className="hidden text-xs text-white/50 md:block">
+                  Compare its language against your resume before sending.
+                </p>
+              </div>
+              <Link
+                href="/builder"
+                className="text-xs font-bold text-[var(--brand-lime)] hover:underline"
+              >
+                Open Role Match →
+              </Link>
+            </div>
           </div>
         </section>
 
