@@ -449,21 +449,10 @@ export function ResumeBuilder({
             <button
               type="button"
               onClick={() => setShowTemplates(true)}
-              className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-black/[0.08] bg-white px-2.5 text-left shadow-2xs transition hover:bg-black/5"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/20"
             >
-              <span
-                className="size-7 shrink-0 rounded-md border border-black/10"
-                style={{ backgroundColor: template.background }}
-              />
-              <span className="min-w-0 flex-1">
-                <span className="block text-[9px] font-semibold leading-tight text-[var(--brand-muted)]">
-                  Template
-                </span>
-                <span className="block truncate text-xs font-bold leading-tight">
-                  {template.name}
-                </span>
-              </span>
-              <LayoutTemplate className="size-4 shrink-0 text-[var(--brand-muted)]" />
+              <LayoutTemplate className="size-4 text-black/70" />
+              <span>Templates</span>
             </button>
           </div>
         </aside>
