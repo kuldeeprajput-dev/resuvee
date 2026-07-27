@@ -162,6 +162,24 @@ export const defaultResumeData: ResumeData = {
   ],
 };
 
+export function createBlankResumeData(): ResumeData {
+  return {
+    basics: {
+      fullName: "",
+      headline: "",
+      email: "",
+      phone: "",
+      location: "",
+      website: "",
+      summary: "",
+    },
+    experience: [],
+    education: [],
+    projects: [],
+    skillGroups: [],
+  };
+}
+
 export function getEmptyExperience(index: number) {
   return {
     id: `experience-${Date.now()}-${index}`,

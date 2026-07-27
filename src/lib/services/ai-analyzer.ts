@@ -128,7 +128,6 @@ export async function analyzeResume(
     });
 
     responseText = completion.choices[0]?.message?.content || "";
-    const finishReason = completion.choices[0]?.finish_reason;
 
     if (!responseText) {
       throw new Error("No response received from AI model");

@@ -9,6 +9,7 @@ import {
   Cloud,
   Download,
   Eye,
+  FilePlus2,
   FileText,
   LayoutTemplate,
   Minus,
@@ -30,6 +31,7 @@ import type {
 import {
   builderSections,
   calculateResumeStrength,
+  createBlankResumeData,
   defaultResumeData,
   resumeTemplates,
 } from "@/lib/resume-data";
@@ -147,6 +149,16 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     window.print();
   };
 
+  const startFresh = () => {
+    const confirmed = window.confirm(
+      "Start a new blank resume? Your current local draft will be replaced.",
+    );
+    if (!confirmed) return;
+
+    updateData(createBlankResumeData());
+    setActiveSection("basics");
+  };
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
       <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-4 sm:px-5">
@@ -201,6 +213,15 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
           </div>
           <Button
             type="button"
+            variant="ghost"
+            onClick={startFresh}
+            className="hidden h-10 rounded-xl px-3 text-xs font-bold text-[var(--brand-muted)] hover:text-[var(--brand-ink)] md:inline-flex"
+          >
+            <FilePlus2 className="size-4" />
+            Start fresh
+          </Button>
+          <Button
+            type="button"
             variant="outline"
             onClick={() => setShowMobilePreview(true)}
             className="h-10 rounded-xl border-black/10 bg-white px-3 font-bold lg:hidden"
@@ -220,7 +241,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         </div>
       </header>
 
-      <div className="grid h-[calc(100dvh-4rem)] lg:grid-cols-[220px_minmax(390px,0.86fr)_minmax(520px,1.14fr)] xl:grid-cols-[235px_minmax(440px,0.84fr)_minmax(580px,1.16fr)]">
+      <div className="grid h-[calc(100dvh-4rem)] grid-cols-[minmax(0,1fr)] lg:grid-cols-[220px_minmax(390px,0.86fr)_minmax(520px,1.14fr)] xl:grid-cols-[235px_minmax(440px,0.84fr)_minmax(580px,1.16fr)]">
         <aside className="no-print hidden flex-col border-r border-black/10 bg-[#eeeee8] lg:flex">
           <div className="border-b border-black/10 px-5 py-5">
             <div className="mb-2 flex items-center justify-between text-xs font-bold">
@@ -300,7 +321,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
           </div>
         </aside>
 
-        <section className="no-print flex min-h-0 flex-col border-r border-black/10 bg-[#f7f6f1]">
+        <section className="no-print flex min-h-0 min-w-0 flex-col border-r border-black/10 bg-[#f7f6f1]">
           <div className="border-b border-black/[0.08] px-5 py-3 lg:hidden">
             <div className="flex gap-2 overflow-x-auto pb-1">
               {builderSections.map((section, index) => (
@@ -421,9 +442,9 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
             </div>
           </div>
 
-          <div className="h-full overflow-auto px-5 pb-20 pt-20">
+          <div className="resume-preview-scroll h-full overflow-auto px-5 pb-20 pt-20">
             <div
-              className="mx-auto origin-top transition-transform duration-300"
+              className="resume-preview-stage mx-auto origin-top transition-transform duration-300"
               style={{
                 width: 595,
                 transform: `scale(${zoom / 100})`,

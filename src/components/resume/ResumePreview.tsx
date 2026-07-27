@@ -456,7 +456,7 @@ export function ResumePreview({
           "pb-6",
           isClassic && "border-b text-center",
           isExecutive &&
-            "-mx-12 -mt-11 bg-[#23334f] px-12 pb-7 pt-10 text-white",
+            "-mx-12 -mt-11 bg-[#23334f] px-12 pb-7 pt-10 text-white [&_h1]:text-white",
           theme.divider,
         )}
       >

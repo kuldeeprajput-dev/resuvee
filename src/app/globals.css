@@ -212,11 +212,21 @@
   }
 
   .resume-print-area {
-    position: absolute !important;
+    position: fixed !important;
     left: 0 !important;
     top: 0 !important;
     margin: 0 !important;
     box-shadow: none !important;
+    transform: scale(1.334) !important;
+    transform-origin: top left !important;
+  }
+
+  .resume-preview-stage {
     transform: none !important;
+  }
+
+  .resume-preview-scroll {
+    overflow: visible !important;
+    padding: 0 !important;
   }
 }
