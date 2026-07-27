@@ -120,6 +120,12 @@ function SidebarContent({
           inverted
           lines={3}
         />
+        <MiniSection
+          title="Projects"
+          accent={template.accent}
+          inverted
+          lines={4}
+        />
       </div>
     </div>
   );
@@ -259,6 +265,11 @@ export function TemplateThumbnail({
               title="Experience"
               accent={template.accent}
               lines={5}
+            />
+            <MiniSection
+              title="Achievements"
+              accent={template.accent}
+              lines={4}
             />
             {!isMeridian && !isColumn && (
               <MiniSection

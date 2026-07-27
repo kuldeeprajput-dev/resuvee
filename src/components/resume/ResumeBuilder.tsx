@@ -48,6 +48,7 @@ interface ResumeBuilderProps {
 
 const STORAGE_KEY = "resulyra-draft-v1";
 const LEGACY_STORAGE_KEY = "resumix-draft-v1";
+const SAMPLE_VERSION = 2;
 
 function isTemplateId(value: string | undefined): value is ResumeTemplateId {
   return resumeTemplates.some((template) => template.id === value);
@@ -90,13 +91,27 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         const parsed = JSON.parse(storedDraft) as {
           data?: ResumeData;
           templateId?: ResumeTemplateId;
+          sampleVersion?: number;
         };
-        if (parsed.data) setData(parsed.data);
+        const isPreviousDemo =
+          parsed.data?.basics.fullName === "Alex Morgan" &&
+          parsed.data.basics.email === "alex.morgan@example.com";
+        const restoredData = isPreviousDemo
+          ? defaultResumeData
+          : parsed.data;
+        if (restoredData) setData(restoredData);
         if (!initialTemplate && isTemplateId(parsed.templateId)) {
           setTemplateId(parsed.templateId);
         }
-        if (!currentDraft) {
-          window.localStorage.setItem(STORAGE_KEY, storedDraft);
+        if (!currentDraft || isPreviousDemo) {
+          window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+              data: restoredData,
+              templateId: parsed.templateId,
+              sampleVersion: SAMPLE_VERSION,
+            }),
+          );
           window.localStorage.removeItem(LEGACY_STORAGE_KEY);
         }
       }
@@ -116,7 +131,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     saveTimer.current = setTimeout(() => {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ data, templateId }),
+        JSON.stringify({ data, templateId, sampleVersion: SAMPLE_VERSION }),
       );
       setSaveLabel("Saved locally");
     }, 450);
