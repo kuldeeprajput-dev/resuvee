@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  AlertTriangle,
   ArrowLeft,
   Check,
   ChevronLeft,
@@ -103,6 +104,7 @@ export function ResumeBuilder({
     return true;
   });
   // Resizable Editor & Studio Canvas Split State
+  const [showStartFreshModal, setShowStartFreshModal] = useState<boolean>(false);
   const [splitPercent, setSplitPercent] = useState<number>(42);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [containerWidth, setContainerWidth] = useState<number>(1400);
@@ -224,12 +226,7 @@ export function ResumeBuilder({
   };
 
   const startFresh = () => {
-    const confirmed = window.confirm(
-      "Start a new blank resume? Your current local draft will be replaced.",
-    );
-    if (!confirmed) return;
-
-    clearResume();
+    setShowStartFreshModal(true);
   };
 
   const addTargetKeywords = (keywords: string[]) => {
@@ -774,6 +771,48 @@ export function ResumeBuilder({
           </div>
         </div>
       )}
+      {/* Start Fresh Confirmation Modal */}
+      {showStartFreshModal && (
+        <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[20px] bg-[var(--brand-paper)] p-6 shadow-2xl">
+            {/* Icon */}
+            <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-[#c65b38]/10">
+              <AlertTriangle className="size-6 text-[#c65b38]" />
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-lg font-bold tracking-[-0.03em]">Start fresh?</h2>
+            <p className="mt-1.5 text-sm text-[var(--brand-muted)] leading-relaxed">
+              This will clear your current resume and start a new blank draft.
+              <strong className="text-[var(--brand-ink)]"> This action cannot be undone.</strong>
+            </p>
+
+            {/* Actions */}
+            <div className="mt-6 flex items-center justify-end gap-2.5">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setShowStartFreshModal(false)}
+                className="h-10 rounded-xl px-4 text-sm font-bold text-[var(--brand-muted)] hover:text-[var(--brand-ink)]"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  clearResume();
+                  setShowStartFreshModal(false);
+                }}
+                className="h-10 rounded-xl bg-[#c65b38] px-4 text-sm font-bold text-white hover:bg-[#a84d2e]"
+              >
+                <FilePlus2 className="size-4" />
+                Yes, start fresh
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showTailor && (
         <TailorPanel
           data={data}
