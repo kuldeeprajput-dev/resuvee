@@ -126,7 +126,14 @@ export function ResumeBuilder({
   useEffect(() => {
     if (initialStarter === "fresher") {
       setData(fresherResumeData);
-      setTemplateId("fresher");
+      const requestedTemplate = resumeTemplates.find(
+        (item) => item.id === initialTemplate,
+      );
+      setTemplateId(
+        requestedTemplate?.audience === "fresher"
+          ? requestedTemplate.id
+          : "fresher",
+      );
       hasLoadedDraft.current = true;
       return;
     }
