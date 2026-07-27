@@ -139,6 +139,38 @@ export function InteractiveCanvas({
     onZoomChange(80);
   }, [onZoomChange]);
 
+  // Recalculate selection box bounds dynamically whenever text size/content changes
+  const updateSelectionBounds = useCallback(() => {
+    if (!selectedDomRef.current || !containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const elemRect = selectedDomRef.current.getBoundingClientRect();
+
+    const box = {
+      top: elemRect.top - containerRect.top - 2,
+      left: elemRect.left - containerRect.left - 2,
+      width: Math.max(40, elemRect.width + 4),
+      height: Math.max(16, elemRect.height + 4),
+    };
+
+    const top = Math.max(65, box.top - 48);
+    const left = Math.max(20, Math.min(containerRect.width - 420, box.left + box.width / 2 - 210));
+
+    setHighlightRect(box);
+    setToolbarPos({ top, left });
+  }, []);
+
+  // ResizeObserver to track dynamic line wrapping & font size changes automatically
+  useEffect(() => {
+    if (!selectedElement || !selectedDomRef.current) return;
+    const observer = new ResizeObserver(() => {
+      updateSelectionBounds();
+    });
+    observer.observe(selectedDomRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [selectedElement, updateSelectionBounds]);
+
   // Keyboard listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -254,21 +286,6 @@ export function InteractiveCanvas({
     }
     selectedDomRef.current = elem as HTMLElement;
 
-    const containerRect = container.getBoundingClientRect();
-    const elemRect = elem.getBoundingClientRect();
-
-    // Bounding box wrapping ONLY the specific clicked text element
-    const box = {
-      top: elemRect.top - containerRect.top - 2,
-      left: elemRect.left - containerRect.left - 2,
-      width: Math.max(40, elemRect.width + 4),
-      height: Math.max(16, elemRect.height + 4),
-    };
-
-    // Position floating toolbar directly above the highlighted element
-    const top = Math.max(65, box.top - 48);
-    const left = Math.max(20, Math.min(containerRect.width - 420, box.left + box.width / 2 - 210));
-
     const clickedText = elem.textContent?.trim() || "";
     let found: SelectedCanvasElement | null = null;
 
@@ -375,8 +392,7 @@ export function InteractiveCanvas({
     }
 
     setSelectedElement(found);
-    setHighlightRect(box);
-    setToolbarPos({ top, left });
+    requestAnimationFrame(() => updateSelectionBounds());
 
     // Sync section with Left-Side Editor
     onSelectSection?.(found.section);
@@ -385,6 +401,10 @@ export function InteractiveCanvas({
   // REAL-TIME INSTANT TYPING UPDATE FOR SPECIFIC FIELD
   const handleRealtimeTextChange = (newText: string) => {
     setInlineText(newText);
+    if (selectedDomRef.current) {
+      selectedDomRef.current.textContent = newText;
+    }
+    requestAnimationFrame(() => updateSelectionBounds());
     if (!selectedElement || !onUpdateData) return;
 
     const { section, id, field, highlightIndex } = selectedElement;
@@ -451,6 +471,7 @@ export function InteractiveCanvas({
     const currentSize = parseFloat(window.getComputedStyle(selectedDomRef.current).fontSize) || 14;
     const newSize = Math.max(8, Math.min(48, currentSize + delta));
     selectedDomRef.current.style.fontSize = `${newSize}px`;
+    requestAnimationFrame(() => updateSelectionBounds());
   };
 
   const toggleBold = () => {
@@ -458,6 +479,7 @@ export function InteractiveCanvas({
     const weight = window.getComputedStyle(selectedDomRef.current).fontWeight;
     const isBold = weight === "700" || weight === "bold";
     selectedDomRef.current.style.fontWeight = isBold ? "normal" : "bold";
+    requestAnimationFrame(() => updateSelectionBounds());
   };
 
   const toggleItalic = () => {
@@ -465,11 +487,13 @@ export function InteractiveCanvas({
     const style = window.getComputedStyle(selectedDomRef.current).fontStyle;
     const isItalic = style === "italic";
     selectedDomRef.current.style.fontStyle = isItalic ? "normal" : "italic";
+    requestAnimationFrame(() => updateSelectionBounds());
   };
 
   const setTextAlign = (align: "left" | "center" | "right") => {
     if (!selectedDomRef.current) return;
     selectedDomRef.current.style.textAlign = align;
+    requestAnimationFrame(() => updateSelectionBounds());
   };
 
   const toggleCase = () => {
@@ -482,7 +506,12 @@ export function InteractiveCanvas({
     } else {
       nextText = inlineText.toUpperCase();
     }
+    setInlineText(nextText);
+    if (selectedDomRef.current) {
+      selectedDomRef.current.textContent = nextText;
+    }
     handleRealtimeTextChange(nextText);
+    requestAnimationFrame(() => updateSelectionBounds());
   };
 
   // Adjust Page Padding (Margins)
