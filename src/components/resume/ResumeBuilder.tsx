@@ -107,15 +107,25 @@ export function ResumeBuilder({
   // Resizable Editor & Studio Canvas Split State
   const [splitPercent, setSplitPercent] = useState<number>(42);
   const [isResizing, setIsResizing] = useState<boolean>(false);
+  const [containerWidth, setContainerWidth] = useState<number>(1400);
   const containerRef = useRef<HTMLDivElement>(null);
   const navScrollRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.getBoundingClientRect().width);
+      } else if (typeof window !== "undefined") {
+        setContainerWidth(window.innerWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
   const isLeftCollapsed = splitPercent <= 1;
   const isRightCollapsed = splitPercent >= 99;
-
-  const containerWidth =
-    containerRef.current?.getBoundingClientRect().width ||
-    (typeof window !== "undefined" ? window.innerWidth : 1200);
   const totalLeftWidthPx = (splitPercent / 100) * containerWidth;
   const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 560;
 
