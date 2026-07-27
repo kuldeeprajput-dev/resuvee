@@ -606,45 +606,45 @@ export function InteractiveCanvas({
       )}
     >
       {/* Top Header Bar */}
-      <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-black/10 bg-white/90 px-4 backdrop-blur lg:px-5">
-        <div className="flex items-center gap-3">
+      <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
+        <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
           {isMobilePreview && (
             <button
               type="button"
               onClick={onCloseMobilePreview}
-              className="builder-icon-button lg:hidden"
+              className="builder-icon-button shrink-0 lg:hidden"
               aria-label="Close preview"
             >
               <X className="size-4" />
             </button>
           )}
-          <div className="flex items-center gap-2">
-            <span className="flex size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <p className="text-xs font-bold tracking-tight">Studio Canvas</p>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
+            <p className="whitespace-nowrap text-xs font-bold tracking-tight">Studio Canvas</p>
           </div>
-          <span className="hidden rounded-full bg-[var(--brand-lime)] px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em] text-[var(--brand-ink)] sm:inline">
+
+          {/* Editorial Template Badge */}
+          <span className="shrink-0 max-w-[110px] truncate rounded-full bg-[var(--brand-lime)] px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em] text-[var(--brand-ink)]">
             {template.name}
           </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-
 
           {/* Template Selector Button */}
           <button
             type="button"
             onClick={onShowTemplates}
-            className="flex h-8 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 text-[11px] font-bold transition hover:bg-black/5 shadow-xs"
+            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3"
           >
             <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
-            <span>Templates</span>
+            <span className="whitespace-nowrap">Templates</span>
           </button>
+        </div>
 
+        <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
           {/* Fullscreen Toggle Button */}
           <button
             type="button"
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="builder-icon-button"
+            className="builder-icon-button shrink-0"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
           >
             {isFullscreen ? (
