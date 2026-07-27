@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ResumeTemplate } from "@/types/resume";
 import { cn } from "@/lib/utils";
 
@@ -7,133 +8,294 @@ interface TemplateThumbnailProps {
   showLabel?: boolean;
 }
 
-const roles = ["Product Designer", "Experience", "Education"];
+function TextLines({
+  count = 4,
+  inverted = false,
+  compact = false,
+}: {
+  count?: number;
+  inverted?: boolean;
+  compact?: boolean;
+}) {
+  const widths = [96, 88, 93, 76, 90, 68];
+  return (
+    <div className={compact ? "space-y-[2px]" : "space-y-[3px]"}>
+      {Array.from({ length: count }).map((_, index) => (
+        <span
+          key={index}
+          className={cn(
+            "block h-px rounded-full",
+            inverted ? "bg-white/35" : "bg-black/18",
+          )}
+          style={{ width: `${widths[index % widths.length]}%` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MiniSection({
+  title,
+  accent,
+  inverted = false,
+  lines = 4,
+}: {
+  title: string;
+  accent: string;
+  inverted?: boolean;
+  lines?: number;
+}) {
+  return (
+    <div>
+      <div className="mb-[5px] flex items-center gap-[5px]">
+        <span
+          className={cn("h-[2px] w-5", inverted && "bg-white/80")}
+          style={!inverted ? { backgroundColor: accent } : undefined}
+        />
+        <span
+          className={cn(
+            "text-[4.5px] font-extrabold uppercase tracking-[0.1em]",
+            inverted ? "text-white/80" : "text-black/65",
+          )}
+        >
+          {title}
+        </span>
+      </div>
+      <TextLines count={lines} inverted={inverted} compact />
+    </div>
+  );
+}
+
+function MiniPortrait({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden border-2 border-white bg-[#dfe6e2] shadow-sm",
+        className,
+      )}
+    >
+      <Image
+        src="/assets/mira-shah-profile.webp"
+        alt=""
+        fill
+        sizes="60px"
+        className="object-cover"
+      />
+    </div>
+  );
+}
+
+function SidebarContent({
+  template,
+  side = "left",
+}: {
+  template: ResumeTemplate;
+  side?: "left" | "right";
+}) {
+  return (
+    <div
+      className={cn(
+        "absolute bottom-0 top-0 w-[30%] px-[5%] py-[9%]",
+        side === "left" ? "left-0" : "right-0",
+      )}
+      style={{ backgroundColor: template.accent }}
+    >
+      <MiniPortrait className="mb-[20%] aspect-square w-[68%] rounded-full" />
+      <div className="space-y-[18%]">
+        <MiniSection
+          title="Profile"
+          accent={template.accent}
+          inverted
+          lines={3}
+        />
+        <MiniSection
+          title="Skills"
+          accent={template.accent}
+          inverted
+          lines={5}
+        />
+        <MiniSection
+          title="Education"
+          accent={template.accent}
+          inverted
+          lines={3}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function TemplateThumbnail({
   template,
   className,
   showLabel = false,
 }: TemplateThumbnailProps) {
-  const isSidebar = template.layout === "sidebar";
-  const isTerminal = template.id === "terminal";
-  const isClassic = template.id === "classic";
-  const isStudio = template.id === "studio";
-  const isMinimal = template.id === "minimal";
+  const isMeridian = template.id === "nova";
+  const isEditorial = template.id === "classic";
+  const isSummit = template.id === "executive";
+  const isColumn = template.id === "minimal";
+  const isHorizon = template.id === "studio";
+  const isBlueprint = template.id === "terminal";
+  const hasLeftRail = isBlueprint;
+  const hasRightRail = isSummit;
 
   return (
     <div
       className={cn(
-        "relative aspect-[0.76] w-full overflow-hidden rounded-[3px] border border-black/10 bg-white shadow-[0_12px_35px_rgba(22,32,28,0.13)]",
+        "relative aspect-[0.707] w-full overflow-hidden rounded-[3px] border border-black/10 bg-white shadow-[0_12px_35px_rgba(22,32,28,0.13)]",
         className,
       )}
-      style={{ backgroundColor: template.background }}
       aria-label={`${template.name} template preview`}
     >
+      {hasLeftRail && <SidebarContent template={template} />}
+      {hasRightRail && <SidebarContent template={template} side="right" />}
+
+      {isMeridian && (
+        <>
+          <div className="absolute -left-[8%] -top-[6%] size-[38%] rounded-full bg-[#d9f1e4]" />
+          <MiniPortrait className="absolute left-[8%] top-[7%] aspect-square w-[18%] rounded-[28%]" />
+        </>
+      )}
+
+      {isHorizon && (
+        <>
+          <div className="absolute -right-[18%] -top-[13%] h-[34%] w-[85%] rotate-6 rounded-[50%] bg-[#dceeff]" />
+          <MiniPortrait className="absolute right-[8%] top-[7%] aspect-square w-[17%] rounded-[24%]" />
+        </>
+      )}
+
       <div
         className={cn(
           "absolute inset-0 p-[8%]",
-          isClassic && "text-center",
-          isTerminal && "font-mono",
+          hasLeftRail && "left-[30%]",
+          hasRightRail && "right-[30%]",
         )}
       >
-        {isSidebar && (
-          <div
-            className={cn(
-              "absolute bottom-0 left-0 top-0 w-[31%]",
-              isStudio ? "rounded-br-[32%]" : "",
-            )}
-            style={{ backgroundColor: template.accent }}
-          />
-        )}
-
-        <div
+        <header
           className={cn(
             "relative",
-            isSidebar ? "ml-[28%] pl-[8%]" : "",
-            isClassic && "border-b pb-[5%]",
+            isEditorial && "border-b border-black/45 pb-[5%] text-center",
+            isMeridian && "ml-[24%] pt-[2%]",
+            isHorizon && "mr-[24%] pt-[2%]",
           )}
-          style={isClassic ? { borderColor: template.accent } : undefined}
         >
+          <p
+            className={cn(
+              "text-[5px] font-extrabold uppercase tracking-[0.12em]",
+              isEditorial && "text-[4px]",
+            )}
+            style={{ color: template.accent }}
+          >
+            Senior product & strategy lead
+          </p>
+          <p
+            className={cn(
+              "mt-[2%] text-[11px] font-bold leading-none tracking-[-0.04em] text-black/80",
+              isEditorial && "font-serif uppercase tracking-[0.06em]",
+              isColumn && "font-light",
+            )}
+          >
+            Mira Shah
+          </p>
           <div
             className={cn(
-              "h-[5px] rounded-full",
-              isClassic ? "mx-auto w-[58%]" : "w-[52%]",
-              isMinimal && "w-[42%]",
-              isTerminal && "rounded-none",
+              "mt-[4%] flex gap-[3px]",
+              isEditorial && "justify-center",
             )}
-            style={{ backgroundColor: template.accent }}
-          />
-          <div
-            className={cn(
-              "mt-[4%] h-[2px] w-[34%] rounded-full bg-black/30",
-              isClassic && "mx-auto",
-            )}
-          />
-          <div
-            className={cn(
-              "mt-[2%] h-[1.5px] w-[60%] rounded-full bg-black/15",
-              isClassic && "mx-auto",
-            )}
-          />
-        </div>
-
-        {isSidebar && (
-          <div className="absolute left-[5%] top-[10%] z-10 w-[21%] space-y-[8px]">
-            <div className="mx-auto size-[18px] rounded-full border-2 border-white/80" />
-            {[45, 76, 62, 84, 58].map((width, index) => (
-              <div key={index} className="space-y-[3px]">
-                {index === 0 && (
-                  <div className="h-[2px] w-[70%] bg-white/90" />
-                )}
-                <div
-                  className="h-px bg-white/45"
-                  style={{ width: `${width}%` }}
-                />
-                <div className="h-px w-full bg-white/25" />
-              </div>
+          >
+            {[24, 20, 18].map((width) => (
+              <span
+                key={width}
+                className="h-px rounded-full bg-black/18"
+                style={{ width: `${width}%` }}
+              />
             ))}
           </div>
-        )}
+        </header>
 
         <div
           className={cn(
-            "relative mt-[9%] space-y-[8%]",
-            isSidebar ? "ml-[28%] pl-[8%]" : "",
+            "relative mt-[8%]",
+            isColumn && "grid grid-cols-[28%_1fr] gap-[8%]",
+            isMeridian && "grid grid-cols-[32%_1fr] gap-[8%]",
+            isHorizon && "grid grid-cols-[1.3fr_0.7fr] gap-[8%]",
           )}
         >
-          {roles.map((role, index) => (
-            <div key={role}>
-              <div className="mb-[3%] flex items-center gap-[4%]">
-                <div
-                  className={cn(
-                    "h-[2.5px] rounded-full",
-                    index === 0 ? "w-[31%]" : "w-[24%]",
-                    isTerminal && "rounded-none",
-                  )}
-                  style={{ backgroundColor: template.accent }}
-                />
-                {!isClassic && (
-                  <div className="h-px flex-1 bg-black/10" />
-                )}
-              </div>
-              <div className="space-y-[3px]">
-                <div className="h-[1.5px] w-[72%] rounded-full bg-black/35" />
-                <div className="h-px w-full rounded-full bg-black/15" />
-                <div className="h-px w-[92%] rounded-full bg-black/15" />
-                {index === 0 && (
-                  <div className="h-px w-[81%] rounded-full bg-black/15" />
-                )}
-              </div>
+          {(isColumn || isMeridian) && (
+            <div
+              className={cn(
+                "space-y-[16%]",
+                isMeridian && "rounded-[5px] bg-[#edf6f0] p-[10%]",
+              )}
+            >
+              <MiniSection title="Skills" accent={template.accent} lines={5} />
+              <MiniSection
+                title="Education"
+                accent={template.accent}
+                lines={4}
+              />
+              <MiniSection
+                title="Projects"
+                accent={template.accent}
+                lines={4}
+              />
             </div>
-          ))}
+          )}
+
+          <div
+            className={cn(
+              "space-y-[9%]",
+              (isColumn || isMeridian) && "",
+              isHorizon && "",
+            )}
+          >
+            <MiniSection title="Profile" accent={template.accent} lines={4} />
+            <MiniSection
+              title="Experience"
+              accent={template.accent}
+              lines={6}
+            />
+            <MiniSection
+              title="Experience"
+              accent={template.accent}
+              lines={5}
+            />
+            {!isMeridian && !isColumn && (
+              <MiniSection
+                title="Education"
+                accent={template.accent}
+                lines={3}
+              />
+            )}
+          </div>
+
+          {isHorizon && (
+            <div className="space-y-[15%] border-l border-black/10 pl-[10%]">
+              <MiniSection
+                title="Projects"
+                accent={template.accent}
+                lines={4}
+              />
+              <MiniSection title="Skills" accent={template.accent} lines={5} />
+              <MiniSection
+                title="Education"
+                accent={template.accent}
+                lines={3}
+              />
+            </div>
+          )}
         </div>
 
         {showLabel && (
-          <div className="absolute bottom-[4%] right-[5%] rounded-sm bg-white/80 px-1.5 py-1 text-[7px] font-bold uppercase tracking-[0.16em] text-black/50 backdrop-blur">
+          <div className="absolute bottom-[3%] right-[4%] rounded-sm bg-white/85 px-1.5 py-1 text-[6px] font-bold uppercase tracking-[0.14em] text-black/45 backdrop-blur">
             {template.eyebrow}
           </div>
         )}
       </div>
+
+      {isBlueprint && (
+        <div className="pointer-events-none absolute bottom-0 left-0 top-0 w-[30%] opacity-[0.08] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:8px_8px]" />
+      )}
     </div>
   );
 }

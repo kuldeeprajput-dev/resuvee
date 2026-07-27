@@ -52,12 +52,12 @@ template artwork.
 
 | Template | Style | Best suited for |
 | --- | --- | --- |
-| Nova | Modern sidebar | Product, engineering, and design |
-| Cambridge | Classic single column | Academia, law, and consulting |
-| Avenue | Executive | Leadership and management |
-| Mono | Minimal | ATS-first applications |
-| Saffron | Creative sidebar | Brand, media, and creative roles |
-| Kernel | Technical sidebar | Software and data roles |
+| Meridian | Fresh portrait layout | Product, people, and operations |
+| Editorial | Timeless single column | Academia, law, and consulting |
+| Summit | Executive profile panel | Leadership and management |
+| Column | Minimal information layout | ATS-first applications |
+| Horizon | Contemporary portrait layout | Education, research, and creative |
+| Blueprint | Technical grid sidebar | Software and data roles |
 
 ## Application routes
 

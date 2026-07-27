@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Globe2,
   Mail,
@@ -7,7 +8,6 @@ import {
 import type {
   ResumeData,
   ResumeTemplate,
-  ResumeTemplateId,
 } from "@/types/resume";
 import { cn } from "@/lib/utils";
 
@@ -17,88 +17,112 @@ interface ResumePreviewProps {
   className?: string;
 }
 
-const themeClasses: Record<
-  ResumeTemplateId,
-  { paper: string; heading: string; body: string; divider: string }
-> = {
-  nova: {
-    paper: "bg-[#fbfaf5] font-sans",
-    heading: "font-sans tracking-[-0.035em]",
-    body: "text-[#34433d]",
-    divider: "border-[#214e45]/20",
-  },
-  classic: {
-    paper: "bg-[#fffdfa] font-serif",
-    heading: "font-serif tracking-[-0.015em]",
-    body: "text-[#3f3732]",
-    divider: "border-[#7a2e2e]/25",
-  },
-  executive: {
-    paper: "bg-white font-sans",
-    heading: "font-serif tracking-[-0.02em]",
-    body: "text-[#384253]",
-    divider: "border-[#23334f]/25",
-  },
-  minimal: {
-    paper: "bg-white font-sans",
-    heading: "font-sans tracking-[-0.045em]",
-    body: "text-[#424242]",
-    divider: "border-black/15",
-  },
-  studio: {
-    paper: "bg-[#fffaf5] font-sans",
-    heading: "font-serif italic tracking-[-0.025em]",
-    body: "text-[#4f3d34]",
-    divider: "border-[#b34f2d]/20",
-  },
-  terminal: {
-    paper: "bg-[#fbfdf9] font-mono",
-    heading: "font-mono tracking-[-0.035em]",
-    body: "text-[#304037]",
-    divider: "border-[#315f45]/25",
-  },
-};
+interface SectionProps {
+  data: ResumeData;
+  accent: string;
+  inverted?: boolean;
+  compact?: boolean;
+}
 
-function SectionHeading({
+function initials(name: string) {
+  return (
+    name
+      .split(" ")
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "CV"
+  );
+}
+
+function ProfilePhoto({
+  data,
+  className,
+}: {
+  data: ResumeData;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative flex shrink-0 items-center justify-center overflow-hidden bg-[#dde4e0] font-sans text-lg font-bold text-[#39534a]",
+        className,
+      )}
+    >
+      {data.basics.photo ? (
+        <Image
+          src={data.basics.photo}
+          alt={`${data.basics.fullName || "Candidate"} profile`}
+          fill
+          unoptimized
+          sizes="120px"
+          className="object-cover"
+        />
+      ) : (
+        initials(data.basics.fullName)
+      )}
+    </div>
+  );
+}
+
+function SectionTitle({
   children,
-  template,
+  accent,
   inverted = false,
+  centered = false,
+  boxed = false,
 }: {
   children: React.ReactNode;
-  template: ResumeTemplate;
+  accent: string;
   inverted?: boolean;
+  centered?: boolean;
+  boxed?: boolean;
 }) {
-  const isTerminal = template.id === "terminal";
-  const isClassic = template.id === "classic";
-  const isMinimal = template.id === "minimal";
+  if (boxed) {
+    return (
+      <h2
+        className={cn(
+          "mb-2.5 inline-flex rounded-[3px] px-2 py-1 text-[7px] font-extrabold uppercase tracking-[0.13em]",
+          inverted ? "bg-white/12 text-white" : "text-white",
+        )}
+        style={!inverted ? { backgroundColor: accent } : undefined}
+      >
+        {children}
+      </h2>
+    );
+  }
 
   return (
     <div
       className={cn(
-        "mb-3 flex items-center gap-3",
-        isClassic && "justify-center",
+        "mb-2.5 flex items-center gap-2",
+        centered && "justify-center",
       )}
     >
-      <h2
-        className={cn(
-          "shrink-0 text-[9px] font-bold uppercase tracking-[0.18em]",
-          inverted ? "text-white/75" : "",
-          isClassic && "font-serif text-[10px]",
-          isMinimal && "tracking-[0.28em]",
-          isTerminal && "normal-case tracking-normal",
-        )}
-        style={!inverted ? { color: template.accent } : undefined}
-      >
-        {isTerminal ? `// ${children}` : children}
-      </h2>
-      {!isClassic && (
+      {!centered && (
         <span
           className={cn(
-            "h-px flex-1",
-            inverted ? "bg-white/25" : "bg-black/10",
+            "size-1.5 shrink-0 rounded-[2px]",
+            inverted && "bg-white/80",
           )}
+          style={!inverted ? { backgroundColor: accent } : undefined}
         />
       )}
+      <h2
+        className={cn(
+          "shrink-0 text-[8px] font-extrabold uppercase tracking-[0.13em]",
+          inverted ? "text-white/85" : "text-black/80",
+        )}
+      >
+        {children}
+      </h2>
+      <span
+        className={cn(
+          "h-px flex-1",
+          inverted ? "bg-white/25" : "bg-black/14",
+        )}
+      />
     </div>
   );
 }
@@ -107,31 +131,33 @@ function ContactList({
   data,
   inverted = false,
   horizontal = false,
+  hideIcons = false,
 }: {
   data: ResumeData;
   inverted?: boolean;
   horizontal?: boolean;
+  hideIcons?: boolean;
 }) {
   const items = [
     { id: "email", icon: Mail, value: data.basics.email },
     { id: "phone", icon: Phone, value: data.basics.phone },
     { id: "location", icon: MapPin, value: data.basics.location },
     { id: "website", icon: Globe2, value: data.basics.website },
-  ].filter((item) => item.value.trim());
+  ].filter((item) => item.value?.trim());
 
   return (
     <div
       className={cn(
-        "text-[8px] leading-[1.45]",
+        "text-[6.5px] leading-[1.45]",
         horizontal
-          ? "flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5"
-          : "space-y-2.5",
-        inverted ? "text-white/70" : "text-black/55",
+          ? "flex flex-wrap items-center gap-x-3 gap-y-1"
+          : "space-y-2",
+        inverted ? "text-white/65" : "text-black/52",
       )}
     >
       {items.map((item) => (
         <div key={item.id} className="flex items-center gap-1.5">
-          <item.icon className="size-2.5 shrink-0 opacity-70" />
+          {!hideIcons && <item.icon className="size-2 shrink-0 opacity-70" />}
           <span className="break-all">{item.value}</span>
         </div>
       ))}
@@ -139,47 +165,93 @@ function ContactList({
   );
 }
 
-function ExperienceSection({
+function SummarySection({
   data,
-  template,
-}: {
-  data: ResumeData;
-  template: ResumeTemplate;
-}) {
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
+  if (!data.basics.summary) return null;
   return (
     <section>
-      <SectionHeading template={template}>Experience</SectionHeading>
-      <div className="space-y-4">
+      <SectionTitle accent={accent} inverted={inverted}>
+        Profile
+      </SectionTitle>
+      <p
+        className={cn(
+          compact ? "text-[7px]" : "text-[7.5px]",
+          "leading-[1.55]",
+          inverted ? "text-white/65" : "text-black/62",
+        )}
+      >
+        {data.basics.summary}
+      </p>
+    </section>
+  );
+}
+
+function ExperienceSection({
+  data,
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
+  return (
+    <section>
+      <SectionTitle accent={accent} inverted={inverted}>
+        Experience
+      </SectionTitle>
+      <div className={compact ? "space-y-3" : "space-y-4"}>
         {data.experience.map((item) => (
           <article key={item.id}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-[10.5px] font-bold leading-tight text-black/85">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3
+                  className={cn(
+                    "text-[8.5px] font-extrabold leading-tight",
+                    inverted ? "text-white" : "text-black/85",
+                  )}
+                >
                   {item.role || "Role title"}
                 </h3>
                 <p
-                  className="mt-0.5 text-[8.5px] font-semibold"
-                  style={{ color: template.accent }}
+                  className={cn(
+                    "mt-0.5 text-[7px] font-bold",
+                    inverted && "text-white/65",
+                  )}
+                  style={!inverted ? { color: accent } : undefined}
                 >
                   {[item.company, item.location].filter(Boolean).join(" · ") ||
                     "Company"}
                 </p>
               </div>
-              <p className="shrink-0 text-[7.5px] font-semibold text-black/45">
+              <p
+                className={cn(
+                  "shrink-0 text-[6px] font-semibold",
+                  inverted ? "text-white/45" : "text-black/42",
+                )}
+              >
                 {[item.startDate, item.current ? "Present" : item.endDate]
                   .filter(Boolean)
                   .join(" — ")}
               </p>
             </div>
-            <ul className="mt-2 space-y-1.5">
+            <ul className={cn("mt-1.5", compact ? "space-y-0.5" : "space-y-1")}>
               {item.highlights.filter(Boolean).map((highlight, index) => (
                 <li
                   key={`${item.id}-${index}`}
-                  className="flex gap-2 text-[8px] leading-[1.48]"
+                  className={cn(
+                    "flex gap-1.5 leading-[1.42]",
+                    compact ? "text-[6.4px]" : "text-[6.8px]",
+                    inverted ? "text-white/62" : "text-black/58",
+                  )}
                 >
                   <span
-                    className="mt-[4px] size-1 shrink-0 rounded-full"
-                    style={{ backgroundColor: template.accent }}
+                    className={cn(
+                      "mt-[3.5px] size-1 shrink-0 rounded-full",
+                      inverted && "bg-white/50",
+                    )}
+                    style={!inverted ? { backgroundColor: accent } : undefined}
                   />
                   <span>{highlight}</span>
                 </li>
@@ -194,55 +266,46 @@ function ExperienceSection({
 
 function EducationSection({
   data,
-  template,
+  accent,
   inverted = false,
-}: {
-  data: ResumeData;
-  template: ResumeTemplate;
-  inverted?: boolean;
-}) {
+  compact = false,
+}: SectionProps) {
+  if (!data.education.length) return null;
   return (
     <section>
-      <SectionHeading template={template} inverted={inverted}>
+      <SectionTitle accent={accent} inverted={inverted}>
         Education
-      </SectionHeading>
-      <div className="space-y-3">
+      </SectionTitle>
+      <div className={compact ? "space-y-2.5" : "space-y-3"}>
         {data.education.map((item) => (
           <article key={item.id}>
             <h3
               className={cn(
-                "text-[9px] font-bold leading-tight",
-                inverted ? "text-white" : "text-black/85",
+                "text-[7.5px] font-extrabold leading-tight",
+                inverted ? "text-white" : "text-black/82",
               )}
             >
               {item.degree || "Degree"}
             </h3>
             <p
               className={cn(
-                "mt-1 text-[8px] leading-snug",
-                inverted ? "text-white/65" : "text-black/55",
+                "mt-0.5 text-[6.5px] leading-snug",
+                inverted ? "text-white/62" : "text-black/55",
               )}
             >
               {item.school || "School"}
             </p>
-            <p
+            <div
               className={cn(
-                "mt-1 text-[7px]",
-                inverted ? "text-white/45" : "text-black/40",
+                "mt-0.5 flex flex-wrap justify-between gap-1 text-[5.8px]",
+                inverted ? "text-white/40" : "text-black/38",
               )}
             >
-              {[item.startDate, item.endDate].filter(Boolean).join(" — ")}
-            </p>
-            {item.details && (
-              <p
-                className={cn(
-                  "mt-1 text-[7.5px]",
-                  inverted ? "text-white/55" : "text-black/50",
-                )}
-              >
-                {item.details}
-              </p>
-            )}
+              <span>
+                {[item.startDate, item.endDate].filter(Boolean).join(" — ")}
+              </span>
+              <span>{item.details}</span>
+            </div>
           </article>
         ))}
       </div>
@@ -252,37 +315,53 @@ function EducationSection({
 
 function SkillsSection({
   data,
-  template,
+  accent,
   inverted = false,
-}: {
-  data: ResumeData;
-  template: ResumeTemplate;
-  inverted?: boolean;
-}) {
+  pills = false,
+}: SectionProps & { pills?: boolean }) {
+  if (!data.skillGroups.length) return null;
   return (
     <section>
-      <SectionHeading template={template} inverted={inverted}>
+      <SectionTitle accent={accent} inverted={inverted}>
         Skills
-      </SectionHeading>
-      <div className="space-y-3">
+      </SectionTitle>
+      <div className="space-y-2.5">
         {data.skillGroups.map((group) => (
           <div key={group.id}>
             <h3
               className={cn(
-                "mb-1.5 text-[8px] font-bold",
-                inverted ? "text-white" : "text-black/75",
+                "mb-1 text-[6.5px] font-extrabold",
+                inverted ? "text-white/88" : "text-black/72",
               )}
             >
               {group.name || "Skills"}
             </h3>
-            <p
-              className={cn(
-                "text-[7.5px] leading-[1.65]",
-                inverted ? "text-white/60" : "text-black/55",
+            <div className={cn(pills && "flex flex-wrap gap-1")}>
+              {pills ? (
+                group.skills.map((skill, index) => (
+                  <span
+                    key={`${group.id}-${index}`}
+                    className={cn(
+                      "rounded-[3px] px-1.5 py-0.5 text-[5.8px]",
+                      inverted
+                        ? "bg-white/10 text-white/65"
+                        : "bg-black/[0.045] text-black/58",
+                    )}
+                  >
+                    {skill}
+                  </span>
+                ))
+              ) : (
+                <p
+                  className={cn(
+                    "text-[6.3px] leading-[1.55]",
+                    inverted ? "text-white/58" : "text-black/52",
+                  )}
+                >
+                  {group.skills.join(" · ")}
+                </p>
               )}
-            >
-              {group.skills.join(" · ")}
-            </p>
+            </div>
           </div>
         ))}
       </div>
@@ -292,34 +371,54 @@ function SkillsSection({
 
 function ProjectsSection({
   data,
-  template,
-}: {
-  data: ResumeData;
-  template: ResumeTemplate;
-}) {
-  if (data.projects.length === 0) return null;
-
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
+  if (!data.projects.length) return null;
   return (
     <section>
-      <SectionHeading template={template}>Projects</SectionHeading>
-      <div className="space-y-3">
+      <SectionTitle accent={accent} inverted={inverted}>
+        Selected projects
+      </SectionTitle>
+      <div className={compact ? "space-y-2.5" : "space-y-3"}>
         {data.projects.map((project) => (
           <article key={project.id}>
-            <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-[9.5px] font-bold text-black/85">
+            <div className="flex items-baseline justify-between gap-2">
+              <h3
+                className={cn(
+                  "text-[7.5px] font-extrabold",
+                  inverted ? "text-white" : "text-black/82",
+                )}
+              >
                 {project.name || "Project name"}
               </h3>
               {project.link && (
-                <p className="text-[7px] text-black/40">{project.link}</p>
+                <span
+                  className={cn(
+                    "text-[5.5px]",
+                    inverted ? "text-white/38" : "text-black/35",
+                  )}
+                >
+                  {project.link}
+                </span>
               )}
             </div>
-            <p className="mt-1 text-[8px] leading-[1.5]">
+            <p
+              className={cn(
+                "mt-0.5 text-[6.3px] leading-[1.45]",
+                inverted ? "text-white/58" : "text-black/52",
+              )}
+            >
               {project.description}
             </p>
             {project.highlights.filter(Boolean).map((highlight, index) => (
               <p
                 key={`${project.id}-${index}`}
-                className="mt-1 text-[7.5px] leading-[1.45] text-black/60"
+                className={cn(
+                  "mt-0.5 text-[6px] leading-[1.4]",
+                  inverted ? "text-white/45" : "text-black/45",
+                )}
               >
                 — {highlight}
               </p>
@@ -331,173 +430,398 @@ function ProjectsSection({
   );
 }
 
-function ResumeHeader({
-  data,
-  template,
-  centered = false,
+function Sheet({
+  children,
+  className,
 }: {
-  data: ResumeData;
-  template: ResumeTemplate;
-  centered?: boolean;
+  children: React.ReactNode;
+  className?: string;
 }) {
-  const theme = themeClasses[template.id];
   return (
-    <header className={cn(centered && "text-center")}>
-      <p
-        className={cn(
-          "mb-2 text-[8px] font-bold uppercase tracking-[0.2em]",
-          template.id === "terminal" && "normal-case tracking-normal",
-        )}
-        style={{ color: template.accent }}
-      >
-        {template.id === "terminal"
-          ? "$ candidate --profile"
-          : data.basics.headline}
-      </p>
-      <h1
-        className={cn(
-          "text-[29px] font-bold leading-[0.98] text-black/90",
-          theme.heading,
-          template.id === "executive" && "text-[31px]",
-          template.id === "minimal" && "font-light",
-        )}
-      >
-        {data.basics.fullName || "Your Name"}
-      </h1>
-      {template.id === "terminal" && (
-        <p className="mt-2 text-[8px] text-black/55">
-          {data.basics.headline}
-        </p>
+    <article
+      className={cn(
+        "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
+        className,
       )}
-    </header>
+    >
+      {children}
+    </article>
   );
 }
 
-export function ResumePreview({
+function MeridianTemplate({
   data,
   template,
   className,
 }: ResumePreviewProps) {
-  const theme = themeClasses[template.id];
-  const isSidebar = template.layout === "sidebar";
-  const isClassic = template.id === "classic";
-  const isExecutive = template.id === "executive";
-
-  if (isSidebar) {
-    return (
-      <article
-        className={cn(
-          "resume-print-area relative grid aspect-[210/297] min-h-[842px] w-[595px] grid-cols-[172px_1fr] overflow-hidden shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
-          theme.paper,
-          theme.body,
-          className,
-        )}
-      >
-        <aside
-          className="flex flex-col px-6 py-10 text-white"
-          style={{ backgroundColor: template.accent }}
-        >
-          <div className="mb-9 flex size-16 items-center justify-center rounded-full border border-white/30 bg-white/10 text-xl font-bold">
-            {data.basics.fullName
-              .split(" ")
-              .map((part) => part[0])
-              .join("")
-              .slice(0, 2)}
-          </div>
-          <div className="space-y-8">
-            <section>
-              <SectionHeading template={template} inverted>
-                Contact
-              </SectionHeading>
-              <ContactList data={data} inverted />
-            </section>
-            <SkillsSection data={data} template={template} inverted />
-            <EducationSection data={data} template={template} inverted />
-          </div>
-          <p className="mt-auto pt-8 text-[6.5px] uppercase tracking-[0.18em] text-white/35">
-            Resume · {new Date().getFullYear()}
-          </p>
-        </aside>
-
-        <div className="px-9 py-10">
-          <ResumeHeader data={data} template={template} />
-          <div
-            className="my-6 h-[2px] w-16"
-            style={{ backgroundColor: template.accent }}
-          />
-          {data.basics.summary && (
-            <section className="mb-6">
-              <SectionHeading template={template}>Profile</SectionHeading>
-              <p className="text-[8.5px] leading-[1.62]">
-                {data.basics.summary}
-              </p>
-            </section>
-          )}
-          <div className="space-y-6">
-            <ExperienceSection data={data} template={template} />
-            <ProjectsSection data={data} template={template} />
-          </div>
-        </div>
-      </article>
-    );
-  }
-
   return (
-    <article
-      className={cn(
-        "resume-print-area aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden px-12 py-11 shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
-        theme.paper,
-        theme.body,
-        className,
-      )}
-    >
-      <div
-        className={cn(
-          "pb-6",
-          isClassic && "border-b text-center",
-          isExecutive &&
-            "-mx-12 -mt-11 bg-[#23334f] px-12 pb-7 pt-10 text-white [&_h1]:text-white",
-          theme.divider,
-        )}
-      >
-        <ResumeHeader
+    <Sheet className={cn("bg-[#fbfdfb]", className)}>
+      <div className="absolute -left-16 -top-20 size-60 rounded-full bg-[#d9f1e4]" />
+      <div className="absolute left-16 top-4 size-24 rounded-[32px] bg-[#9ddbb8]/70" />
+      <header className="relative grid grid-cols-[112px_1fr] items-center gap-6 px-11 pb-7 pt-9">
+        <ProfilePhoto
           data={data}
-          template={template}
-          centered={isClassic}
+          className="size-[92px] rounded-[28px] border-[5px] border-white shadow-md"
         />
-        {isExecutive && (
-          <p className="mt-2 text-[9px] text-white/60">
+        <div>
+          <p
+            className="mb-1.5 text-[7px] font-extrabold uppercase tracking-[0.18em]"
+            style={{ color: template.accent }}
+          >
             {data.basics.headline}
           </p>
-        )}
-        <div className={cn("mt-4", isExecutive && "[&_div]:text-white/60")}>
-          <ContactList data={data} horizontal />
+          <h1 className="text-[30px] font-bold leading-none tracking-[-0.045em] text-[#19342a]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div className="mt-3">
+            <ContactList data={data} horizontal />
+          </div>
         </div>
-      </div>
+      </header>
 
-      <div className={cn("space-y-6 pt-6", isClassic && "pt-7")}>
+      <div className="relative grid grid-cols-[165px_1fr] gap-7 px-11 pb-10">
+        <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            compact
+            pills
+          />
+          <ProjectsSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+          <EducationSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+        </aside>
+        <main className="space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+        </main>
+      </div>
+      <p className="absolute bottom-5 right-11 text-[5.5px] font-semibold uppercase tracking-[0.14em] text-black/25">
+        Resulyra · Meridian
+      </p>
+    </Sheet>
+  );
+}
+
+function EditorialTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}>
+      <header className="border-b border-black/55 pb-4 text-center">
+        <h1 className="text-[27px] font-semibold uppercase leading-none tracking-[0.08em] text-black/85">
+          {data.basics.fullName || "Your Name"}
+        </h1>
+        <p
+          className="mt-2 text-[7px] font-bold uppercase tracking-[0.16em]"
+          style={{ color: template.accent }}
+        >
+          {data.basics.headline}
+        </p>
+        <div className="mt-2 flex justify-center font-sans">
+          <ContactList data={data} horizontal hideIcons />
+        </div>
+      </header>
+
+      <main className="pt-4">
         {data.basics.summary && (
-          <section>
-            <SectionHeading template={template}>Profile</SectionHeading>
-            <p
-              className={cn(
-                "text-[8.5px] leading-[1.65]",
-                isClassic && "text-center italic",
-              )}
-            >
+          <section className="border-b border-black/25 pb-3 text-center">
+            <h2 className="mb-1 text-[8px] font-bold">Professional profile</h2>
+            <p className="mx-auto max-w-[475px] text-[6.8px] leading-[1.5] text-black/58">
               {data.basics.summary}
             </p>
           </section>
         )}
-        <ExperienceSection data={data} template={template} />
-        <div className="grid grid-cols-[1.25fr_0.75fr] gap-8">
-          <div className="space-y-6">
-            <ProjectsSection data={data} template={template} />
-            <EducationSection data={data} template={template} />
+        <div className="space-y-4 pt-4 font-sans">
+          <ExperienceSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
+          <div className="grid grid-cols-2 gap-8 border-t border-black/20 pt-4">
+            <ProjectsSection data={data} accent={template.accent} compact />
+            <SkillsSection
+              data={data}
+              accent={template.accent}
+              compact
+              pills
+            />
           </div>
-          <SkillsSection data={data} template={template} />
         </div>
+      </main>
+      <div className="absolute inset-x-10 bottom-5 flex items-center justify-between border-t border-black/15 pt-2 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
+        <span>{data.basics.website}</span>
+        <span>Resulyra · Editorial</span>
       </div>
-    </article>
+    </Sheet>
   );
+}
+
+function SummitTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet
+      className={cn(
+        "grid grid-cols-[1fr_178px] bg-[#fcfdff]",
+        className,
+      )}
+    >
+      <main className="px-9 py-9">
+        <header className="mb-5 border-b-2 pb-4" style={{ borderColor: template.accent }}>
+          <p
+            className="text-[7px] font-bold uppercase tracking-[0.16em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline}
+          </p>
+          <h1 className="mt-1.5 text-[28px] font-bold leading-none tracking-[-0.04em] text-[#182435]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div className="mt-3">
+            <ContactList data={data} horizontal />
+          </div>
+        </header>
+        <div className="space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
+        </div>
+      </main>
+
+      <aside
+        className="relative flex flex-col px-5 py-8 text-white"
+        style={{ backgroundColor: template.accent }}
+      >
+        <div className="absolute right-0 top-0 h-24 w-12 bg-white/[0.06]" />
+        <ProfilePhoto
+          data={data}
+          className="relative z-10 mb-6 size-[90px] self-center rounded-full border-4 border-white/20"
+        />
+        <div className="space-y-6">
+          <ProjectsSection
+            data={data}
+            accent={template.accent}
+            inverted
+            compact
+          />
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            inverted
+            compact
+          />
+        </div>
+        <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
+          Resulyra · Summit
+        </p>
+      </aside>
+    </Sheet>
+  );
+}
+
+function ColumnTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-white px-11 py-10", className)}>
+      <header className="mb-6 flex items-end justify-between gap-6 border-b border-black/70 pb-4">
+        <div>
+          <h1 className="text-[30px] font-light leading-none tracking-[-0.05em] text-black/90">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <p className="mt-2 text-[7px] font-bold uppercase tracking-[0.2em] text-black/50">
+            {data.basics.headline}
+          </p>
+        </div>
+        <div className="max-w-[210px]">
+          <ContactList data={data} horizontal hideIcons />
+        </div>
+      </header>
+
+      <div className="grid grid-cols-[138px_1fr] gap-8">
+        <aside className="space-y-6 border-r border-black/10 pr-6">
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+          <EducationSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+          <ProjectsSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+        </aside>
+        <main className="space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+        </main>
+      </div>
+      <p className="absolute bottom-5 left-11 text-[5px] uppercase tracking-[0.18em] text-black/20">
+        Resulyra · Column
+      </p>
+    </Sheet>
+  );
+}
+
+function HorizonTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-[#fbfdff]", className)}>
+      <div className="absolute -right-16 -top-24 h-52 w-[430px] rotate-6 rounded-[50%] bg-[#dceeff]" />
+      <div className="absolute -right-6 -top-20 h-44 w-[350px] rotate-6 rounded-[50%] border-[18px] border-white/55" />
+      <header className="relative flex min-h-[150px] items-center justify-between gap-6 px-10 py-8">
+        <div className="max-w-[360px]">
+          <p
+            className="text-[7px] font-extrabold uppercase tracking-[0.16em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline}
+          </p>
+          <h1 className="mt-1.5 text-[29px] font-bold leading-none tracking-[-0.04em] text-[#1b3a57]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div className="mt-3">
+            <ContactList data={data} horizontal />
+          </div>
+        </div>
+        <ProfilePhoto
+          data={data}
+          className="size-[82px] rounded-[22px] border-4 border-white shadow-lg"
+        />
+      </header>
+
+      <div className="relative grid grid-cols-[1.3fr_0.7fr] gap-7 px-10 pb-9">
+        <main className="space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+        </main>
+        <aside className="space-y-5 border-l border-[#9fc9f0]/40 pl-6">
+          <ProjectsSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            compact
+            pills
+          />
+          <EducationSection
+            data={data}
+            accent={template.accent}
+            compact
+          />
+        </aside>
+      </div>
+      <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-[#2d70a6]/35">
+        Resulyra · Horizon
+      </p>
+    </Sheet>
+  );
+}
+
+function BlueprintTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("grid grid-cols-[172px_1fr] bg-[#fbfcfd]", className)}>
+      <aside
+        className="relative flex flex-col px-5 py-8 text-white"
+        style={{ backgroundColor: template.accent }}
+      >
+        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:18px_18px]" />
+        <ProfilePhoto
+          data={data}
+          className="relative mb-5 size-[78px] rounded-[14px] border-2 border-white/25"
+        />
+        <div className="relative space-y-6">
+          <section>
+            <SectionTitle accent={template.accent} inverted>
+              Contact
+            </SectionTitle>
+            <ContactList data={data} inverted />
+          </section>
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            inverted
+            compact
+            pills
+          />
+          <ProjectsSection
+            data={data}
+            accent={template.accent}
+            inverted
+            compact
+          />
+        </div>
+        <p className="relative mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
+          Resulyra · Blueprint
+        </p>
+      </aside>
+
+      <main className="px-8 py-9">
+        <header className="mb-5">
+          <p
+            className="font-mono text-[7px] font-bold uppercase tracking-[0.14em]"
+            style={{ color: template.accent }}
+          >
+            {"// "}
+            {data.basics.headline}
+          </p>
+          <h1 className="mt-2 text-[28px] font-bold leading-none tracking-[-0.045em] text-[#172b24]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div
+            className="mt-4 h-[3px] w-14"
+            style={{ backgroundColor: template.accent }}
+          />
+        </header>
+        <div className="space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
+        </div>
+      </main>
+    </Sheet>
+  );
+}
+
+export function ResumePreview(props: ResumePreviewProps) {
+  switch (props.template.id) {
+    case "nova":
+      return <MeridianTemplate {...props} />;
+    case "classic":
+      return <EditorialTemplate {...props} />;
+    case "executive":
+      return <SummitTemplate {...props} />;
+    case "minimal":
+      return <ColumnTemplate {...props} />;
+    case "studio":
+      return <HorizonTemplate {...props} />;
+    case "terminal":
+      return <BlueprintTemplate {...props} />;
+  }
 }
