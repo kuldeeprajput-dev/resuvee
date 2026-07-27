@@ -15,6 +15,7 @@ interface ResumePreviewProps {
   data: ResumeData;
   template: ResumeTemplate;
   className?: string;
+  showPhoto?: boolean;
 }
 
 interface SectionProps {
@@ -39,10 +40,13 @@ function initials(name: string) {
 function ProfilePhoto({
   data,
   className,
+  hidden = false,
 }: {
   data: ResumeData;
   className?: string;
+  hidden?: boolean;
 }) {
+  if (hidden) return null;
   return (
     <div
       className={cn(
@@ -453,6 +457,7 @@ function MeridianTemplate({
   data,
   template,
   className,
+  showPhoto = true,
 }: ResumePreviewProps) {
   return (
     <Sheet className={cn("bg-[#fbfdfb]", className)}>
@@ -461,6 +466,7 @@ function MeridianTemplate({
       <header className="relative grid grid-cols-[112px_1fr] items-center gap-6 px-11 pb-7 pt-9">
         <ProfilePhoto
           data={data}
+          hidden={!showPhoto}
           className="size-[92px] rounded-[28px] border-[5px] border-white shadow-md"
         />
         <div>
@@ -567,6 +573,7 @@ function SummitTemplate({
   data,
   template,
   className,
+  showPhoto = true,
 }: ResumePreviewProps) {
   return (
     <Sheet
@@ -604,6 +611,7 @@ function SummitTemplate({
         <div className="absolute right-0 top-0 h-24 w-12 bg-white/[0.06]" />
         <ProfilePhoto
           data={data}
+          hidden={!showPhoto}
           className="relative z-10 mb-6 size-[90px] self-center rounded-full border-4 border-white/20"
         />
         <div className="space-y-6">
@@ -683,6 +691,7 @@ function HorizonTemplate({
   data,
   template,
   className,
+  showPhoto = true,
 }: ResumePreviewProps) {
   return (
     <Sheet className={cn("bg-[#fbfdff]", className)}>
@@ -705,6 +714,7 @@ function HorizonTemplate({
         </div>
         <ProfilePhoto
           data={data}
+          hidden={!showPhoto}
           className="size-[82px] rounded-[22px] border-4 border-white shadow-lg"
         />
       </header>
@@ -744,6 +754,7 @@ function BlueprintTemplate({
   data,
   template,
   className,
+  showPhoto = true,
 }: ResumePreviewProps) {
   return (
     <Sheet className={cn("grid grid-cols-[172px_1fr] bg-[#fbfcfd]", className)}>
@@ -754,6 +765,7 @@ function BlueprintTemplate({
         <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:18px_18px]" />
         <ProfilePhoto
           data={data}
+          hidden={!showPhoto}
           className="relative mb-5 size-[78px] rounded-[14px] border-2 border-white/25"
         />
         <div className="relative space-y-6">

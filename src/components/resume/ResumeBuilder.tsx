@@ -13,6 +13,7 @@ import {
   FileText,
   LayoutTemplate,
   ScanSearch,
+  Palette,
   Minus,
   Plus,
   Redo2,
@@ -43,6 +44,12 @@ import { ResumeEditor } from "./ResumeEditor";
 import { ResumePreview } from "./ResumePreview";
 import { TemplateThumbnail } from "./TemplateThumbnail";
 import { TailorPanel } from "./TailorPanel";
+import {
+  CustomizePanel,
+  defaultResumeStyle,
+  resumeFontClass,
+  type ResumeStyle,
+} from "./CustomizePanel";
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
@@ -70,6 +77,9 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
   const [showTemplates, setShowTemplates] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [showTailor, setShowTailor] = useState(false);
+  const [showCustomize, setShowCustomize] = useState(false);
+  const [resumeStyle, setResumeStyle] =
+    useState<ResumeStyle>(defaultResumeStyle);
   const [zoom, setZoom] = useState(72);
   const [history, setHistory] = useState<ResumeData[]>([]);
   const [future, setFuture] = useState<ResumeData[]>([]);
@@ -95,6 +105,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
           data?: ResumeData;
           templateId?: ResumeTemplateId;
           sampleVersion?: number;
+          style?: ResumeStyle;
         };
         const isPreviousDemo =
           parsed.data?.basics.fullName === "Alex Morgan" &&
@@ -106,6 +117,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         if (!initialTemplate && isTemplateId(parsed.templateId)) {
           setTemplateId(parsed.templateId);
         }
+        if (parsed.style) setResumeStyle(parsed.style);
         if (!currentDraft || isPreviousDemo) {
           window.localStorage.setItem(
             STORAGE_KEY,
@@ -113,6 +125,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               data: restoredData,
               templateId: parsed.templateId,
               sampleVersion: SAMPLE_VERSION,
+              style: parsed.style ?? defaultResumeStyle,
             }),
           );
           window.localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -134,7 +147,12 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     saveTimer.current = setTimeout(() => {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ data, templateId, sampleVersion: SAMPLE_VERSION }),
+        JSON.stringify({
+          data,
+          templateId,
+          sampleVersion: SAMPLE_VERSION,
+          style: resumeStyle,
+        }),
       );
       setSaveLabel("Saved locally");
     }, 450);
@@ -142,7 +160,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [data, templateId]);
+  }, [data, resumeStyle, templateId]);
 
   const updateData = (nextData: ResumeData) => {
     setHistory((items) => [...items.slice(-39), data]);
@@ -210,6 +228,11 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     updateData({ ...data, skillGroups: nextGroups });
   };
 
+  const previewTemplate = {
+    ...template,
+    accent: resumeStyle.accent || template.accent,
+  };
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
       <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-4 sm:px-5">
@@ -262,6 +285,15 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               <Redo2 className="size-4" />
             </button>
           </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowCustomize(true)}
+            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold xl:inline-flex"
+          >
+            <Palette className="size-4" />
+            Design
+          </Button>
           <Button
             type="button"
             variant="outline"
@@ -510,7 +542,12 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
                 transform: `scale(${zoom / 100})`,
               }}
             >
-              <ResumePreview data={data} template={template} />
+              <ResumePreview
+                data={data}
+                template={previewTemplate}
+                showPhoto={resumeStyle.showPhoto}
+                className={resumeFontClass(resumeStyle.font)}
+              />
             </div>
           </div>
         </section>
@@ -585,6 +622,14 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
           data={data}
           onAddKeywords={addTargetKeywords}
           onClose={() => setShowTailor(false)}
+        />
+      )}
+      {showCustomize && (
+        <CustomizePanel
+          style={resumeStyle}
+          templateAccent={template.accent}
+          onChange={setResumeStyle}
+          onClose={() => setShowCustomize(false)}
         />
       )}
     </div>
