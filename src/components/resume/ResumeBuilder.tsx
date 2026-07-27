@@ -35,6 +35,7 @@ import {
   calculateResumeStrength,
   createBlankResumeData,
   defaultResumeData,
+  fresherResumeData,
   resumeTemplates,
 } from "@/lib/resume-data";
 import { Brand } from "@/components/layout/SiteHeader";
@@ -53,6 +54,7 @@ import {
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
+  initialStarter?: string;
 }
 
 const STORAGE_KEY = "resulyra-draft-v1";
@@ -64,11 +66,16 @@ function isTemplateId(value: string | undefined): value is ResumeTemplateId {
 }
 
 function getInitialTemplate(value: string | undefined): ResumeTemplateId {
-  return isTemplateId(value) ? value : "nova";
+  return isTemplateId(value) ? value : "standard";
 }
 
-export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
-  const [data, setData] = useState<ResumeData>(defaultResumeData);
+export function ResumeBuilder({
+  initialTemplate,
+  initialStarter,
+}: ResumeBuilderProps) {
+  const [data, setData] = useState<ResumeData>(
+    initialStarter === "fresher" ? fresherResumeData : defaultResumeData,
+  );
   const [templateId, setTemplateId] = useState<ResumeTemplateId>(
     getInitialTemplate(initialTemplate),
   );
@@ -78,6 +85,9 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [showTailor, setShowTailor] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
+  const [templateFilter, setTemplateFilter] = useState<
+    "all" | "popular" | "fresher" | "professional"
+  >("popular");
   const [resumeStyle, setResumeStyle] =
     useState<ResumeStyle>(defaultResumeStyle);
   const [zoom, setZoom] = useState(72);
@@ -89,13 +99,35 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
 
   const template =
     resumeTemplates.find((item) => item.id === templateId) ??
+    resumeTemplates.find((item) => item.id === "standard") ??
     resumeTemplates[0];
-  const strength = calculateResumeStrength(data);
-  const activeIndex = builderSections.findIndex(
+  const isFresherTemplate = template.audience === "fresher";
+  const visibleSections = isFresherTemplate
+    ? builderSections.filter((section) => section.id !== "experience")
+    : builderSections;
+  const strength = calculateResumeStrength(data, {
+    fresher: isFresherTemplate,
+  });
+  const activeIndex = visibleSections.findIndex(
     (section) => section.id === activeSection,
   );
+  const filteredTemplates = resumeTemplates.filter((item) => {
+    if (templateFilter === "popular") return item.popular;
+    if (templateFilter === "fresher") return item.audience === "fresher";
+    if (templateFilter === "professional") {
+      return item.audience !== "fresher";
+    }
+    return true;
+  });
 
   useEffect(() => {
+    if (initialStarter === "fresher") {
+      setData(fresherResumeData);
+      setTemplateId("fresher");
+      hasLoadedDraft.current = true;
+      return;
+    }
+
     try {
       const currentDraft = window.localStorage.getItem(STORAGE_KEY);
       const storedDraft =
@@ -137,7 +169,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     } finally {
       hasLoadedDraft.current = true;
     }
-  }, [initialTemplate]);
+  }, [initialStarter, initialTemplate]);
 
   useEffect(() => {
     if (!hasLoadedDraft.current) return;
@@ -162,6 +194,12 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     };
   }, [data, resumeStyle, templateId]);
 
+  useEffect(() => {
+    if (isFresherTemplate && activeSection === "experience") {
+      setActiveSection("education");
+    }
+  }, [activeSection, isFresherTemplate]);
+
   const updateData = (nextData: ResumeData) => {
     setHistory((items) => [...items.slice(-39), data]);
     setFuture([]);
@@ -185,7 +223,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
   };
 
   const goToRelativeSection = (direction: -1 | 1) => {
-    const target = builderSections[activeIndex + direction];
+    const target = visibleSections[activeIndex + direction];
     if (target) setActiveSection(target.id);
   };
 
@@ -337,7 +375,11 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         <aside className="no-print hidden flex-col border-r border-black/10 bg-[#eeeee8] lg:flex">
           <div className="border-b border-black/10 px-5 py-5">
             <div className="mb-2 flex items-center justify-between text-xs font-bold">
-              <span>Resume strength</span>
+              <span>
+                {isFresherTemplate
+                  ? "Fresher readiness"
+                  : "Resume strength"}
+              </span>
               <span>{strength}%</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-black/10">
@@ -357,7 +399,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
             className="flex-1 space-y-1 overflow-y-auto px-3 py-4"
             aria-label="Resume sections"
           >
-            {builderSections.map((section, index) => {
+            {visibleSections.map((section, index) => {
               const isActive = activeSection === section.id;
               const isComplete = index < activeIndex;
               return (
@@ -416,7 +458,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         <section className="no-print flex min-h-0 min-w-0 flex-col border-r border-black/10 bg-[#f7f6f1]">
           <div className="border-b border-black/[0.08] px-5 py-3 lg:hidden">
             <div className="flex gap-2 overflow-x-auto pb-1">
-              {builderSections.map((section, index) => (
+              {visibleSections.map((section, index) => (
                 <button
                   key={section.id}
                   type="button"
@@ -440,6 +482,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               activeSection={activeSection}
               data={data}
               onChange={updateData}
+              supportsPhoto={template.supportsPhoto}
             />
           </div>
 
@@ -455,12 +498,12 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               Back
             </Button>
             <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
-              {activeIndex + 1} / {builderSections.length}
+              {activeIndex + 1} / {visibleSections.length}
             </span>
             <Button
               type="button"
               onClick={() => {
-                if (activeIndex === builderSections.length - 1) {
+                if (activeIndex === visibleSections.length - 1) {
                   setShowMobilePreview(true);
                 } else {
                   goToRelativeSection(1);
@@ -468,10 +511,10 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               }}
               className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white hover:bg-[#293630]"
             >
-              {activeIndex === builderSections.length - 1
+              {activeIndex === visibleSections.length - 1
                 ? "Preview"
                 : "Continue"}
-              {activeIndex === builderSections.length - 1 ? (
+              {activeIndex === visibleSections.length - 1 ? (
                 <Eye className="size-4" />
               ) : (
                 <ChevronRight className="size-4" />
@@ -545,7 +588,9 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               <ResumePreview
                 data={data}
                 template={previewTemplate}
-                showPhoto={resumeStyle.showPhoto}
+                showPhoto={
+                  resumeStyle.showPhoto && template.supportsPhoto
+                }
                 className={resumeFontClass(resumeStyle.font)}
               />
             </div>
@@ -555,7 +600,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
 
       {showTemplates && (
         <div className="no-print fixed inset-0 z-[100] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
-          <div className="max-h-[92dvh] w-full max-w-4xl overflow-y-auto rounded-t-[24px] bg-[var(--brand-paper)] p-5 shadow-2xl sm:rounded-[24px] sm:p-7">
+          <div className="max-h-[92dvh] w-full max-w-6xl overflow-y-auto rounded-t-[24px] bg-[var(--brand-paper)] p-5 shadow-2xl sm:rounded-[24px] sm:p-7">
             <div className="mb-6 flex items-start justify-between gap-6">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
@@ -578,13 +623,44 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               </button>
             </div>
 
+            <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
+              {(
+                [
+                  ["popular", "Most used"],
+                  ["all", "All 18"],
+                  ["fresher", "Fresher"],
+                  ["professional", "Professional"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setTemplateFilter(id)}
+                  className={cn(
+                    "shrink-0 rounded-full px-3.5 py-2 text-[11px] font-bold transition",
+                    templateFilter === id
+                      ? "bg-[var(--brand-ink)] text-white"
+                      : "border border-black/10 bg-white text-[var(--brand-muted)]",
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-              {resumeTemplates.map((item) => (
+              {filteredTemplates.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => {
                     setTemplateId(item.id);
+                    if (
+                      item.audience === "fresher" &&
+                      activeSection === "experience"
+                    ) {
+                      setActiveSection("education");
+                    }
                     setShowTemplates(false);
                   }}
                   className={cn(
@@ -628,6 +704,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         <CustomizePanel
           style={resumeStyle}
           templateAccent={template.accent}
+          supportsPhoto={template.supportsPhoto}
           onChange={setResumeStyle}
           onClose={() => setShowCustomize(false)}
         />

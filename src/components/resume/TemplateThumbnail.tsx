@@ -100,7 +100,9 @@ function SidebarContent({
       )}
       style={{ backgroundColor: template.accent }}
     >
-      <MiniPortrait className="mb-[20%] aspect-square w-[68%] rounded-full" />
+      {template.supportsPhoto && (
+        <MiniPortrait className="mb-[20%] aspect-square w-[68%] rounded-full" />
+      )}
       <div className="space-y-[18%]">
         <MiniSection
           title="Profile"
@@ -136,12 +138,16 @@ export function TemplateThumbnail({
   className,
   showLabel = false,
 }: TemplateThumbnailProps) {
-  const isMeridian = template.id === "nova";
-  const isEditorial = template.id === "classic";
-  const isSummit = template.id === "executive";
-  const isColumn = template.id === "minimal";
-  const isHorizon = template.id === "studio";
-  const isBlueprint = template.id === "terminal";
+  const isMeridian = template.renderer === "meridian";
+  const isEditorial = template.renderer === "editorial";
+  const isSummit = template.renderer === "summit";
+  const isColumn = template.renderer === "column";
+  const isHorizon = template.renderer === "horizon";
+  const isBlueprint = template.renderer === "blueprint";
+  const isChronological = template.renderer === "chronological";
+  const isCompact = template.renderer === "compact";
+  const isHybrid = template.renderer === "hybrid";
+  const isFresher = template.renderer === "fresher";
   const hasLeftRail = isBlueprint;
   const hasRightRail = isSummit;
 
@@ -156,14 +162,14 @@ export function TemplateThumbnail({
       {hasLeftRail && <SidebarContent template={template} />}
       {hasRightRail && <SidebarContent template={template} side="right" />}
 
-      {isMeridian && (
+      {isMeridian && template.supportsPhoto && (
         <>
           <div className="absolute -left-[8%] -top-[6%] size-[38%] rounded-full bg-[#d9f1e4]" />
           <MiniPortrait className="absolute left-[8%] top-[7%] aspect-square w-[18%] rounded-[28%]" />
         </>
       )}
 
-      {isHorizon && (
+      {isHorizon && template.supportsPhoto && (
         <>
           <div className="absolute -right-[18%] -top-[13%] h-[34%] w-[85%] rotate-6 rounded-[50%] bg-[#dceeff]" />
           <MiniPortrait className="absolute right-[8%] top-[7%] aspect-square w-[17%] rounded-[24%]" />
@@ -183,6 +189,10 @@ export function TemplateThumbnail({
             isEditorial && "border-b border-black/45 pb-[5%] text-center",
             isMeridian && "ml-[24%] pt-[2%]",
             isHorizon && "mr-[24%] pt-[2%]",
+            (isChronological || isCompact) &&
+              "border-b-2 pb-[5%] text-left",
+            isFresher && "border-b pb-[5%] text-center",
+            isHybrid && "border-b-[3px] pb-[5%]",
           )}
         >
           <p
@@ -199,6 +209,7 @@ export function TemplateThumbnail({
               "mt-[2%] text-[11px] font-bold leading-none tracking-[-0.04em] text-black/80",
               isEditorial && "font-serif uppercase tracking-[0.06em]",
               isColumn && "font-light",
+              isFresher && "text-[10px]",
             )}
           >
             Mira Shah
@@ -225,13 +236,16 @@ export function TemplateThumbnail({
             isColumn && "grid grid-cols-[28%_1fr] gap-[8%]",
             isMeridian && "grid grid-cols-[32%_1fr] gap-[8%]",
             isHorizon && "grid grid-cols-[1.3fr_0.7fr] gap-[8%]",
+            isCompact && "grid grid-cols-[1fr_30%] gap-[8%]",
+            isHybrid && "grid grid-cols-2 gap-[8%]",
           )}
         >
-          {(isColumn || isMeridian) && (
+          {(isColumn || isMeridian || isHybrid) && (
             <div
               className={cn(
                 "space-y-[16%]",
                 isMeridian && "rounded-[5px] bg-[#edf6f0] p-[10%]",
+                isHybrid && "rounded-[5px] bg-black/[0.035] p-[8%]",
               )}
             >
               <MiniSection title="Skills" accent={template.accent} lines={5} />
@@ -248,6 +262,7 @@ export function TemplateThumbnail({
             </div>
           )}
 
+          {!isFresher && (
           <div
             className={cn(
               "space-y-[9%]",
@@ -255,7 +270,9 @@ export function TemplateThumbnail({
               isHorizon && "",
             )}
           >
-            <MiniSection title="Profile" accent={template.accent} lines={4} />
+            {!isCompact && (
+              <MiniSection title="Profile" accent={template.accent} lines={4} />
+            )}
             <MiniSection
               title="Experience"
               accent={template.accent}
@@ -271,7 +288,7 @@ export function TemplateThumbnail({
               accent={template.accent}
               lines={4}
             />
-            {!isMeridian && !isColumn && (
+            {!isMeridian && !isColumn && !isCompact && (
               <MiniSection
                 title="Education"
                 accent={template.accent}
@@ -279,6 +296,44 @@ export function TemplateThumbnail({
               />
             )}
           </div>
+          )}
+
+          {isFresher && (
+            <div className="space-y-[10%]">
+              <MiniSection
+                title="Education"
+                accent={template.accent}
+                lines={5}
+              />
+              <MiniSection
+                title="Projects"
+                accent={template.accent}
+                lines={6}
+              />
+              <MiniSection title="Skills" accent={template.accent} lines={5} />
+              <MiniSection
+                title="Coursework"
+                accent={template.accent}
+                lines={4}
+              />
+            </div>
+          )}
+
+          {isCompact && (
+            <div className="space-y-[16%] border-l border-black/10 pl-[10%]">
+              <MiniSection title="Skills" accent={template.accent} lines={5} />
+              <MiniSection
+                title="Education"
+                accent={template.accent}
+                lines={4}
+              />
+              <MiniSection
+                title="Projects"
+                accent={template.accent}
+                lines={4}
+              />
+            </div>
+          )}
 
           {isHorizon && (
             <div className="space-y-[15%] border-l border-black/10 pl-[10%]">

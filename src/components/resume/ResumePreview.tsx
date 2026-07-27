@@ -200,6 +200,8 @@ function ExperienceSection({
   inverted = false,
   compact = false,
 }: SectionProps) {
+  if (!data.experience.length) return null;
+
   return (
     <section>
       <SectionTitle accent={accent} inverted={inverted}>
@@ -510,7 +512,7 @@ function MeridianTemplate({
         </main>
       </div>
       <p className="absolute bottom-5 right-11 text-[5.5px] font-semibold uppercase tracking-[0.14em] text-black/25">
-        Resulyra · Meridian
+        Resulyra · {template.name}
       </p>
     </Sheet>
   );
@@ -563,7 +565,7 @@ function EditorialTemplate({
       </main>
       <div className="absolute inset-x-10 bottom-5 flex items-center justify-between border-t border-black/15 pt-2 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
         <span>{data.basics.website}</span>
-        <span>Resulyra · Editorial</span>
+        <span>Resulyra · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -629,7 +631,7 @@ function SummitTemplate({
           />
         </div>
         <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resulyra · Summit
+          Resulyra · {template.name}
         </p>
       </aside>
     </Sheet>
@@ -681,7 +683,7 @@ function ColumnTemplate({
         </main>
       </div>
       <p className="absolute bottom-5 left-11 text-[5px] uppercase tracking-[0.18em] text-black/20">
-        Resulyra · Column
+        Resulyra · {template.name}
       </p>
     </Sheet>
   );
@@ -744,7 +746,7 @@ function HorizonTemplate({
         </aside>
       </div>
       <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-[#2d70a6]/35">
-        Resulyra · Horizon
+        Resulyra · {template.name}
       </p>
     </Sheet>
   );
@@ -790,7 +792,7 @@ function BlueprintTemplate({
           />
         </div>
         <p className="relative mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resulyra · Blueprint
+          Resulyra · {template.name}
         </p>
       </aside>
 
@@ -821,19 +823,224 @@ function BlueprintTemplate({
   );
 }
 
+function ChronologicalTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-white px-11 py-10", className)}>
+      <header
+        className="border-b-2 pb-4"
+        style={{ borderColor: template.accent }}
+      >
+        <div className="flex items-end justify-between gap-7">
+          <div>
+            <h1 className="text-[29px] font-bold leading-none tracking-[-0.045em] text-black/90">
+              {data.basics.fullName || "Your Name"}
+            </h1>
+            <p
+              className="mt-2 text-[7px] font-bold uppercase tracking-[0.17em]"
+              style={{ color: template.accent }}
+            >
+              {data.basics.headline}
+            </p>
+          </div>
+          <div className="max-w-[230px]">
+            <ContactList data={data} horizontal hideIcons />
+          </div>
+        </div>
+      </header>
+
+      <main className="mt-5 space-y-5">
+        <SummarySection data={data} accent={template.accent} compact />
+        <ExperienceSection data={data} accent={template.accent} compact />
+        <div className="grid grid-cols-2 gap-8 border-t border-black/12 pt-5">
+          <EducationSection data={data} accent={template.accent} compact />
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            compact
+            pills
+          />
+        </div>
+        {data.projects.length > 0 && (
+          <div className="border-t border-black/12 pt-5">
+            <ProjectsSection data={data} accent={template.accent} compact />
+          </div>
+        )}
+      </main>
+
+      <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
+        <span>{data.basics.website}</span>
+        <span>Resulyra · {template.name}</span>
+      </div>
+    </Sheet>
+  );
+}
+
+function CompactTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-white px-9 py-8", className)}>
+      <header className="grid grid-cols-[1fr_225px] items-end gap-5 border-b border-black/45 pb-4">
+        <div>
+          <p
+            className="text-[6.5px] font-bold uppercase tracking-[0.16em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline}
+          </p>
+          <h1 className="mt-1.5 text-[27px] font-bold leading-none tracking-[-0.04em] text-black/90">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+        </div>
+        <ContactList data={data} horizontal hideIcons />
+      </header>
+
+      <main className="mt-4 grid grid-cols-[1fr_150px] gap-7">
+        <div className="space-y-4">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+          <ProjectsSection data={data} accent={template.accent} compact />
+        </div>
+        <aside className="space-y-5 border-l border-black/12 pl-5">
+          <SkillsSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
+        </aside>
+      </main>
+
+      <p className="absolute bottom-4 right-9 text-[5px] uppercase tracking-[0.14em] text-black/20">
+        Resulyra · {template.name}
+      </p>
+    </Sheet>
+  );
+}
+
+function HybridTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-white px-10 py-9", className)}>
+      <header>
+        <div className="flex items-center justify-between gap-6">
+          <div>
+            <h1 className="text-[29px] font-bold leading-none tracking-[-0.045em]">
+              {data.basics.fullName || "Your Name"}
+            </h1>
+            <p
+              className="mt-2 text-[7px] font-extrabold uppercase tracking-[0.16em]"
+              style={{ color: template.accent }}
+            >
+              {data.basics.headline}
+            </p>
+          </div>
+          <div className="max-w-[225px]">
+            <ContactList data={data} horizontal hideIcons />
+          </div>
+        </div>
+        <div
+          className="mt-4 h-1.5 w-full"
+          style={{ backgroundColor: template.accent }}
+        />
+      </header>
+
+      <main className="mt-5 space-y-5">
+        <SummarySection data={data} accent={template.accent} compact />
+        <div className="grid grid-cols-[0.8fr_1.2fr] gap-8 rounded-xl bg-[#f4f5f2] p-4">
+          <SkillsSection
+            data={data}
+            accent={template.accent}
+            compact
+            pills
+          />
+          <ProjectsSection data={data} accent={template.accent} compact />
+        </div>
+        <ExperienceSection data={data} accent={template.accent} compact />
+        <div className="border-t border-black/12 pt-4">
+          <EducationSection data={data} accent={template.accent} compact />
+        </div>
+      </main>
+
+      <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-black/20">
+        Resulyra · {template.name}
+      </p>
+    </Sheet>
+  );
+}
+
+function FresherTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("bg-white px-11 py-10", className)}>
+      <header className="text-center">
+        <h1 className="text-[29px] font-bold leading-none tracking-[-0.045em] text-black/90">
+          {data.basics.fullName || "Your Name"}
+        </h1>
+        <p
+          className="mt-2 text-[7px] font-bold uppercase tracking-[0.17em]"
+          style={{ color: template.accent }}
+        >
+          {data.basics.headline || "Graduate candidate"}
+        </p>
+        <div className="mt-3 flex justify-center">
+          <ContactList data={data} horizontal hideIcons />
+        </div>
+        <div
+          className="mx-auto mt-4 h-1 w-16"
+          style={{ backgroundColor: template.accent }}
+        />
+      </header>
+
+      <main className="mt-6 space-y-5">
+        <SummarySection data={data} accent={template.accent} compact />
+        <EducationSection data={data} accent={template.accent} compact />
+        <ProjectsSection data={data} accent={template.accent} compact />
+        <SkillsSection
+          data={data}
+          accent={template.accent}
+          compact
+          pills
+        />
+      </main>
+
+      <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
+        <span>Education · Projects · Skills</span>
+        <span>Resulyra · {template.name}</span>
+      </div>
+    </Sheet>
+  );
+}
+
 export function ResumePreview(props: ResumePreviewProps) {
-  switch (props.template.id) {
-    case "nova":
+  switch (props.template.renderer) {
+    case "meridian":
       return <MeridianTemplate {...props} />;
-    case "classic":
+    case "editorial":
       return <EditorialTemplate {...props} />;
-    case "executive":
+    case "summit":
       return <SummitTemplate {...props} />;
-    case "minimal":
+    case "column":
       return <ColumnTemplate {...props} />;
-    case "studio":
+    case "horizon":
       return <HorizonTemplate {...props} />;
-    case "terminal":
+    case "blueprint":
       return <BlueprintTemplate {...props} />;
+    case "chronological":
+      return <ChronologicalTemplate {...props} />;
+    case "compact":
+      return <CompactTemplate {...props} />;
+    case "hybrid":
+      return <HybridTemplate {...props} />;
+    case "fresher":
+      return <FresherTemplate {...props} />;
   }
 }

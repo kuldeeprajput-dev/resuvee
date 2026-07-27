@@ -10,9 +10,14 @@ export const metadata: Metadata = {
 export default async function BuilderPage({
   searchParams,
 }: {
-  searchParams: Promise<{ template?: string }>;
+  searchParams: Promise<{ template?: string; starter?: string }>;
 }) {
-  const { template } = await searchParams;
+  const { template, starter } = await searchParams;
 
-  return <ResumeBuilder initialTemplate={template} />;
+  return (
+    <ResumeBuilder
+      initialTemplate={template}
+      initialStarter={starter}
+    />
+  );
 }

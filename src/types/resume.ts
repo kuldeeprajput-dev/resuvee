@@ -4,7 +4,31 @@ export type ResumeTemplateId =
   | "executive"
   | "minimal"
   | "studio"
-  | "terminal";
+  | "terminal"
+  | "standard"
+  | "compact"
+  | "hybrid"
+  | "consulting"
+  | "finance"
+  | "sales"
+  | "healthcare"
+  | "educator"
+  | "research"
+  | "fresher"
+  | "internship"
+  | "career-change";
+
+export type ResumeRendererId =
+  | "meridian"
+  | "editorial"
+  | "summit"
+  | "column"
+  | "horizon"
+  | "blueprint"
+  | "chronological"
+  | "compact"
+  | "hybrid"
+  | "fresher";
 
 export interface ResumeBasics {
   fullName: string;
@@ -62,6 +86,7 @@ export interface ResumeData {
 
 export interface ResumeTemplate {
   id: ResumeTemplateId;
+  renderer: ResumeRendererId;
   name: string;
   eyebrow: string;
   description: string;
@@ -69,6 +94,9 @@ export interface ResumeTemplate {
   background: string;
   suitableFor: string;
   layout: "single" | "sidebar";
+  supportsPhoto: boolean;
+  audience: "experienced" | "fresher" | "career-change";
+  popular?: boolean;
 }
 
 export type BuilderSection =

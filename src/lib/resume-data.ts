@@ -7,6 +7,7 @@ import type {
 export const resumeTemplates: ResumeTemplate[] = [
   {
     id: "nova",
+    renderer: "meridian",
     name: "Meridian",
     eyebrow: "Fresh",
     description: "A friendly portrait layout with a focused content rail.",
@@ -14,9 +15,13 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#e7f2eb",
     suitableFor: "Product, people & operations",
     layout: "sidebar",
+    supportsPhoto: true,
+    audience: "experienced",
+    popular: true,
   },
   {
     id: "classic",
+    renderer: "editorial",
     name: "Editorial",
     eyebrow: "Timeless",
     description: "A formal, typography-first document with balanced rules.",
@@ -24,9 +29,13 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#f2f0eb",
     suitableFor: "Academia, law & consulting",
     layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+    popular: true,
   },
   {
     id: "executive",
+    renderer: "summit",
     name: "Summit",
     eyebrow: "Leadership",
     description: "A confident executive document with a deep profile panel.",
@@ -34,9 +43,12 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#e6ecf2",
     suitableFor: "Leadership & management",
     layout: "sidebar",
+    supportsPhoto: true,
+    audience: "experienced",
   },
   {
     id: "minimal",
+    renderer: "column",
     name: "Column",
     eyebrow: "Minimal",
     description: "A crisp information-led layout with restrained typography.",
@@ -44,9 +56,13 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#efefec",
     suitableFor: "Any ATS-first application",
     layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+    popular: true,
   },
   {
     id: "studio",
+    renderer: "horizon",
     name: "Horizon",
     eyebrow: "Contemporary",
     description: "An airy portrait layout with an original curved masthead.",
@@ -54,9 +70,12 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#e8f2fa",
     suitableFor: "Education, research & creative",
     layout: "single",
+    supportsPhoto: true,
+    audience: "experienced",
   },
   {
     id: "terminal",
+    renderer: "blueprint",
     name: "Blueprint",
     eyebrow: "Technical",
     description: "A structured document with a subtle technical grid rail.",
@@ -64,6 +83,180 @@ export const resumeTemplates: ResumeTemplate[] = [
     background: "#e6eeeb",
     suitableFor: "Software & data roles",
     layout: "sidebar",
+    supportsPhoto: true,
+    audience: "experienced",
+  },
+  {
+    id: "standard",
+    renderer: "chronological",
+    name: "Standard",
+    eyebrow: "Most used",
+    description:
+      "A familiar reverse-chronological format with conventional headings.",
+    accent: "#263a34",
+    background: "#eceeea",
+    suitableFor: "Most roles & ATS-first applications",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+    popular: true,
+  },
+  {
+    id: "compact",
+    renderer: "compact",
+    name: "Compact",
+    eyebrow: "Space smart",
+    description:
+      "A dense one-page format for candidates with substantial experience.",
+    accent: "#315f54",
+    background: "#eceeea",
+    suitableFor: "Experienced specialists",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+    popular: true,
+  },
+  {
+    id: "hybrid",
+    renderer: "hybrid",
+    name: "Bridge",
+    eyebrow: "Hybrid",
+    description:
+      "Skills and achievements lead before a concise career timeline.",
+    accent: "#5a516d",
+    background: "#eceeea",
+    suitableFor: "Specialists & career transitions",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "career-change",
+    popular: true,
+  },
+  {
+    id: "consulting",
+    renderer: "chronological",
+    name: "Casebook",
+    eyebrow: "Consulting",
+    description:
+      "A rigorous results-first layout with restrained professional styling.",
+    accent: "#344f68",
+    background: "#eceeea",
+    suitableFor: "Consulting & strategy",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "finance",
+    renderer: "compact",
+    name: "Ledger",
+    eyebrow: "Finance",
+    description:
+      "Compact typography and disciplined hierarchy for analytical careers.",
+    accent: "#3f4c45",
+    background: "#eceeea",
+    suitableFor: "Finance, audit & banking",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "sales",
+    renderer: "chronological",
+    name: "Momentum",
+    eyebrow: "Commercial",
+    description:
+      "A performance-led layout that keeps measurable outcomes prominent.",
+    accent: "#865532",
+    background: "#eceeea",
+    suitableFor: "Sales & business development",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "healthcare",
+    renderer: "chronological",
+    name: "Careline",
+    eyebrow: "Healthcare",
+    description:
+      "A calm, highly readable document for credentials and patient impact.",
+    accent: "#28706c",
+    background: "#eceeea",
+    suitableFor: "Healthcare & clinical roles",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "educator",
+    renderer: "hybrid",
+    name: "Chalkline",
+    eyebrow: "Education",
+    description:
+      "A balanced format for teaching strengths, programs, and outcomes.",
+    accent: "#6e5634",
+    background: "#eceeea",
+    suitableFor: "Teaching & learning design",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "research",
+    renderer: "editorial",
+    name: "Citation",
+    eyebrow: "Research",
+    description:
+      "A formal document for education, research, and publication-led work.",
+    accent: "#4d4d4d",
+    background: "#eceeea",
+    suitableFor: "Research & academia",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "experienced",
+  },
+  {
+    id: "fresher",
+    renderer: "fresher",
+    name: "Launchpad",
+    eyebrow: "Fresher",
+    description:
+      "Education, projects, and skills take priority—with no experience block.",
+    accent: "#326b57",
+    background: "#eceeea",
+    suitableFor: "Graduates with no work experience",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "fresher",
+    popular: true,
+  },
+  {
+    id: "internship",
+    renderer: "fresher",
+    name: "First Step",
+    eyebrow: "Internship",
+    description:
+      "A clean student format for coursework, projects, and campus leadership.",
+    accent: "#3f6591",
+    background: "#eceeea",
+    suitableFor: "Students & internship seekers",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "fresher",
+  },
+  {
+    id: "career-change",
+    renderer: "hybrid",
+    name: "Pivot",
+    eyebrow: "Career change",
+    description:
+      "Transferable strengths and relevant proof lead before work history.",
+    accent: "#79515e",
+    background: "#eceeea",
+    suitableFor: "Career changers & returners",
+    layout: "single",
+    supportsPhoto: false,
+    audience: "career-change",
   },
 ];
 
@@ -201,6 +394,74 @@ export const defaultResumeData: ResumeData = {
   ],
 };
 
+export const fresherResumeData: ResumeData = {
+  basics: {
+    fullName: "Aarav Mehta",
+    headline: "Computer Science Graduate · Frontend Developer",
+    photo: "",
+    email: "aarav.mehta@example.com",
+    phone: "+91 98765 43210",
+    location: "Pune, India",
+    website: "github.com/aarav-builds",
+    summary:
+      "Computer Science graduate with hands-on experience building accessible web applications using React, TypeScript, and REST APIs. Strong foundation in data structures, collaborative development, and user-centered problem solving, demonstrated through academic and independent projects.",
+  },
+  experience: [],
+  education: [
+    {
+      id: "fresher-education-1",
+      degree: "BTech, Computer Science & Engineering",
+      school: "Western Institute of Technology",
+      location: "Pune, India",
+      startDate: "2022",
+      endDate: "2026",
+      details:
+        "CGPA: 8.7/10 · Relevant coursework: Data Structures, Databases, Web Engineering",
+    },
+  ],
+  projects: [
+    {
+      id: "fresher-project-1",
+      name: "Campus Connect",
+      description:
+        "A responsive event-discovery platform for student organizations.",
+      link: "github.com/aarav-builds/campus-connect",
+      highlights: [
+        "Built 12 reusable React components and reduced repeat UI code by 35%.",
+        "Tested navigation with 24 students and improved task completion by 28%.",
+      ],
+    },
+    {
+      id: "fresher-project-2",
+      name: "Budget Lens",
+      description:
+        "A TypeScript expense dashboard with categorized insights and CSV import.",
+      link: "github.com/aarav-builds/budget-lens",
+      highlights: [
+        "Processed 5,000+ transaction rows in under two seconds using client-side parsing.",
+        "Added keyboard navigation and achieved a 96 Lighthouse accessibility score.",
+      ],
+    },
+  ],
+  skillGroups: [
+    {
+      id: "fresher-skills-1",
+      name: "Development",
+      skills: ["TypeScript", "React", "JavaScript", "HTML", "CSS"],
+    },
+    {
+      id: "fresher-skills-2",
+      name: "Data & tools",
+      skills: ["SQL", "Git", "REST APIs", "Figma", "Vitest"],
+    },
+    {
+      id: "fresher-skills-3",
+      name: "Foundations",
+      skills: ["Data structures", "OOP", "Accessibility", "Agile"],
+    },
+  ],
+};
+
 export function createBlankResumeData(): ResumeData {
   return {
     basics: {
@@ -263,22 +524,37 @@ export function getEmptySkillGroup(index: number) {
   };
 }
 
-export function calculateResumeStrength(data: ResumeData) {
-  const checks = [
+export function calculateResumeStrength(
+  data: ResumeData,
+  options: { fresher?: boolean } = {},
+) {
+  const sharedChecks = [
     Boolean(data.basics.fullName.trim()),
     Boolean(data.basics.headline.trim()),
     Boolean(data.basics.email.trim()),
     Boolean(data.basics.phone.trim()),
     data.basics.summary.trim().length >= 80,
-    data.experience.length > 0 &&
-      data.experience.some((item) => item.highlights.some(Boolean)),
     data.education.length > 0,
     data.skillGroups.some((group) => group.skills.length >= 3),
     data.projects.length > 0,
-    data.experience.some((item) =>
-      item.highlights.some((highlight) => /\d/.test(highlight)),
-    ),
   ];
+  const evidenceChecks = options.fresher
+    ? [
+        data.projects.some((item) => item.highlights.some(Boolean)),
+        data.projects.some((item) =>
+          [item.description, ...item.highlights].some((text) =>
+            /\d/.test(text),
+          ),
+        ),
+      ]
+    : [
+        data.experience.length > 0 &&
+          data.experience.some((item) => item.highlights.some(Boolean)),
+        data.experience.some((item) =>
+          item.highlights.some((highlight) => /\d/.test(highlight)),
+        ),
+      ];
+  const checks = [...sharedChecks, ...evidenceChecks];
 
   return Math.round(
     (checks.filter(Boolean).length / checks.length) * 100,

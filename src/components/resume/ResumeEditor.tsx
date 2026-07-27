@@ -31,6 +31,7 @@ interface ResumeEditorProps {
   activeSection: BuilderSection;
   data: ResumeData;
   onChange: (data: ResumeData) => void;
+  supportsPhoto?: boolean;
 }
 
 function PhotoEditor({
@@ -128,6 +129,7 @@ function PhotoEditor({
 function PersonalDetailsEditor({
   data,
   onChange,
+  supportsPhoto = true,
 }: Omit<ResumeEditorProps, "activeSection">) {
   const update = (field: keyof ResumeData["basics"], value: string) => {
     onChange({
@@ -142,11 +144,26 @@ function PersonalDetailsEditor({
       title="Let’s start with the essentials"
       description="This information sits at the top of your resume. Use the name and contact details employers should use."
     >
-      <PhotoEditor
-        photo={data.basics.photo || ""}
-        name={data.basics.fullName}
-        onChange={(photo) => update("photo", photo)}
-      />
+      {supportsPhoto ? (
+        <PhotoEditor
+          photo={data.basics.photo || ""}
+          name={data.basics.fullName}
+          onChange={(photo) => update("photo", photo)}
+        />
+      ) : (
+        <div className="mb-6 flex items-center gap-3 rounded-2xl border border-[#bfd1c4] bg-[#edf4ef] p-4">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#42634e]">
+            <UserRound className="size-4" />
+          </span>
+          <div>
+            <p className="text-xs font-bold">Photo-free template</p>
+            <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
+              This design intentionally omits a profile image for a simpler,
+              ATS-focused document.
+            </p>
+          </div>
+        </div>
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label="Full name"
@@ -615,12 +632,18 @@ export function ResumeEditor({
   activeSection,
   data,
   onChange,
+  supportsPhoto = true,
 }: ResumeEditorProps) {
   const sharedProps = { data, onChange };
 
   switch (activeSection) {
     case "basics":
-      return <PersonalDetailsEditor {...sharedProps} />;
+      return (
+        <PersonalDetailsEditor
+          {...sharedProps}
+          supportsPhoto={supportsPhoto}
+        />
+      );
     case "summary":
       return <SummaryEditor {...sharedProps} />;
     case "experience":

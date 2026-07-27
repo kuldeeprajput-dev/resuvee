@@ -13,6 +13,7 @@ export interface ResumeStyle {
 interface CustomizePanelProps {
   style: ResumeStyle;
   templateAccent: string;
+  supportsPhoto: boolean;
   onChange: (style: ResumeStyle) => void;
   onClose: () => void;
 }
@@ -75,6 +76,7 @@ export function resumeFontClass(font: ResumeStyle["font"]) {
 export function CustomizePanel({
   style,
   templateAccent,
+  supportsPhoto,
   onChange,
   onClose,
 }: CustomizePanelProps) {
@@ -146,6 +148,7 @@ export function CustomizePanel({
             </div>
           </section>
 
+          {supportsPhoto && (
           <section className="mt-8 border-t border-black/10 pt-7">
             <div className="flex items-center gap-2">
               <Type className="size-4 text-[#4d7141]" />
@@ -182,6 +185,7 @@ export function CustomizePanel({
               ))}
             </div>
           </section>
+          )}
 
           <section className="mt-8 border-t border-black/10 pt-7">
             <div className="flex items-center gap-2">
