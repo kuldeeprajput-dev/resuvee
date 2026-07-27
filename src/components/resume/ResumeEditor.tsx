@@ -163,7 +163,7 @@ function PersonalDetailsEditor({
       title="Let’s start with the essentials"
       description="This information sits at the top of your resume. Use the name and contact details employers should use."
     >
-      <div className="mb-6 grid gap-2 grid-cols-1 min-[440px]:grid-cols-3">
+      <div className="mb-6 grid gap-2 grid-cols-1 min-[500px]:grid-cols-3">
         <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
           {template.layout === "sidebar" ? (
             <Columns3 className="size-4 text-[#4d7141]" />
@@ -209,20 +209,20 @@ function PersonalDetailsEditor({
           </div>
         </div>
       )}
-      <div className="grid gap-4 grid-cols-1 min-[440px]:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
         <Field
           label="Full name"
           value={data.basics.fullName}
           onChange={(value) => update("fullName", value)}
           placeholder="e.g. Maya Patel"
-          className="min-[440px]:col-span-2"
+          className="min-[500px]:col-span-2"
         />
         <Field
           label="Professional headline"
           value={data.basics.headline}
           onChange={(value) => update("headline", value)}
           placeholder="e.g. Senior Software Engineer"
-          className="min-[440px]:col-span-2"
+          className="min-[500px]:col-span-2"
         />
         <Field
           label="Email"
@@ -331,7 +331,7 @@ function ExperienceEditor({
             subtitle={item.company || "Add company"}
             onRemove={() => removeItem(item.id)}
           >
-            <div className="grid gap-4 grid-cols-1 min-[440px]:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
                 label="Job title"
                 value={item.role}
@@ -349,7 +349,7 @@ function ExperienceEditor({
                 value={item.location}
                 onChange={(value) => updateItem(item.id, { location: value })}
                 placeholder="Remote or City"
-                className="min-[440px]:col-span-2"
+                className="min-[500px]:col-span-2"
               />
               <Field
                 label="Start date"
@@ -446,13 +446,13 @@ function EducationEditor({
               })
             }
           >
-            <div className="grid gap-4 grid-cols-1 min-[440px]:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
                 label="Degree or qualification"
                 value={item.degree}
                 onChange={(value) => updateItem(item.id, { degree: value })}
                 placeholder="BSc, Computer Science"
-                className="min-[440px]:col-span-2"
+                className="min-[500px]:col-span-2"
               />
               <Field
                 label="School"
@@ -483,7 +483,7 @@ function EducationEditor({
                 value={item.details}
                 onChange={(value) => updateItem(item.id, { details: value })}
                 placeholder="Honors, GPA, or focus"
-                className="min-[440px]:col-span-2"
+                className="min-[500px]:col-span-2"
               />
             </div>
           </ItemCard>
@@ -544,7 +544,7 @@ function ProjectsEditor({
               })
             }
           >
-            <div className="grid gap-4 grid-cols-1 min-[440px]:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
                 label="Project name"
                 value={item.name}
@@ -565,7 +565,7 @@ function ProjectsEditor({
                 }
                 placeholder="What did you build and why?"
                 rows={3}
-                className="min-[440px]:col-span-2"
+                className="min-[500px]:col-span-2"
               />
             </div>
             <BulletEditor

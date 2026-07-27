@@ -84,15 +84,15 @@ export function EditorSection({
   children,
 }: EditorSectionProps) {
   return (
-    <div className="mx-auto w-full max-w-2xl px-5 pb-12 pt-7 sm:px-7">
-      <div className="mb-7">
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+    <div className="mx-auto w-full max-w-2xl px-3.5 pb-8 pt-4 sm:px-7 sm:pb-12 sm:pt-7">
+      <div className="mb-4 sm:mb-7">
+        <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
           {eyebrow}
         </p>
-        <h2 className="text-2xl font-bold tracking-[-0.035em] text-[var(--brand-ink)]">
+        <h2 className="text-xl font-bold tracking-[-0.035em] text-[var(--brand-ink)] sm:text-2xl">
           {title}
         </h2>
-        <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--brand-muted)]">
+        <p className="mt-1.5 max-w-xl text-xs leading-5 text-[var(--brand-muted)] sm:mt-2 sm:text-sm sm:leading-6">
           {description}
         </p>
       </div>
@@ -118,14 +118,14 @@ export function ItemCard({
 }: ItemCardProps) {
   return (
     <article className="overflow-hidden rounded-2xl border border-black/[0.09] bg-[#fbfaf6] shadow-sm">
-      <div className="flex items-center gap-3 border-b border-black/[0.07] bg-white/60 px-4 py-3">
+      <div className="flex items-center gap-2.5 border-b border-black/[0.07] bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3">
         <GripVertical className="size-4 text-black/25" />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-bold text-[var(--brand-ink)]">
+          <h3 className="truncate text-xs font-bold text-[var(--brand-ink)] sm:text-sm">
             {title}
           </h3>
           {subtitle && (
-            <p className="truncate text-xs text-[var(--brand-muted)]">
+            <p className="truncate text-[11px] text-[var(--brand-muted)] sm:text-xs">
               {subtitle}
             </p>
           )}
@@ -135,12 +135,12 @@ export function ItemCard({
           onClick={onRemove}
           disabled={!canRemove}
           aria-label={`Remove ${title}`}
-          className="flex size-8 items-center justify-center rounded-lg text-black/35 transition hover:bg-red-50 hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+          className="flex size-7 items-center justify-center rounded-lg text-black/35 transition hover:bg-red-50 hover:text-red-600 disabled:pointer-events-none disabled:opacity-25 sm:size-8"
         >
           <Trash2 className="size-3.5" />
         </button>
       </div>
-      <div className="space-y-4 p-4">{children}</div>
+      <div className="space-y-3 p-3 sm:space-y-4 sm:p-4">{children}</div>
     </article>
   );
 }

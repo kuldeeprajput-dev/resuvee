@@ -586,18 +586,18 @@ export function ResumeBuilder({
               />
             </div>
 
-            <div className="flex items-center justify-between border-t border-black/10 bg-white/80 px-5 py-3 backdrop-blur sm:px-7">
+            <div className="flex items-center justify-between border-t border-black/10 bg-white/80 px-3.5 py-2.5 backdrop-blur sm:px-7 sm:py-3">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => goToRelativeSection(-1)}
                 disabled={activeIndex === 0}
-                className="h-10 rounded-xl px-3 font-bold"
+                className="h-9 rounded-xl px-2.5 text-xs font-bold sm:h-10 sm:px-3 sm:text-sm"
               >
-                <ChevronLeft className="size-4" />
+                <ChevronLeft className="size-3.5 sm:size-4" />
                 Back
               </Button>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)] sm:text-[10px]">
                 {activeIndex + 1} / {visibleSections.length}
               </span>
               <Button
@@ -609,15 +609,15 @@ export function ResumeBuilder({
                     goToRelativeSection(1);
                   }
                 }}
-                className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white hover:bg-[#293630]"
+                className="h-9 rounded-xl bg-[var(--brand-ink)] px-3 text-xs font-bold text-white hover:bg-[#293630] sm:h-10 sm:px-4 sm:text-sm"
               >
                 {activeIndex === visibleSections.length - 1
                   ? "Preview"
                   : "Continue"}
                 {activeIndex === visibleSections.length - 1 ? (
-                  <Eye className="size-4" />
+                  <Eye className="size-3.5 sm:size-4" />
                 ) : (
-                  <ChevronRight className="size-4" />
+                  <ChevronRight className="size-3.5 sm:size-4" />
                 )}
               </Button>
             </div>
