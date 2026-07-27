@@ -473,8 +473,8 @@ export function ResumeBuilder({
                 ? undefined
                 : {
                     width: hideLeftSidebar
-                      ? `${Math.max(360, totalLeftWidthPx)}px`
-                      : `${Math.max(360, totalLeftWidthPx - 220)}px`,
+                      ? `${Math.max(540, totalLeftWidthPx)}px`
+                      : `${Math.max(540, totalLeftWidthPx - 220)}px`,
                   }
             }
           >
@@ -525,11 +525,10 @@ export function ResumeBuilder({
               />
             </div>
 
-            {/* Carousel Navigation Control Bar (Ultra-Thin Arrow - Line - Dots - Line - Arrow) */}
+            {/* Carousel Navigation Control Bar (Hidden for now, preserved for future feature activation) */}
             <div
               className={cn(
-                "flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1",
-                !hideLeftSidebar && "hidden",
+                "hidden items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1",
               )}
             >
               <button
