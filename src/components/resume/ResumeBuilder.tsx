@@ -15,8 +15,6 @@ import {
   ScanSearch,
   Palette,
   SpellCheck2,
-  Minus,
-  Plus,
   Redo2,
   Undo2,
   X,
@@ -32,14 +30,11 @@ import { Brand } from "@/components/layout/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ResumeEditor } from "./ResumeEditor";
-import { ResumePreview } from "./ResumePreview";
+import { InteractiveCanvas } from "./InteractiveCanvas";
 import { TemplateThumbnail } from "./TemplateThumbnail";
 import { TailorPanel } from "./TailorPanel";
 import { WritingCheckPanel } from "./WritingCheckPanel";
-import {
-  CustomizePanel,
-  resumeFontClass,
-} from "./CustomizePanel";
+import { CustomizePanel } from "./CustomizePanel";
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
@@ -432,75 +427,21 @@ export function ResumeBuilder({
         <section
           className={cn(
             "resume-preview-panel relative min-h-0 overflow-hidden bg-[#dfe1dc] lg:block",
-            showMobilePreview
-              ? "fixed inset-0 z-[80] block"
-              : "hidden",
+            showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden",
           )}
         >
-          <div className="no-print absolute inset-x-0 top-0 z-20 flex h-14 items-center justify-between border-b border-black/10 bg-white/90 px-4 backdrop-blur lg:px-5">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowMobilePreview(false)}
-                className="builder-icon-button lg:hidden"
-                aria-label="Close preview"
-              >
-                <X className="size-4" />
-              </button>
-              <p className="text-xs font-bold">Live preview</p>
-              <span className="hidden rounded-full bg-[var(--brand-lime)] px-2 py-1 text-[9px] font-bold uppercase tracking-[0.1em] sm:inline">
-                {template.name}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => setShowTemplates(true)}
-                className="mr-1 flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2.5 text-[10px] font-bold hover:bg-black/5"
-              >
-                <LayoutTemplate className="size-3.5" />
-                Templates
-              </button>
-              <button
-                type="button"
-                onClick={() => setZoom(zoom - 5)}
-                className="builder-icon-button"
-                aria-label="Zoom out"
-              >
-                <Minus className="size-3.5" />
-              </button>
-              <span className="w-9 text-center text-[10px] font-bold text-[var(--brand-muted)]">
-                {zoom}%
-              </span>
-              <button
-                type="button"
-                onClick={() => setZoom(zoom + 5)}
-                className="builder-icon-button"
-                aria-label="Zoom in"
-              >
-                <Plus className="size-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="resume-preview-scroll h-full overflow-auto px-5 pb-20 pt-20">
-            <div
-              className="resume-preview-stage mx-auto origin-top transition-transform duration-300"
-              style={{
-                width: 595,
-                transform: `scale(${zoom / 100})`,
-              }}
-            >
-              <ResumePreview
-                data={data}
-                template={previewTemplate}
-                showPhoto={
-                  resumeStyle.showPhoto && template.supportsPhoto
-                }
-                className={resumeFontClass(resumeStyle.font)}
-              />
-            </div>
-          </div>
+          <InteractiveCanvas
+            data={data}
+            template={template}
+            previewTemplate={previewTemplate}
+            showPhoto={Boolean(resumeStyle.showPhoto && template.supportsPhoto)}
+            font={resumeStyle.font}
+            zoom={zoom}
+            onZoomChange={setZoom}
+            onShowTemplates={() => setShowTemplates(true)}
+            onCloseMobilePreview={() => setShowMobilePreview(false)}
+            isMobilePreview={showMobilePreview}
+          />
         </section>
       </div>
 

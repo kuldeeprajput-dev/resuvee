@@ -193,7 +193,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
 
       setActiveSection: (activeSection) => set({ activeSection }),
       setResumeStyle: (resumeStyle) => set({ resumeStyle }),
-      setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(95, zoom)) }),
+      setZoom: (zoom) => set({ zoom: Math.max(25, Math.min(300, Math.round(zoom))) }),
       setTemplateFilter: (templateFilter) => set({ templateFilter }),
       setShowTemplates: (showTemplates) => set({ showTemplates }),
       setShowMobilePreview: (showMobilePreview) => set({ showMobilePreview }),
