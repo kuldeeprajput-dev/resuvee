@@ -11,6 +11,7 @@ import {
   Eye,
   FilePlus2,
   FileText,
+  GripVertical,
   LayoutTemplate,
   ScanSearch,
   Palette,
@@ -19,7 +20,7 @@ import {
   Undo2,
   X,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   builderSections,
   calculateResumeStrength,
@@ -103,6 +104,56 @@ export function ResumeBuilder({
     }
     return true;
   });
+  // Resizable Editor & Studio Canvas Split State
+  const [splitPercent, setSplitPercent] = useState<number>(42);
+  const [isResizing, setIsResizing] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const isLeftCollapsed = splitPercent <= 1;
+  const isRightCollapsed = splitPercent >= 99;
+
+  const containerWidth =
+    containerRef.current?.getBoundingClientRect().width ||
+    (typeof window !== "undefined" ? window.innerWidth : 1200);
+  const totalLeftWidthPx = (splitPercent / 100) * containerWidth;
+  const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 360;
+
+  useEffect(() => {
+    let animId: number | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing || !containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const relativeX = e.clientX - rect.left;
+      let percent = (relativeX / rect.width) * 100;
+
+      // Edge snapping for complete collapse
+      if (percent < 3) percent = 0;
+      else if (percent > 97) percent = 100;
+      else percent = Math.max(0, Math.min(100, percent));
+
+      if (animId !== null) cancelAnimationFrame(animId);
+      animId = requestAnimationFrame(() => {
+        setSplitPercent(percent);
+      });
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      if (animId !== null) cancelAnimationFrame(animId);
+    };
+
+    if (isResizing) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      if (animId !== null) cancelAnimationFrame(animId);
+    };
+  }, [isResizing]);
 
   useEffect(() => {
     let active = true;
@@ -272,8 +323,19 @@ export function ResumeBuilder({
         </div>
       </header>
 
-      <div className="grid h-[calc(100dvh-4rem)] grid-cols-[minmax(0,1fr)] lg:grid-cols-[220px_minmax(390px,0.86fr)_minmax(520px,1.14fr)] xl:grid-cols-[235px_minmax(440px,0.84fr)_minmax(580px,1.16fr)]">
-        <aside className="no-print hidden flex-col border-r border-black/10 bg-[#eeeee8] lg:flex">
+      <div
+        ref={containerRef}
+        className={cn(
+          "relative flex h-[calc(100dvh-4rem)] w-full overflow-hidden",
+          isResizing && "select-none",
+        )}
+      >
+        <aside
+          className={cn(
+            "no-print hidden w-[220px] shrink-0 flex-col border-r border-black/10 bg-[#eeeee8] lg:flex",
+            hideLeftSidebar && "lg:hidden",
+          )}
+        >
           <div className="border-b border-black/10 px-5 py-5">
             <div className="mb-2 flex items-center justify-between text-xs font-bold">
               <span>
@@ -356,98 +418,165 @@ export function ResumeBuilder({
           </div>
         </aside>
 
-        <section className="no-print flex min-h-0 min-w-0 flex-col border-r border-black/10 bg-[#f7f6f1]">
-          <div className="border-b border-black/[0.08] px-5 py-3 lg:hidden">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {visibleSections.map((section, index) => (
-                <button
-                  key={section.id}
-                  type="button"
-                  onClick={() => setActiveSection(section.id)}
-                  className={cn(
-                    "flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold",
-                    activeSection === section.id
-                      ? "bg-[var(--brand-ink)] text-white"
-                      : "border border-black/10 bg-white text-[var(--brand-muted)]",
-                  )}
-                >
-                  <span>{index + 1}</span>
-                  {section.shortLabel}
-                </button>
-              ))}
+        {/* Resizable Left Editor Panel */}
+        {!isLeftCollapsed && (
+          <section
+            className={cn(
+              "no-print flex min-h-0 flex-col border-r border-black/10 bg-[#f7f6f1]",
+              isResizing
+                ? "transition-none"
+                : "transition-[width] duration-150 ease-out",
+              isRightCollapsed ? "flex-1" : "shrink-0",
+            )}
+            style={
+              isRightCollapsed
+                ? undefined
+                : {
+                    width: hideLeftSidebar
+                      ? `${splitPercent}%`
+                      : `calc(${splitPercent}% - 220px)`,
+                  }
+            }
+          >
+            <div className="border-b border-black/[0.08] px-5 py-3 lg:hidden">
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {visibleSections.map((section, index) => (
+                  <button
+                    key={section.id}
+                    type="button"
+                    onClick={() => setActiveSection(section.id)}
+                    className={cn(
+                      "flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold",
+                      activeSection === section.id
+                        ? "bg-[var(--brand-ink)] text-white"
+                        : "border border-black/10 bg-white text-[var(--brand-muted)]",
+                    )}
+                  >
+                    <span>{index + 1}</span>
+                    {section.shortLabel}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <ResumeEditor
-              activeSection={activeSection}
-              data={data}
-              onChange={updateData}
-              template={template}
-            />
-          </div>
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <ResumeEditor
+                activeSection={activeSection}
+                data={data}
+                onChange={updateData}
+                template={template}
+              />
+            </div>
 
-          <div className="flex items-center justify-between border-t border-black/10 bg-white/80 px-5 py-3 backdrop-blur sm:px-7">
-            <Button
+            <div className="flex items-center justify-between border-t border-black/10 bg-white/80 px-5 py-3 backdrop-blur sm:px-7">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => goToRelativeSection(-1)}
+                disabled={activeIndex === 0}
+                className="h-10 rounded-xl px-3 font-bold"
+              >
+                <ChevronLeft className="size-4" />
+                Back
+              </Button>
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
+                {activeIndex + 1} / {visibleSections.length}
+              </span>
+              <Button
+                type="button"
+                onClick={() => {
+                  if (activeIndex === visibleSections.length - 1) {
+                    setShowMobilePreview(true);
+                  } else {
+                    goToRelativeSection(1);
+                  }
+                }}
+                className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white hover:bg-[#293630]"
+              >
+                {activeIndex === visibleSections.length - 1
+                  ? "Preview"
+                  : "Continue"}
+                {activeIndex === visibleSections.length - 1 ? (
+                  <Eye className="size-4" />
+                ) : (
+                  <ChevronRight className="size-4" />
+                )}
+              </Button>
+            </div>
+          </section>
+        )}
+
+        {/* Draggable Thin Vertical Splitter Resizer Bar */}
+        <div
+          onMouseDown={() => setIsResizing(true)}
+          onDoubleClick={() => setSplitPercent(42)}
+          className="no-print relative z-30 hidden w-3 shrink-0 cursor-col-resize items-center justify-center select-none lg:flex group -mx-1.5"
+          title="Drag left/right to adjust width (Double-click to reset)"
+        >
+          {/* Thin visual line */}
+          <div
+            className={cn(
+              "h-full w-px bg-black/20 transition-all duration-150 group-hover:w-1 group-hover:bg-emerald-500",
+              isResizing && "w-1 bg-emerald-500 shadow-sm",
+            )}
+          />
+
+          {isLeftCollapsed && (
+            <button
               type="button"
-              variant="ghost"
-              onClick={() => goToRelativeSection(-1)}
-              disabled={activeIndex === 0}
-              className="h-10 rounded-xl px-3 font-bold"
+              onClick={() => setSplitPercent(42)}
+              className="absolute left-2.5 z-40 flex size-7 items-center justify-center rounded-full border border-black/15 bg-white text-black/70 shadow-lg transition-all hover:scale-110 hover:text-black"
+              title="Expand Left Panels"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          )}
+
+          {isRightCollapsed && (
+            <button
+              type="button"
+              onClick={() => setSplitPercent(42)}
+              className="absolute right-2.5 z-40 flex size-7 items-center justify-center rounded-full border border-black/15 bg-white text-black/70 shadow-lg transition-all hover:scale-110 hover:text-black"
+              title="Expand Studio Canvas"
             >
               <ChevronLeft className="size-4" />
-              Back
-            </Button>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
-              {activeIndex + 1} / {visibleSections.length}
-            </span>
-            <Button
-              type="button"
-              onClick={() => {
-                if (activeIndex === visibleSections.length - 1) {
-                  setShowMobilePreview(true);
-                } else {
-                  goToRelativeSection(1);
-                }
-              }}
-              className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white hover:bg-[#293630]"
-            >
-              {activeIndex === visibleSections.length - 1
-                ? "Preview"
-                : "Continue"}
-              {activeIndex === visibleSections.length - 1 ? (
-                <Eye className="size-4" />
-              ) : (
-                <ChevronRight className="size-4" />
-              )}
-            </Button>
-          </div>
-        </section>
-
-        <section
-          className={cn(
-            "resume-preview-panel relative min-h-0 overflow-hidden bg-[#dfe1dc] lg:block",
-            showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden",
+            </button>
           )}
-        >
-          <InteractiveCanvas
-            data={data}
-            template={template}
-            previewTemplate={previewTemplate}
-            showPhoto={Boolean(resumeStyle.showPhoto && template.supportsPhoto)}
-            font={resumeStyle.font}
-            resumeStyle={resumeStyle}
-            zoom={zoom}
-            onZoomChange={setZoom}
-            onShowTemplates={() => setShowTemplates(true)}
-            onCloseMobilePreview={() => setShowMobilePreview(false)}
-            isMobilePreview={showMobilePreview}
-            onUpdateData={updateData}
-            onUpdateStyle={setResumeStyle}
-            onSelectSection={setActiveSection}
-          />
-        </section>
+        </div>
+
+        {/* Resizable Studio Canvas Panel */}
+        {!isRightCollapsed && (
+          <section
+            className={cn(
+              "resume-preview-panel relative min-h-0 flex-1 overflow-hidden bg-[#dfe1dc] lg:block",
+              showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden",
+            )}
+          >
+            <InteractiveCanvas
+              data={data}
+              template={template}
+              previewTemplate={previewTemplate}
+              showPhoto={Boolean(
+                resumeStyle.showPhoto && template.supportsPhoto,
+              )}
+              font={resumeStyle.font}
+              resumeStyle={resumeStyle}
+              zoom={zoom}
+              onZoomChange={setZoom}
+              onShowTemplates={() => setShowTemplates(true)}
+              onCloseMobilePreview={() => setShowMobilePreview(false)}
+              isMobilePreview={showMobilePreview}
+              onUpdateData={updateData}
+              onUpdateStyle={setResumeStyle}
+              onSelectSection={setActiveSection}
+            />
+          </section>
+        )}
       </div>
+
+      {isResizing && (
+        <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />
+      )}
 
       {showTemplates && (
         <div className="no-print fixed inset-0 z-[100] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
