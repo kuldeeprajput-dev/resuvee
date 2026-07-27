@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useRef, useState, type DragEvent } from "react";
 import {
   ArrowUpRight,
@@ -7,6 +8,7 @@ import {
   FileText,
   Gauge,
   Loader2,
+  PenLine,
   ScanLine,
   ShieldCheck,
   Sparkles,
@@ -153,14 +155,25 @@ export function ResumeAnalyzer() {
               </p>
             </div>
           </div>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="h-10 w-full justify-center gap-2 border-black/10 bg-white/75 text-[var(--premium-ink)] hover:bg-white sm:w-auto"
-          >
-            <Upload className="size-4" />
-            Analyze Another
-          </Button>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <Button
+              asChild
+              className="h-10 justify-center gap-2 bg-[var(--brand-ink)] px-4 text-white hover:bg-[#293630]"
+            >
+              <Link href="/builder">
+                <PenLine className="size-4" />
+                Build improved resume
+              </Link>
+            </Button>
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              className="h-10 justify-center gap-2 border-black/10 bg-white/75 text-[var(--premium-ink)] hover:bg-white"
+            >
+              <Upload className="size-4" />
+              Analyze another
+            </Button>
+          </div>
         </div>
         <ATSDashboard analysis={analysis} />
       </section>
