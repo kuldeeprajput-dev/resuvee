@@ -30,7 +30,7 @@ export function Brand() {
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-black/[0.07] bg-[var(--brand-canvas)]/88 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-white/90 shadow-[0_8px_28px_rgba(22,32,28,0.08)] backdrop-blur-xl">
       <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
         <Brand />
 
