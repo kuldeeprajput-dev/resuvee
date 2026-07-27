@@ -116,7 +116,7 @@ export function ResumeBuilder({
     containerRef.current?.getBoundingClientRect().width ||
     (typeof window !== "undefined" ? window.innerWidth : 1200);
   const totalLeftWidthPx = (splitPercent / 100) * containerWidth;
-  const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 360;
+  const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 560;
 
   useEffect(() => {
     let animId: number | null = null;
@@ -438,7 +438,12 @@ export function ResumeBuilder({
                   }
             }
           >
-            <div className="border-b border-black/[0.08] px-5 py-3 lg:hidden">
+            <div
+              className={cn(
+                "border-b border-black/[0.08] px-5 py-3",
+                !hideLeftSidebar && "lg:hidden",
+              )}
+            >
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {visibleSections.map((section, index) => (
                   <button
