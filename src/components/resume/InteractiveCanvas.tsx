@@ -2,12 +2,18 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  CaseUpper,
   Check,
   ChevronDown,
   Copy,
   Edit3,
   Grid,
   Hand,
+  Italic,
   LayoutTemplate,
   Maximize2,
   Minimize2,
@@ -125,6 +131,7 @@ export function InteractiveCanvas({
     setHighlightRect(null);
     setToolbarPos(null);
     setShowColorPicker(false);
+    selectedDomRef.current = null;
   }, []);
 
   const resetPanAndZoom = useCallback(() => {
@@ -259,8 +266,8 @@ export function InteractiveCanvas({
     };
 
     // Position floating toolbar directly above the highlighted element
-    const top = Math.max(65, box.top - 46);
-    const left = Math.max(20, Math.min(containerRect.width - 320, box.left + box.width / 2 - 160));
+    const top = Math.max(65, box.top - 48);
+    const left = Math.max(20, Math.min(containerRect.width - 420, box.left + box.width / 2 - 210));
 
     const clickedText = elem.textContent?.trim() || "";
     let found: SelectedCanvasElement | null = null;
@@ -436,6 +443,46 @@ export function InteractiveCanvas({
         }),
       });
     }
+  };
+
+  // Localized Micro-Formatting Tools
+  const changeFontSize = (delta: number) => {
+    if (!selectedDomRef.current) return;
+    const currentSize = parseFloat(window.getComputedStyle(selectedDomRef.current).fontSize) || 14;
+    const newSize = Math.max(8, Math.min(48, currentSize + delta));
+    selectedDomRef.current.style.fontSize = `${newSize}px`;
+  };
+
+  const toggleBold = () => {
+    if (!selectedDomRef.current) return;
+    const weight = window.getComputedStyle(selectedDomRef.current).fontWeight;
+    const isBold = weight === "700" || weight === "bold";
+    selectedDomRef.current.style.fontWeight = isBold ? "normal" : "bold";
+  };
+
+  const toggleItalic = () => {
+    if (!selectedDomRef.current) return;
+    const style = window.getComputedStyle(selectedDomRef.current).fontStyle;
+    const isItalic = style === "italic";
+    selectedDomRef.current.style.fontStyle = isItalic ? "normal" : "italic";
+  };
+
+  const setTextAlign = (align: "left" | "center" | "right") => {
+    if (!selectedDomRef.current) return;
+    selectedDomRef.current.style.textAlign = align;
+  };
+
+  const toggleCase = () => {
+    if (!inlineText) return;
+    let nextText = inlineText;
+    if (inlineText === inlineText.toUpperCase()) {
+      nextText = inlineText.toLowerCase();
+    } else if (inlineText === inlineText.toLowerCase()) {
+      nextText = inlineText.replace(/\b\w/g, (c) => c.toUpperCase());
+    } else {
+      nextText = inlineText.toUpperCase();
+    }
+    handleRealtimeTextChange(nextText);
   };
 
   // Adjust Page Padding (Margins)
@@ -639,7 +686,7 @@ export function InteractiveCanvas({
         {/* Contextual Floating Formatting Bar (Appears directly above clicked element on PDF) */}
         {selectedElement && toolbarPos && (
           <div
-            className="no-print absolute z-50 flex items-center gap-1.5 rounded-2xl border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 animate-in fade-in zoom-in-95"
+            className="no-print absolute z-50 flex items-center gap-1 rounded-2xl border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 animate-in fade-in zoom-in-95"
             style={{
               top: `${toolbarPos.top}px`,
               left: `${toolbarPos.left}px`,
@@ -652,12 +699,90 @@ export function InteractiveCanvas({
                 type="text"
                 value={inlineText}
                 onChange={(e) => handleRealtimeTextChange(e.target.value)}
-                className="w-44 rounded-md bg-white px-2 py-0.5 text-xs font-bold text-[var(--brand-ink)] focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                className="w-40 rounded-md bg-white px-2 py-0.5 text-xs font-bold text-[var(--brand-ink)] focus:outline-none focus:ring-1 focus:ring-emerald-600"
                 placeholder="Type in real-time..."
               />
             </div>
 
-            <span className="h-5 w-px bg-black/10" />
+            <span className="h-5 w-px bg-black/10 mx-0.5" />
+
+            {/* Localized Font Size Adjusters */}
+            <div className="flex items-center gap-0.5 rounded-xl bg-black/5 p-0.5">
+              <button
+                type="button"
+                onClick={() => changeFontSize(-1)}
+                className="flex size-6 items-center justify-center rounded-md text-[11px] font-extrabold text-[var(--brand-ink)] hover:bg-white"
+                title="Decrease Font Size"
+              >
+                A-
+              </button>
+              <button
+                type="button"
+                onClick={() => changeFontSize(1)}
+                className="flex size-6 items-center justify-center rounded-md text-[11px] font-extrabold text-[var(--brand-ink)] hover:bg-white"
+                title="Increase Font Size"
+              >
+                A+
+              </button>
+            </div>
+
+            {/* Localized Bold & Italic Toggles */}
+            <button
+              type="button"
+              onClick={toggleBold}
+              className="builder-icon-button"
+              title="Toggle Bold"
+            >
+              <Bold className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={toggleItalic}
+              className="builder-icon-button"
+              title="Toggle Italic"
+            >
+              <Italic className="size-3.5" />
+            </button>
+
+            {/* Case Transformer */}
+            <button
+              type="button"
+              onClick={toggleCase}
+              className="builder-icon-button"
+              title="Cycle Text Case (UPPER / Title / lower)"
+            >
+              <CaseUpper className="size-3.5" />
+            </button>
+
+            <span className="h-5 w-px bg-black/10 mx-0.5" />
+
+            {/* Alignment Controls */}
+            <button
+              type="button"
+              onClick={() => setTextAlign("left")}
+              className="builder-icon-button"
+              title="Align Left"
+            >
+              <AlignLeft className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setTextAlign("center")}
+              className="builder-icon-button"
+              title="Align Center"
+            >
+              <AlignCenter className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setTextAlign("right")}
+              className="builder-icon-button"
+              title="Align Right"
+            >
+              <AlignRight className="size-3.5" />
+            </button>
+
+            <span className="h-5 w-px bg-black/10 mx-0.5" />
 
             {/* Color Swatch Picker */}
             <div className="relative">
@@ -691,7 +816,7 @@ export function InteractiveCanvas({
               )}
             </div>
 
-            <span className="h-5 w-px bg-black/10" />
+            <span className="h-5 w-px bg-black/10 mx-0.5" />
 
             {/* Duplicate Item */}
             {selectedElement.id && (
