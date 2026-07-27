@@ -627,7 +627,9 @@ export function InteractiveCanvas({
           <span className="shrink-0 max-w-[110px] truncate rounded-full bg-[var(--brand-lime)] px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em] text-[var(--brand-ink)]">
             {template.name}
           </span>
+        </div>
 
+        <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
           {/* Template Selector Button */}
           <button
             type="button"
@@ -637,9 +639,7 @@ export function InteractiveCanvas({
             <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
             <span className="whitespace-nowrap">Templates</span>
           </button>
-        </div>
 
-        <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
           {/* Fullscreen Toggle Button */}
           <button
             type="button"
