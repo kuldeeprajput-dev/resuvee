@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import { ImagePlus, UserRound, X } from "lucide-react";
+import { useRef, useState } from "react";
 import type {
   BuilderSection,
   ResumeData,
@@ -30,6 +33,98 @@ interface ResumeEditorProps {
   onChange: (data: ResumeData) => void;
 }
 
+function PhotoEditor({
+  photo,
+  name,
+  onChange,
+}: {
+  photo: string;
+  name: string;
+  onChange: (photo: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState("");
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Choose a JPG, PNG, or WebP image.");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError("Keep the profile image under 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        onChange(reader.result);
+        setError("");
+      }
+    };
+    reader.onerror = () => setError("The image could not be read.");
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="mb-6 rounded-2xl border border-black/[0.09] bg-white/60 p-4 shadow-sm">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={(event) => handleFile(event.target.files?.[0])}
+      />
+      <div className="flex items-center gap-4">
+        <div className="relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-[#e8ece8] text-[var(--brand-muted)]">
+          {photo ? (
+            <Image
+              src={photo}
+              alt={name ? `${name} profile` : "Resume profile"}
+              fill
+              unoptimized
+              sizes="80px"
+              className="object-cover"
+            />
+          ) : (
+            <UserRound className="size-8" />
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-bold text-[var(--brand-ink)]">
+            Profile photo
+          </p>
+          <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
+            Optional. Used only by templates designed for a headshot.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[var(--brand-ink)] px-3 text-[10px] font-bold text-white transition hover:bg-[#293630]"
+            >
+              <ImagePlus className="size-3.5" />
+              {photo ? "Replace photo" : "Upload photo"}
+            </button>
+            {photo && (
+              <button
+                type="button"
+                onClick={() => onChange("")}
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-3 text-[10px] font-bold text-[var(--brand-muted)] transition hover:text-red-600"
+              >
+                <X className="size-3.5" />
+                Remove
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      {error && <p className="mt-3 text-xs font-medium text-red-600">{error}</p>}
+    </div>
+  );
+}
+
 function PersonalDetailsEditor({
   data,
   onChange,
@@ -47,6 +142,11 @@ function PersonalDetailsEditor({
       title="Let’s start with the essentials"
       description="This information sits at the top of your resume. Use the name and contact details employers should use."
     >
+      <PhotoEditor
+        photo={data.basics.photo || ""}
+        name={data.basics.fullName}
+        onChange={(photo) => update("photo", photo)}
+      />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label="Full name"

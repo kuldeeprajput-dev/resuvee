@@ -9,6 +9,7 @@ export type ResumeTemplateId =
 export interface ResumeBasics {
   fullName: string;
   headline: string;
+  photo: string;
   email: string;
   phone: string;
   location: string;
