@@ -8,36 +8,11 @@ interface TemplateThumbnailProps {
   showLabel?: boolean;
 }
 
-const templatePreviewImages: Record<string, string> = {
-  nova: "/assets/template-previews/meridian.webp",
-  classic: "/assets/template-previews/editorial.webp",
-  executive: "/assets/template-previews/summit.webp",
-  minimal: "/assets/template-previews/column.webp",
-  studio: "/assets/template-previews/horizon.webp",
-  terminal: "/assets/template-previews/blueprint.webp",
-  standard: "/assets/template-previews/standard.webp",
-  compact: "/assets/template-previews/compact.webp",
-  hybrid: "/assets/template-previews/bridge.webp",
-  consulting: "/assets/template-previews/casebook.webp",
-  finance: "/assets/template-previews/ledger.webp",
-  sales: "/assets/template-previews/momentum.webp",
-  healthcare: "/assets/template-previews/careline.webp",
-  educator: "/assets/template-previews/chalkline.webp",
-  research: "/assets/template-previews/citation.webp",
-  fresher: "/assets/template-previews/launchpad.webp",
-  internship: "/assets/template-previews/first-step.webp",
-  "career-change": "/assets/template-previews/pivot.webp",
-};
-
 export function TemplateThumbnail({
   template,
   className,
   showLabel = false,
 }: TemplateThumbnailProps) {
-  const previewSrc =
-    templatePreviewImages[template.id] ??
-    "/assets/template-previews/standard.webp";
-
   return (
     <div
       className={cn(
@@ -47,7 +22,7 @@ export function TemplateThumbnail({
       aria-label={`${template.name} template preview`}
     >
       <Image
-        src={previewSrc}
+        src={template.previewImage}
         alt={`${template.name} original resume template preview`}
         fill
         quality={90}

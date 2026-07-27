@@ -8,12 +8,6 @@ export type ResumeTemplateId =
   | "standard"
   | "compact"
   | "hybrid"
-  | "consulting"
-  | "finance"
-  | "sales"
-  | "healthcare"
-  | "educator"
-  | "research"
   | "fresher"
   | "internship"
   | "career-change";
@@ -28,7 +22,9 @@ export type ResumeRendererId =
   | "chronological"
   | "compact"
   | "hybrid"
-  | "fresher";
+  | "fresher"
+  | "first-step"
+  | "pivot";
 
 export interface ResumeBasics {
   fullName: string;
@@ -95,6 +91,10 @@ export interface ResumeTemplate {
   suitableFor: string;
   layout: "single" | "sidebar";
   supportsPhoto: boolean;
+  photoShape?: "circle" | "rounded" | "square";
+  sections: BuilderSection[];
+  sidebarSections: BuilderSection[];
+  previewImage: string;
   audience: "experienced" | "fresher" | "career-change";
   popular?: boolean;
 }
