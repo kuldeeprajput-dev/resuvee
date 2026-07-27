@@ -30,9 +30,9 @@ export function Brand() {
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-black/[0.07] bg-[var(--brand-canvas)]/88 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 bg-[var(--brand-canvas)]/88 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] w-full max-w-[1280px] items-center px-3 sm:px-5 lg:px-8">
-        <div className="flex h-[54px] w-full items-center gap-2 rounded-[20px] border border-black/[0.08] bg-white/72 px-2.5 shadow-[0_8px_28px_rgba(22,32,28,0.09)] backdrop-blur-xl sm:px-3">
+        <div className="flex h-[54px] w-full items-center gap-2 rounded-[20px] border border-black/[0.08] bg-white/72 px-2.5 backdrop-blur-xl sm:px-3">
           <div className="shrink-0">
             <Brand />
           </div>
