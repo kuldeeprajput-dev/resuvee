@@ -16,6 +16,10 @@ interface ResumePreviewProps {
   template: ResumeTemplate;
   className?: string;
   showPhoto?: boolean;
+  pagePadding?: "compact" | "normal" | "spacious";
+  sectionSpacing?: "compact" | "normal" | "spacious";
+  fontSizeScale?: number;
+  lineHeight?: "tight" | "normal" | "relaxed";
 }
 
 interface SectionProps {
@@ -439,16 +443,19 @@ function ProjectsSection({
 function Sheet({
   children,
   className,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <article
       className={cn(
-        "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
+        "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)] transition-all duration-200",
         className,
       )}
+      style={style}
     >
       {children}
     </article>

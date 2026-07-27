@@ -8,6 +8,10 @@ export interface ResumeStyle {
   accent: string;
   font: "template" | "sans" | "serif" | "mono";
   showPhoto: boolean;
+  pagePadding?: "compact" | "normal" | "spacious";
+  sectionSpacing?: "compact" | "normal" | "spacious";
+  fontSizeScale?: 0.9 | 1.0 | 1.1;
+  lineHeight?: "tight" | "normal" | "relaxed";
 }
 
 interface CustomizePanelProps {
@@ -22,6 +26,10 @@ export const defaultResumeStyle: ResumeStyle = {
   accent: "",
   font: "template",
   showPhoto: true,
+  pagePadding: "normal",
+  sectionSpacing: "normal",
+  fontSizeScale: 1.0,
+  lineHeight: "normal",
 };
 
 const colors = [

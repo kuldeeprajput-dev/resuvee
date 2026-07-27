@@ -436,11 +436,15 @@ export function ResumeBuilder({
             previewTemplate={previewTemplate}
             showPhoto={Boolean(resumeStyle.showPhoto && template.supportsPhoto)}
             font={resumeStyle.font}
+            resumeStyle={resumeStyle}
             zoom={zoom}
             onZoomChange={setZoom}
             onShowTemplates={() => setShowTemplates(true)}
             onCloseMobilePreview={() => setShowMobilePreview(false)}
             isMobilePreview={showMobilePreview}
+            onUpdateData={updateData}
+            onUpdateStyle={setResumeStyle}
+            onSelectSection={setActiveSection}
           />
         </section>
       </div>

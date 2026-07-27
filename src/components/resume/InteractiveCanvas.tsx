@@ -4,7 +4,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Check,
   ChevronDown,
-  Compass,
+  Copy,
+  Edit3,
   Grid,
   Hand,
   LayoutTemplate,
@@ -12,16 +13,29 @@ import {
   Minimize2,
   Minus,
   MousePointer,
+  Palette,
   Plus,
   RotateCcw,
+  Ruler,
+  Trash2,
+  Type,
   X,
 } from "lucide-react";
-import type { ResumeData, ResumeTemplate } from "@/types/resume";
+import type { BuilderSection, ResumeData, ResumeTemplate } from "@/types/resume";
 import { ResumePreview } from "./ResumePreview";
 import { resumeFontClass, type ResumeStyle } from "./CustomizePanel";
 import { cn } from "@/lib/utils";
 
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
+
+export interface SelectedCanvasElement {
+  section: "basics" | "experience" | "education" | "projects" | "skills";
+  id?: string;
+  field?: string;
+  highlightIndex?: number;
+  title: string;
+  subtitle?: string;
+}
 
 interface InteractiveCanvasProps {
   data: ResumeData;
@@ -29,11 +43,15 @@ interface InteractiveCanvasProps {
   previewTemplate: ResumeTemplate;
   showPhoto: boolean;
   font: ResumeStyle["font"];
+  resumeStyle?: ResumeStyle;
   zoom: number;
   onZoomChange: (zoom: number) => void;
   onShowTemplates: () => void;
   onCloseMobilePreview?: () => void;
   isMobilePreview?: boolean;
+  onUpdateData?: (data: ResumeData) => void;
+  onUpdateStyle?: (style: ResumeStyle) => void;
+  onSelectSection?: (section: BuilderSection) => void;
 }
 
 const ZOOM_PRESETS = [
@@ -47,19 +65,37 @@ const ZOOM_PRESETS = [
   { label: "300%", value: 300 },
 ];
 
+const COLOR_SWATCHES = [
+  { name: "Forest", value: "#28785b" },
+  { name: "Ink", value: "#243934" },
+  { name: "Ocean", value: "#2f6fa3" },
+  { name: "Navy", value: "#203b57" },
+  { name: "Plum", value: "#6c4c70" },
+  { name: "Terracotta", value: "#a85239" },
+  { name: "Graphite", value: "#424242" },
+];
+
 export function InteractiveCanvas({
   data,
   template,
   previewTemplate,
   showPhoto,
   font,
+  resumeStyle,
   zoom,
   onZoomChange,
   onShowTemplates,
   onCloseMobilePreview,
   isMobilePreview = false,
+  onUpdateData,
+  onUpdateStyle,
+  onSelectSection,
 }: InteractiveCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const selectedDomRef = useRef<HTMLElement | null>(null);
+
+  // Pan & Drag States
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -67,18 +103,38 @@ export function InteractiveCanvas({
   const [isSpacePressed, setIsSpacePressed] = useState(false);
   const [canvasTheme, setCanvasTheme] = useState<CanvasTheme>("dots");
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Menus
   const [showPresetsMenu, setShowPresetsMenu] = useState(false);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+
+  // Direct On-Canvas Element Selection, Bounding Highlight & Real-Time Toolbar State
+  const [selectedElement, setSelectedElement] = useState<SelectedCanvasElement | null>(null);
+  const [highlightRect, setHighlightRect] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const [toolbarPos, setToolbarPos] = useState<{ top: number; left: number } | null>(null);
+  const [inlineText, setInlineText] = useState("");
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const clearSelection = useCallback(() => {
+    setSelectedElement(null);
+    setHighlightRect(null);
+    setToolbarPos(null);
+    setShowColorPicker(false);
+  }, []);
 
   const resetPanAndZoom = useCallback(() => {
     setPan({ x: 0, y: 0 });
     onZoomChange(80);
   }, [onZoomChange]);
 
-  // Keyboard shortcut listeners for Space-drag and zoom
+  // Keyboard listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept keypresses when typing in inputs/textareas
       const targetTag = (e.target as HTMLElement)?.tagName?.toLowerCase();
       if (targetTag === "input" || targetTag === "textarea") return;
 
@@ -96,6 +152,8 @@ export function InteractiveCanvas({
       } else if ((e.ctrlKey || e.metaKey) && e.key === "0") {
         e.preventDefault();
         resetPanAndZoom();
+      } else if (e.key === "Escape") {
+        clearSelection();
       }
     };
 
@@ -111,9 +169,9 @@ export function InteractiveCanvas({
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [isSpacePressed, zoom, onZoomChange, resetPanAndZoom]);
+  }, [isSpacePressed, zoom, onZoomChange, resetPanAndZoom, clearSelection]);
 
-  // Handle Wheel Events for Ctrl+Wheel Zoom & Smooth Pan
+  // Wheel zoom & pan
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
       if (e.ctrlKey || e.metaKey) {
@@ -121,7 +179,6 @@ export function InteractiveCanvas({
         const delta = e.deltaY < 0 ? 8 : -8;
         onZoomChange(zoom + delta);
       } else {
-        // Pan with wheel when not zooming
         setPan((prev) => ({
           x: prev.x - e.deltaX * 0.8,
           y: prev.y - e.deltaY * 0.8,
@@ -134,7 +191,6 @@ export function InteractiveCanvas({
   const activeHand = isHandTool || isSpacePressed;
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Enable drag on middle button, hand tool, spacebar, or clicking background
     if (
       e.button === 1 ||
       activeHand ||
@@ -175,6 +231,290 @@ export function InteractiveCanvas({
     setPan({ x: 0, y: 0 });
   };
 
+  // Direct Granular Element Click Handler + Left Editor Step Sync
+  const handleSheetClick = (e: React.MouseEvent) => {
+    if (activeHand || isDragging) return;
+
+    const target = e.target as HTMLElement;
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Granular text element: h1, h2, h3, h4, p, li, span, a, or direct target
+    const elem = target.closest("h1, h2, h3, h4, p, li, span, a") || target;
+    if (!elem || elem.tagName.toLowerCase() === "article" || elem.tagName.toLowerCase() === "section") {
+      clearSelection();
+      return;
+    }
+    selectedDomRef.current = elem as HTMLElement;
+
+    const containerRect = container.getBoundingClientRect();
+    const elemRect = elem.getBoundingClientRect();
+
+    // Bounding box wrapping ONLY the specific clicked text element
+    const box = {
+      top: elemRect.top - containerRect.top - 2,
+      left: elemRect.left - containerRect.left - 2,
+      width: Math.max(40, elemRect.width + 4),
+      height: Math.max(16, elemRect.height + 4),
+    };
+
+    // Position floating toolbar directly above the highlighted element
+    const top = Math.max(65, box.top - 46);
+    const left = Math.max(20, Math.min(containerRect.width - 320, box.left + box.width / 2 - 160));
+
+    const clickedText = elem.textContent?.trim() || "";
+    let found: SelectedCanvasElement | null = null;
+
+    // Basics fields
+    if (clickedText === data.basics.fullName || elem.tagName.toLowerCase() === "h1") {
+      found = { section: "basics", field: "fullName", title: "Full Name" };
+      setInlineText(data.basics.fullName);
+    } else if (clickedText === data.basics.headline) {
+      found = { section: "basics", field: "headline", title: "Headline" };
+      setInlineText(data.basics.headline);
+    } else if (clickedText === data.basics.summary) {
+      found = { section: "basics", field: "summary", title: "Summary" };
+      setInlineText(data.basics.summary);
+    } else if (clickedText === data.basics.email) {
+      found = { section: "basics", field: "email", title: "Email" };
+      setInlineText(data.basics.email);
+    } else if (clickedText === data.basics.phone) {
+      found = { section: "basics", field: "phone", title: "Phone" };
+      setInlineText(data.basics.phone);
+    } else if (clickedText === data.basics.location) {
+      found = { section: "basics", field: "location", title: "Location" };
+      setInlineText(data.basics.location);
+    }
+
+    // Experience
+    if (!found) {
+      for (const item of data.experience) {
+        if (clickedText === item.role) {
+          found = { section: "experience", id: item.id, field: "role", title: "Job Role", subtitle: item.company };
+          setInlineText(item.role);
+          break;
+        } else if (clickedText.includes(item.company)) {
+          found = { section: "experience", id: item.id, field: "company", title: "Company", subtitle: item.role };
+          setInlineText(item.company);
+          break;
+        } else {
+          const hIndex = item.highlights.findIndex((hl) => clickedText.includes(hl) || hl.includes(clickedText));
+          if (hIndex !== -1) {
+            found = { section: "experience", id: item.id, field: "highlight", highlightIndex: hIndex, title: "Highlight" };
+            setInlineText(item.highlights[hIndex]);
+            break;
+          }
+        }
+      }
+    }
+
+    // Education
+    if (!found) {
+      for (const item of data.education) {
+        if (clickedText === item.degree) {
+          found = { section: "education", id: item.id, field: "degree", title: "Degree", subtitle: item.school };
+          setInlineText(item.degree);
+          break;
+        } else if (clickedText === item.school) {
+          found = { section: "education", id: item.id, field: "school", title: "School", subtitle: item.degree };
+          setInlineText(item.school);
+          break;
+        } else if (item.details && clickedText.includes(item.details)) {
+          found = { section: "education", id: item.id, field: "details", title: "Education Details" };
+          setInlineText(item.details);
+          break;
+        }
+      }
+    }
+
+    // Projects
+    if (!found) {
+      for (const item of data.projects) {
+        if (clickedText === item.name) {
+          found = { section: "projects", id: item.id, field: "name", title: "Project Name" };
+          setInlineText(item.name);
+          break;
+        } else if (clickedText === item.description) {
+          found = { section: "projects", id: item.id, field: "description", title: "Project Description" };
+          setInlineText(item.description);
+          break;
+        }
+      }
+    }
+
+    // Skills
+    if (!found) {
+      for (const group of data.skillGroups) {
+        if (clickedText === group.name) {
+          found = { section: "skills", id: group.id, field: "name", title: "Skill Category" };
+          setInlineText(group.name);
+          break;
+        } else if (group.skills.some((s) => clickedText.includes(s))) {
+          found = { section: "skills", id: group.id, field: "skills", title: "Skills List" };
+          setInlineText(group.skills.join(", "));
+          break;
+        }
+      }
+    }
+
+    // Fallback
+    if (!found) {
+      found = {
+        section: "basics",
+        field: "fullName",
+        title: "Selected Text",
+      };
+      setInlineText(clickedText);
+    }
+
+    setSelectedElement(found);
+    setHighlightRect(box);
+    setToolbarPos({ top, left });
+
+    // Sync section with Left-Side Editor
+    onSelectSection?.(found.section);
+  };
+
+  // REAL-TIME INSTANT TYPING UPDATE FOR SPECIFIC FIELD
+  const handleRealtimeTextChange = (newText: string) => {
+    setInlineText(newText);
+    if (!selectedElement || !onUpdateData) return;
+
+    const { section, id, field, highlightIndex } = selectedElement;
+
+    if (section === "basics") {
+      const fieldKey = (field || "fullName") as keyof ResumeData["basics"];
+      onUpdateData({
+        ...data,
+        basics: { ...data.basics, [fieldKey]: newText },
+      });
+    } else if (section === "experience" && id) {
+      onUpdateData({
+        ...data,
+        experience: data.experience.map((item) => {
+          if (item.id !== id) return item;
+          if (field === "company") return { ...item, company: newText };
+          if (field === "highlight" && highlightIndex !== undefined) {
+            const nextH = [...item.highlights];
+            nextH[highlightIndex] = newText;
+            return { ...item, highlights: nextH };
+          }
+          return { ...item, role: newText };
+        }),
+      });
+    } else if (section === "education" && id) {
+      onUpdateData({
+        ...data,
+        education: data.education.map((item) => {
+          if (item.id !== id) return item;
+          if (field === "school") return { ...item, school: newText };
+          if (field === "details") return { ...item, details: newText };
+          return { ...item, degree: newText };
+        }),
+      });
+    } else if (section === "projects" && id) {
+      onUpdateData({
+        ...data,
+        projects: data.projects.map((item) => {
+          if (item.id !== id) return item;
+          if (field === "description") return { ...item, description: newText };
+          return { ...item, name: newText };
+        }),
+      });
+    } else if (section === "skills" && id) {
+      onUpdateData({
+        ...data,
+        skillGroups: data.skillGroups.map((group) => {
+          if (group.id !== id) return group;
+          if (field === "skills") {
+            return {
+              ...group,
+              skills: newText.split(",").map((s) => s.trim()).filter(Boolean),
+            };
+          }
+          return { ...group, name: newText };
+        }),
+      });
+    }
+  };
+
+  // Adjust Page Padding (Margins)
+  const cyclePagePadding = () => {
+    if (!onUpdateStyle || !resumeStyle) return;
+    const current = resumeStyle.pagePadding || "normal";
+    const next = current === "compact" ? "normal" : current === "normal" ? "spacious" : "compact";
+    onUpdateStyle({ ...resumeStyle, pagePadding: next });
+  };
+
+  // Adjust Section Spacing / Gaps
+  const cycleSectionSpacing = () => {
+    if (!onUpdateStyle || !resumeStyle) return;
+    const current = resumeStyle.sectionSpacing || "normal";
+    const next = current === "compact" ? "normal" : current === "normal" ? "spacious" : "compact";
+    onUpdateStyle({ ...resumeStyle, sectionSpacing: next });
+  };
+
+  // Duplicate Selected Item
+  const duplicateSelected = () => {
+    if (!selectedElement || !onUpdateData) return;
+    if (selectedElement.section === "experience" && selectedElement.id) {
+      const target = data.experience.find((i) => i.id === selectedElement.id);
+      if (target) {
+        onUpdateData({
+          ...data,
+          experience: [
+            ...data.experience,
+            { ...target, id: `exp-${Date.now()}`, role: `${target.role} (Copy)` },
+          ],
+        });
+      }
+    } else if (selectedElement.section === "education" && selectedElement.id) {
+      const target = data.education.find((i) => i.id === selectedElement.id);
+      if (target) {
+        onUpdateData({
+          ...data,
+          education: [
+            ...data.education,
+            { ...target, id: `edu-${Date.now()}`, degree: `${target.degree} (Copy)` },
+          ],
+        });
+      }
+    } else if (selectedElement.section === "projects" && selectedElement.id) {
+      const target = data.projects.find((i) => i.id === selectedElement.id);
+      if (target) {
+        onUpdateData({
+          ...data,
+          projects: [
+            ...data.projects,
+            { ...target, id: `proj-${Date.now()}`, name: `${target.name} (Copy)` },
+          ],
+        });
+      }
+    }
+  };
+
+  // Delete Selected Item
+  const deleteSelected = () => {
+    if (!selectedElement || !onUpdateData) return;
+    if (selectedElement.section === "experience" && selectedElement.id) {
+      onUpdateData({
+        ...data,
+        experience: data.experience.filter((i) => i.id !== selectedElement.id),
+      });
+    } else if (selectedElement.section === "education" && selectedElement.id) {
+      onUpdateData({
+        ...data,
+        education: data.education.filter((i) => i.id !== selectedElement.id),
+      });
+    } else if (selectedElement.section === "projects" && selectedElement.id) {
+      onUpdateData({
+        ...data,
+        projects: data.projects.filter((i) => i.id !== selectedElement.id),
+      });
+    }
+    clearSelection();
+  };
+
   // Background style classes
   const themeStyles: Record<CanvasTheme, string> = {
     dots: "bg-[#e5e7e2] [background-image:radial-gradient(#b8beb5_1.2px,transparent_1.2px)] [background-size:20px_20px]",
@@ -213,6 +553,28 @@ export function InteractiveCanvas({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Quick Margins Toggle */}
+          <button
+            type="button"
+            onClick={cyclePagePadding}
+            className="flex h-8 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 text-[11px] font-bold transition hover:bg-black/5 shadow-xs"
+            title="Cycle Page Padding (Compact / Normal / Spacious)"
+          >
+            <Ruler className="size-3.5 text-emerald-600" />
+            <span className="capitalize">Margin: {resumeStyle?.pagePadding || "normal"}</span>
+          </button>
+
+          {/* Quick Gaps Toggle */}
+          <button
+            type="button"
+            onClick={cycleSectionSpacing}
+            className="flex h-8 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 text-[11px] font-bold transition hover:bg-black/5 shadow-xs"
+            title="Cycle Section Spacing"
+          >
+            <Type className="size-3.5 text-emerald-600" />
+            <span className="capitalize">Gap: {resumeStyle?.sectionSpacing || "normal"}</span>
+          </button>
+
           {/* Template Selector Button */}
           <button
             type="button"
@@ -222,12 +584,6 @@ export function InteractiveCanvas({
             <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
             <span>Templates</span>
           </button>
-
-          {/* Canvas Specs Info Pill */}
-          <span className="hidden items-center gap-1.5 rounded-xl border border-black/10 bg-white/70 px-2.5 py-1 text-[10px] font-semibold text-[var(--brand-muted)] xl:flex">
-            <Compass className="size-3 text-emerald-600" />
-            A4 · 210 × 297 mm
-          </span>
 
           {/* Fullscreen Toggle Button */}
           <button
@@ -263,6 +619,115 @@ export function InteractiveCanvas({
             : "cursor-default",
         )}
       >
+        {/* Visual Granular Selection Bounding Box Overlay */}
+        {highlightRect && (
+          <div
+            className="no-print absolute z-30 pointer-events-none rounded-md ring-2 ring-emerald-500 bg-emerald-500/10 shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all duration-100 ease-out"
+            style={{
+              top: `${highlightRect.top}px`,
+              left: `${highlightRect.left}px`,
+              width: `${highlightRect.width}px`,
+              height: `${highlightRect.height}px`,
+            }}
+          >
+            <span className="absolute -bottom-2.5 right-1 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[7.5px] font-extrabold uppercase tracking-widest text-white shadow-xs">
+              Selected
+            </span>
+          </div>
+        )}
+
+        {/* Contextual Floating Formatting Bar (Appears directly above clicked element on PDF) */}
+        {selectedElement && toolbarPos && (
+          <div
+            className="no-print absolute z-50 flex items-center gap-1.5 rounded-2xl border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 animate-in fade-in zoom-in-95"
+            style={{
+              top: `${toolbarPos.top}px`,
+              left: `${toolbarPos.left}px`,
+            }}
+          >
+            {/* Real-Time Inline Input */}
+            <div className="flex items-center gap-1 rounded-xl bg-black/5 px-2 py-1">
+              <Edit3 className="size-3.5 text-emerald-700" />
+              <input
+                type="text"
+                value={inlineText}
+                onChange={(e) => handleRealtimeTextChange(e.target.value)}
+                className="w-44 rounded-md bg-white px-2 py-0.5 text-xs font-bold text-[var(--brand-ink)] focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                placeholder="Type in real-time..."
+              />
+            </div>
+
+            <span className="h-5 w-px bg-black/10" />
+
+            {/* Color Swatch Picker */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowColorPicker(!showColorPicker)}
+                className="builder-icon-button"
+                title="Accent / Text Color"
+              >
+                <Palette className="size-3.5 text-emerald-600" />
+              </button>
+
+              {showColorPicker && (
+                <div className="absolute top-10 left-0 z-50 flex items-center gap-1.5 rounded-xl border border-black/10 bg-white p-2 shadow-xl">
+                  {COLOR_SWATCHES.map((color) => (
+                    <button
+                      key={color.name}
+                      type="button"
+                      onClick={() => {
+                        if (selectedDomRef.current) {
+                          selectedDomRef.current.style.color = color.value;
+                        }
+                        setShowColorPicker(false);
+                      }}
+                      className="size-5 rounded-full border border-black/10 transition hover:scale-110"
+                      style={{ backgroundColor: color.value }}
+                      title={color.name}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <span className="h-5 w-px bg-black/10" />
+
+            {/* Duplicate Item */}
+            {selectedElement.id && (
+              <button
+                type="button"
+                onClick={duplicateSelected}
+                className="builder-icon-button"
+                title="Duplicate Item"
+              >
+                <Copy className="size-3.5" />
+              </button>
+            )}
+
+            {/* Delete Item */}
+            {selectedElement.id && (
+              <button
+                type="button"
+                onClick={deleteSelected}
+                className="builder-icon-button text-red-600 hover:bg-red-50"
+                title="Delete Item"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            )}
+
+            {/* Close Toolbar */}
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="builder-icon-button"
+            >
+              <X className="size-3.5" />
+            </button>
+          </div>
+        )}
+
         {/* Rendered Document Sheet Container */}
         <div
           className="canvas-bg absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -272,23 +737,30 @@ export function InteractiveCanvas({
           }}
         >
           <div
-            className="pointer-events-auto transition-transform duration-100 ease-out shadow-[0_28px_85px_rgba(0,0,0,0.22)]"
+            ref={sheetRef}
+            onClick={handleSheetClick}
+            className="pointer-events-auto relative transition-transform duration-100 ease-out shadow-[0_28px_85px_rgba(0,0,0,0.22)]"
             style={{
               transform: `scale(${zoom / 100})`,
               transformOrigin: "center center",
             }}
           >
+            {/* Resume Sheet Preview */}
             <ResumePreview
               data={data}
               template={previewTemplate}
               showPhoto={showPhoto}
+              pagePadding={resumeStyle?.pagePadding || "normal"}
+              sectionSpacing={resumeStyle?.sectionSpacing || "normal"}
+              fontSizeScale={resumeStyle?.fontSizeScale || 1.0}
+              lineHeight={resumeStyle?.lineHeight || "normal"}
               className={resumeFontClass(font)}
             />
           </div>
         </div>
       </div>
 
-      {/* Floating Bottom-Center Glassmorphic Toolbar */}
+      {/* Floating Bottom-Center Glassmorphic Zoom Toolbar */}
       <div className="no-print absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-2xl border border-white/40 bg-white/85 p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] backdrop-blur-md">
         {/* Select vs Hand/Pan Tool Switcher */}
         <div className="flex items-center rounded-xl bg-black/5 p-0.5">
@@ -301,7 +773,7 @@ export function InteractiveCanvas({
                 ? "bg-white text-[var(--brand-ink)] shadow-xs"
                 : "text-[var(--brand-muted)] hover:text-black",
             )}
-            title="Select Mode"
+            title="Select Mode (Click text on PDF to highlight & edit)"
           >
             <MousePointer className="size-3.5" />
           </button>
@@ -426,7 +898,7 @@ export function InteractiveCanvas({
             className="builder-icon-button"
             title="Canvas Theme"
           >
-            <Grid className="size-3.5" />
+            <Grid className="size-3.5 text-[var(--brand-ink)]" />
           </button>
 
           {showThemeMenu && (
