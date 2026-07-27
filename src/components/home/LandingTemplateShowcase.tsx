@@ -1,8 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, ImageOff, Sparkles } from "lucide-react";
-import { useMemo, useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ImageOff,
+  Sparkles,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
 import { resumeTemplates } from "@/lib/resume-data";
 import { cn } from "@/lib/utils";
@@ -34,7 +40,10 @@ const filters: {
 ];
 
 export function LandingTemplateShowcase() {
-  const [filter, setFilter] = useState<TemplateFilter>("popular");
+  const [filter, setFilter] = useState<TemplateFilter>("all");
+  const [activePage, setActivePage] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const visibleTemplates = useMemo(() => {
     if (filter === "popular") {
       return resumeTemplates.filter((item) => item.popular);
@@ -48,6 +57,53 @@ export function LandingTemplateShowcase() {
     return resumeTemplates;
   }, [filter]);
 
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const updatePages = () => {
+      const count = Math.max(
+        1,
+        Math.ceil(carousel.scrollWidth / carousel.clientWidth),
+      );
+      setPageCount(count);
+      setActivePage((current) => Math.min(current, count - 1));
+    };
+    const updateActivePage = () => {
+      const page = Math.round(carousel.scrollLeft / carousel.clientWidth);
+      setActivePage(Math.min(page, pageCount - 1));
+    };
+    const observer = new ResizeObserver(updatePages);
+
+    updatePages();
+    carousel.addEventListener("scroll", updateActivePage, {
+      passive: true,
+    });
+    observer.observe(carousel);
+
+    return () => {
+      carousel.removeEventListener("scroll", updateActivePage);
+      observer.disconnect();
+    };
+  }, [pageCount, visibleTemplates]);
+
+  const goToPage = (page: number) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const nextPage = Math.max(0, Math.min(page, pageCount - 1));
+    carousel.scrollTo({
+      left: nextPage * carousel.clientWidth,
+      behavior: "smooth",
+    });
+    setActivePage(nextPage);
+  };
+
+  const selectFilter = (nextFilter: TemplateFilter) => {
+    setFilter(nextFilter);
+    setActivePage(0);
+    carouselRef.current?.scrollTo({ left: 0 });
+  };
+
   return (
     <>
       <div className="mb-8 flex gap-2 overflow-x-auto pb-1">
@@ -55,7 +111,7 @@ export function LandingTemplateShowcase() {
           <button
             key={item.id}
             type="button"
-            onClick={() => setFilter(item.id)}
+            onClick={() => selectFilter(item.id)}
             className={cn(
               "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition",
               filter === item.id
@@ -76,7 +132,10 @@ export function LandingTemplateShowcase() {
         ))}
       </div>
 
-      <div className="grid grid-flow-col grid-rows-2 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[48%] lg:auto-cols-[31.8%] [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={carouselRef}
+        className="grid snap-x snap-mandatory grid-flow-col grid-rows-2 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[48%] lg:auto-cols-[31.8%] [&::-webkit-scrollbar]:hidden"
+      >
         {visibleTemplates.map((template, index) => (
           <Link
             key={template.id}
@@ -85,7 +144,7 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}`
             }
-            className="group rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,32,28,0.11)] sm:p-5"
+            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,32,28,0.11)] sm:p-5"
           >
             <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-8 sm:p-10">
               <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm">
@@ -140,6 +199,49 @@ export function LandingTemplateShowcase() {
             </div>
           </Link>
         ))}
+      </div>
+
+      <div className="mt-2 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={() => goToPage(activePage - 1)}
+          disabled={activePage === 0}
+          aria-label="Previous templates"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          <ArrowLeft className="size-4" />
+        </button>
+
+        <div className="relative flex flex-1 items-center justify-center">
+          <span className="absolute inset-x-0 h-px bg-black/15" />
+          <div className="relative flex items-center gap-2 rounded-full bg-[var(--brand-canvas)] px-4">
+            {Array.from({ length: pageCount }).map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => goToPage(index)}
+                aria-label={`Show template page ${index + 1}`}
+                aria-current={activePage === index ? "page" : undefined}
+                className={cn(
+                  "size-2.5 rounded-full border-2 border-[var(--brand-canvas)] ring-1 ring-black/20 transition",
+                  activePage === index
+                    ? "scale-125 bg-[var(--brand-ink)]"
+                    : "bg-[#c6cbc4] hover:bg-[var(--brand-lime)]",
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => goToPage(activePage + 1)}
+          disabled={activePage === pageCount - 1}
+          aria-label="Next templates"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          <ArrowRight className="size-4" />
+        </button>
       </div>
     </>
   );
