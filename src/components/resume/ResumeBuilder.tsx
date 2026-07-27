@@ -266,20 +266,31 @@ export function ResumeBuilder({
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
-      <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-4 sm:px-5">
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="flex size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden"
+      <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] pr-4 sm:pr-5">
+        <div className="flex h-full items-center">
+          {/* Logo Section matched to Left Sidebar width (w-[220px]) */}
+          <div
+            className={cn(
+              "flex h-full items-center px-4 transition-all duration-150 sm:px-5",
+              !hideLeftSidebar
+                ? "lg:w-[220px] lg:shrink-0 lg:justify-center"
+                : "w-auto",
+            )}
           >
-            <ArrowLeft className="size-4" />
-          </Link>
-          <div className="hidden lg:block">
-            <Brand />
+            <Link
+              href="/"
+              aria-label="Back to home"
+              className="flex size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden"
+            >
+              <ArrowLeft className="size-4" />
+            </Link>
+            <div className="hidden lg:block">
+              <Brand />
+            </div>
           </div>
-          <span className="hidden h-6 w-px bg-black/10 lg:block" />
-          <div>
+
+          {/* Document Title (reduced left padding by another 8px) */}
+          <div className="pl-0 sm:pl-1">
             <div className="flex items-center gap-2">
               <FileText className="hidden size-4 text-[var(--brand-muted)] sm:block" />
               <p className="max-w-[155px] truncate text-sm font-bold sm:max-w-none">
@@ -288,10 +299,6 @@ export function ResumeBuilder({
                   : "Untitled resume"}
               </p>
             </div>
-            <p className="mt-0.5 flex items-center gap-1.5 text-[10px] font-semibold text-[var(--brand-muted)]">
-              <Cloud className="size-3" />
-              {saveLabel}
-            </p>
           </div>
         </div>
 
@@ -389,9 +396,7 @@ export function ResumeBuilder({
           <div className="border-b border-black/10 px-5 py-5">
             <div className="mb-2 flex items-center justify-between text-xs font-bold">
               <span>
-                {isFresherTemplate
-                  ? "Fresher readiness"
-                  : "Resume strength"}
+                {isFresherTemplate ? "Fresher readiness" : "Resume strength"}
               </span>
               <span>{strength}%</span>
             </div>
@@ -706,7 +711,8 @@ export function ResumeBuilder({
                   Choose a template
                 </h2>
                 <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                  Your content stays. Select any template layout for your resume.
+                  Your content stays. Select any template layout for your
+                  resume.
                 </p>
               </div>
               <button
@@ -759,15 +765,14 @@ export function ResumeBuilder({
                       : "border-black/10 bg-white hover:shadow-lg",
                   )}
                 >
-                  <TemplateThumbnail
-                    template={item}
-                    className="shadow-md"
-                  />
+                  <TemplateThumbnail template={item} className="shadow-md" />
                   <div className="flex items-center justify-between gap-1 px-1 pb-1 pt-2.5">
                     <div className="min-w-0">
                       <p className="truncate text-xs font-bold">{item.name}</p>
                       <p className="truncate text-[9px] text-[var(--brand-muted)]">
-                        {item.layout === "sidebar" ? "Sidebar" : "Single column"}
+                        {item.layout === "sidebar"
+                          ? "Sidebar"
+                          : "Single column"}
                         {" · "}
                         {item.supportsPhoto ? "Photo" : "Photo-free"}
                       </p>
