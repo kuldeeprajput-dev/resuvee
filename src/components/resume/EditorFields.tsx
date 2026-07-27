@@ -1,0 +1,235 @@
+"use client";
+
+import {
+  GripVertical,
+  Lightbulb,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface FieldProps
+  extends Omit<React.ComponentProps<"input">, "onChange"> {
+  label: string;
+  hint?: string;
+  onChange: (value: string) => void;
+}
+
+export function Field({
+  label,
+  hint,
+  className,
+  onChange,
+  ...props
+}: FieldProps) {
+  return (
+    <label className={cn("block space-y-2", className)}>
+      <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
+        {label}
+        {hint && (
+          <span className="font-medium text-[var(--brand-muted)]">{hint}</span>
+        )}
+      </span>
+      <input
+        {...props}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-11 w-full rounded-xl border border-black/10 bg-white px-3.5 text-sm text-[var(--brand-ink)] shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
+      />
+    </label>
+  );
+}
+
+interface TextAreaFieldProps
+  extends Omit<React.ComponentProps<"textarea">, "onChange"> {
+  label: string;
+  hint?: string;
+  onChange: (value: string) => void;
+}
+
+export function TextAreaField({
+  label,
+  hint,
+  className,
+  onChange,
+  ...props
+}: TextAreaFieldProps) {
+  return (
+    <label className={cn("block space-y-2", className)}>
+      <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
+        {label}
+        {hint && (
+          <span className="font-medium text-[var(--brand-muted)]">{hint}</span>
+        )}
+      </span>
+      <textarea
+        {...props}
+        onChange={(event) => onChange(event.target.value)}
+        className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-white px-3.5 py-3 text-sm leading-6 text-[var(--brand-ink)] shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
+      />
+    </label>
+  );
+}
+
+interface EditorSectionProps {
+  eyebrow: string;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}
+
+export function EditorSection({
+  eyebrow,
+  title,
+  description,
+  children,
+}: EditorSectionProps) {
+  return (
+    <div className="mx-auto w-full max-w-2xl px-5 pb-12 pt-7 sm:px-7">
+      <div className="mb-7">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+          {eyebrow}
+        </p>
+        <h2 className="text-2xl font-bold tracking-[-0.035em] text-[var(--brand-ink)]">
+          {title}
+        </h2>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--brand-muted)]">
+          {description}
+        </p>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+interface ItemCardProps {
+  title: string;
+  subtitle?: string;
+  onRemove: () => void;
+  children: React.ReactNode;
+  canRemove?: boolean;
+}
+
+export function ItemCard({
+  title,
+  subtitle,
+  onRemove,
+  children,
+  canRemove = true,
+}: ItemCardProps) {
+  return (
+    <article className="overflow-hidden rounded-2xl border border-black/[0.09] bg-[#fbfaf6] shadow-sm">
+      <div className="flex items-center gap-3 border-b border-black/[0.07] bg-white/60 px-4 py-3">
+        <GripVertical className="size-4 text-black/25" />
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-sm font-bold text-[var(--brand-ink)]">
+            {title}
+          </h3>
+          {subtitle && (
+            <p className="truncate text-xs text-[var(--brand-muted)]">
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onRemove}
+          disabled={!canRemove}
+          aria-label={`Remove ${title}`}
+          className="flex size-8 items-center justify-center rounded-lg text-black/35 transition hover:bg-red-50 hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+        >
+          <Trash2 className="size-3.5" />
+        </button>
+      </div>
+      <div className="space-y-4 p-4">{children}</div>
+    </article>
+  );
+}
+
+export function AddItemButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-white/50 text-sm font-bold text-[var(--brand-muted)] transition hover:border-[#315f45]/40 hover:bg-white hover:text-[var(--brand-ink)]"
+    >
+      <Plus className="size-4" />
+      {children}
+    </button>
+  );
+}
+
+interface BulletEditorProps {
+  label?: string;
+  values: string[];
+  onChange: (values: string[]) => void;
+  placeholder?: string;
+}
+
+export function BulletEditor({
+  label = "Highlights",
+  values,
+  onChange,
+  placeholder = "Describe an achievement and include the outcome…",
+}: BulletEditorProps) {
+  const updateValue = (index: number, value: string) => {
+    onChange(values.map((item, itemIndex) => (itemIndex === index ? value : item)));
+  };
+
+  const removeValue = (index: number) => {
+    const nextValues = values.filter((_, itemIndex) => itemIndex !== index);
+    onChange(nextValues.length ? nextValues : [""]);
+  };
+
+  return (
+    <div>
+      <span className="mb-2 block text-xs font-bold text-[var(--brand-ink)]">
+        {label}
+      </span>
+      <div className="space-y-2">
+        {values.map((value, index) => (
+          <div key={index} className="flex items-start gap-2">
+            <span className="mt-[17px] size-1.5 shrink-0 rounded-full bg-[#315f45]" />
+            <textarea
+              value={value}
+              onChange={(event) => updateValue(index, event.target.value)}
+              placeholder={placeholder}
+              rows={2}
+              className="min-h-16 flex-1 resize-y rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm leading-5 outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
+            />
+            <button
+              type="button"
+              onClick={() => removeValue(index)}
+              aria-label="Remove highlight"
+              className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg text-black/30 transition hover:bg-red-50 hover:text-red-500"
+            >
+              <Trash2 className="size-3.5" />
+            </button>
+          </div>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => onChange([...values, ""])}
+        className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#315f45] hover:underline"
+      >
+        <Plus className="size-3.5" />
+        Add highlight
+      </button>
+    </div>
+  );
+}
+
+export function WritingTip({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3 rounded-xl border border-[#d9c887] bg-[#fff9df] p-3.5 text-xs leading-5 text-[#655826]">
+      <Lightbulb className="mt-0.5 size-4 shrink-0" />
+      <p>{children}</p>
+    </div>
+  );
+}
