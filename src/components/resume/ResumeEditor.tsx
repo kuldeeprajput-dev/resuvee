@@ -1,0 +1,535 @@
+"use client";
+
+import type {
+  BuilderSection,
+  ResumeData,
+  ResumeEducation,
+  ResumeExperience,
+  ResumeProject,
+  ResumeSkillGroup,
+} from "@/types/resume";
+import {
+  getEmptyEducation,
+  getEmptyExperience,
+  getEmptyProject,
+  getEmptySkillGroup,
+} from "@/lib/resume-data";
+import {
+  AddItemButton,
+  BulletEditor,
+  EditorSection,
+  Field,
+  ItemCard,
+  TextAreaField,
+  WritingTip,
+} from "./EditorFields";
+
+interface ResumeEditorProps {
+  activeSection: BuilderSection;
+  data: ResumeData;
+  onChange: (data: ResumeData) => void;
+}
+
+function PersonalDetailsEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const update = (field: keyof ResumeData["basics"], value: string) => {
+    onChange({
+      ...data,
+      basics: { ...data.basics, [field]: value },
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow="Step 1 of 6"
+      title="Let’s start with the essentials"
+      description="This information sits at the top of your resume. Use the name and contact details employers should use."
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field
+          label="Full name"
+          value={data.basics.fullName}
+          onChange={(value) => update("fullName", value)}
+          placeholder="e.g. Maya Patel"
+          className="sm:col-span-2"
+        />
+        <Field
+          label="Professional headline"
+          value={data.basics.headline}
+          onChange={(value) => update("headline", value)}
+          placeholder="e.g. Senior Software Engineer"
+          className="sm:col-span-2"
+        />
+        <Field
+          label="Email"
+          type="email"
+          value={data.basics.email}
+          onChange={(value) => update("email", value)}
+          placeholder="you@example.com"
+        />
+        <Field
+          label="Phone"
+          type="tel"
+          value={data.basics.phone}
+          onChange={(value) => update("phone", value)}
+          placeholder="+1 555 000 0000"
+        />
+        <Field
+          label="Location"
+          value={data.basics.location}
+          onChange={(value) => update("location", value)}
+          placeholder="City, Country"
+        />
+        <Field
+          label="Website or portfolio"
+          value={data.basics.website}
+          onChange={(value) => update("website", value)}
+          placeholder="yourportfolio.com"
+        />
+      </div>
+    </EditorSection>
+  );
+}
+
+function SummaryEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const wordCount = data.basics.summary.trim()
+    ? data.basics.summary.trim().split(/\s+/).length
+    : 0;
+
+  return (
+    <EditorSection
+      eyebrow="Step 2 of 6"
+      title="Write a focused introduction"
+      description="Summarize what you do, your strongest experience, and the kind of impact you create in 3–4 sentences."
+    >
+      <div className="space-y-4">
+        <TextAreaField
+          label="Professional summary"
+          hint={`${wordCount} words`}
+          value={data.basics.summary}
+          onChange={(value) =>
+            onChange({
+              ...data,
+              basics: { ...data.basics, summary: value },
+            })
+          }
+          rows={7}
+          placeholder="Experienced product manager with a track record of…"
+        />
+        <WritingTip>
+          Lead with your role and years of experience, then add one specialty
+          and a measurable result. Aim for 50–80 words.
+        </WritingTip>
+      </div>
+    </EditorSection>
+  );
+}
+
+function ExperienceEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const updateItem = (
+    id: string,
+    updates: Partial<ResumeExperience>,
+  ) => {
+    onChange({
+      ...data,
+      experience: data.experience.map((item) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
+    });
+  };
+
+  const removeItem = (id: string) => {
+    onChange({
+      ...data,
+      experience: data.experience.filter((item) => item.id !== id),
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow="Step 3 of 6"
+      title="Show how you made a difference"
+      description="List your most relevant work first. Focus each highlight on an action, the context, and a result."
+    >
+      <div className="space-y-4">
+        {data.experience.map((item) => (
+          <ItemCard
+            key={item.id}
+            title={item.role || "Untitled role"}
+            subtitle={item.company || "Add company"}
+            onRemove={() => removeItem(item.id)}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label="Job title"
+                value={item.role}
+                onChange={(value) => updateItem(item.id, { role: value })}
+                placeholder="Product Designer"
+              />
+              <Field
+                label="Company"
+                value={item.company}
+                onChange={(value) => updateItem(item.id, { company: value })}
+                placeholder="Northstar Labs"
+              />
+              <Field
+                label="Location"
+                value={item.location}
+                onChange={(value) => updateItem(item.id, { location: value })}
+                placeholder="Remote or City"
+                className="sm:col-span-2"
+              />
+              <Field
+                label="Start date"
+                value={item.startDate}
+                onChange={(value) => updateItem(item.id, { startDate: value })}
+                placeholder="Jan 2022"
+              />
+              <Field
+                label="End date"
+                value={item.current ? "Present" : item.endDate}
+                onChange={(value) => updateItem(item.id, { endDate: value })}
+                placeholder="Dec 2025"
+                disabled={item.current}
+              />
+            </div>
+
+            <label className="flex w-fit cursor-pointer items-center gap-2 text-xs font-semibold text-[var(--brand-muted)]">
+              <input
+                type="checkbox"
+                checked={item.current}
+                onChange={(event) =>
+                  updateItem(item.id, { current: event.target.checked })
+                }
+                className="size-4 rounded border-black/20 accent-[#315f45]"
+              />
+              I currently work here
+            </label>
+
+            <BulletEditor
+              values={item.highlights}
+              onChange={(highlights) =>
+                updateItem(item.id, { highlights })
+              }
+            />
+          </ItemCard>
+        ))}
+        <AddItemButton
+          onClick={() =>
+            onChange({
+              ...data,
+              experience: [
+                ...data.experience,
+                getEmptyExperience(data.experience.length),
+              ],
+            })
+          }
+        >
+          Add work experience
+        </AddItemButton>
+        <WritingTip>
+          Strong bullet: “Reduced support response time by 32% by redesigning
+          the triage workflow.” Numbers make outcomes easier to trust.
+        </WritingTip>
+      </div>
+    </EditorSection>
+  );
+}
+
+function EducationEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const updateItem = (
+    id: string,
+    updates: Partial<ResumeEducation>,
+  ) => {
+    onChange({
+      ...data,
+      education: data.education.map((item) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow="Step 4 of 6"
+      title="Add your education"
+      description="Include degrees, certifications, bootcamps, or relevant training. You can keep this concise once you have work experience."
+    >
+      <div className="space-y-4">
+        {data.education.map((item) => (
+          <ItemCard
+            key={item.id}
+            title={item.degree || "Untitled education"}
+            subtitle={item.school || "Add school"}
+            onRemove={() =>
+              onChange({
+                ...data,
+                education: data.education.filter(
+                  (education) => education.id !== item.id,
+                ),
+              })
+            }
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label="Degree or qualification"
+                value={item.degree}
+                onChange={(value) => updateItem(item.id, { degree: value })}
+                placeholder="BSc, Computer Science"
+                className="sm:col-span-2"
+              />
+              <Field
+                label="School"
+                value={item.school}
+                onChange={(value) => updateItem(item.id, { school: value })}
+                placeholder="University name"
+              />
+              <Field
+                label="Location"
+                value={item.location}
+                onChange={(value) => updateItem(item.id, { location: value })}
+                placeholder="City, Country"
+              />
+              <Field
+                label="Start date"
+                value={item.startDate}
+                onChange={(value) => updateItem(item.id, { startDate: value })}
+                placeholder="2018"
+              />
+              <Field
+                label="End date"
+                value={item.endDate}
+                onChange={(value) => updateItem(item.id, { endDate: value })}
+                placeholder="2022"
+              />
+              <Field
+                label="Additional detail"
+                value={item.details}
+                onChange={(value) => updateItem(item.id, { details: value })}
+                placeholder="Honors, GPA, or focus"
+                className="sm:col-span-2"
+              />
+            </div>
+          </ItemCard>
+        ))}
+        <AddItemButton
+          onClick={() =>
+            onChange({
+              ...data,
+              education: [
+                ...data.education,
+                getEmptyEducation(data.education.length),
+              ],
+            })
+          }
+        >
+          Add education
+        </AddItemButton>
+      </div>
+    </EditorSection>
+  );
+}
+
+function ProjectsEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const updateItem = (
+    id: string,
+    updates: Partial<ResumeProject>,
+  ) => {
+    onChange({
+      ...data,
+      projects: data.projects.map((item) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow="Step 5 of 6"
+      title="Bring your work to life"
+      description="Projects are especially useful for showing hands-on ability, independent work, and relevant interests."
+    >
+      <div className="space-y-4">
+        {data.projects.map((item) => (
+          <ItemCard
+            key={item.id}
+            title={item.name || "Untitled project"}
+            subtitle={item.link || "Add a project link"}
+            onRemove={() =>
+              onChange({
+                ...data,
+                projects: data.projects.filter(
+                  (project) => project.id !== item.id,
+                ),
+              })
+            }
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label="Project name"
+                value={item.name}
+                onChange={(value) => updateItem(item.id, { name: value })}
+                placeholder="Project name"
+              />
+              <Field
+                label="Link"
+                value={item.link}
+                onChange={(value) => updateItem(item.id, { link: value })}
+                placeholder="project.example.com"
+              />
+              <TextAreaField
+                label="Short description"
+                value={item.description}
+                onChange={(value) =>
+                  updateItem(item.id, { description: value })
+                }
+                placeholder="What did you build and why?"
+                rows={3}
+                className="sm:col-span-2"
+              />
+            </div>
+            <BulletEditor
+              label="Project outcomes"
+              values={item.highlights}
+              onChange={(highlights) =>
+                updateItem(item.id, { highlights })
+              }
+              placeholder="Add a result, scale, or notable technical detail…"
+            />
+          </ItemCard>
+        ))}
+        <AddItemButton
+          onClick={() =>
+            onChange({
+              ...data,
+              projects: [
+                ...data.projects,
+                getEmptyProject(data.projects.length),
+              ],
+            })
+          }
+        >
+          Add project
+        </AddItemButton>
+      </div>
+    </EditorSection>
+  );
+}
+
+function SkillsEditor({
+  data,
+  onChange,
+}: Omit<ResumeEditorProps, "activeSection">) {
+  const updateItem = (
+    id: string,
+    updates: Partial<ResumeSkillGroup>,
+  ) => {
+    onChange({
+      ...data,
+      skillGroups: data.skillGroups.map((item) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow="Step 6 of 6"
+      title="Finish with relevant skills"
+      description="Group related skills so they are easy to scan. Prioritize the tools and abilities mentioned in your target job descriptions."
+    >
+      <div className="space-y-4">
+        {data.skillGroups.map((item) => (
+          <ItemCard
+            key={item.id}
+            title={item.name || "Untitled skill group"}
+            subtitle={`${item.skills.length} skills`}
+            onRemove={() =>
+              onChange({
+                ...data,
+                skillGroups: data.skillGroups.filter(
+                  (group) => group.id !== item.id,
+                ),
+              })
+            }
+          >
+            <Field
+              label="Group name"
+              value={item.name}
+              onChange={(value) => updateItem(item.id, { name: value })}
+              placeholder="e.g. Languages, Design, Tools"
+            />
+            <Field
+              label="Skills"
+              hint="Separate with commas"
+              value={item.skills.join(", ")}
+              onChange={(value) =>
+                updateItem(item.id, {
+                  skills: value
+                    .split(",")
+                    .map((skill) => skill.trim())
+                    .filter(Boolean),
+                })
+              }
+              placeholder="TypeScript, React, Node.js"
+            />
+          </ItemCard>
+        ))}
+        <AddItemButton
+          onClick={() =>
+            onChange({
+              ...data,
+              skillGroups: [
+                ...data.skillGroups,
+                getEmptySkillGroup(data.skillGroups.length),
+              ],
+            })
+          }
+        >
+          Add skill group
+        </AddItemButton>
+        <WritingTip>
+          Keep this targeted. A focused list of 8–15 relevant skills is
+          stronger than a long inventory of everything you have tried.
+        </WritingTip>
+      </div>
+    </EditorSection>
+  );
+}
+
+export function ResumeEditor({
+  activeSection,
+  data,
+  onChange,
+}: ResumeEditorProps) {
+  const sharedProps = { data, onChange };
+
+  switch (activeSection) {
+    case "basics":
+      return <PersonalDetailsEditor {...sharedProps} />;
+    case "summary":
+      return <SummaryEditor {...sharedProps} />;
+    case "experience":
+      return <ExperienceEditor {...sharedProps} />;
+    case "education":
+      return <EducationEditor {...sharedProps} />;
+    case "projects":
+      return <ProjectsEditor {...sharedProps} />;
+    case "skills":
+      return <SkillsEditor {...sharedProps} />;
+  }
+}
