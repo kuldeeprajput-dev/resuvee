@@ -238,3 +238,13 @@
     padding: 0 !important;
   }
 }
+
+@layer components {
+  .dialog-label {
+    @apply mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)];
+  }
+
+  .dialog-input {
+    @apply h-11 w-full rounded-xl border border-black/10 bg-white px-3.5 text-sm outline-none transition focus:border-[#537c45] focus:ring-3 focus:ring-[#a8ca59]/20;
+  }
+}
