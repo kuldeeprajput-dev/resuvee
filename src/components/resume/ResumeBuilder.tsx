@@ -12,6 +12,7 @@ import {
   FilePlus2,
   FileText,
   LayoutTemplate,
+  ScanSearch,
   Minus,
   Plus,
   Redo2,
@@ -41,6 +42,7 @@ import { cn } from "@/lib/utils";
 import { ResumeEditor } from "./ResumeEditor";
 import { ResumePreview } from "./ResumePreview";
 import { TemplateThumbnail } from "./TemplateThumbnail";
+import { TailorPanel } from "./TailorPanel";
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
@@ -67,6 +69,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     useState<BuilderSection>("basics");
   const [showTemplates, setShowTemplates] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
+  const [showTailor, setShowTailor] = useState(false);
   const [zoom, setZoom] = useState(72);
   const [history, setHistory] = useState<ResumeData[]>([]);
   const [future, setFuture] = useState<ResumeData[]>([]);
@@ -182,6 +185,31 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
     setActiveSection("basics");
   };
 
+  const addTargetKeywords = (keywords: string[]) => {
+    const targetGroup = data.skillGroups.find(
+      (group) => group.name.toLowerCase() === "target role",
+    );
+    const nextGroups = targetGroup
+      ? data.skillGroups.map((group) =>
+          group.id === targetGroup.id
+            ? {
+                ...group,
+                skills: [...new Set([...group.skills, ...keywords])],
+              }
+            : group,
+        )
+      : [
+          ...data.skillGroups,
+          {
+            id: `target-role-${Date.now()}`,
+            name: "Target role",
+            skills: keywords,
+          },
+        ];
+
+    updateData({ ...data, skillGroups: nextGroups });
+  };
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
       <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-4 sm:px-5">
@@ -234,6 +262,15 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
               <Redo2 className="size-4" />
             </button>
           </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowTailor(true)}
+            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold sm:inline-flex"
+          >
+            <ScanSearch className="size-4" />
+            Role match
+          </Button>
           <Button
             type="button"
             variant="ghost"
@@ -542,6 +579,13 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
             </div>
           </div>
         </div>
+      )}
+      {showTailor && (
+        <TailorPanel
+          data={data}
+          onAddKeywords={addTargetKeywords}
+          onClose={() => setShowTailor(false)}
+        />
       )}
     </div>
   );
