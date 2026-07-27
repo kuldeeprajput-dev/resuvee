@@ -142,7 +142,7 @@ export function LandingTemplateShowcase() {
             href={
               template.audience === "fresher"
                 ? `/builder?template=${template.id}&starter=fresher`
-                : `/builder?template=${template.id}`
+                : `/builder?template=${template.id}&starter=template`
             }
             className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5"
           >

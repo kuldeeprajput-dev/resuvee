@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ImagePlus, UserRound, X } from "lucide-react";
+import { Columns3, ImagePlus, LayoutPanelTop, UserRound, X } from "lucide-react";
 import { useRef, useState } from "react";
 import type {
   BuilderSection,
@@ -10,6 +10,7 @@ import type {
   ResumeExperience,
   ResumeProject,
   ResumeSkillGroup,
+  ResumeTemplate,
 } from "@/types/resume";
 import {
   getEmptyEducation,
@@ -17,6 +18,7 @@ import {
   getEmptyProject,
   getEmptySkillGroup,
 } from "@/lib/resume-data";
+import { cn } from "@/lib/utils";
 import {
   AddItemButton,
   BulletEditor,
@@ -31,16 +33,23 @@ interface ResumeEditorProps {
   activeSection: BuilderSection;
   data: ResumeData;
   onChange: (data: ResumeData) => void;
-  supportsPhoto?: boolean;
+  template: ResumeTemplate;
+}
+
+interface ResumeEditorContentProps
+  extends Omit<ResumeEditorProps, "activeSection"> {
+  stepLabel: string;
 }
 
 function PhotoEditor({
   photo,
   name,
+  shape,
   onChange,
 }: {
   photo: string;
   name: string;
+  shape: ResumeTemplate["photoShape"];
   onChange: (photo: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +87,16 @@ function PhotoEditor({
         onChange={(event) => handleFile(event.target.files?.[0])}
       />
       <div className="flex items-center gap-4">
-        <div className="relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-[#e8ece8] text-[var(--brand-muted)]">
+        <div
+          className={cn(
+            "relative flex size-20 shrink-0 items-center justify-center overflow-hidden border border-black/10 bg-[#e8ece8] text-[var(--brand-muted)]",
+            shape === "circle"
+              ? "rounded-full"
+              : shape === "square"
+                ? "rounded-md"
+                : "rounded-2xl",
+          )}
+        >
           {photo ? (
             <Image
               src={photo}
@@ -129,8 +147,9 @@ function PhotoEditor({
 function PersonalDetailsEditor({
   data,
   onChange,
-  supportsPhoto = true,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  template,
+  stepLabel,
+}: ResumeEditorContentProps) {
   const update = (field: keyof ResumeData["basics"], value: string) => {
     onChange({
       ...data,
@@ -140,14 +159,40 @@ function PersonalDetailsEditor({
 
   return (
     <EditorSection
-      eyebrow="Step 1 of 6"
+      eyebrow={stepLabel}
       title="Let’s start with the essentials"
       description="This information sits at the top of your resume. Use the name and contact details employers should use."
     >
-      {supportsPhoto ? (
+      <div className="mb-6 grid gap-2 sm:grid-cols-3">
+        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
+          {template.layout === "sidebar" ? (
+            <Columns3 className="size-4 text-[#4d7141]" />
+          ) : (
+            <LayoutPanelTop className="size-4 text-[#4d7141]" />
+          )}
+          <span className="text-[10px] font-bold">
+            {template.layout === "sidebar" ? "Sidebar layout" : "Single column"}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
+          <UserRound className="size-4 text-[#4d7141]" />
+          <span className="text-[10px] font-bold">
+            {template.supportsPhoto ? "Photo supported" : "Photo-free"}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
+          <span className="flex size-4 items-center justify-center rounded-full bg-[var(--brand-lime)] text-[8px] font-black">
+            {template.sections.length}
+          </span>
+          <span className="text-[10px] font-bold">Editable sections</span>
+        </div>
+      </div>
+
+      {template.supportsPhoto ? (
         <PhotoEditor
           photo={data.basics.photo || ""}
           name={data.basics.fullName}
+          shape={template.photoShape}
           onChange={(photo) => update("photo", photo)}
         />
       ) : (
@@ -213,14 +258,15 @@ function PersonalDetailsEditor({
 function SummaryEditor({
   data,
   onChange,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  stepLabel,
+}: ResumeEditorContentProps) {
   const wordCount = data.basics.summary.trim()
     ? data.basics.summary.trim().split(/\s+/).length
     : 0;
 
   return (
     <EditorSection
-      eyebrow="Step 2 of 6"
+      eyebrow={stepLabel}
       title="Write a focused introduction"
       description="Summarize what you do, your strongest experience, and the kind of impact you create in 3–4 sentences."
     >
@@ -250,7 +296,8 @@ function SummaryEditor({
 function ExperienceEditor({
   data,
   onChange,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  stepLabel,
+}: ResumeEditorContentProps) {
   const updateItem = (
     id: string,
     updates: Partial<ResumeExperience>,
@@ -272,7 +319,7 @@ function ExperienceEditor({
 
   return (
     <EditorSection
-      eyebrow="Step 3 of 6"
+      eyebrow={stepLabel}
       title="Show how you made a difference"
       description="List your most relevant work first. Focus each highlight on an action, the context, and a result."
     >
@@ -364,7 +411,8 @@ function ExperienceEditor({
 function EducationEditor({
   data,
   onChange,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  stepLabel,
+}: ResumeEditorContentProps) {
   const updateItem = (
     id: string,
     updates: Partial<ResumeEducation>,
@@ -379,7 +427,7 @@ function EducationEditor({
 
   return (
     <EditorSection
-      eyebrow="Step 4 of 6"
+      eyebrow={stepLabel}
       title="Add your education"
       description="Include degrees, certifications, bootcamps, or relevant training. You can keep this concise once you have work experience."
     >
@@ -461,7 +509,8 @@ function EducationEditor({
 function ProjectsEditor({
   data,
   onChange,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  stepLabel,
+}: ResumeEditorContentProps) {
   const updateItem = (
     id: string,
     updates: Partial<ResumeProject>,
@@ -476,7 +525,7 @@ function ProjectsEditor({
 
   return (
     <EditorSection
-      eyebrow="Step 5 of 6"
+      eyebrow={stepLabel}
       title="Bring your work to life"
       description="Projects are especially useful for showing hands-on ability, independent work, and relevant interests."
     >
@@ -550,7 +599,8 @@ function ProjectsEditor({
 function SkillsEditor({
   data,
   onChange,
-}: Omit<ResumeEditorProps, "activeSection">) {
+  stepLabel,
+}: ResumeEditorContentProps) {
   const updateItem = (
     id: string,
     updates: Partial<ResumeSkillGroup>,
@@ -565,7 +615,7 @@ function SkillsEditor({
 
   return (
     <EditorSection
-      eyebrow="Step 6 of 6"
+      eyebrow={stepLabel}
       title="Finish with relevant skills"
       description="Group related skills so they are easy to scan. Prioritize the tools and abilities mentioned in your target job descriptions."
     >
@@ -632,18 +682,19 @@ export function ResumeEditor({
   activeSection,
   data,
   onChange,
-  supportsPhoto = true,
+  template,
 }: ResumeEditorProps) {
-  const sharedProps = { data, onChange };
+  const sectionIndex = Math.max(0, template.sections.indexOf(activeSection));
+  const sharedProps = {
+    data,
+    onChange,
+    template,
+    stepLabel: `Step ${sectionIndex + 1} of ${template.sections.length}`,
+  };
 
   switch (activeSection) {
     case "basics":
-      return (
-        <PersonalDetailsEditor
-          {...sharedProps}
-          supportsPhoto={supportsPhoto}
-        />
-      );
+      return <PersonalDetailsEditor {...sharedProps} />;
     case "summary":
       return <SummaryEditor {...sharedProps} />;
     case "experience":

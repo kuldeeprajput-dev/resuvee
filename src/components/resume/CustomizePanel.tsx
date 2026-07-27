@@ -148,7 +148,6 @@ export function CustomizePanel({
             </div>
           </section>
 
-          {supportsPhoto && (
           <section className="mt-8 border-t border-black/10 pt-7">
             <div className="flex items-center gap-2">
               <Type className="size-4 text-[#4d7141]" />
@@ -185,8 +184,8 @@ export function CustomizePanel({
               ))}
             </div>
           </section>
-          )}
 
+          {supportsPhoto && (
           <section className="mt-8 border-t border-black/10 pt-7">
             <div className="flex items-center gap-2">
               <UserRound className="size-4 text-[#4d7141]" />
@@ -224,6 +223,7 @@ export function CustomizePanel({
               </span>
             </button>
           </section>
+          )}
         </div>
 
         <footer className="flex gap-2 border-t border-black/10 bg-white px-5 py-4 sm:px-7">

@@ -1020,6 +1020,104 @@ function FresherTemplate({
   );
 }
 
+function FirstStepTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("grid grid-cols-[176px_1fr] bg-[#fbfcff]", className)}>
+      <aside className="relative bg-[#edf3f9] px-6 py-9">
+        <div
+          className="absolute inset-x-0 top-0 h-2"
+          style={{ backgroundColor: template.accent }}
+        />
+        <div className="space-y-6 pt-20">
+          <EducationSection data={data} accent={template.accent} compact />
+          <SkillsSection data={data} accent={template.accent} compact pills />
+        </div>
+        <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
+          Resulyra · {template.name}
+        </p>
+      </aside>
+
+      <main className="px-8 py-9">
+        <header className="border-b-2 pb-5" style={{ borderColor: template.accent }}>
+          <p
+            className="text-[7px] font-bold uppercase tracking-[0.17em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline || "Internship candidate"}
+          </p>
+          <h1 className="mt-2 text-[29px] font-bold leading-none tracking-[-0.045em] text-[#172c43]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div className="mt-3">
+            <ContactList data={data} horizontal hideIcons />
+          </div>
+        </header>
+
+        <div className="mt-6 space-y-6">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ProjectsSection data={data} accent={template.accent} compact />
+        </div>
+      </main>
+    </Sheet>
+  );
+}
+
+function PivotTemplate({
+  data,
+  template,
+  className,
+}: ResumePreviewProps) {
+  return (
+    <Sheet className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}>
+      <aside className="flex flex-col bg-[#f3edef] px-5 py-8">
+        <div
+          className="mb-7 h-10 w-10 rounded-xl"
+          style={{ backgroundColor: template.accent }}
+        />
+        <div className="space-y-6">
+          <SkillsSection data={data} accent={template.accent} compact pills />
+          <EducationSection data={data} accent={template.accent} compact />
+        </div>
+        <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-black/25">
+          Transferable strengths
+        </p>
+      </aside>
+
+      <main className="px-8 py-8">
+        <header className="border-b border-black/15 pb-5">
+          <p
+            className="text-[7px] font-extrabold uppercase tracking-[0.16em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline}
+          </p>
+          <h1 className="mt-2 text-[29px] font-bold leading-none tracking-[-0.045em]">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <div className="mt-3">
+            <ContactList data={data} horizontal hideIcons />
+          </div>
+        </header>
+
+        <div className="mt-5 space-y-5">
+          <SummarySection data={data} accent={template.accent} compact />
+          <div className="rounded-xl bg-[#f7f4f5] p-4">
+            <ProjectsSection data={data} accent={template.accent} compact />
+          </div>
+          <ExperienceSection data={data} accent={template.accent} compact />
+        </div>
+        <p className="absolute bottom-5 right-8 text-[5px] uppercase tracking-[0.14em] text-black/22">
+          Resulyra · {template.name}
+        </p>
+      </main>
+    </Sheet>
+  );
+}
+
 export function ResumePreview(props: ResumePreviewProps) {
   switch (props.template.renderer) {
     case "meridian":
@@ -1042,5 +1140,9 @@ export function ResumePreview(props: ResumePreviewProps) {
       return <HybridTemplate {...props} />;
     case "fresher":
       return <FresherTemplate {...props} />;
+    case "first-step":
+      return <FirstStepTemplate {...props} />;
+    case "pivot":
+      return <PivotTemplate {...props} />;
   }
 }
