@@ -13,14 +13,14 @@ export function Brand() {
     <Link
       href="/"
       className="group inline-flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--brand-lime)]/40"
-      aria-label="Resumix home"
+      aria-label="Resulyra home"
     >
       <span className="relative flex size-9 items-center justify-center overflow-hidden rounded-xl bg-[var(--brand-ink)] text-white shadow-[0_7px_18px_rgba(20,28,25,0.16)]">
         <Layers3 className="size-[18px] transition-transform duration-300 group-hover:-rotate-6" />
         <span className="absolute -bottom-3 -right-3 size-6 rounded-full bg-[var(--brand-lime)]" />
       </span>
       <span className="text-[17px] font-bold tracking-[-0.035em] text-[var(--brand-ink)]">
-        resumix
+        Resulyra
       </span>
     </Link>
   );

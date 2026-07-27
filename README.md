@@ -1,6 +1,6 @@
-# Resumix
+# Resulyra
 
-Resumix is a resume product that combines a guided resume builder with the
+Resulyra is a resume product that combines a guided resume builder with the
 existing AI-powered ATS analyzer. Users can create a resume, switch between
 original templates, export to PDF, and review an existing resume from the same
 product.
@@ -164,7 +164,8 @@ src/
 ## Persistence upgrade path
 
 The builder reads and writes a single versioned local draft under
-`resumix-draft-v1`. When database and authentication work begins, the
+`resulyra-draft-v1`. Existing drafts stored under the former product key are
+migrated automatically. When database and authentication work begins, the
 `ResumeData` type in `src/types/resume.ts` can be used as the stored document
 shape. Replace the local save/load effects in `ResumeBuilder.tsx` with
 authenticated API calls while preserving the editor and preview components.

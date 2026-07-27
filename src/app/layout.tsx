@@ -9,8 +9,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Resumix — Build better resumes",
-    template: "%s | Resumix",
+    default: "Resulyra — Build better resumes",
+    template: "%s | Resulyra",
   },
   description:
     "Build a professional resume with original templates, then check it for ATS compatibility and actionable improvements.",

@@ -46,7 +46,8 @@ interface ResumeBuilderProps {
   initialTemplate?: string;
 }
 
-const STORAGE_KEY = "resumix-draft-v1";
+const STORAGE_KEY = "resulyra-draft-v1";
+const LEGACY_STORAGE_KEY = "resumix-draft-v1";
 
 function isTemplateId(value: string | undefined): value is ResumeTemplateId {
   return resumeTemplates.some((template) => template.id === value);
@@ -82,7 +83,9 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
 
   useEffect(() => {
     try {
-      const storedDraft = window.localStorage.getItem(STORAGE_KEY);
+      const currentDraft = window.localStorage.getItem(STORAGE_KEY);
+      const storedDraft =
+        currentDraft ?? window.localStorage.getItem(LEGACY_STORAGE_KEY);
       if (storedDraft) {
         const parsed = JSON.parse(storedDraft) as {
           data?: ResumeData;
@@ -92,9 +95,14 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
         if (!initialTemplate && isTemplateId(parsed.templateId)) {
           setTemplateId(parsed.templateId);
         }
+        if (!currentDraft) {
+          window.localStorage.setItem(STORAGE_KEY, storedDraft);
+          window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+        }
       }
     } catch {
       window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY);
     } finally {
       hasLoadedDraft.current = true;
     }

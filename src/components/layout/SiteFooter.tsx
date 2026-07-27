@@ -29,7 +29,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-black/[0.07]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-5 py-5 text-xs text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
-          <p>© 2026 Resumix. Built for better applications.</p>
+          <p>© 2026 Resulyra. Built for better applications.</p>
           <p>Original, copyright-safe template designs.</p>
         </div>
       </div>
