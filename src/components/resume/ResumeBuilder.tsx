@@ -622,8 +622,8 @@ export function ResumeBuilder({
           {/* Thin visual line */}
           <div
             className={cn(
-              "h-full w-px bg-black/20 transition-all duration-150 group-hover:w-1 group-hover:bg-emerald-500",
-              isResizing && "w-1 bg-emerald-500 shadow-sm",
+              "h-full w-px bg-black/20 transition-colors duration-150 group-hover:bg-emerald-500",
+              isResizing && "bg-emerald-500 shadow-sm",
             )}
           />
 
