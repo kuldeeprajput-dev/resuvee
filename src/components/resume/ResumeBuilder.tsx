@@ -108,6 +108,7 @@ export function ResumeBuilder({
   const [splitPercent, setSplitPercent] = useState<number>(42);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const navScrollRef = useRef<HTMLDivElement>(null);
 
   const isLeftCollapsed = splitPercent <= 1;
   const isRightCollapsed = splitPercent >= 99;
@@ -117,6 +118,20 @@ export function ResumeBuilder({
     (typeof window !== "undefined" ? window.innerWidth : 1200);
   const totalLeftWidthPx = (splitPercent / 100) * containerWidth;
   const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 560;
+
+  useEffect(() => {
+    if (!navScrollRef.current) return;
+    const activeBtn = navScrollRef.current.querySelector<HTMLButtonElement>(
+      `[data-section-id="${activeSection}"]`,
+    );
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     let animId: number | null = null;
@@ -440,28 +455,86 @@ export function ResumeBuilder({
           >
             <div
               className={cn(
-                "border-b border-black/[0.08] px-5 py-3",
+                "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5",
                 !hideLeftSidebar && "lg:hidden",
               )}
             >
-              <div className="flex gap-2 overflow-x-auto pb-2 custom-h-scrollbar">
+              {/* Left Edge Fade Overlay */}
+              <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent" />
+
+              {/* Faded Carousel Track */}
+              <div
+                ref={navScrollRef}
+                className="flex w-full gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-6 py-0.5 [mask-image:linear-gradient(to_right,transparent_0%,black_20px,black_calc(100%-20px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20px,black_calc(100%-20px),transparent_100%)]"
+              >
                 {visibleSections.map((section, index) => (
                   <button
                     key={section.id}
                     type="button"
+                    data-section-id={section.id}
                     onClick={() => setActiveSection(section.id)}
                     className={cn(
-                      "flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold",
+                      "flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-all duration-150",
                       activeSection === section.id
-                        ? "bg-[var(--brand-ink)] text-white"
-                        : "border border-black/10 bg-white text-[var(--brand-muted)]",
+                        ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
+                        : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]",
                     )}
                   >
-                    <span>{index + 1}</span>
+                    <span className="text-[10px] opacity-80">{index + 1}</span>
                     {section.shortLabel}
                   </button>
                 ))}
               </div>
+
+              {/* Right Edge Fade Overlay */}
+              <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent" />
+            </div>
+
+            {/* Carousel Navigation Control Bar (Ultra-Thin Arrow - Line - Dots - Line - Arrow) */}
+            <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1">
+              <button
+                type="button"
+                onClick={() => goToRelativeSection(-1)}
+                disabled={activeIndex === 0}
+                aria-label="Previous section"
+                className="flex size-5 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+              >
+                <ChevronLeft className="size-3" />
+              </button>
+
+              <div className="h-[1px] flex-1 bg-black/10" />
+
+              <div className="flex items-center gap-1 px-1">
+                {visibleSections.map((sec) => {
+                  const isActive = activeSection === sec.id;
+                  return (
+                    <button
+                      key={sec.id}
+                      type="button"
+                      onClick={() => setActiveSection(sec.id)}
+                      title={sec.label}
+                      className={cn(
+                        "transition-all duration-150",
+                        isActive
+                          ? "size-2 rounded-full bg-[var(--brand-ink)] ring-1 ring-black/20"
+                          : "size-1.5 rounded-full border border-black/30 bg-black/10 hover:bg-black/40",
+                      )}
+                    />
+                  );
+                })}
+              </div>
+
+              <div className="h-[1px] flex-1 bg-black/10" />
+
+              <button
+                type="button"
+                onClick={() => goToRelativeSection(1)}
+                disabled={activeIndex === visibleSections.length - 1}
+                aria-label="Next section"
+                className="flex size-5 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+              >
+                <ChevronRight className="size-3" />
+              </button>
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto">
