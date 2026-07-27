@@ -219,6 +219,14 @@
     box-shadow: none !important;
     transform: scale(1.334) !important;
     transform-origin: top left !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .resume-preview-panel {
+    display: block !important;
+    position: static !important;
+    overflow: visible !important;
   }
 
   .resume-preview-stage {

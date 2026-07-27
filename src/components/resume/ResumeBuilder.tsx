@@ -413,7 +413,7 @@ export function ResumeBuilder({ initialTemplate }: ResumeBuilderProps) {
 
         <section
           className={cn(
-            "relative min-h-0 overflow-hidden bg-[#dfe1dc] lg:block",
+            "resume-preview-panel relative min-h-0 overflow-hidden bg-[#dfe1dc] lg:block",
             showMobilePreview
               ? "fixed inset-0 z-[80] block"
               : "hidden",
