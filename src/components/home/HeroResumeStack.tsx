@@ -56,8 +56,8 @@ const resumeSheets = [
 
 export function HeroResumeStack() {
   return (
-    <div className="group relative mx-auto w-full max-w-[680px] cursor-default">
-      <div className="relative h-[390px] sm:h-[520px]">
+    <div className="group relative mx-auto w-full max-w-[680px] cursor-default lg:flex lg:h-[656px] lg:flex-col">
+      <div className="relative h-[350px] shrink-0 sm:h-[470px]">
         <div
           className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-[var(--brand-lime)]/20 blur-[90px]"
           aria-hidden="true"
@@ -90,25 +90,25 @@ export function HeroResumeStack() {
         ))}
       </div>
 
-      <div className="relative z-[60] mt-3 grid gap-3 px-[2%] sm:mt-[-66px] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
-        <div className="rounded-2xl border border-black/10 bg-white/94 p-4 shadow-[0_16px_42px_rgba(22,32,28,0.14)] backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
+      <div className="relative z-[60] mt-3 grid gap-3 px-[2%] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%] lg:flex-1">
+        <div className="rounded-2xl border border-black/10 bg-white/94 p-3 shadow-[0_16px_42px_rgba(22,32,28,0.14)] backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1 sm:p-3.5">
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)] sm:size-11">
-              <Zap className="size-5" />
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)] sm:size-10">
+              <Zap className="size-4.5" />
             </span>
             <div className="min-w-0">
               <p className="truncate text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] sm:text-[10px]">
                 ATS strength
               </p>
-              <p className="whitespace-nowrap text-lg font-bold tracking-tight sm:text-xl">
+              <p className="whitespace-nowrap text-lg font-bold tracking-tight">
                 90%{" "}
-                <span className="text-sm text-[var(--brand-muted)]">
+                <span className="text-xs text-[var(--brand-muted)]">
                   ready
                 </span>
               </p>
             </div>
           </div>
-          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
             <div className="h-full w-[90%] rounded-full bg-[var(--brand-lime)]" />
           </div>
           <p className="mt-2 text-[10px] font-medium text-[var(--brand-muted)]">
@@ -116,32 +116,32 @@ export function HeroResumeStack() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-[#aebcab]/60 bg-[#e4ece3]/95 p-4 text-[var(--brand-ink)] shadow-[0_16px_42px_rgba(22,32,28,0.12)] transition-transform delay-75 duration-300 group-hover:-translate-y-1 sm:p-5">
+        <div className="rounded-2xl border border-[#aebcab]/60 bg-[#e4ece3]/95 p-3 text-[var(--brand-ink)] shadow-[0_16px_42px_rgba(22,32,28,0.12)] transition-transform delay-75 duration-300 group-hover:-translate-y-1 sm:p-4">
           <div className="flex items-center justify-between">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-[var(--brand-ink)] text-[var(--brand-lime)]">
-              <BadgeCheck className="size-4" />
+            <span className="flex size-7 items-center justify-center rounded-lg bg-[var(--brand-ink)] text-[var(--brand-lime)]">
+              <BadgeCheck className="size-3.5" />
             </span>
             <span className="rounded-full border border-black/10 bg-white/60 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]">
               Built into Resulyra
             </span>
           </div>
-          <p className="mt-3 text-sm font-bold sm:mt-4">
+          <p className="mt-2.5 text-sm font-bold">
             Everything you need to finish
           </p>
-          <div className="mt-3 grid grid-cols-3 divide-x divide-black/10 rounded-xl border border-black/[0.07] bg-white/55">
-            <div className="p-2.5 sm:p-3">
-              <Layers3 className="size-4 text-[#4f7242]" />
-              <p className="mt-2 text-[11px] font-bold leading-4">6 layouts</p>
+          <div className="mt-2.5 grid grid-cols-3 divide-x divide-black/10 rounded-xl border border-black/[0.07] bg-white/55">
+            <div className="p-2 sm:p-2.5">
+              <Layers3 className="size-3.5 text-[#4f7242]" />
+              <p className="mt-1.5 text-[11px] font-bold leading-4">6 layouts</p>
               <p className="text-[9px] text-[var(--brand-muted)]">Original</p>
             </div>
-            <div className="p-2.5 sm:p-3">
-              <Sparkles className="size-4 text-[#c65b38]" />
-              <p className="mt-2 text-[11px] font-bold leading-4">AI polish</p>
+            <div className="p-2 sm:p-2.5">
+              <Sparkles className="size-3.5 text-[#c65b38]" />
+              <p className="mt-1.5 text-[11px] font-bold leading-4">AI polish</p>
               <p className="text-[9px] text-[var(--brand-muted)]">Writing</p>
             </div>
-            <div className="p-2.5 sm:p-3">
-              <FileDown className="size-4 text-[#376878]" />
-              <p className="mt-2 text-[11px] font-bold leading-4">Clean PDF</p>
+            <div className="p-2 sm:p-2.5">
+              <FileDown className="size-3.5 text-[#376878]" />
+              <p className="mt-1.5 text-[11px] font-bold leading-4">Clean PDF</p>
               <p className="text-[9px] text-[var(--brand-muted)]">Ready</p>
             </div>
           </div>

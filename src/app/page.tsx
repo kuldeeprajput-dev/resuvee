@@ -90,8 +90,8 @@ export default function Home() {
       <main>
         <section className="relative border-b border-black/[0.08]">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-[720px] w-full max-w-[1440px] items-center gap-14 px-5 py-16 sm:px-8 md:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-24">
-            <div className="relative z-10 max-w-[650px]">
+          <div className="relative mx-auto grid min-h-[720px] w-full max-w-[1440px] items-start gap-14 px-5 py-14 sm:px-8 md:py-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:px-12 lg:pb-16 lg:pt-12">
+            <div className="relative z-10 max-w-[650px] lg:flex lg:h-[656px] lg:flex-col">
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] shadow-sm">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
                 18 original, white-page resume templates
@@ -145,7 +145,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div className="mt-9 space-y-2.5">
+              <div className="mt-9 space-y-2.5 lg:mt-auto">
                 {productBenefits.map((benefit) => (
                   <div
                     key={benefit}
