@@ -134,7 +134,7 @@ export function LandingTemplateShowcase() {
 
       <div
         ref={carouselRef}
-        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[48%] lg:auto-cols-[31.8%] [&::-webkit-scrollbar]:hidden"
+        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
@@ -144,7 +144,7 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}`
             }
-            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,32,28,0.11)] sm:p-5"
+            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5"
           >
             <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-8 sm:p-10">
               <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm">
