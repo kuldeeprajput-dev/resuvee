@@ -433,8 +433,8 @@ export function ResumeBuilder({
                 ? undefined
                 : {
                     width: hideLeftSidebar
-                      ? `${splitPercent}%`
-                      : `calc(${splitPercent}% - 220px)`,
+                      ? `${Math.max(360, totalLeftWidthPx)}px`
+                      : `${Math.max(360, totalLeftWidthPx - 220)}px`,
                   }
             }
           >
@@ -444,7 +444,7 @@ export function ResumeBuilder({
                 !hideLeftSidebar && "lg:hidden",
               )}
             >
-              <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex gap-2 overflow-x-auto pb-2 custom-h-scrollbar">
                 {visibleSections.map((section, index) => (
                   <button
                     key={section.id}

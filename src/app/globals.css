@@ -190,6 +190,32 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Custom Thin & Beautiful Horizontal Scrollbar */
+  .custom-h-scrollbar::-webkit-scrollbar {
+    height: 4px;
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 9999px;
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 9999px;
+    transition: background-color 150ms ease;
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .custom-h-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.05);
+  }
 }
 
 @layer components {
