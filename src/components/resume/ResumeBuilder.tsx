@@ -516,8 +516,7 @@ export function ResumeBuilder({
                   Choose a template
                 </h2>
                 <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                  Your content stays. Empty sections receive matching example
-                  copy so every layout is complete.
+                  Your content stays. Select any template layout for your resume.
                 </p>
               </div>
               <button

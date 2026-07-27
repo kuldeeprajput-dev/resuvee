@@ -4,10 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { defaultResumeStyle, type ResumeStyle } from "@/components/resume/CustomizePanel";
 import { createBlankResumeData, resumeTemplates } from "@/lib/resume-data";
-import {
-  getTemplateStarterData,
-  mergeResumeWithStarter,
-} from "@/lib/resume-presets";
+import { getTemplateStarterData } from "@/lib/resume-presets";
 import type {
   BuilderSection,
   ResumeData,
@@ -159,13 +156,8 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         }
 
         if (isResumeTemplateId(initialTemplate)) {
-          const currentData = legacyDraft?.data ?? get().data;
           set({
             templateId: requestedTemplate,
-            data: mergeResumeWithStarter(
-              currentData,
-              getTemplateStarterData(requestedTemplate),
-            ),
           });
         }
 
@@ -191,16 +183,12 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         const activeSection = template.sections.includes(get().activeSection)
           ? get().activeSection
           : template.sections[0];
-        set((state) => ({
+        set({
           templateId,
           activeSection,
-          data: mergeResumeWithStarter(
-            state.data,
-            getTemplateStarterData(templateId),
-          ),
           showTemplates: false,
           saveLabel: "Template applied",
-        }));
+        });
       },
 
       setActiveSection: (activeSection) => set({ activeSection }),
