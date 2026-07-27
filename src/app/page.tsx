@@ -10,33 +10,18 @@ import {
   PenLine,
   ScanSearch,
   Sparkles,
-  WandSparkles,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
+import { HeroResumeStack } from "@/components/home/HeroResumeStack";
 import { LandingTemplateShowcase } from "@/components/home/LandingTemplateShowcase";
-import { resumeTemplates } from "@/lib/resume-data";
 
 const productBenefits = [
   "18 original templates across proven resume formats",
   "Dedicated fresher layouts with no experience section",
   "Switch designs without losing any of your work",
 ];
-
-const heroTemplates = {
-  standard:
-    resumeTemplates.find((template) => template.id === "standard") ??
-    resumeTemplates[0],
-  compact:
-    resumeTemplates.find((template) => template.id === "compact") ??
-    resumeTemplates[1],
-  fresher:
-    resumeTemplates.find((template) => template.id === "fresher") ??
-    resumeTemplates[2],
-};
 
 const workflow = [
   {
@@ -175,44 +160,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative mx-auto h-[520px] w-full max-w-[660px] sm:h-[620px]">
-              <div className="absolute left-[2%] top-[9%] w-[52%] -rotate-6 opacity-65 sm:left-[5%]">
-                <TemplateThumbnail template={heroTemplates.compact} />
-              </div>
-              <div className="absolute right-[2%] top-[1%] w-[57%] rotate-[5deg] opacity-80 sm:right-[4%]">
-                <TemplateThumbnail template={heroTemplates.fresher} />
-              </div>
-              <div className="absolute left-1/2 top-[7%] w-[59%] -translate-x-1/2">
-                <TemplateThumbnail
-                  template={heroTemplates.standard}
-                  showLabel
-                />
-              </div>
-
-              <div className="absolute bottom-[8%] left-[1%] z-20 rounded-2xl border border-black/10 bg-white/90 p-4 shadow-[0_18px_55px_rgba(22,32,28,0.18)] backdrop-blur sm:left-[5%] sm:p-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-[var(--brand-lime)]">
-                    <Zap className="size-5" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-semibold text-[var(--brand-muted)]">
-                      Resume strength
-                    </p>
-                    <p className="text-xl font-bold tracking-tight">
-                      90% ready
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute bottom-[1%] right-[1%] z-20 max-w-[210px] rounded-2xl bg-[var(--brand-ink)] p-4 text-white shadow-[0_18px_55px_rgba(22,32,28,0.25)] sm:bottom-[4%] sm:right-[3%] sm:p-5">
-                <WandSparkles className="mb-3 size-5 text-[var(--brand-lime)]" />
-                <p className="text-sm font-bold">Made to be yours</p>
-                <p className="mt-1 text-xs leading-5 text-white/60">
-                  Original layouts, built from the ground up.
-                </p>
-              </div>
-            </div>
+            <HeroResumeStack />
           </div>
         </section>
 
