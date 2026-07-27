@@ -481,7 +481,7 @@ export function ResumeBuilder({
             <div
               className={cn(
                 "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5",
-                !hideLeftSidebar && "lg:hidden",
+                !hideLeftSidebar && "hidden",
               )}
             >
               {/* Left Edge Fade Overlay */}
@@ -526,7 +526,12 @@ export function ResumeBuilder({
             </div>
 
             {/* Carousel Navigation Control Bar (Ultra-Thin Arrow - Line - Dots - Line - Arrow) */}
-            <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1">
+            <div
+              className={cn(
+                "flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1",
+                !hideLeftSidebar && "hidden",
+              )}
+            >
               <button
                 type="button"
                 onClick={() => goToRelativeSection(-1)}
