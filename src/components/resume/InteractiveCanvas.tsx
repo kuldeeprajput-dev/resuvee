@@ -20,6 +20,7 @@ import {
   Minus,
   MousePointer,
   Palette,
+  Pipette,
   Plus,
   Redo2,
   RotateCcw,
@@ -83,8 +84,6 @@ const COLOR_SWATCHES = [
   { name: "Ocean", value: "#2f6fa3" },
   { name: "Navy", value: "#203b57" },
   { name: "Plum", value: "#6c4c70" },
-  { name: "Terracotta", value: "#a85239" },
-  { name: "Graphite", value: "#424242" },
 ];
 
 export function InteractiveCanvas({
@@ -133,6 +132,7 @@ export function InteractiveCanvas({
   // Menus
   const [showPresetsMenu, setShowPresetsMenu] = useState(false);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [showDesignMenu, setShowDesignMenu] = useState(false);
 
   // Direct On-Canvas Element Selection, Bounding Highlight & Real-Time Toolbar State
   const [selectedElement, setSelectedElement] = useState<SelectedCanvasElement | null>(null);
@@ -671,6 +671,171 @@ export function InteractiveCanvas({
             <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
             <span className="whitespace-nowrap">Templates</span>
           </button>
+
+          {/* Design Controls Button in Canvas Bar */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setShowDesignMenu(!showDesignMenu);
+                setShowPresetsMenu(false);
+                setShowThemeMenu(false);
+              }}
+              className={cn(
+                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3",
+                showDesignMenu && "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50 text-emerald-800"
+              )}
+            >
+              <Palette className="size-3.5 text-emerald-600" />
+              <span className="whitespace-nowrap">Design</span>
+            </button>
+
+            {/* Design Popover Dropdown Panel */}
+            {showDesignMenu && (
+              <div className="absolute top-10 right-0 z-50 w-72 sm:w-80 rounded-2xl border border-black/15 bg-white p-4 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+                <div className="flex items-center justify-between pb-2.5 border-b border-black/10 mb-3">
+                  <div className="flex items-center gap-2">
+                    <Palette className="size-4 text-emerald-700" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">Canvas Design</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowDesignMenu(false)}
+                    className="builder-icon-button"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+
+                {/* Accent Color Section */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold text-[var(--brand-ink)]">Accent Color</label>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-mono text-[var(--brand-muted)] font-bold">
+                        {resumeStyle?.accent || template.accent || "#28785b"}
+                      </span>
+                      <span
+                        className="size-3.5 rounded-full border border-black/20"
+                        style={{ backgroundColor: resumeStyle?.accent || template.accent || "#28785b" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Custom Color Wheel Swatch on Left Side */}
+                    <label
+                      className={cn(
+                        "relative flex size-6 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                        !COLOR_SWATCHES.some(c => c.value.toLowerCase() === (resumeStyle?.accent || "").toLowerCase()) && "ring-2 ring-emerald-600 ring-offset-1"
+                      )}
+                      title="Pick Any Custom Color"
+                    >
+                      <input
+                        type="color"
+                        value={(resumeStyle?.accent || template.accent || "#28785b").startsWith("#") ? (resumeStyle?.accent || template.accent || "#28785b") : "#28785b"}
+                        onChange={(e) => onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)}
+                        className="absolute inset-0 size-full cursor-pointer opacity-0"
+                      />
+                      <Pipette className="size-3 text-white drop-shadow-md" />
+                    </label>
+
+                    {/* Custom Hex Code Text Input */}
+                    <input
+                      type="text"
+                      value={resumeStyle?.accent || ""}
+                      onChange={(e) => onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)}
+                      placeholder={template.accent || "#28785b"}
+                      className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] focus:outline-none focus:bg-white"
+                    />
+
+                    <span className="h-4 w-px bg-black/15 mx-0.5" />
+
+                    {/* Preset Swatches */}
+                    {COLOR_SWATCHES.map((color) => {
+                      const isSelected = (resumeStyle?.accent || template.accent).toLowerCase() === color.value.toLowerCase();
+                      return (
+                        <button
+                          key={color.value}
+                          type="button"
+                          onClick={() => onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle)}
+                          className={cn(
+                            "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center",
+                            isSelected && "ring-2 ring-emerald-600 ring-offset-1"
+                          )}
+                          style={{ backgroundColor: color.value }}
+                          title={color.name}
+                        >
+                          {isSelected && <Check className="size-3 text-white" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Typography / Font Section */}
+                <div className="mb-4 pt-3 border-t border-black/10">
+                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Font / Typography</label>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[
+                      { id: "template", name: "Template", desc: "Designed pairing", cls: "font-sans" },
+                      { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
+                      { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
+                      { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
+                    ].map((f) => {
+                      const isSelected = (resumeStyle?.font || "template") === f.id;
+                      return (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => onUpdateStyle?.({ ...resumeStyle, font: f.id as any } as ResumeStyle)}
+                          className={cn(
+                            "flex flex-col items-start rounded-xl border p-2 text-left transition",
+                            isSelected
+                              ? "border-emerald-600 bg-emerald-50/80 ring-1 ring-emerald-600/30"
+                              : "border-black/10 bg-white hover:border-black/25"
+                          )}
+                        >
+                          <span className={cn("text-base font-bold leading-none mb-1", f.cls)}>Aa</span>
+                          <span className="text-[11px] font-bold leading-tight">{f.name}</span>
+                          <span className="text-[9px] text-[var(--brand-muted)]">{f.desc}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Layout Spacing Options */}
+                <div className="pt-3 border-t border-black/10">
+                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Page Spacing</label>
+                  <div className="flex gap-1.5">
+                    {[
+                      { id: "compact", label: "Compact" },
+                      { id: "normal", label: "Normal" },
+                      { id: "spacious", label: "Spacious" },
+                    ].map((p) => {
+                      const isSelected = (resumeStyle?.pagePadding || "normal") === p.id;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => onUpdateStyle?.({ ...resumeStyle, pagePadding: p.id as any } as ResumeStyle)}
+                          className={cn(
+                            "flex-1 rounded-lg border py-1 text-center text-[10px] font-bold transition",
+                            isSelected
+                              ? "border-emerald-600 bg-emerald-600 text-white"
+                              : "border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/25"
+                          )}
+                        >
+                          {p.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Fullscreen Toggle Button */}
           <button

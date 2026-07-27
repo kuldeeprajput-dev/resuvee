@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Palette, RotateCcw, Type, UserRound, X } from "lucide-react";
+import { Check, Palette, Pipette, RotateCcw, Type, UserRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -38,8 +38,6 @@ const colors = [
   { name: "Ocean", value: "#2f6fa3" },
   { name: "Navy", value: "#203b57" },
   { name: "Plum", value: "#6c4c70" },
-  { name: "Terracotta", value: "#a85239" },
-  { name: "Graphite", value: "#424242" },
 ];
 
 const fonts: {
@@ -132,7 +130,41 @@ export function CustomizePanel({
             <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
               Keep contrast strong for a professional, readable document.
             </p>
-            <div className="mt-4 flex flex-wrap gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {/* Custom Color Wheel Swatch on Left Side */}
+              <label
+                className={cn(
+                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full border-4 border-white shadow-sm ring-offset-2 transition hover:scale-105 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                  !colors.some(
+                    (c) => c.value.toLowerCase() === activeAccent.toLowerCase(),
+                  ) && "ring-2 ring-black/65",
+                )}
+                title="Choose custom color"
+              >
+                <input
+                  type="color"
+                  value={activeAccent.startsWith("#") ? activeAccent : "#28785b"}
+                  onChange={(e) => onChange({ ...style, accent: e.target.value })}
+                  className="absolute inset-0 size-full cursor-pointer opacity-0"
+                />
+                <Pipette className="size-4 text-white drop-shadow-md" />
+              </label>
+
+              {/* Custom Hex Color Code Input */}
+              <div className="flex items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 shadow-xs">
+                <span className="text-xs font-bold text-[var(--brand-muted)]">Hex</span>
+                <input
+                  type="text"
+                  value={style.accent}
+                  onChange={(e) => onChange({ ...style, accent: e.target.value })}
+                  placeholder={templateAccent || "#28785b"}
+                  className="w-20 bg-transparent text-xs font-mono font-bold text-[var(--brand-ink)] focus:outline-none"
+                />
+              </div>
+
+              <span className="h-6 w-px bg-black/15 mx-1" />
+
+              {/* Preset Color Swatches */}
               {colors.map((color) => {
                 const selected =
                   activeAccent.toLowerCase() === color.value.toLowerCase();

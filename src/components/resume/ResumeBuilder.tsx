@@ -314,15 +314,7 @@ export function ResumeBuilder({
             <SpellCheck2 className="size-4" />
             Writing
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setShowCustomize(true)}
-            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold xl:inline-flex"
-          >
-            <Palette className="size-4" />
-            Design
-          </Button>
+
           <Button
             type="button"
             variant="outline"
