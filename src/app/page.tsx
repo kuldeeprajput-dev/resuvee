@@ -17,13 +17,26 @@ import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
+import { LandingTemplateShowcase } from "@/components/home/LandingTemplateShowcase";
 import { resumeTemplates } from "@/lib/resume-data";
 
 const productBenefits = [
-  "Build from scratch or start with sample content",
-  "Switch templates without losing your work",
-  "Check ATS readiness in the same workspace",
+  "18 original templates across proven resume formats",
+  "Dedicated fresher layouts with no experience section",
+  "Switch designs without losing any of your work",
 ];
+
+const heroTemplates = {
+  standard:
+    resumeTemplates.find((template) => template.id === "standard") ??
+    resumeTemplates[0],
+  compact:
+    resumeTemplates.find((template) => template.id === "compact") ??
+    resumeTemplates[1],
+  fresher:
+    resumeTemplates.find((template) => template.id === "fresher") ??
+    resumeTemplates[2],
+};
 
 const workflow = [
   {
@@ -96,7 +109,7 @@ export default function Home() {
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] shadow-sm">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
-                Your complete application workspace
+                18 original, white-page resume templates
               </div>
 
               <h1 className="text-balance text-[clamp(3.5rem,7.1vw,7.1rem)] font-bold leading-[0.88] tracking-[-0.075em]">
@@ -120,9 +133,9 @@ export default function Home() {
               </h1>
 
               <p className="mt-8 max-w-[580px] text-lg leading-8 text-[var(--brand-muted)] sm:text-xl">
-                Build a resume that looks like you, reads clearly, and gets
-                through the first screen. One focused workspace from first
-                draft to final check.
+                Start with the format employers know, a focused fresher
+                layout, or a role-specific design. Then write, check,
+                customize, and export from one focused workspace.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -164,13 +177,16 @@ export default function Home() {
 
             <div className="relative mx-auto h-[520px] w-full max-w-[660px] sm:h-[620px]">
               <div className="absolute left-[2%] top-[9%] w-[52%] -rotate-6 opacity-65 sm:left-[5%]">
-                <TemplateThumbnail template={resumeTemplates[1]} />
+                <TemplateThumbnail template={heroTemplates.compact} />
               </div>
               <div className="absolute right-[2%] top-[1%] w-[57%] rotate-[5deg] opacity-80 sm:right-[4%]">
-                <TemplateThumbnail template={resumeTemplates[4]} />
+                <TemplateThumbnail template={heroTemplates.fresher} />
               </div>
               <div className="absolute left-1/2 top-[7%] w-[59%] -translate-x-1/2">
-                <TemplateThumbnail template={resumeTemplates[0]} showLabel />
+                <TemplateThumbnail
+                  template={heroTemplates.standard}
+                  showLabel
+                />
               </div>
 
               <div className="absolute bottom-[8%] left-[1%] z-20 rounded-2xl border border-black/10 bg-white/90 p-4 shadow-[0_18px_55px_rgba(22,32,28,0.18)] backdrop-blur sm:left-[5%] sm:p-5">
@@ -203,8 +219,8 @@ export default function Home() {
         <section className="bg-[var(--brand-ink)] text-white">
           <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
-              ["6", "original templates"],
-                ["4", "connected career tools"],
+              ["18", "original templates"],
+              ["4", "connected career tools"],
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
               <div
@@ -229,61 +245,20 @@ export default function Home() {
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-                Template collection
+                Template screenshot library
               </p>
               <h2 className="max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
-                A strong first impression,
-                <br />
-                in your own style.
+                Start with a format people already understand.
               </h2>
             </div>
             <p className="max-w-md text-base leading-7 text-[var(--brand-muted)]">
-              Six original designs based on proven resume structures. Every
-              option is editable, printable, and safe to use.
+              Browse realistic previews of reverse-chronological, hybrid,
+              role-focused, and fresher layouts. Every page stays white,
+              readable, editable, and original to Resulyra.
             </p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {resumeTemplates.map((template, index) => (
-              <Link
-                key={template.id}
-                href={`/builder?template=${template.id}`}
-                className="group rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,32,28,0.11)] sm:p-5"
-              >
-                <div
-                  className="relative overflow-hidden rounded-2xl p-8 sm:p-10"
-                  style={{ backgroundColor: template.background }}
-                >
-                  <span className="absolute left-4 top-4 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-black/50">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <TemplateThumbnail
-                    template={template}
-                    className="mx-auto max-w-[235px] transition-transform duration-500 group-hover:scale-[1.025] group-hover:-rotate-1"
-                  />
-                </div>
-                <div className="flex items-start justify-between gap-4 px-1 pb-1 pt-5">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-xl font-bold tracking-[-0.025em]">
-                        {template.name}
-                      </h3>
-                      <span
-                        className="size-2.5 rounded-full"
-                        style={{ backgroundColor: template.accent }}
-                      />
-                    </div>
-                    <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                      {template.suitableFor}
-                    </p>
-                  </div>
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)]">
-                    <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:rotate-0" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <LandingTemplateShowcase />
         </section>
 
         <section className="border-y border-black/[0.08] bg-[#e9e7df]">
