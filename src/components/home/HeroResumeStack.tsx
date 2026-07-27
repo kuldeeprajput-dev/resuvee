@@ -35,21 +35,21 @@ const resumeSheets = [
     src: "/assets/hero-resumes/daniel-kim.webp",
     alt: "Daniel Kim engineering director resume template",
     className:
-      "pointer-events-auto left-[8%] top-[16%] z-10 w-[42%] -rotate-[7deg] cursor-default group-hover:-translate-x-6 group-hover:-rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:left-[10%] sm:w-[39%]",
+      "pointer-events-auto left-[8%] top-[16%] z-10 w-[42%] -rotate-[7deg] cursor-default group-hover:-translate-x-6 group-hover:-rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:left-[10%] sm:w-[36%]",
   },
   {
     id: "noah-bennett",
     src: "/assets/hero-resumes/noah-bennett.webp",
     alt: "Noah Bennett full-stack software engineer resume template",
     className:
-      "pointer-events-auto right-[7%] top-[14%] z-20 w-[42%] rotate-[7deg] cursor-default group-hover:translate-x-6 group-hover:rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:right-[9%] sm:w-[39%]",
+      "pointer-events-auto right-[7%] top-[14%] z-20 w-[42%] rotate-[7deg] cursor-default group-hover:translate-x-6 group-hover:rotate-[10deg] hover:z-50 hover:scale-[1.045] sm:right-[9%] sm:w-[36%]",
   },
   {
     id: "ethan-brooks",
     src: "/assets/hero-resumes/ethan-brooks.webp",
     alt: "Ethan Brooks product strategy lead resume template",
     className:
-      "pointer-events-auto left-1/2 top-[10%] z-30 w-[46%] -translate-x-1/2 cursor-default shadow-[0_30px_80px_rgba(22,32,28,0.24)] group-hover:-translate-y-3 hover:z-50 hover:scale-[1.055] sm:w-[43%]",
+      "pointer-events-auto left-1/2 top-[10%] z-30 w-[46%] -translate-x-1/2 cursor-default shadow-[0_30px_80px_rgba(22,32,28,0.24)] group-hover:-translate-y-3 hover:z-50 hover:scale-[1.055] sm:w-[39%]",
     preload: true,
   },
 ] as const;
@@ -90,7 +90,7 @@ export function HeroResumeStack() {
         ))}
       </div>
 
-      <div className="relative z-[60] mt-3 grid gap-3 px-[2%] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
+      <div className="relative z-[60] mt-3 grid gap-3 px-[2%] sm:mt-[-66px] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
         <div className="rounded-2xl border border-black/10 bg-white/94 p-4 shadow-[0_16px_42px_rgba(22,32,28,0.14)] backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)] sm:size-11">
