@@ -444,7 +444,7 @@ export function ResumeBuilder({
                 !hideLeftSidebar && "lg:hidden",
               )}
             >
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                 {visibleSections.map((section, index) => (
                   <button
                     key={section.id}
