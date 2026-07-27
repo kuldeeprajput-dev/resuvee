@@ -20,7 +20,7 @@ import {
   Undo2,
   X,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   builderSections,
   calculateResumeStrength,
@@ -119,6 +119,30 @@ export function ResumeBuilder({
   const totalLeftWidthPx = (splitPercent / 100) * containerWidth;
   const hideLeftSidebar = isLeftCollapsed || totalLeftWidthPx < 560;
 
+  const [showLeftFade, setShowLeftFade] = useState<boolean>(false);
+  const [showRightFade, setShowRightFade] = useState<boolean>(true);
+
+  const checkScrollFades = useCallback(() => {
+    if (!navScrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = navScrollRef.current;
+    setShowLeftFade(scrollLeft > 6);
+    setShowRightFade(scrollLeft + clientWidth < scrollWidth - 6);
+  }, []);
+
+  useEffect(() => {
+    const el = navScrollRef.current;
+    if (!el) return;
+
+    checkScrollFades();
+    el.addEventListener("scroll", checkScrollFades, { passive: true });
+    window.addEventListener("resize", checkScrollFades);
+
+    return () => {
+      el.removeEventListener("scroll", checkScrollFades);
+      window.removeEventListener("resize", checkScrollFades);
+    };
+  }, [checkScrollFades, visibleSections]);
+
   useEffect(() => {
     if (!navScrollRef.current) return;
     const activeBtn = navScrollRef.current.querySelector<HTMLButtonElement>(
@@ -131,7 +155,8 @@ export function ResumeBuilder({
         block: "nearest",
       });
     }
-  }, [activeSection]);
+    setTimeout(checkScrollFades, 250);
+  }, [activeSection, checkScrollFades]);
 
   useEffect(() => {
     let animId: number | null = null;
@@ -460,12 +485,17 @@ export function ResumeBuilder({
               )}
             >
               {/* Left Edge Fade Overlay */}
-              <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent" />
+              <div
+                className={cn(
+                  "pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
+                  showLeftFade ? "opacity-100" : "opacity-0",
+                )}
+              />
 
-              {/* Faded Carousel Track */}
+              {/* Carousel Track */}
               <div
                 ref={navScrollRef}
-                className="flex w-full gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-6 py-0.5 [mask-image:linear-gradient(to_right,transparent_0%,black_20px,black_calc(100%-20px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20px,black_calc(100%-20px),transparent_100%)]"
+                className="flex w-full gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-4 py-0.5"
               >
                 {visibleSections.map((section, index) => (
                   <button
@@ -487,7 +517,12 @@ export function ResumeBuilder({
               </div>
 
               {/* Right Edge Fade Overlay */}
-              <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent" />
+              <div
+                className={cn(
+                  "pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
+                  showRightFade ? "opacity-100" : "opacity-0",
+                )}
+              />
             </div>
 
             {/* Carousel Navigation Control Bar (Ultra-Thin Arrow - Line - Dots - Line - Arrow) */}
