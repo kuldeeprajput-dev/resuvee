@@ -288,10 +288,17 @@ export function ResumeBuilder({
           </div>
 
           {/* Document Title (reduced left padding by another 8px) */}
-          <div className="pl-0 sm:pl-1">
-            <div className="flex items-center gap-2">
-              <FileText className="hidden size-4 text-[var(--brand-muted)] sm:block" />
-              <p className="max-w-[155px] truncate text-sm font-bold sm:max-w-none">
+          <div className="min-w-0 pl-0 sm:pl-1">
+            <div className="flex items-center gap-2 min-w-0">
+              <FileText className="hidden size-4 shrink-0 text-[var(--brand-muted)] sm:block" />
+              <p
+                className="max-w-[150px] truncate text-sm font-bold sm:max-w-[220px] md:max-w-[300px] lg:max-w-[380px]"
+                title={
+                  data.basics.fullName
+                    ? `${data.basics.fullName} — Resume`
+                    : "Untitled resume"
+                }
+              >
                 {data.basics.fullName
                   ? `${data.basics.fullName} — Resume`
                   : "Untitled resume"}
