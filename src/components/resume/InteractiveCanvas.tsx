@@ -22,7 +22,6 @@ import {
   Palette,
   Plus,
   RotateCcw,
-  Ruler,
   Trash2,
   Type,
   X,
@@ -629,27 +628,7 @@ export function InteractiveCanvas({
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Quick Margins Toggle */}
-          <button
-            type="button"
-            onClick={cyclePagePadding}
-            className="flex h-8 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 text-[11px] font-bold transition hover:bg-black/5 shadow-xs"
-            title="Cycle Page Padding (Compact / Normal / Spacious)"
-          >
-            <Ruler className="size-3.5 text-emerald-600" />
-            <span className="capitalize">Margin: {resumeStyle?.pagePadding || "normal"}</span>
-          </button>
 
-          {/* Quick Gaps Toggle */}
-          <button
-            type="button"
-            onClick={cycleSectionSpacing}
-            className="flex h-8 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 text-[11px] font-bold transition hover:bg-black/5 shadow-xs"
-            title="Cycle Section Spacing"
-          >
-            <Type className="size-3.5 text-emerald-600" />
-            <span className="capitalize">Gap: {resumeStyle?.sectionSpacing || "normal"}</span>
-          </button>
 
           {/* Template Selector Button */}
           <button
