@@ -24,62 +24,97 @@ const productBenefits = [
   "Switch designs without losing any of your work",
 ];
 
+const workspaceBenefits = [
+  "Drafts save in your browser",
+  "Reuse your story across every tool",
+  "Export clean files when you are ready",
+];
+
 const workflow = [
   {
     number: "01",
+    label: "Format",
     icon: LayoutTemplate,
     title: "Choose your direction",
     description:
       "Pick from curated formats made for different careers and experience levels.",
+    outcome: "A structure matched to your goals",
+    accent: "bg-[var(--brand-lime)]",
   },
   {
     number: "02",
+    label: "Content",
     icon: PenLine,
     title: "Shape your story",
     description:
       "Add your experience, education, projects and skills with a guided editor.",
+    outcome: "Every section stays in sync",
+    accent: "bg-[var(--brand-blue)]",
   },
   {
     number: "03",
+    label: "Quality",
     icon: ClipboardCheck,
     title: "Review and apply",
     description:
       "Export a polished resume, then run it through the ATS analyzer before applying.",
+    outcome: "An ATS-ready file you can send",
+    accent: "bg-[#ffd8ca]",
   },
 ];
 
 const productTools = [
   {
+    number: "01",
+    category: "Create",
     icon: PenLine,
     title: "Resume Builder",
     description:
       "Write section by section, check spelling and grammar with AI, tune the design, and export a clean PDF.",
+    features: ["Guided editor", "18 original layouts"],
     href: "/builder",
     action: "Build a resume",
+    accent: "bg-[var(--brand-lime)]",
+    wash: "from-[#eff8d8] to-[#fffefa]",
   },
   {
+    number: "02",
+    category: "Review",
     icon: FileSearch,
     title: "ATS Analyzer",
     description:
       "Review an existing resume for structure, clarity, keyword coverage, and practical improvements.",
+    features: ["ATS score", "Clear next steps"],
     href: "/analyzer",
     action: "Check a resume",
+    accent: "bg-[var(--brand-blue)]",
+    wash: "from-[#e7f2fb] to-[#fffefa]",
   },
   {
+    number: "03",
+    category: "Personalize",
     icon: Files,
     title: "Letter Studio",
     description:
       "Create a focused cover letter that reuses your local resume details and matches your visual direction.",
+    features: ["Resume-aware", "Role focused"],
     href: "/cover-letter",
     action: "Write a letter",
+    accent: "bg-[#ffd8ca]",
+    wash: "from-[#fff0e9] to-[#fffefa]",
   },
   {
+    number: "04",
+    category: "Organize",
     icon: BriefcaseBusiness,
     title: "Application Board",
     description:
       "Track saved roles, applications, interviews, offers, notes, due dates, and every next action.",
+    features: ["Visual pipeline", "Local-first"],
     href: "/job-tracker",
     action: "Track applications",
+    accent: "bg-[#d8d1f5]",
+    wash: "from-[#efecfb] to-[#fffefa]",
   },
 ];
 
@@ -189,7 +224,7 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-[1440px] px-5 py-20 sm:px-8 md:py-28 lg:px-12"
+          className="mx-auto w-full max-w-[1440px] px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
         >
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -210,25 +245,60 @@ export default function Home() {
           <LandingTemplateShowcase />
         </section>
 
-        <section className="border-y border-black/[0.08] bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-20 sm:px-8 md:py-28 lg:px-12">
-            <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-                  The Resulyra toolkit
-                </p>
-                <h2 className="mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
-                  More than a resume builder.
-                </h2>
-                <p className="mt-5 max-w-md text-base leading-7 text-[var(--brand-muted)]">
-                  Move from first draft to active job search in one
-                  privacy-friendly workspace. Everything saves in your
-                  browser for now.
-                </p>
+        <section
+          id="toolkit"
+          className="relative overflow-hidden border-y border-black/[0.08] bg-[#e9e7df]"
+        >
+          <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
+          <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
+
+          <div className="relative mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+            <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:gap-12">
+              <div className="flex flex-col xl:py-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+                    The Resulyra toolkit
+                  </p>
+                  <h2 className="mt-4 max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
+                    One workspace for the whole job search.
+                  </h2>
+                  <p className="mt-5 max-w-lg text-base leading-7 text-[var(--brand-muted)]">
+                    Build your story, check how it reads, tailor every
+                    application, and keep the follow-up moving—all without
+                    leaving your private workspace.
+                  </p>
+                </div>
+
+                <div className="mt-9 rounded-[24px] border border-black/10 bg-white/55 p-5 shadow-[0_18px_50px_rgba(22,32,28,0.06)] backdrop-blur-sm sm:p-6 xl:mt-auto">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-sm font-bold">Your work stays yours</p>
+                    <span className="rounded-full bg-[#e7f3db] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#46613c]">
+                      Local-first
+                    </span>
+                  </div>
+                  <div className="mt-5 space-y-2">
+                    {workspaceBenefits.map((benefit) => (
+                      <div
+                        key={benefit}
+                        className="flex items-center gap-3 rounded-xl border border-black/[0.07] bg-white/70 px-3 py-3"
+                      >
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--brand-lime)]">
+                          <Check className="size-3" strokeWidth={2.5} />
+                        </span>
+                        <span className="text-xs font-bold">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-4 text-xs leading-5 text-[var(--brand-muted)]">
+                    No scattered documents or repeated setup while you move
+                    from writing to applying.
+                  </p>
+                </div>
+
                 <Button
                   asChild
                   variant="outline"
-                  className="mt-7 h-11 rounded-full border-black/15 bg-white px-5 font-bold"
+                  className="mt-5 h-11 w-fit rounded-full border-black/15 bg-white px-5 font-bold shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
                 >
                   <Link href="/examples">
                     Explore resume examples
@@ -237,48 +307,83 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div className="grid gap-px overflow-hidden rounded-[26px] border border-black/10 bg-black/10 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 {productTools.map((tool) => (
                   <Link
                     key={tool.href}
                     href={tool.href}
-                    className="group bg-[var(--brand-paper)] p-7 transition hover:bg-white sm:p-8"
+                    className="group relative flex min-h-[290px] flex-col overflow-hidden rounded-[26px] border border-black/10 bg-[var(--brand-paper)] p-6 shadow-[0_18px_55px_rgba(22,32,28,0.04)] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_70px_rgba(22,32,28,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d] sm:p-7"
                   >
-                    <div className="flex items-start justify-between">
-                      <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--brand-lime)]">
-                        <tool.icon className="size-5" />
+                    <div
+                      className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tool.wash} opacity-0 transition duration-300 group-hover:opacity-100`}
+                    />
+                    <div className="relative flex items-start justify-between">
+                      <span
+                        className={`flex size-12 items-center justify-center rounded-2xl ${tool.accent} shadow-sm transition duration-300 group-hover:scale-105 group-hover:-rotate-3`}
+                      >
+                        <tool.icon className="size-5" strokeWidth={1.9} />
                       </span>
-                      <ArrowRight className="size-4 -rotate-45 text-black/25 transition group-hover:rotate-0 group-hover:text-black/70" />
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] font-bold tracking-[0.14em] text-black/35">
+                          {tool.number}
+                        </span>
+                        <ArrowRight className="size-4 -rotate-45 text-black/25 transition duration-300 group-hover:rotate-0 group-hover:text-black/70" />
+                      </div>
                     </div>
-                    <h3 className="mt-9 text-xl font-bold tracking-[-0.03em]">
-                      {tool.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
-                      {tool.description}
-                    </p>
-                    <p className="mt-5 text-xs font-bold text-[#4f7242]">
-                      {tool.action}
-                    </p>
+
+                    <div className="relative mt-8">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#6a725f]">
+                        {tool.category}
+                      </p>
+                      <h3 className="mt-2 text-[22px] font-bold tracking-[-0.035em]">
+                        {tool.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
+                        {tool.description}
+                      </p>
+                    </div>
+
+                    <div className="relative mt-5 flex flex-wrap gap-2">
+                      {tool.features.map((feature) => (
+                        <span
+                          key={feature}
+                          className="rounded-full border border-black/[0.07] bg-white/70 px-2.5 py-1 text-[10px] font-bold text-[#59615a]"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="relative mt-auto flex items-center gap-2 pt-6 text-xs font-bold text-[#3f6438]">
+                      <span>{tool.action}</span>
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col gap-4 rounded-2xl bg-[var(--brand-ink)] p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:px-6">
-              <div className="flex items-center gap-3">
-                <ScanSearch className="size-5 text-[var(--brand-lime)]" />
-                <p className="text-sm font-bold">
-                  Applying to a specific role?
-                </p>
-                <p className="hidden text-xs text-white/50 md:block">
-                  Compare its language against your resume before sending.
-                </p>
+            <div className="mt-5 flex flex-col gap-5 rounded-[24px] border border-[#bed0b4] bg-[#e5efdf] p-5 shadow-[0_15px_45px_rgba(22,32,28,0.05)] sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div className="flex items-center gap-4">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--brand-ink)] text-[var(--brand-lime)]">
+                  <ScanSearch className="size-5" />
+                </span>
+                <div>
+                  <p className="text-sm font-bold">
+                    Applying to a specific role?
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
+                    Compare the job description with your resume and find the
+                    gaps before you send it.
+                  </p>
+                </div>
               </div>
               <Link
                 href="/builder"
-                className="text-xs font-bold text-[var(--brand-lime)] hover:underline"
+                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--brand-ink)] px-5 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#25332d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d]"
               >
-                Open Role Match →
+                Open Role Match
+                <ArrowRight className="size-3.5" />
               </Link>
             </div>
           </div>
@@ -288,67 +393,102 @@ export default function Home() {
           id="how-it-works"
           className="border-y border-black/[0.08] bg-[#e9e7df]"
         >
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-20 sm:px-8 md:py-28 lg:px-12">
-            <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-              <div>
-                <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+            <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-3xl">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
                   One clear workflow
                 </p>
-                <h2 className="text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
+                <h2 className="mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
                   From blank page to ready to send.
                 </h2>
               </div>
+              <p className="max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
+                Three focused steps, one continuous draft. Move forward
+                without copying details between disconnected tools.
+              </p>
+            </div>
 
-              <div className="grid gap-px overflow-hidden rounded-[24px] border border-black/10 bg-black/10 md:grid-cols-3">
-                {workflow.map((item) => (
-                  <article
-                    key={item.number}
-                    className="group bg-[var(--brand-paper)] p-7 sm:p-8"
-                  >
-                    <div className="mb-12 flex items-center justify-between">
-                      <span className="text-xs font-bold tracking-[0.15em] text-[var(--brand-muted)]">
+            <div className="grid gap-3 md:grid-cols-3">
+              {workflow.map((item) => (
+                <article
+                  key={item.number}
+                  className="group flex min-h-[270px] flex-col rounded-[24px] border border-black/10 bg-[var(--brand-paper)] p-6 shadow-[0_14px_45px_rgba(22,32,28,0.035)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(22,32,28,0.09)] sm:p-7"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-[11px] font-bold tracking-[0.14em] text-black/35">
                         {item.number}
                       </span>
-                      <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--brand-lime)] transition-transform duration-300 group-hover:-rotate-6">
-                        <item.icon className="size-5" />
+                      <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#697166]">
+                        {item.label}
                       </span>
                     </div>
+                    <span
+                      className={`flex size-11 items-center justify-center rounded-2xl ${item.accent} transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105`}
+                    >
+                      <item.icon className="size-5" strokeWidth={1.9} />
+                    </span>
+                  </div>
+                  <div className="mt-9">
                     <h3 className="text-xl font-bold tracking-[-0.025em]">
                       {item.title}
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
                       {item.description}
                     </p>
-                  </article>
-                ))}
-              </div>
+                  </div>
+                  <div className="mt-auto flex items-center gap-2 border-t border-black/[0.07] pt-5 text-xs font-bold text-[#4f664b]">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-[#e7f3db]">
+                      <Check className="size-3" strokeWidth={2.5} />
+                    </span>
+                    {item.outcome}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12">
-          <div className="relative overflow-hidden rounded-[30px] bg-[var(--brand-orange)] px-6 py-16 sm:px-10 md:py-20 lg:px-16">
-            <div className="absolute -right-20 -top-32 size-80 rounded-full border-[54px] border-white/15" />
-            <div className="absolute -bottom-32 right-[28%] size-60 rounded-full bg-[var(--brand-lime)]/35 blur-2xl" />
-            <div className="relative z-10 flex flex-col gap-9 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <p className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em]">
-                  <Sparkles className="size-4" />
-                  Your next application starts here
-                </p>
-                <h2 className="max-w-4xl text-4xl font-bold leading-[0.98] tracking-[-0.06em] sm:text-6xl lg:text-7xl">
-                  Make the resume you wish you already had.
-                </h2>
+        <section className="bg-[#e9e7df]">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-8 md:py-6 lg:px-12">
+            <div className="relative overflow-hidden rounded-[28px] bg-[var(--brand-orange)] px-6 py-10 sm:px-9 sm:py-12 lg:px-12">
+              <div className="absolute -right-16 -top-28 size-64 rounded-full border-[42px] border-white/15" />
+              <div className="absolute -bottom-24 right-[30%] size-48 rounded-full bg-[var(--brand-lime)]/30 blur-2xl" />
+              <div className="relative z-10 flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-4xl">
+                  <p className="mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em]">
+                    <Sparkles className="size-4" />
+                    Your next application starts here
+                  </p>
+                  <h2 className="text-4xl font-bold leading-[0.98] tracking-[-0.055em] sm:text-5xl lg:text-[58px]">
+                    Make the resume you wish you already had.
+                  </h2>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {[
+                      "Free to start",
+                      "No account required",
+                      "Clean PDF export",
+                    ].map((benefit) => (
+                      <span
+                        key={benefit}
+                        className="rounded-full border border-black/10 bg-white/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em]"
+                      >
+                        {benefit}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  className="h-12 w-fit shrink-0 rounded-full bg-[var(--brand-ink)] px-6 font-bold text-white shadow-lg hover:-translate-y-0.5 hover:bg-[#27332f]"
+                >
+                  <Link href="/builder">
+                    Start building
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
               </div>
-              <Button
-                asChild
-                className="h-14 shrink-0 rounded-full bg-[var(--brand-ink)] px-7 font-bold text-white hover:bg-[#27332f]"
-              >
-                <Link href="/builder">
-                  Start for free
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
             </div>
           </div>
         </section>
