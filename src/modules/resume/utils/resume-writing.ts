@@ -71,10 +71,7 @@ function replaceIssueText(text: string, issue: WritingIssue) {
   return text.replace(issue.original, issue.replacement);
 }
 
-export function applyWritingIssue(
-  data: ResumeData,
-  issue: WritingIssue,
-): ResumeData {
+export function applyWritingIssue(data: ResumeData, issue: WritingIssue): ResumeData {
   if (issue.targetId === "basics.headline") {
     return {
       ...data,
@@ -113,9 +110,7 @@ export function applyWritingIssue(
           return {
             ...item,
             highlights: item.highlights.map((highlight, itemIndex) =>
-              itemIndex === index
-                ? replaceIssueText(highlight, issue)
-                : highlight,
+              itemIndex === index ? replaceIssueText(highlight, issue) : highlight
             ),
           };
         }
@@ -168,9 +163,7 @@ export function applyWritingIssue(
           return {
             ...item,
             highlights: item.highlights.map((highlight, itemIndex) =>
-              itemIndex === index
-                ? replaceIssueText(highlight, issue)
-                : highlight,
+              itemIndex === index ? replaceIssueText(highlight, issue) : highlight
             ),
           };
         }
@@ -182,12 +175,6 @@ export function applyWritingIssue(
   return data;
 }
 
-export function applyWritingIssues(
-  data: ResumeData,
-  issues: WritingIssue[],
-) {
-  return issues.reduce(
-    (current, issue) => applyWritingIssue(current, issue),
-    data,
-  );
+export function applyWritingIssues(data: ResumeData, issues: WritingIssue[]) {
+  return issues.reduce((current, issue) => applyWritingIssue(current, issue), data);
 }

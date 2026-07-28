@@ -36,8 +36,8 @@ export function SiteFooter() {
         <div className="max-w-md">
           <Brand />
           <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
-            Build a clearer career story, understand how it performs, and move
-            every application forward with confidence.
+            Build a clearer career story, understand how it performs, and move every application
+            forward with confidence.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <Link

@@ -1,14 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  CheckCircle,
-  Clock3,
-  FileText,
-  SearchCheck,
-  Sparkles,
-  Target,
-} from "lucide-react";
+import { CheckCircle, Clock3, FileText, SearchCheck, Sparkles, Target } from "lucide-react";
 import { Card, CardContent } from "@/shared/components/ui/card";
 
 interface LoadingStateProps {
@@ -43,10 +36,7 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
   ];
 
   const extractingOffset = phase === "extracting" ? 0 : 1;
-  const currentStep = Math.min(
-    Math.floor(elapsedTime / 3) + extractingOffset,
-    steps.length - 1,
-  );
+  const currentStep = Math.min(Math.floor(elapsedTime / 3) + extractingOffset, steps.length - 1);
 
   const radius = 68;
   const circumference = 2 * Math.PI * radius;
@@ -82,13 +72,7 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
                     className="transition-all duration-1000 ease-linear"
                   />
                   <defs>
-                    <linearGradient
-                      id="analysis-progress"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                  >
+                    <linearGradient id="analysis-progress" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#0f766e" />
                       <stop offset="55%" stopColor="#b99449" />
                       <stop offset="100%" stopColor="#d8c28a" />
@@ -99,9 +83,7 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
                   <span className="text-3xl font-semibold sm:text-4xl">
                     {Math.round(progress)}%
                   </span>
-                  <span className="mt-1 text-xs font-medium text-white/60">
-                    Processing
-                  </span>
+                  <span className="mt-1 text-xs font-medium text-white/60">Processing</span>
                 </div>
               </div>
             </div>
@@ -114,13 +96,11 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
                     {phase === "extracting" ? "Reading resume" : "AI review"}
                   </div>
                   <h2 className="text-2xl font-semibold text-[var(--premium-ink)]">
-                    {phase === "extracting"
-                      ? "Extracting resume text"
-                      : "Building your ATS report"}
+                    {phase === "extracting" ? "Extracting resume text" : "Building your ATS report"}
                   </h2>
                   <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-                    The report is being assembled with score, keyword coverage,
-                    strengths, weak points, and edits.
+                    The report is being assembled with score, keyword coverage, strengths, weak
+                    points, and edits.
                   </p>
                 </div>
 

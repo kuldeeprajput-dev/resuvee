@@ -38,8 +38,7 @@ interface ResumeEditorProps {
   template: ResumeTemplate;
 }
 
-interface ResumeEditorContentProps
-  extends Omit<ResumeEditorProps, "activeSection"> {
+interface ResumeEditorContentProps extends Omit<ResumeEditorProps, "activeSection"> {
   stepLabel: string;
 }
 
@@ -92,11 +91,7 @@ function PhotoEditor({
         <div
           className={cn(
             "relative flex size-20 shrink-0 items-center justify-center overflow-hidden border border-black/10 bg-[#e8ece8] text-[var(--brand-muted)]",
-            shape === "circle"
-              ? "rounded-full"
-              : shape === "square"
-                ? "rounded-md"
-                : "rounded-2xl",
+            shape === "circle" ? "rounded-full" : shape === "square" ? "rounded-md" : "rounded-2xl"
           )}
         >
           {photo ? (
@@ -113,9 +108,7 @@ function PhotoEditor({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold text-[var(--brand-ink)]">
-            Profile photo
-          </p>
+          <p className="text-xs font-bold text-[var(--brand-ink)]">Profile photo</p>
           <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
             Optional. Used only by templates designed for a headshot.
           </p>
@@ -146,12 +139,7 @@ function PhotoEditor({
   );
 }
 
-function PersonalDetailsEditor({
-  data,
-  onChange,
-  template,
-  stepLabel,
-}: ResumeEditorContentProps) {
+function PersonalDetailsEditor({ data, onChange, template, stepLabel }: ResumeEditorContentProps) {
   const update = (field: keyof ResumeData["basics"], value: string) => {
     onChange({
       ...data,
@@ -205,8 +193,7 @@ function PersonalDetailsEditor({
           <div>
             <p className="text-xs font-bold">Photo-free template</p>
             <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
-              This design intentionally omits a profile image for a simpler,
-              ATS-focused document.
+              This design intentionally omits a profile image for a simpler, ATS-focused document.
             </p>
           </div>
         </div>
@@ -257,14 +244,8 @@ function PersonalDetailsEditor({
   );
 }
 
-function SummaryEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
-  const wordCount = data.basics.summary.trim()
-    ? data.basics.summary.trim().split(/\s+/).length
-    : 0;
+function SummaryEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const wordCount = data.basics.summary.trim() ? data.basics.summary.trim().split(/\s+/).length : 0;
 
   return (
     <EditorSection
@@ -287,28 +268,19 @@ function SummaryEditor({
           placeholder="Experienced product manager with a track record of…"
         />
         <WritingTip>
-          Lead with your role and years of experience, then add one specialty
-          and a measurable result. Aim for 50–80 words.
+          Lead with your role and years of experience, then add one specialty and a measurable
+          result. Aim for 50–80 words.
         </WritingTip>
       </div>
     </EditorSection>
   );
 }
 
-function ExperienceEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
-  const updateItem = (
-    id: string,
-    updates: Partial<ResumeExperience>,
-  ) => {
+function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const updateItem = (id: string, updates: Partial<ResumeExperience>) => {
     onChange({
       ...data,
-      experience: data.experience.map((item) =>
-        item.id === id ? { ...item, ...updates } : item,
-      ),
+      experience: data.experience.map((item) => (item.id === id ? { ...item, ...updates } : item)),
     });
   };
 
@@ -372,9 +344,7 @@ function ExperienceEditor({
               <input
                 type="checkbox"
                 checked={item.current}
-                onChange={(event) =>
-                  updateItem(item.id, { current: event.target.checked })
-                }
+                onChange={(event) => updateItem(item.id, { current: event.target.checked })}
                 className="size-4 rounded border-black/20 accent-[#315f45]"
               />
               I currently work here
@@ -382,9 +352,7 @@ function ExperienceEditor({
 
             <BulletEditor
               values={item.highlights}
-              onChange={(highlights) =>
-                updateItem(item.id, { highlights })
-              }
+              onChange={(highlights) => updateItem(item.id, { highlights })}
             />
           </ItemCard>
         ))}
@@ -392,38 +360,26 @@ function ExperienceEditor({
           onClick={() =>
             onChange({
               ...data,
-              experience: [
-                ...data.experience,
-                getEmptyExperience(data.experience.length),
-              ],
+              experience: [...data.experience, getEmptyExperience(data.experience.length)],
             })
           }
         >
           Add work experience
         </AddItemButton>
         <WritingTip>
-          Strong bullet: “Reduced support response time by 32% by redesigning
-          the triage workflow.” Numbers make outcomes easier to trust.
+          Strong bullet: “Reduced support response time by 32% by redesigning the triage workflow.”
+          Numbers make outcomes easier to trust.
         </WritingTip>
       </div>
     </EditorSection>
   );
 }
 
-function EducationEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
-  const updateItem = (
-    id: string,
-    updates: Partial<ResumeEducation>,
-  ) => {
+function EducationEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const updateItem = (id: string, updates: Partial<ResumeEducation>) => {
     onChange({
       ...data,
-      education: data.education.map((item) =>
-        item.id === id ? { ...item, ...updates } : item,
-      ),
+      education: data.education.map((item) => (item.id === id ? { ...item, ...updates } : item)),
     });
   };
 
@@ -442,9 +398,7 @@ function EducationEditor({
             onRemove={() =>
               onChange({
                 ...data,
-                education: data.education.filter(
-                  (education) => education.id !== item.id,
-                ),
+                education: data.education.filter((education) => education.id !== item.id),
               })
             }
           >
@@ -494,10 +448,7 @@ function EducationEditor({
           onClick={() =>
             onChange({
               ...data,
-              education: [
-                ...data.education,
-                getEmptyEducation(data.education.length),
-              ],
+              education: [...data.education, getEmptyEducation(data.education.length)],
             })
           }
         >
@@ -508,20 +459,11 @@ function EducationEditor({
   );
 }
 
-function ProjectsEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
-  const updateItem = (
-    id: string,
-    updates: Partial<ResumeProject>,
-  ) => {
+function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const updateItem = (id: string, updates: Partial<ResumeProject>) => {
     onChange({
       ...data,
-      projects: data.projects.map((item) =>
-        item.id === id ? { ...item, ...updates } : item,
-      ),
+      projects: data.projects.map((item) => (item.id === id ? { ...item, ...updates } : item)),
     });
   };
 
@@ -540,9 +482,7 @@ function ProjectsEditor({
             onRemove={() =>
               onChange({
                 ...data,
-                projects: data.projects.filter(
-                  (project) => project.id !== item.id,
-                ),
+                projects: data.projects.filter((project) => project.id !== item.id),
               })
             }
           >
@@ -569,9 +509,7 @@ function ProjectsEditor({
               <TextAreaField
                 label="Short description"
                 value={item.description}
-                onChange={(value) =>
-                  updateItem(item.id, { description: value })
-                }
+                onChange={(value) => updateItem(item.id, { description: value })}
                 placeholder="What did you build and why?"
                 rows={3}
                 className="min-[500px]:col-span-2"
@@ -580,9 +518,7 @@ function ProjectsEditor({
             <BulletEditor
               label="Project outcomes"
               values={item.highlights}
-              onChange={(highlights) =>
-                updateItem(item.id, { highlights })
-              }
+              onChange={(highlights) => updateItem(item.id, { highlights })}
               placeholder="Add a result, scale, or notable technical detail…"
             />
           </ItemCard>
@@ -591,10 +527,7 @@ function ProjectsEditor({
           onClick={() =>
             onChange({
               ...data,
-              projects: [
-                ...data.projects,
-                getEmptyProject(data.projects.length),
-              ],
+              projects: [...data.projects, getEmptyProject(data.projects.length)],
             })
           }
         >
@@ -605,19 +538,12 @@ function ProjectsEditor({
   );
 }
 
-function SkillsEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
-  const updateItem = (
-    id: string,
-    updates: Partial<ResumeSkillGroup>,
-  ) => {
+function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const updateItem = (id: string, updates: Partial<ResumeSkillGroup>) => {
     onChange({
       ...data,
       skillGroups: data.skillGroups.map((item) =>
-        item.id === id ? { ...item, ...updates } : item,
+        item.id === id ? { ...item, ...updates } : item
       ),
     });
   };
@@ -637,9 +563,7 @@ function SkillsEditor({
             onRemove={() =>
               onChange({
                 ...data,
-                skillGroups: data.skillGroups.filter(
-                  (group) => group.id !== item.id,
-                ),
+                skillGroups: data.skillGroups.filter((group) => group.id !== item.id),
               })
             }
           >
@@ -669,38 +593,28 @@ function SkillsEditor({
           onClick={() =>
             onChange({
               ...data,
-              skillGroups: [
-                ...data.skillGroups,
-                getEmptySkillGroup(data.skillGroups.length),
-              ],
+              skillGroups: [...data.skillGroups, getEmptySkillGroup(data.skillGroups.length)],
             })
           }
         >
           Add skill group
         </AddItemButton>
         <WritingTip>
-          Keep this targeted. A focused list of 8–15 relevant skills is
-          stronger than a long inventory of everything you have tried.
+          Keep this targeted. A focused list of 8–15 relevant skills is stronger than a long
+          inventory of everything you have tried.
         </WritingTip>
       </div>
     </EditorSection>
   );
 }
 
-function CertificationsEditor({
-  data,
-  onChange,
-  stepLabel,
-}: ResumeEditorContentProps) {
+function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
   const certifications = data.certifications ?? [];
-  const updateItem = (
-    id: string,
-    updates: Partial<ResumeCertification>,
-  ) => {
+  const updateItem = (id: string, updates: Partial<ResumeCertification>) => {
     onChange({
       ...data,
       certifications: certifications.map((item) =>
-        item.id === id ? { ...item, ...updates } : item,
+        item.id === id ? { ...item, ...updates } : item
       ),
     });
   };
@@ -721,7 +635,7 @@ function CertificationsEditor({
               onChange({
                 ...data,
                 certifications: certifications.filter(
-                  (certification) => certification.id !== item.id,
+                  (certification) => certification.id !== item.id
                 ),
               })
             }
@@ -749,9 +663,7 @@ function CertificationsEditor({
               <TextAreaField
                 label="Why it matters"
                 value={item.description}
-                onChange={(value) =>
-                  updateItem(item.id, { description: value })
-                }
+                onChange={(value) => updateItem(item.id, { description: value })}
                 placeholder="Describe the assessment, recognition, or demonstrated result."
                 rows={3}
                 className="min-[500px]:col-span-2"
@@ -763,30 +675,22 @@ function CertificationsEditor({
           onClick={() =>
             onChange({
               ...data,
-              certifications: [
-                ...certifications,
-                getEmptyCertification(certifications.length),
-              ],
+              certifications: [...certifications, getEmptyCertification(certifications.length)],
             })
           }
         >
           Add award or certification
         </AddItemButton>
         <WritingTip>
-          Prioritize recognized credentials and competitive achievements that
-          directly support the role. Add scale or ranking where it is useful.
+          Prioritize recognized credentials and competitive achievements that directly support the
+          role. Add scale or ranking where it is useful.
         </WritingTip>
       </div>
     </EditorSection>
   );
 }
 
-export function ResumeEditor({
-  activeSection,
-  data,
-  onChange,
-  template,
-}: ResumeEditorProps) {
+export function ResumeEditor({ activeSection, data, onChange, template }: ResumeEditorProps) {
   const sectionIndex = Math.max(0, template.sections.indexOf(activeSection));
   const sharedProps = {
     data,

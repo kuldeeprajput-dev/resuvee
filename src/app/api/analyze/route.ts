@@ -42,7 +42,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<AnalyzeRe
 
         const fileName = file.name.toLowerCase();
         if (fileName.endsWith(".pdf")) {
-          return jsonError("PDF files must have text extracted client-side. Pass 'text' field instead.", 400);
+          return jsonError(
+            "PDF files must have text extracted client-side. Pass 'text' field instead.",
+            400
+          );
         }
 
         if (fileName.endsWith(".docx")) {

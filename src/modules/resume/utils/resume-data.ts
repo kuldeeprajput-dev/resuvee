@@ -1,8 +1,4 @@
-import type {
-  BuilderSection,
-  ResumeData,
-  ResumeTemplate,
-} from "../types/resume";
+import type { BuilderSection, ResumeData, ResumeTemplate } from "../types/resume";
 
 export const resumeTemplates: ResumeTemplate[] = [
   {
@@ -10,8 +6,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "chronological",
     name: "Professional",
     eyebrow: "Reverse chronological",
-    description:
-      "A conventional one-page format with experience presented newest first.",
+    description: "A conventional one-page format with experience presented newest first.",
     accent: "#243d36",
     background: "#e9eeeb",
     suitableFor: "Most roles and ATS applications",
@@ -27,8 +22,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "column",
     name: "Modern ATS",
     eyebrow: "Structured",
-    description:
-      "A restrained two-column format with clear hierarchy and readable sections.",
+    description: "A restrained two-column format with clear hierarchy and readable sections.",
     accent: "#242a29",
     background: "#eceeeb",
     suitableFor: "Business, operations and product",
@@ -44,8 +38,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "blueprint",
     name: "Technical",
     eyebrow: "Engineering",
-    description:
-      "A skills-forward technical resume with room for impact, systems, and projects.",
+    description: "A skills-forward technical resume with room for impact, systems, and projects.",
     accent: "#244b44",
     background: "#e6eeeb",
     suitableFor: "Software, data and infrastructure",
@@ -86,8 +79,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "compact",
     name: "Compact Pro",
     eyebrow: "Dense one page",
-    description:
-      "A space-efficient format for a substantial career without visual clutter.",
+    description: "A space-efficient format for a substantial career without visual clutter.",
     accent: "#315f54",
     background: "#eceeea",
     suitableFor: "Senior specialists and consultants",
@@ -119,8 +111,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "healthcare",
     name: "Healthcare",
     eyebrow: "Clinical operations",
-    description:
-      "A calm, structured resume for patient care, quality, and health operations.",
+    description: "A calm, structured resume for patient care, quality, and health operations.",
     accent: "#24706b",
     background: "#e6f0ee",
     suitableFor: "Healthcare, clinical and public health",
@@ -151,8 +142,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "summit",
     name: "Executive",
     eyebrow: "Leadership",
-    description:
-      "A leadership-focused document with an optional professional portrait rail.",
+    description: "A leadership-focused document with an optional professional portrait rail.",
     accent: "#203b57",
     background: "#e6ecf2",
     suitableFor: "Directors, executives and global roles",
@@ -168,8 +158,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "editorial",
     name: "Academic",
     eyebrow: "Formal",
-    description:
-      "A typography-led format for research, policy, legal, and academic work.",
+    description: "A typography-led format for research, policy, legal, and academic work.",
     accent: "#424242",
     background: "#f2f0eb",
     suitableFor: "Academia, research, law and policy",
@@ -184,8 +173,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "hybrid",
     name: "Skills First",
     eyebrow: "Functional hybrid",
-    description:
-      "Transferable skills and selected proof lead before work history.",
+    description: "Transferable skills and selected proof lead before work history.",
     accent: "#5a516d",
     background: "#eceeea",
     suitableFor: "Specialists and career transitions",
@@ -200,8 +188,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "pivot",
     name: "Career Pivot",
     eyebrow: "Transferable impact",
-    description:
-      "Relevant capabilities and evidence reframe an established work history.",
+    description: "Relevant capabilities and evidence reframe an established work history.",
     accent: "#79515e",
     background: "#eceeea",
     suitableFor: "Career changers and returners",
@@ -216,8 +203,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "fresher",
     name: "Graduate",
     eyebrow: "No experience needed",
-    description:
-      "Education, projects, and practical skills lead with no experience section.",
+    description: "Education, projects, and practical skills lead with no experience section.",
     accent: "#326b57",
     background: "#e9eeeb",
     suitableFor: "Graduates and entry-level candidates",
@@ -233,8 +219,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "first-step",
     name: "Internship",
     eyebrow: "Student",
-    description:
-      "Coursework, projects, and campus leadership form a credible first resume.",
+    description: "Coursework, projects, and campus leadership form a credible first resume.",
     accent: "#3f6591",
     background: "#eceeea",
     suitableFor: "Students and internship seekers",
@@ -249,8 +234,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "meridian",
     name: "International",
     eyebrow: "Photo optional",
-    description:
-      "A modern international CV with a portrait, profile, and supporting detail rail.",
+    description: "A modern international CV with a portrait, profile, and supporting detail rail.",
     accent: "#28785b",
     background: "#e7f2eb",
     suitableFor: "Global markets where photos are expected",
@@ -266,8 +250,7 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "horizon",
     name: "Contemporary",
     eyebrow: "Photo optional",
-    description:
-      "An airy, polished CV with a portrait and an original curved masthead.",
+    description: "An airy, polished CV with a portrait and an original curved masthead.",
     accent: "#347fb7",
     background: "#e8f2fa",
     suitableFor: "Education, research and creative roles",
@@ -377,34 +360,23 @@ export const defaultResumeData: ResumeData = {
     {
       id: "project-1",
       name: "Signal Library",
-      description:
-        "An open collection of product discovery prompts for early-stage teams.",
+      description: "An open collection of product discovery prompts for early-stage teams.",
       link: "signallibrary.org",
-      highlights: [
-        "Designed the content model and grew the resource to 4,000 monthly readers.",
-      ],
+      highlights: ["Designed the content model and grew the resource to 4,000 monthly readers."],
     },
     {
       id: "project-2",
       name: "Product Office Hours",
-      description:
-        "A volunteer coaching circle for first-time product managers.",
+      description: "A volunteer coaching circle for first-time product managers.",
       link: "producthours.community",
-      highlights: [
-        "Facilitated 40+ portfolio reviews and practical career workshops.",
-      ],
+      highlights: ["Facilitated 40+ portfolio reviews and practical career workshops."],
     },
   ],
   skillGroups: [
     {
       id: "skills-1",
       name: "Product",
-      skills: [
-        "Product strategy",
-        "Portfolio planning",
-        "Discovery",
-        "Go-to-market",
-      ],
+      skills: ["Product strategy", "Portfolio planning", "Discovery", "Go-to-market"],
     },
     {
       id: "skills-2",
@@ -441,16 +413,14 @@ export const fresherResumeData: ResumeData = {
       location: "Pune, India",
       startDate: "2022",
       endDate: "2026",
-      details:
-        "CGPA: 8.7/10 · Relevant coursework: Data Structures, Databases, Web Engineering",
+      details: "CGPA: 8.7/10 · Relevant coursework: Data Structures, Databases, Web Engineering",
     },
   ],
   projects: [
     {
       id: "fresher-project-1",
       name: "Campus Connect",
-      description:
-        "A responsive event-discovery platform for student organizations.",
+      description: "A responsive event-discovery platform for student organizations.",
       link: "github.com/aarav-builds/campus-connect",
       highlights: [
         "Built 12 reusable React components and reduced repeat UI code by 35%.",
@@ -460,8 +430,7 @@ export const fresherResumeData: ResumeData = {
     {
       id: "fresher-project-2",
       name: "Budget Lens",
-      description:
-        "A TypeScript expense dashboard with categorized insights and CSV import.",
+      description: "A TypeScript expense dashboard with categorized insights and CSV import.",
       link: "github.com/aarav-builds/budget-lens",
       highlights: [
         "Processed 5,000+ transaction rows in under two seconds using client-side parsing.",
@@ -563,10 +532,7 @@ export function getEmptyCertification(index: number) {
   };
 }
 
-export function calculateResumeStrength(
-  data: ResumeData,
-  options: { fresher?: boolean } = {},
-) {
+export function calculateResumeStrength(data: ResumeData, options: { fresher?: boolean } = {}) {
   const sharedChecks = [
     Boolean(data.basics.fullName.trim()),
     Boolean(data.basics.headline.trim()),
@@ -581,21 +547,14 @@ export function calculateResumeStrength(
     ? [
         data.projects.some((item) => item.highlights.some(Boolean)),
         data.projects.some((item) =>
-          [item.description, ...item.highlights].some((text) =>
-            /\d/.test(text),
-          ),
+          [item.description, ...item.highlights].some((text) => /\d/.test(text))
         ),
       ]
     : [
-        data.experience.length > 0 &&
-          data.experience.some((item) => item.highlights.some(Boolean)),
-        data.experience.some((item) =>
-          item.highlights.some((highlight) => /\d/.test(highlight)),
-        ),
+        data.experience.length > 0 && data.experience.some((item) => item.highlights.some(Boolean)),
+        data.experience.some((item) => item.highlights.some((highlight) => /\d/.test(highlight))),
       ];
   const checks = [...sharedChecks, ...evidenceChecks];
 
-  return Math.round(
-    (checks.filter(Boolean).length / checks.length) * 100,
-  );
+  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }

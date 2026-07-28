@@ -1,14 +1,6 @@
 import Image from "next/image";
-import {
-  Globe2,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
-import type {
-  ResumeData,
-  ResumeTemplate,
-} from "../types/resume";
+import { Globe2, Mail, MapPin, Phone } from "lucide-react";
+import type { ResumeData, ResumeTemplate } from "../types/resume";
 import { cn } from "@/shared/lib/utils";
 
 interface ResumePreviewProps {
@@ -55,7 +47,7 @@ function ProfilePhoto({
     <div
       className={cn(
         "relative flex shrink-0 items-center justify-center overflow-hidden bg-[#dde4e0] font-sans text-lg font-bold text-[#39534a]",
-        className,
+        className
       )}
     >
       {data.basics.photo ? (
@@ -92,7 +84,7 @@ function SectionTitle({
       <h2
         className={cn(
           "mb-2.5 inline-flex rounded-[3px] px-2 py-1 text-[8px] font-extrabold uppercase tracking-[0.13em]",
-          inverted ? "bg-white/12 text-white" : "text-white",
+          inverted ? "bg-white/12 text-white" : "text-white"
         )}
         style={!inverted ? { backgroundColor: accent } : undefined}
       >
@@ -102,35 +94,22 @@ function SectionTitle({
   }
 
   return (
-    <div
-      className={cn(
-        "mb-2.5 flex items-center gap-2",
-        centered && "justify-center",
-      )}
-    >
+    <div className={cn("mb-2.5 flex items-center gap-2", centered && "justify-center")}>
       {!centered && (
         <span
-          className={cn(
-            "size-1.5 shrink-0 rounded-[2px]",
-            inverted && "bg-white/80",
-          )}
+          className={cn("size-1.5 shrink-0 rounded-[2px]", inverted && "bg-white/80")}
           style={!inverted ? { backgroundColor: accent } : undefined}
         />
       )}
       <h2
         className={cn(
           "shrink-0 text-[9px] font-extrabold uppercase tracking-[0.13em]",
-          inverted ? "text-white/85" : "text-black/80",
+          inverted ? "text-white/85" : "text-black/80"
         )}
       >
         {children}
       </h2>
-      <span
-        className={cn(
-          "h-px flex-1",
-          inverted ? "bg-white/25" : "bg-black/14",
-        )}
-      />
+      <span className={cn("h-px flex-1", inverted ? "bg-white/25" : "bg-black/14")} />
     </div>
   );
 }
@@ -157,10 +136,8 @@ function ContactList({
     <div
       className={cn(
         "text-[8px] leading-[1.42]",
-        horizontal
-          ? "flex flex-wrap items-center gap-x-3 gap-y-1"
-          : "space-y-2",
-        inverted ? "text-white/65" : "text-black/52",
+        horizontal ? "flex flex-wrap items-center gap-x-3 gap-y-1" : "space-y-2",
+        inverted ? "text-white/65" : "text-black/52"
       )}
     >
       {items.map((item) => (
@@ -173,12 +150,7 @@ function ContactList({
   );
 }
 
-function SummarySection({
-  data,
-  accent,
-  inverted = false,
-  compact = false,
-}: SectionProps) {
+function SummarySection({ data, accent, inverted = false, compact = false }: SectionProps) {
   if (!data.basics.summary) return null;
   return (
     <section>
@@ -189,7 +161,7 @@ function SummarySection({
         className={cn(
           compact ? "text-[9.2px]" : "text-[9.8px]",
           "leading-[1.5]",
-          inverted ? "text-white/65" : "text-black/62",
+          inverted ? "text-white/65" : "text-black/62"
         )}
       >
         {data.basics.summary}
@@ -198,12 +170,7 @@ function SummarySection({
   );
 }
 
-function ExperienceSection({
-  data,
-  accent,
-  inverted = false,
-  compact = false,
-}: SectionProps) {
+function ExperienceSection({ data, accent, inverted = false, compact = false }: SectionProps) {
   if (!data.experience.length) return null;
 
   return (
@@ -219,26 +186,22 @@ function ExperienceSection({
                 <h3
                   className={cn(
                     "text-[10px] font-extrabold leading-tight",
-                    inverted ? "text-white" : "text-black/85",
+                    inverted ? "text-white" : "text-black/85"
                   )}
                 >
                   {item.role || "Role title"}
                 </h3>
                 <p
-                  className={cn(
-                    "mt-0.5 text-[8.5px] font-bold",
-                    inverted && "text-white/65",
-                  )}
+                  className={cn("mt-0.5 text-[8.5px] font-bold", inverted && "text-white/65")}
                   style={!inverted ? { color: accent } : undefined}
                 >
-                  {[item.company, item.location].filter(Boolean).join(" · ") ||
-                    "Company"}
+                  {[item.company, item.location].filter(Boolean).join(" · ") || "Company"}
                 </p>
               </div>
               <p
                 className={cn(
                   "shrink-0 text-[7.5px] font-semibold",
-                  inverted ? "text-white/45" : "text-black/42",
+                  inverted ? "text-white/45" : "text-black/42"
                 )}
               >
                 {[item.startDate, item.current ? "Present" : item.endDate]
@@ -253,13 +216,13 @@ function ExperienceSection({
                   className={cn(
                     "flex gap-1.5 leading-[1.42]",
                     compact ? "text-[8.7px]" : "text-[9.2px]",
-                    inverted ? "text-white/62" : "text-black/58",
+                    inverted ? "text-white/62" : "text-black/58"
                   )}
                 >
                   <span
                     className={cn(
                       "mt-[3.5px] size-1 shrink-0 rounded-full",
-                      inverted && "bg-white/50",
+                      inverted && "bg-white/50"
                     )}
                     style={!inverted ? { backgroundColor: accent } : undefined}
                   />
@@ -274,12 +237,7 @@ function ExperienceSection({
   );
 }
 
-function EducationSection({
-  data,
-  accent,
-  inverted = false,
-  compact = false,
-}: SectionProps) {
+function EducationSection({ data, accent, inverted = false, compact = false }: SectionProps) {
   if (!data.education.length) return null;
   return (
     <section>
@@ -292,7 +250,7 @@ function EducationSection({
             <h3
               className={cn(
                 "text-[9.2px] font-extrabold leading-tight",
-                inverted ? "text-white" : "text-black/82",
+                inverted ? "text-white" : "text-black/82"
               )}
             >
               {item.degree || "Degree"}
@@ -300,7 +258,7 @@ function EducationSection({
             <p
               className={cn(
                 "mt-0.5 text-[8.2px] leading-snug",
-                inverted ? "text-white/62" : "text-black/55",
+                inverted ? "text-white/62" : "text-black/55"
               )}
             >
               {item.school || "School"}
@@ -308,12 +266,10 @@ function EducationSection({
             <div
               className={cn(
                 "mt-0.5 flex flex-wrap justify-between gap-1 text-[7.2px]",
-                inverted ? "text-white/40" : "text-black/38",
+                inverted ? "text-white/40" : "text-black/38"
               )}
             >
-              <span>
-                {[item.startDate, item.endDate].filter(Boolean).join(" — ")}
-              </span>
+              <span>{[item.startDate, item.endDate].filter(Boolean).join(" — ")}</span>
               <span>{item.details}</span>
             </div>
           </article>
@@ -341,7 +297,7 @@ function SkillsSection({
             <h3
               className={cn(
                 "mb-1 text-[8px] font-extrabold",
-                inverted ? "text-white/88" : "text-black/72",
+                inverted ? "text-white/88" : "text-black/72"
               )}
             >
               {group.name || "Skills"}
@@ -353,9 +309,7 @@ function SkillsSection({
                     key={`${group.id}-${index}`}
                     className={cn(
                       "rounded-[3px] px-1.5 py-0.5 text-[7.3px]",
-                      inverted
-                        ? "bg-white/10 text-white/65"
-                        : "bg-black/[0.045] text-black/58",
+                      inverted ? "bg-white/10 text-white/65" : "bg-black/[0.045] text-black/58"
                     )}
                   >
                     {skill}
@@ -365,7 +319,7 @@ function SkillsSection({
                 <p
                   className={cn(
                     "text-[8.1px] leading-[1.5]",
-                    inverted ? "text-white/58" : "text-black/52",
+                    inverted ? "text-white/58" : "text-black/52"
                   )}
                 >
                   {group.skills.join(" · ")}
@@ -379,12 +333,7 @@ function SkillsSection({
   );
 }
 
-function ProjectsSection({
-  data,
-  accent,
-  inverted = false,
-  compact = false,
-}: SectionProps) {
+function ProjectsSection({ data, accent, inverted = false, compact = false }: SectionProps) {
   if (!data.projects.length) return null;
   return (
     <section>
@@ -398,18 +347,13 @@ function ProjectsSection({
               <h3
                 className={cn(
                   "text-[9.2px] font-extrabold",
-                  inverted ? "text-white" : "text-black/82",
+                  inverted ? "text-white" : "text-black/82"
                 )}
               >
                 {project.name || "Project name"}
               </h3>
               {project.link && (
-                <span
-                  className={cn(
-                    "text-[6.8px]",
-                    inverted ? "text-white/38" : "text-black/35",
-                  )}
-                >
+                <span className={cn("text-[6.8px]", inverted ? "text-white/38" : "text-black/35")}>
                   {project.link}
                 </span>
               )}
@@ -417,7 +361,7 @@ function ProjectsSection({
             <p
               className={cn(
                 "mt-0.5 text-[8.1px] leading-[1.45]",
-                inverted ? "text-white/58" : "text-black/52",
+                inverted ? "text-white/58" : "text-black/52"
               )}
             >
               {project.description}
@@ -427,7 +371,7 @@ function ProjectsSection({
                 key={`${project.id}-${index}`}
                 className={cn(
                   "mt-0.5 text-[7.7px] leading-[1.4]",
-                  inverted ? "text-white/45" : "text-black/45",
+                  inverted ? "text-white/45" : "text-black/45"
                 )}
               >
                 — {highlight}
@@ -458,7 +402,7 @@ function Sheet({
         "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)] transition-all duration-200",
         pagePadding === "compact" && "resume-padding-compact",
         pagePadding === "spacious" && "resume-padding-spacious",
-        className,
+        className
       )}
       style={style}
     >
@@ -497,22 +441,9 @@ function MeridianTemplate(props: ResumePreviewProps) {
 
       <div className="relative grid grid-cols-[165px_1fr] gap-7 px-11 pb-10">
         <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            compact
-            pills
-          />
-          <ProjectsSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
-          <EducationSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
+          <SkillsSection data={data} accent={template.accent} compact pills />
+          <ProjectsSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
         </aside>
         <main className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
@@ -529,7 +460,10 @@ function MeridianTemplate(props: ResumePreviewProps) {
 function EditorialTemplate(props: ResumePreviewProps) {
   const { data, template, className, pagePadding } = props;
   return (
-    <Sheet pagePadding={pagePadding} className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}>
+    <Sheet
+      pagePadding={pagePadding}
+      className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}
+    >
       <header className="border-b border-black/55 pb-4 text-center">
         <h1 className="text-[27px] font-semibold uppercase leading-none tracking-[0.08em] text-black/85">
           {data.basics.fullName || "Your Name"}
@@ -559,12 +493,7 @@ function EditorialTemplate(props: ResumePreviewProps) {
           <EducationSection data={data} accent={template.accent} compact />
           <div className="grid grid-cols-2 gap-8 border-t border-black/20 pt-4">
             <ProjectsSection data={data} accent={template.accent} compact />
-            <SkillsSection
-              data={data}
-              accent={template.accent}
-              compact
-              pills
-            />
+            <SkillsSection data={data} accent={template.accent} compact pills />
           </div>
         </div>
       </main>
@@ -581,10 +510,7 @@ function SummitTemplate(props: ResumePreviewProps) {
   return (
     <Sheet
       pagePadding={pagePadding}
-      className={cn(
-        "grid grid-cols-[1fr_178px] bg-[#fcfdff]",
-        className,
-      )}
+      className={cn("grid grid-cols-[1fr_178px] bg-[#fcfdff]", className)}
     >
       <main className="px-9 py-9">
         <header className="mb-5 border-b-2 pb-4" style={{ borderColor: template.accent }}>
@@ -619,18 +545,8 @@ function SummitTemplate(props: ResumePreviewProps) {
           className="relative z-10 mb-6 size-[90px] self-center rounded-full border-4 border-white/20"
         />
         <div className="space-y-6">
-          <ProjectsSection
-            data={data}
-            accent={template.accent}
-            inverted
-            compact
-          />
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            inverted
-            compact
-          />
+          <ProjectsSection data={data} accent={template.accent} inverted compact />
+          <SkillsSection data={data} accent={template.accent} inverted compact />
         </div>
         <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
           Resulyra · {template.name}
@@ -660,21 +576,9 @@ function ColumnTemplate(props: ResumePreviewProps) {
 
       <div className="grid grid-cols-[138px_1fr] gap-8">
         <aside className="space-y-6 border-r border-black/10 pr-6">
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
-          <EducationSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
-          <ProjectsSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
+          <SkillsSection data={data} accent={template.accent} compact />
+          <EducationSection data={data} accent={template.accent} compact />
+          <ProjectsSection data={data} accent={template.accent} compact />
         </aside>
         <main className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
@@ -722,22 +626,9 @@ function HorizonTemplate(props: ResumePreviewProps) {
           <ExperienceSection data={data} accent={template.accent} compact />
         </main>
         <aside className="space-y-5 border-l border-[#9fc9f0]/40 pl-6">
-          <ProjectsSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            compact
-            pills
-          />
-          <EducationSection
-            data={data}
-            accent={template.accent}
-            compact
-          />
+          <ProjectsSection data={data} accent={template.accent} compact />
+          <SkillsSection data={data} accent={template.accent} compact pills />
+          <EducationSection data={data} accent={template.accent} compact />
         </aside>
       </div>
       <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-[#2d70a6]/35">
@@ -747,12 +638,7 @@ function HorizonTemplate(props: ResumePreviewProps) {
   );
 }
 
-function BlueprintTemplate({
-  data,
-  template,
-  className,
-  showPhoto = true,
-}: ResumePreviewProps) {
+function BlueprintTemplate({ data, template, className, showPhoto = true }: ResumePreviewProps) {
   return (
     <Sheet className={cn("grid grid-cols-[172px_1fr] bg-[#fbfcfd]", className)}>
       <aside
@@ -772,19 +658,8 @@ function BlueprintTemplate({
             </SectionTitle>
             <ContactList data={data} inverted />
           </section>
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            inverted
-            compact
-            pills
-          />
-          <ProjectsSection
-            data={data}
-            accent={template.accent}
-            inverted
-            compact
-          />
+          <SkillsSection data={data} accent={template.accent} inverted compact pills />
+          <ProjectsSection data={data} accent={template.accent} inverted compact />
         </div>
         <p className="relative mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
           Resulyra · {template.name}
@@ -803,10 +678,7 @@ function BlueprintTemplate({
           <h1 className="mt-2 text-[28px] font-bold leading-none tracking-[-0.045em] text-[#172b24]">
             {data.basics.fullName || "Your Name"}
           </h1>
-          <div
-            className="mt-4 h-[3px] w-14"
-            style={{ backgroundColor: template.accent }}
-          />
+          <div className="mt-4 h-[3px] w-14" style={{ backgroundColor: template.accent }} />
         </header>
         <div className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
@@ -822,10 +694,7 @@ function ChronologicalTemplate(props: ResumePreviewProps) {
   const { data, template, className, pagePadding } = props;
   return (
     <Sheet pagePadding={pagePadding} className={cn("bg-white px-11 py-10", className)}>
-      <header
-        className="border-b-2 pb-4"
-        style={{ borderColor: template.accent }}
-      >
+      <header className="border-b-2 pb-4" style={{ borderColor: template.accent }}>
         <div className="flex items-end justify-between gap-7">
           <div>
             <h1 className="text-[29px] font-bold leading-none tracking-[-0.045em] text-black/90">
@@ -849,12 +718,7 @@ function ChronologicalTemplate(props: ResumePreviewProps) {
         <ExperienceSection data={data} accent={template.accent} compact />
         <div className="grid grid-cols-2 gap-8 border-t border-black/12 pt-5">
           <EducationSection data={data} accent={template.accent} compact />
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            compact
-            pills
-          />
+          <SkillsSection data={data} accent={template.accent} compact pills />
         </div>
         {data.projects.length > 0 && (
           <div className="border-t border-black/12 pt-5">
@@ -930,21 +794,13 @@ function HybridTemplate(props: ResumePreviewProps) {
             <ContactList data={data} horizontal hideIcons />
           </div>
         </div>
-        <div
-          className="mt-4 h-1.5 w-full"
-          style={{ backgroundColor: template.accent }}
-        />
+        <div className="mt-4 h-1.5 w-full" style={{ backgroundColor: template.accent }} />
       </header>
 
       <main className="mt-5 space-y-5">
         <SummarySection data={data} accent={template.accent} compact />
         <div className="grid grid-cols-[0.8fr_1.2fr] gap-8 rounded-xl bg-[#f4f5f2] p-4">
-          <SkillsSection
-            data={data}
-            accent={template.accent}
-            compact
-            pills
-          />
+          <SkillsSection data={data} accent={template.accent} compact pills />
           <ProjectsSection data={data} accent={template.accent} compact />
         </div>
         <ExperienceSection data={data} accent={template.accent} compact />
@@ -1010,7 +866,10 @@ function FinanceTemplate(props: ResumePreviewProps) {
 function HealthcareTemplate(props: ResumePreviewProps) {
   const { data, template, className, pagePadding } = props;
   return (
-    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[174px_1fr] bg-[#fcfefe]", className)}>
+    <Sheet
+      pagePadding={pagePadding}
+      className={cn("grid grid-cols-[174px_1fr] bg-[#fcfefe]", className)}
+    >
       <aside className="relative bg-[#e7f2f0] px-6 py-8">
         <div
           aria-hidden="true"
@@ -1112,7 +971,10 @@ function AnalystTemplate(props: ResumePreviewProps) {
   const certifications = data.certifications ?? [];
 
   return (
-    <Sheet pagePadding={pagePadding} className={cn("bg-white px-8 py-7 font-serif text-[#202020]", className)}>
+    <Sheet
+      pagePadding={pagePadding}
+      className={cn("bg-white px-8 py-7 font-serif text-[#202020]", className)}
+    >
       <header className="text-center">
         <h1 className="text-[27px] font-semibold leading-none tracking-[0.045em]">
           {data.basics.fullName || "Your Name"}
@@ -1129,9 +991,7 @@ function AnalystTemplate(props: ResumePreviewProps) {
         {data.basics.summary && (
           <section>
             <AnalystRuleTitle>Summary</AnalystRuleTitle>
-            <p className="text-[9px] leading-[1.42] text-black/75">
-              {data.basics.summary}
-            </p>
+            <p className="text-[9px] leading-[1.42] text-black/75">{data.basics.summary}</p>
           </section>
         )}
 
@@ -1196,21 +1056,14 @@ function AnalystTemplate(props: ResumePreviewProps) {
                         </span>
                       )}
                     </h3>
-                    <p className="shrink-0 text-[8.2px] font-bold">
-                      {project.date}
-                    </p>
+                    <p className="shrink-0 text-[8.2px] font-bold">{project.date}</p>
                   </div>
                   <ul className="mt-1 space-y-0.5 pl-4 text-[8.2px] leading-[1.34] text-black/72">
-                    {project.highlights
-                      .filter(Boolean)
-                      .map((highlight, index) => (
-                        <li
-                          key={`${project.id}-${index}`}
-                          className="list-[square]"
-                        >
-                          {highlight}
-                        </li>
-                      ))}
+                    {project.highlights.filter(Boolean).map((highlight, index) => (
+                      <li key={`${project.id}-${index}`} className="list-[square]">
+                        {highlight}
+                      </li>
+                    ))}
                   </ul>
                 </article>
               ))}
@@ -1225,10 +1078,7 @@ function AnalystTemplate(props: ResumePreviewProps) {
               {certifications.map((item) => (
                 <li key={item.id} className="list-disc">
                   <span className="font-bold text-black/88">{item.title}</span>
-                  <span>
-                    {" "}
-                    — {[item.issuer, item.date].filter(Boolean).join(" · ")}
-                  </span>
+                  <span> — {[item.issuer, item.date].filter(Boolean).join(" · ")}</span>
                   {item.description && <span>: {item.description}</span>}
                 </li>
               ))}
@@ -1240,10 +1090,7 @@ function AnalystTemplate(props: ResumePreviewProps) {
           <section>
             <AnalystRuleTitle>Education</AnalystRuleTitle>
             {data.education.map((item) => (
-              <article
-                key={item.id}
-                className="flex items-start justify-between gap-6"
-              >
+              <article key={item.id} className="flex items-start justify-between gap-6">
                 <div>
                   <h3 className="text-[9.4px] font-bold">{item.degree}</h3>
                   <p className="mt-0.5 text-[8px] italic text-black/65">
@@ -1254,9 +1101,7 @@ function AnalystTemplate(props: ResumePreviewProps) {
                   <p className="text-[8.5px] font-bold">
                     {[item.startDate, item.endDate].filter(Boolean).join(" – ")}
                   </p>
-                  <p className="mt-0.5 text-[7.8px] italic text-black/60">
-                    {item.details}
-                  </p>
+                  <p className="mt-0.5 text-[7.8px] italic text-black/60">{item.details}</p>
                 </div>
               </article>
             ))}
@@ -1288,22 +1133,14 @@ function FresherTemplate(props: ResumePreviewProps) {
         <div className="mt-3 flex justify-center">
           <ContactList data={data} horizontal hideIcons />
         </div>
-        <div
-          className="mx-auto mt-4 h-1 w-16"
-          style={{ backgroundColor: template.accent }}
-        />
+        <div className="mx-auto mt-4 h-1 w-16" style={{ backgroundColor: template.accent }} />
       </header>
 
       <main className="mt-6 space-y-5">
         <SummarySection data={data} accent={template.accent} compact />
         <EducationSection data={data} accent={template.accent} compact />
         <ProjectsSection data={data} accent={template.accent} compact />
-        <SkillsSection
-          data={data}
-          accent={template.accent}
-          compact
-          pills
-        />
+        <SkillsSection data={data} accent={template.accent} compact pills />
       </main>
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
@@ -1317,7 +1154,10 @@ function FresherTemplate(props: ResumePreviewProps) {
 function FirstStepTemplate(props: ResumePreviewProps) {
   const { data, template, className, pagePadding } = props;
   return (
-    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[176px_1fr] bg-[#fbfcff]", className)}>
+    <Sheet
+      pagePadding={pagePadding}
+      className={cn("grid grid-cols-[176px_1fr] bg-[#fbfcff]", className)}
+    >
       <aside className="relative bg-[#edf3f9] px-6 py-9">
         <div
           className="absolute inset-x-0 top-0 h-2"
@@ -1360,7 +1200,10 @@ function FirstStepTemplate(props: ResumePreviewProps) {
 function PivotTemplate(props: ResumePreviewProps) {
   const { data, template, className, pagePadding } = props;
   return (
-    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}>
+    <Sheet
+      pagePadding={pagePadding}
+      className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}
+    >
       <aside className="flex flex-col bg-[#f3edef] px-5 py-8">
         <div
           aria-hidden="true"

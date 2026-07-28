@@ -117,10 +117,4 @@ export interface ResumeTemplate {
 }
 
 export type BuilderSection =
-  | "basics"
-  | "summary"
-  | "experience"
-  | "education"
-  | "projects"
-  | "skills"
-  | "certifications";
+  "basics" | "summary" | "experience" | "education" | "projects" | "skills" | "certifications";

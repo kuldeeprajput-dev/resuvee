@@ -35,8 +35,7 @@ const workflow = [
     label: "Format",
     icon: LayoutTemplate,
     title: "Choose your direction",
-    description:
-      "Pick from curated formats made for different careers and experience levels.",
+    description: "Pick from curated formats made for different careers and experience levels.",
     outcome: "A structure matched to your goals",
     accent: "bg-[var(--brand-lime)]",
   },
@@ -45,8 +44,7 @@ const workflow = [
     label: "Content",
     icon: PenLine,
     title: "Shape your story",
-    description:
-      "Add your experience, education, projects and skills with a guided editor.",
+    description: "Add your experience, education, projects and skills with a guided editor.",
     outcome: "Every section stays in sync",
     accent: "bg-[var(--brand-blue)]",
   },
@@ -55,8 +53,7 @@ const workflow = [
     label: "Quality",
     icon: ClipboardCheck,
     title: "Review and apply",
-    description:
-      "Export a polished resume, then run it through the ATS analyzer before applying.",
+    description: "Export a polished resume, then run it through the ATS analyzer before applying.",
     outcome: "An ATS-ready file you can send",
     accent: "bg-[#ffd8ca]",
   },
@@ -153,9 +150,8 @@ export default function Home() {
               </h1>
 
               <p className="mt-8 max-w-[580px] text-lg leading-8 text-[var(--brand-muted)] sm:text-xl">
-                Start with the format employers know, a focused fresher
-                layout, or a role-specific design. Then write, check,
-                customize, and export from one focused workspace.
+                Start with the format employers know, a focused fresher layout, or a role-specific
+                design. Then write, check, customize, and export from one focused workspace.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -206,16 +202,11 @@ export default function Home() {
               ["4", "connected career tools"],
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
-              <div
-                key={label}
-                className="flex items-baseline gap-3 py-7 sm:justify-center sm:py-8"
-              >
+              <div key={label} className="flex items-baseline gap-3 py-7 sm:justify-center sm:py-8">
                 <span className="text-4xl font-bold tracking-[-0.05em] text-[var(--brand-lime)]">
                   {value}
                 </span>
-                <span className="text-sm font-medium text-white/60">
-                  {label}
-                </span>
+                <span className="text-sm font-medium text-white/60">{label}</span>
               </div>
             ))}
           </div>
@@ -235,9 +226,9 @@ export default function Home() {
               </h2>
             </div>
             <p className="max-w-md text-base leading-7 text-[var(--brand-muted)]">
-              Every card is rendered from the same layout and starter content
-              used by the builder, so the template you choose is the document
-              you edit. Each design is original to Resulyra.
+              Every card is rendered from the same layout and starter content used by the builder,
+              so the template you choose is the document you edit. Each design is original to
+              Resulyra.
             </p>
           </div>
 
@@ -262,9 +253,8 @@ export default function Home() {
                     One workspace for the whole job search.
                   </h2>
                   <p className="mt-5 max-w-lg text-base leading-7 text-[var(--brand-muted)]">
-                    Build your story, check how it reads, tailor every
-                    application, and keep the follow-up moving—all without
-                    leaving your private workspace.
+                    Build your story, check how it reads, tailor every application, and keep the
+                    follow-up moving—all without leaving your private workspace.
                   </p>
                 </div>
 
@@ -289,8 +279,8 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="mt-4 text-xs leading-5 text-[var(--brand-muted)]">
-                    No scattered documents or repeated setup while you move
-                    from writing to applying.
+                    No scattered documents or repeated setup while you move from writing to
+                    applying.
                   </p>
                 </div>
 
@@ -368,12 +358,10 @@ export default function Home() {
                   <ScanSearch className="size-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-bold">
-                    Applying to a specific role?
-                  </p>
+                  <p className="text-sm font-bold">Applying to a specific role?</p>
                   <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
-                    Compare the job description with your resume and find the
-                    gaps before you send it.
+                    Compare the job description with your resume and find the gaps before you send
+                    it.
                   </p>
                 </div>
               </div>
@@ -388,10 +376,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="how-it-works"
-          className="border-y border-black/[0.08] bg-[#e9e7df]"
-        >
+        <section id="how-it-works" className="border-y border-black/[0.08] bg-[#e9e7df]">
           <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
             <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div className="max-w-3xl">
@@ -403,8 +388,8 @@ export default function Home() {
                 </h2>
               </div>
               <p className="max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
-                Three focused steps, one continuous draft. Move forward
-                without copying details between disconnected tools.
+                Three focused steps, one continuous draft. Move forward without copying details
+                between disconnected tools.
               </p>
             </div>
 
@@ -430,9 +415,7 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="mt-9">
-                    <h3 className="text-xl font-bold tracking-[-0.025em]">
-                      {item.title}
-                    </h3>
+                    <h3 className="text-xl font-bold tracking-[-0.025em]">{item.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
                       {item.description}
                     </p>
@@ -464,11 +447,7 @@ export default function Home() {
                     Make the resume you wish you already had.
                   </h2>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {[
-                      "Free to start",
-                      "No account required",
-                      "Clean PDF export",
-                    ].map((benefit) => (
+                    {["Free to start", "No account required", "Clean PDF export"].map((benefit) => (
                       <span
                         key={benefit}
                         className="rounded-full border border-black/10 bg-white/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em]"

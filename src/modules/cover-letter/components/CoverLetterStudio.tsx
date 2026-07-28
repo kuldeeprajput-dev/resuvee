@@ -1,22 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Cloud,
-  Download,
-  FileText,
-  LayoutTemplate,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, Cloud, Download, FileText, LayoutTemplate, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import type {
-  CoverLetterData,
-  CoverLetterTheme,
-} from "../types/cover-letter";
+import type { CoverLetterData, CoverLetterTheme } from "../types/cover-letter";
 import type { ResumeData } from "@/modules/resume";
 
 const STORAGE_KEY = "resulyra-cover-letter-v1";
@@ -70,12 +60,10 @@ function getStarterCopy(data: CoverLetterData) {
   const role = data.role || "this role";
   const company = data.company || "your team";
   return {
-    opening:
-      `I am excited to apply for ${role} at ${company}. My background in ${data.headline || "building thoughtful, measurable work"} has taught me how to turn complex goals into focused action while keeping customers and collaborators at the center.`,
+    opening: `I am excited to apply for ${role} at ${company}. My background in ${data.headline || "building thoughtful, measurable work"} has taught me how to turn complex goals into focused action while keeping customers and collaborators at the center.`,
     evidence:
       "In my recent work, I have led cross-functional projects from early discovery through delivery, created practical systems that improved team performance, and communicated decisions clearly across technical and business groups. I would bring that same combination of curiosity, ownership, and steady execution to this opportunity.",
-    closing:
-      `I would welcome the chance to learn more about ${company} and discuss how my experience could support the team’s priorities. Thank you for your time and consideration.`,
+    closing: `I would welcome the chance to learn more about ${company} and discuss how my experience could support the team’s priorities. Thank you for your time and consideration.`,
   };
 }
 
@@ -125,10 +113,7 @@ export function CoverLetterStudio() {
     setSaveLabel("Saving…");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ data, theme }),
-      );
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ data, theme }));
       setSaveLabel("Saved locally");
     }, 400);
     return () => {
@@ -140,18 +125,13 @@ export function CoverLetterStudio() {
     setData((current) => ({ ...current, [field]: value }));
   };
 
-  const activeTheme =
-    themes.find((item) => item.id === theme) ?? themes[0];
+  const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
 
   return (
     <div className="min-h-[100dvh] bg-[#e5e6e1] text-[var(--brand-ink)]">
       <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-4 sm:px-5">
         <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="builder-icon-button lg:hidden"
-          >
+          <Link href="/" aria-label="Back to home" className="builder-icon-button lg:hidden">
             <ArrowLeft className="size-4" />
           </Link>
           <div className="hidden lg:block">
@@ -161,9 +141,7 @@ export function CoverLetterStudio() {
           <div>
             <p className="flex items-center gap-2 text-sm font-bold">
               <FileText className="size-4 text-[var(--brand-muted)]" />
-              {data.company
-                ? `${data.company} — Cover letter`
-                : "Untitled cover letter"}
+              {data.company ? `${data.company} — Cover letter` : "Untitled cover letter"}
             </p>
             <p className="mt-0.5 flex items-center gap-1.5 text-[10px] font-semibold text-[var(--brand-muted)]">
               <Cloud className="size-3" />
@@ -192,8 +170,7 @@ export function CoverLetterStudio() {
                 Write for one specific role
               </h1>
               <p className="mt-2 text-xs leading-5 text-[var(--brand-muted)]">
-                Start from your resume details, then make every sentence
-                truthful and personal.
+                Start from your resume details, then make every sentence truthful and personal.
               </p>
             </div>
 
@@ -308,7 +285,7 @@ export function CoverLetterStudio() {
                       "rounded-2xl border bg-white p-3 text-left transition",
                       theme === item.id
                         ? "border-[#537c45] ring-2 ring-[#8baa54]/15"
-                        : "border-black/10",
+                        : "border-black/10"
                     )}
                   >
                     <span
@@ -327,24 +304,14 @@ export function CoverLetterStudio() {
         </section>
 
         <section className="flex min-h-[900px] items-start justify-center overflow-auto bg-[#dcded9] p-6 lg:p-12">
-          <CoverLetterPreview
-            data={data}
-            theme={theme}
-            accent={activeTheme.accent}
-          />
+          <CoverLetterPreview data={data} theme={theme} accent={activeTheme.accent} />
         </section>
       </main>
     </div>
   );
 }
 
-function FormSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-7 border-t border-black/10 pt-6">
       <h2 className="mb-4 text-sm font-bold">{title}</h2>
@@ -422,14 +389,11 @@ function CoverLetterPreview({
     <article
       className={cn(
         "resume-print-area relative min-h-[842px] w-[595px] shrink-0 overflow-hidden bg-white px-14 py-12 text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
-        theme === "ledger" ? "font-serif" : "font-sans",
+        theme === "ledger" ? "font-serif" : "font-sans"
       )}
     >
       {theme === "signal" && (
-        <div
-          className="absolute inset-y-0 left-0 w-3"
-          style={{ backgroundColor: accent }}
-        />
+        <div className="absolute inset-y-0 left-0 w-3" style={{ backgroundColor: accent }} />
       )}
       {theme === "linen" && (
         <div className="absolute -right-20 -top-24 size-64 rounded-full bg-[#e7f1e8]" />
@@ -451,26 +415,21 @@ function CoverLetterPreview({
         <div className="flex items-start justify-between gap-8 text-[8px] leading-4">
           <div>
             <p className="font-bold">{data.recipient || "Hiring team"}</p>
-            <p className="text-black/50">
-              {data.company || "Company name"}
-            </p>
+            <p className="text-black/50">{data.company || "Company name"}</p>
             <p className="text-black/50">{data.role || "Role title"}</p>
           </div>
           <p className="text-black/45">{data.date || "Date"}</p>
         </div>
 
         <div className="mt-9 space-y-5 text-[9px] leading-[1.75] text-black/70">
-          <p className="font-semibold text-black/85">
-            {data.greeting || "Dear hiring team,"}
-          </p>
+          <p className="font-semibold text-black/85">{data.greeting || "Dear hiring team,"}</p>
           <p>{data.opening || "Your tailored opening will appear here."}</p>
           <p>
             {data.evidence ||
               "Use this paragraph to connect relevant experience, outcomes, and strengths to the role."}
           </p>
           <p>
-            {data.closing ||
-              "Close with a sincere expression of interest and a clear next step."}
+            {data.closing || "Close with a sincere expression of interest and a clear next step."}
           </p>
         </div>
 

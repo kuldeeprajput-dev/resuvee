@@ -20,10 +20,7 @@ import {
 } from "../utils/resume-writing";
 import { cn } from "@/shared/lib/utils";
 import type { ResumeData } from "../types/resume";
-import type {
-  WritingCheckResponse,
-  WritingIssue,
-} from "../types/writing";
+import type { WritingCheckResponse, WritingIssue } from "../types/writing";
 
 interface WritingCheckPanelProps {
   data: ResumeData;
@@ -37,11 +34,7 @@ const issueTone: Record<WritingIssue["type"], string> = {
   clarity: "bg-[#e6f0f5] text-[#35667b]",
 };
 
-export function WritingCheckPanel({
-  data,
-  onChange,
-  onClose,
-}: WritingCheckPanelProps) {
+export function WritingCheckPanel({ data, onChange, onClose }: WritingCheckPanelProps) {
   const [issues, setIssues] = useState<WritingIssue[]>([]);
   const [hasChecked, setHasChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -63,13 +56,10 @@ export function WritingCheckPanel({
         body: JSON.stringify({ targets }),
       });
       const payload = (await response.json()) as
-        | { success: true; data: WritingCheckResponse }
-        | { success: false; error: string };
+        { success: true; data: WritingCheckResponse } | { success: false; error: string };
 
       if (!response.ok || !payload.success) {
-        throw new Error(
-          payload.success ? "Writing check failed." : payload.error,
-        );
+        throw new Error(payload.success ? "Writing check failed." : payload.error);
       }
 
       setIssues(payload.data.issues);
@@ -78,7 +68,7 @@ export function WritingCheckPanel({
       setError(
         caughtError instanceof Error
           ? caughtError.message
-          : "The writing check could not be completed.",
+          : "The writing check could not be completed."
       );
     } finally {
       setLoading(false);
@@ -87,15 +77,11 @@ export function WritingCheckPanel({
 
   const acceptIssue = (issue: WritingIssue) => {
     onChange(applyWritingIssue(data, issue));
-    setIssues((current) =>
-      current.filter((item) => item.id !== issue.id),
-    );
+    setIssues((current) => current.filter((item) => item.id !== issue.id));
   };
 
   const dismissIssue = (issue: WritingIssue) => {
-    setIssues((current) =>
-      current.filter((item) => item.id !== issue.id),
-    );
+    setIssues((current) => current.filter((item) => item.id !== issue.id));
   };
 
   const acceptAll = () => {
@@ -145,8 +131,8 @@ export function WritingCheckPanel({
                   Review every important sentence.
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-white/60">
-                  Check spelling, grammar, and clarity while preserving your
-                  facts, voice, metrics, and experience.
+                  Check spelling, grammar, and clarity while preserving your facts, voice, metrics,
+                  and experience.
                 </p>
                 <Button
                   type="button"
@@ -164,9 +150,8 @@ export function WritingCheckPanel({
                   <div>
                     <p className="text-xs font-bold">You stay in control</p>
                     <p className="mt-1 text-[11px] leading-5 text-black/55">
-                      Each suggestion requires your approval. Resulyra never
-                      adds employers, achievements, skills, or numbers that
-                      you did not write.
+                      Each suggestion requires your approval. Resulyra never adds employers,
+                      achievements, skills, or numbers that you did not write.
                     </p>
                   </div>
                 </div>
@@ -175,9 +160,8 @@ export function WritingCheckPanel({
               <div className="mt-3 flex items-start gap-3 rounded-2xl border border-black/10 bg-white p-4">
                 <LockKeyhole className="mt-0.5 size-4 shrink-0 text-[var(--brand-muted)]" />
                 <p className="text-[11px] leading-5 text-[var(--brand-muted)]">
-                  Resume writing fields are sent to the configured AI
-                  provider for this check. Contact fields such as your name,
-                  email, phone, location, and links are excluded.
+                  Resume writing fields are sent to the configured AI provider for this check.
+                  Contact fields such as your name, email, phone, location, and links are excluded.
                 </p>
               </div>
             </div>
@@ -188,12 +172,9 @@ export function WritingCheckPanel({
               <span className="flex size-14 items-center justify-center rounded-2xl bg-white shadow-sm">
                 <LoaderCircle className="size-6 animate-spin text-[#4f7946]" />
               </span>
-              <h3 className="mt-5 text-base font-bold">
-                Reviewing your writing
-              </h3>
+              <h3 className="mt-5 text-base font-bold">Reviewing your writing</h3>
               <p className="mt-2 max-w-xs text-xs leading-5 text-[var(--brand-muted)]">
-                Looking for spelling, grammar, and clarity improvements
-                without changing your facts.
+                Looking for spelling, grammar, and clarity improvements without changing your facts.
               </p>
             </div>
           )}
@@ -203,9 +184,7 @@ export function WritingCheckPanel({
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-bold">
-                    {issues.length
-                      ? `${issues.length} suggestions`
-                      : "Writing looks clean"}
+                    {issues.length ? `${issues.length} suggestions` : "Writing looks clean"}
                   </p>
                   <p className="mt-1 text-[11px] text-[var(--brand-muted)]">
                     Accept or dismiss every change individually.
@@ -232,7 +211,7 @@ export function WritingCheckPanel({
                         <span
                           className={cn(
                             "rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.1em]",
-                            issueTone[issue.type],
+                            issueTone[issue.type]
                           )}
                         >
                           {issue.type}
@@ -286,12 +265,10 @@ export function WritingCheckPanel({
               ) : (
                 <div className="mt-5 rounded-3xl border border-[#bfd1c4] bg-[#edf4ef] px-5 py-10 text-center">
                   <CheckCheck className="mx-auto size-8 text-[#4f7946]" />
-                  <h3 className="mt-4 text-base font-bold">
-                    No clear mistakes found
-                  </h3>
+                  <h3 className="mt-4 text-base font-bold">No clear mistakes found</h3>
                   <p className="mx-auto mt-2 max-w-sm text-xs leading-5 text-[var(--brand-muted)]">
-                    Give the resume one final human read for names, dates, and
-                    role-specific terminology.
+                    Give the resume one final human read for names, dates, and role-specific
+                    terminology.
                   </p>
                 </div>
               )}

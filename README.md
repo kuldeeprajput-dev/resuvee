@@ -50,24 +50,24 @@ All templates were designed specifically for this project. They use common
 resume structures and typography conventions rather than copying third-party
 template artwork.
 
-| Template | Style | Best suited for |
-| --- | --- | --- |
-| Meridian | Fresh portrait layout | Product, people, and operations |
-| Editorial | Timeless single column | Academia, law, and consulting |
-| Summit | Executive profile panel | Leadership and management |
-| Column | Minimal information layout | ATS-first applications |
-| Horizon | Contemporary portrait layout | Education, research, and creative |
-| Blueprint | Technical grid sidebar | Software and data roles |
+| Template  | Style                        | Best suited for                   |
+| --------- | ---------------------------- | --------------------------------- |
+| Meridian  | Fresh portrait layout        | Product, people, and operations   |
+| Editorial | Timeless single column       | Academia, law, and consulting     |
+| Summit    | Executive profile panel      | Leadership and management         |
+| Column    | Minimal information layout   | ATS-first applications            |
+| Horizon   | Contemporary portrait layout | Education, research, and creative |
+| Blueprint | Technical grid sidebar       | Software and data roles           |
 
 ## Application routes
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Product landing page and template gallery |
-| `/builder` | Interactive resume builder |
-| `/builder?template=nova` | Builder with a selected template |
-| `/analyzer` | Existing ATS analyzer |
-| `/api/analyze` | Resume analysis API |
+| Route                    | Purpose                                   |
+| ------------------------ | ----------------------------------------- |
+| `/`                      | Product landing page and template gallery |
+| `/builder`               | Interactive resume builder                |
+| `/builder?template=nova` | Builder with a selected template          |
+| `/analyzer`              | Existing ATS analyzer                     |
+| `/api/analyze`           | Resume analysis API                       |
 
 ## Tech stack
 

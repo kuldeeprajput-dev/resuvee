@@ -1,34 +1,20 @@
 "use client";
 
-import {
-  GripVertical,
-  Lightbulb,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { GripVertical, Lightbulb, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
-interface FieldProps
-  extends Omit<React.ComponentProps<"input">, "onChange"> {
+interface FieldProps extends Omit<React.ComponentProps<"input">, "onChange"> {
   label: string;
   hint?: string;
   onChange: (value: string) => void;
 }
 
-export function Field({
-  label,
-  hint,
-  className,
-  onChange,
-  ...props
-}: FieldProps) {
+export function Field({ label, hint, className, onChange, ...props }: FieldProps) {
   return (
     <label className={cn("block space-y-2", className)}>
       <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
         {label}
-        {hint && (
-          <span className="font-medium text-[var(--brand-muted)]">{hint}</span>
-        )}
+        {hint && <span className="font-medium text-[var(--brand-muted)]">{hint}</span>}
       </span>
       <input
         {...props}
@@ -39,27 +25,18 @@ export function Field({
   );
 }
 
-interface TextAreaFieldProps
-  extends Omit<React.ComponentProps<"textarea">, "onChange"> {
+interface TextAreaFieldProps extends Omit<React.ComponentProps<"textarea">, "onChange"> {
   label: string;
   hint?: string;
   onChange: (value: string) => void;
 }
 
-export function TextAreaField({
-  label,
-  hint,
-  className,
-  onChange,
-  ...props
-}: TextAreaFieldProps) {
+export function TextAreaField({ label, hint, className, onChange, ...props }: TextAreaFieldProps) {
   return (
     <label className={cn("block space-y-2", className)}>
       <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
         {label}
-        {hint && (
-          <span className="font-medium text-[var(--brand-muted)]">{hint}</span>
-        )}
+        {hint && <span className="font-medium text-[var(--brand-muted)]">{hint}</span>}
       </span>
       <textarea
         {...props}
@@ -77,12 +54,7 @@ interface EditorSectionProps {
   children: React.ReactNode;
 }
 
-export function EditorSection({
-  eyebrow,
-  title,
-  description,
-  children,
-}: EditorSectionProps) {
+export function EditorSection({ eyebrow, title, description, children }: EditorSectionProps) {
   return (
     <div className="mx-auto w-full max-w-2xl px-3.5 pb-8 pt-4 sm:px-7 sm:pb-12 sm:pt-7">
       <div className="mb-4 sm:mb-7">
@@ -109,25 +81,15 @@ interface ItemCardProps {
   canRemove?: boolean;
 }
 
-export function ItemCard({
-  title,
-  subtitle,
-  onRemove,
-  children,
-  canRemove = true,
-}: ItemCardProps) {
+export function ItemCard({ title, subtitle, onRemove, children, canRemove = true }: ItemCardProps) {
   return (
     <article className="overflow-hidden rounded-2xl border border-black/[0.09] bg-[#fbfaf6] shadow-sm">
       <div className="flex items-center gap-2.5 border-b border-black/[0.07] bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3">
         <GripVertical className="size-4 text-black/25" />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-xs font-bold text-[var(--brand-ink)] sm:text-sm">
-            {title}
-          </h3>
+          <h3 className="truncate text-xs font-bold text-[var(--brand-ink)] sm:text-sm">{title}</h3>
           {subtitle && (
-            <p className="truncate text-[11px] text-[var(--brand-muted)] sm:text-xs">
-              {subtitle}
-            </p>
+            <p className="truncate text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
           )}
         </div>
         <button
@@ -188,9 +150,7 @@ export function BulletEditor({
 
   return (
     <div>
-      <span className="mb-2 block text-xs font-bold text-[var(--brand-ink)]">
-        {label}
-      </span>
+      <span className="mb-2 block text-xs font-bold text-[var(--brand-ink)]">{label}</span>
       <div className="space-y-2">
         {values.map((value, index) => (
           <div key={index} className="flex items-start gap-2">

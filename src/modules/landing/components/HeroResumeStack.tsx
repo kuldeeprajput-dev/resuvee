@@ -1,12 +1,5 @@
 import Image from "next/image";
-import {
-  BadgeCheck,
-  FileDown,
-  Layers3,
-  MousePointer2,
-  Sparkles,
-  Zap,
-} from "lucide-react";
+import { BadgeCheck, FileDown, Layers3, MousePointer2, Sparkles, Zap } from "lucide-react";
 
 const resumeSheets = [
   {
@@ -101,10 +94,7 @@ export function HeroResumeStack() {
                 ATS strength
               </p>
               <p className="whitespace-nowrap text-lg font-bold tracking-tight">
-                90%{" "}
-                <span className="text-xs text-[var(--brand-muted)]">
-                  ready
-                </span>
+                90% <span className="text-xs text-[var(--brand-muted)]">ready</span>
               </p>
             </div>
           </div>

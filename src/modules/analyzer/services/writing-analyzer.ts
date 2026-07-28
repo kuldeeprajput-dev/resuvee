@@ -53,70 +53,50 @@ function extractJsonObject(value: string) {
 }
 
 function isIssueType(value: unknown): value is WritingIssueType {
-  return (
-    value === "spelling" ||
-    value === "grammar" ||
-    value === "clarity"
-  );
+  return value === "spelling" || value === "grammar" || value === "clarity";
 }
 
-function validateIssues(
-  rawIssues: unknown,
-  targets: WritingTarget[],
-): WritingIssue[] {
+function validateIssues(rawIssues: unknown, targets: WritingTarget[]): WritingIssue[] {
   if (!Array.isArray(rawIssues)) return [];
   const targetMap = new Map(targets.map((target) => [target.id, target]));
 
-  return rawIssues
-    .slice(0, 15)
-    .flatMap((rawIssue, index) => {
-      if (!rawIssue || typeof rawIssue !== "object") return [];
-      const candidate = rawIssue as Record<string, unknown>;
-      const targetId =
-        typeof candidate.targetId === "string"
-          ? candidate.targetId
-          : "";
-      const original =
-        typeof candidate.original === "string"
-          ? candidate.original.trim()
-          : "";
-      const replacement =
-        typeof candidate.replacement === "string"
-          ? candidate.replacement.trim()
-          : "";
-      const explanation =
-        typeof candidate.explanation === "string"
-          ? candidate.explanation.trim()
-          : "";
-      const target = targetMap.get(targetId);
+  return rawIssues.slice(0, 15).flatMap((rawIssue, index) => {
+    if (!rawIssue || typeof rawIssue !== "object") return [];
+    const candidate = rawIssue as Record<string, unknown>;
+    const targetId = typeof candidate.targetId === "string" ? candidate.targetId : "";
+    const original = typeof candidate.original === "string" ? candidate.original.trim() : "";
+    const replacement =
+      typeof candidate.replacement === "string" ? candidate.replacement.trim() : "";
+    const explanation =
+      typeof candidate.explanation === "string" ? candidate.explanation.trim() : "";
+    const target = targetMap.get(targetId);
 
-      if (
-        !target ||
-        !isIssueType(candidate.type) ||
-        !original ||
-        !replacement ||
-        original === replacement ||
-        !target.text.includes(original)
-      ) {
-        return [];
-      }
+    if (
+      !target ||
+      !isIssueType(candidate.type) ||
+      !original ||
+      !replacement ||
+      original === replacement ||
+      !target.text.includes(original)
+    ) {
+      return [];
+    }
 
-      const issue: WritingIssue = {
-        id: `${targetId}-${index}`,
-        targetId,
-        label: target.label,
-        type: candidate.type,
-        original,
-        replacement,
-        explanation:
-          explanation || "Corrects a writing issue in this section.",
-      };
-      return [issue];
-    });
+    const issue: WritingIssue = {
+      id: `${targetId}-${index}`,
+      targetId,
+      label: target.label,
+      type: candidate.type,
+      original,
+      replacement,
+      explanation: explanation || "Corrects a writing issue in this section.",
+    };
+    return [issue];
+  });
 }
 
 export async function analyzeResumeWriting(
-  targets: WritingTarget[],
+  targets: WritingTarget[]
 ): Promise<WritingCheckResponse> {
   const completion = await getWritingClient().chat.completions.create({
     model: "openai/gpt-oss-120b",

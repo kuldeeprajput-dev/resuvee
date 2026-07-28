@@ -91,26 +91,11 @@ function resumeToText(data: ResumeData) {
     [
       data.basics.headline,
       data.basics.summary,
-      ...data.experience.flatMap((item) => [
-        item.role,
-        item.company,
-        ...item.highlights,
-      ]),
-      ...data.education.flatMap((item) => [
-        item.degree,
-        item.school,
-        item.details,
-      ]),
-      ...data.projects.flatMap((item) => [
-        item.name,
-        item.description,
-        ...item.highlights,
-      ]),
-      ...data.skillGroups.flatMap((group) => [
-        group.name,
-        ...group.skills,
-      ]),
-    ].join(" "),
+      ...data.experience.flatMap((item) => [item.role, item.company, ...item.highlights]),
+      ...data.education.flatMap((item) => [item.degree, item.school, item.details]),
+      ...data.projects.flatMap((item) => [item.name, item.description, ...item.highlights]),
+      ...data.skillGroups.flatMap((group) => [group.name, ...group.skills]),
+    ].join(" ")
   );
 }
 
@@ -118,17 +103,11 @@ function extractKeywords(description: string) {
   const normalized = normalize(description);
   if (!normalized) return [];
 
-  const phraseMatches = RECOGNIZED_PHRASES.filter((phrase) =>
-    normalized.includes(phrase),
-  );
+  const phraseMatches = RECOGNIZED_PHRASES.filter((phrase) => normalized.includes(phrase));
   const frequencies = new Map<string, number>();
 
   normalized.split(" ").forEach((word) => {
-    if (
-      word.length < 3 ||
-      STOP_WORDS.has(word) ||
-      /^\d+$/.test(word)
-    ) {
+    if (word.length < 3 || STOP_WORDS.has(word) || /^\d+$/.test(word)) {
       return;
     }
     frequencies.set(word, (frequencies.get(word) ?? 0) + 1);
@@ -150,22 +129,15 @@ function hasKeyword(resumeText: string, keyword: string) {
   return parts.length > 1 && parts.every((part) => resumeText.includes(part));
 }
 
-export function analyzeJobMatch(
-  data: ResumeData,
-  description: string,
-): JobMatchResult {
+export function analyzeJobMatch(data: ResumeData, description: string): JobMatchResult {
   const keywords = extractKeywords(description);
   if (!keywords.length) {
     return { score: 0, matched: [], missing: [], keywordCount: 0 };
   }
 
   const resumeText = resumeToText(data);
-  const matched = keywords.filter((keyword) =>
-    hasKeyword(resumeText, keyword),
-  );
-  const missing = keywords.filter(
-    (keyword) => !hasKeyword(resumeText, keyword),
-  );
+  const matched = keywords.filter((keyword) => hasKeyword(resumeText, keyword));
+  const missing = keywords.filter((keyword) => !hasKeyword(resumeText, keyword));
 
   return {
     score: Math.round((matched.length / keywords.length) * 100),

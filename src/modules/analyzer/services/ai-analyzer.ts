@@ -88,11 +88,9 @@ function getClient(): OpenAI {
   return openaiInstance;
 }
 
-export async function analyzeResume(
-  resumeText: string,
-): Promise<ResumeAnalysis> {
+export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis> {
   const hash = getHash(resumeText);
-  
+
   // Check cache first
   if (analysisCache.has(hash)) {
     console.log("Returning cached analysis result");
@@ -106,9 +104,10 @@ export async function analyzeResume(
     // Trim resume to stay within 8K TPM limit
     // Budget: ~1500 (system) + resume + 4096 (max_tokens) < 8000
     // So resume must be < ~2400 tokens (~1800 chars)
-    const trimmedResume = resumeText.length > 1800
-      ? resumeText.substring(0, 1800) + "\n[Resume trimmed for processing]"
-      : resumeText;
+    const trimmedResume =
+      resumeText.length > 1800
+        ? resumeText.substring(0, 1800) + "\n[Resume trimmed for processing]"
+        : resumeText;
 
     const completion = await client.chat.completions.create({
       model: "openai/gpt-oss-120b",

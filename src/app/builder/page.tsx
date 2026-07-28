@@ -14,10 +14,5 @@ export default async function BuilderPage({
 }) {
   const { template, starter } = await searchParams;
 
-  return (
-    <ResumeBuilder
-      initialTemplate={template}
-      initialStarter={starter}
-    />
-  );
+  return <ResumeBuilder initialTemplate={template} initialStarter={starter} />;
 }

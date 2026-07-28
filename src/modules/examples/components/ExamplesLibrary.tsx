@@ -19,12 +19,7 @@ import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 import type { ResumeTemplateId } from "@/modules/resume";
 
-type ExampleCategory =
-  | "All"
-  | "Business"
-  | "Technology"
-  | "Creative"
-  | "Early career";
+type ExampleCategory = "All" | "Business" | "Technology" | "Creative" | "Early career";
 
 interface ResumeExample {
   role: string;
@@ -37,13 +32,7 @@ interface ResumeExample {
   icon: typeof BriefcaseBusiness;
 }
 
-const categories: ExampleCategory[] = [
-  "All",
-  "Business",
-  "Technology",
-  "Creative",
-  "Early career",
-];
+const categories: ExampleCategory[] = ["All", "Business", "Technology", "Creative", "Early career"];
 
 const examples: ResumeExample[] = [
   {
@@ -187,16 +176,10 @@ export function ExamplesLibrary() {
   const visibleExamples = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     return examples.filter((example) => {
-      const categoryMatches =
-        category === "All" || example.category === category;
+      const categoryMatches = category === "All" || example.category === category;
       const queryMatches =
         !normalized ||
-        [
-          example.role,
-          example.category,
-          example.summary,
-          ...example.skills,
-        ]
+        [example.role, example.category, example.summary, ...example.skills]
           .join(" ")
           .toLowerCase()
           .includes(normalized);
@@ -215,9 +198,8 @@ export function ExamplesLibrary() {
             Strong resumes start with the right evidence.
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--brand-muted)] sm:text-lg">
-            Explore role-specific direction written for Resulyra. Use the
-            examples as prompts, then replace every idea with your own honest
-            experience and results.
+            Explore role-specific direction written for Resulyra. Use the examples as prompts, then
+            replace every idea with your own honest experience and results.
           </p>
         </div>
       </section>
@@ -234,7 +216,7 @@ export function ExamplesLibrary() {
                   "shrink-0 rounded-full px-4 py-2.5 text-xs font-bold transition",
                   category === item
                     ? "bg-[var(--brand-ink)] text-white"
-                    : "border border-black/10 bg-white/70 text-[var(--brand-muted)] hover:bg-white",
+                    : "border border-black/10 bg-white/70 text-[var(--brand-muted)] hover:bg-white"
                 )}
               >
                 {item}
@@ -269,12 +251,8 @@ export function ExamplesLibrary() {
               <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.15em] text-[#bd593a]">
                 {example.category}
               </p>
-              <h2 className="mt-1 text-2xl font-bold tracking-[-0.04em]">
-                {example.role}
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
-                {example.summary}
-              </p>
+              <h2 className="mt-1 text-2xl font-bold tracking-[-0.04em]">{example.role}</h2>
+              <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">{example.summary}</p>
 
               <div className="mt-5 flex flex-wrap gap-2">
                 {example.skills.map((skill) => (
@@ -291,9 +269,7 @@ export function ExamplesLibrary() {
                 <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#4f7946]">
                   Evidence prompt
                 </p>
-                <p className="mt-1.5 text-xs leading-5 text-black/65">
-                  {example.proof}
-                </p>
+                <p className="mt-1.5 text-xs leading-5 text-black/65">{example.proof}</p>
               </div>
 
               <Button

@@ -29,42 +29,28 @@ function validateTargets(value: unknown): WritingTarget[] {
     }
     const candidate = item as Record<string, unknown>;
     const id = typeof candidate.id === "string" ? candidate.id : "";
-    const label =
-      typeof candidate.label === "string"
-        ? candidate.label.trim().slice(0, 100)
-        : "";
-    const text =
-      typeof candidate.text === "string" ? candidate.text.trim() : "";
+    const label = typeof candidate.label === "string" ? candidate.label.trim().slice(0, 100) : "";
+    const text = typeof candidate.text === "string" ? candidate.text.trim() : "";
 
     if (!TARGET_ID_PATTERN.test(id) || !label || !text) {
       throw new Error("A writing field is incomplete or unsupported.");
     }
     if (text.length > MAX_TARGET_LENGTH) {
-      throw new Error(
-        `Each writing field must be under ${MAX_TARGET_LENGTH} characters.`,
-      );
+      throw new Error(`Each writing field must be under ${MAX_TARGET_LENGTH} characters.`);
     }
     return { id, label, text };
   });
 
-  const totalLength = targets.reduce(
-    (total, target) => total + target.text.length,
-    0,
-  );
+  const totalLength = targets.reduce((total, target) => total + target.text.length, 0);
   if (totalLength > MAX_TOTAL_LENGTH) {
-    throw new Error(
-      "The resume is too long for one writing check. Shorten it and try again.",
-    );
+    throw new Error("The resume is too long for one writing check. Shorten it and try again.");
   }
   return targets;
 }
 
 export async function POST(request: NextRequest) {
   if (!process.env.GROQ_API_KEY) {
-    return errorResponse(
-      "AI writing check is not configured. Add GROQ_API_KEY to use it.",
-      503,
-    );
+    return errorResponse("AI writing check is not configured. Add GROQ_API_KEY to use it.", 503);
   }
 
   try {

@@ -25,7 +25,7 @@ export function TemplateThumbnail({
     <div
       className={cn(
         "relative shrink-0 overflow-hidden rounded-[3px] border border-black/10 bg-white shadow-[0_12px_35px_rgba(22,32,28,0.13)]",
-        className,
+        className
       )}
       style={{ width, height }}
       aria-label={`${template.name} template preview`}

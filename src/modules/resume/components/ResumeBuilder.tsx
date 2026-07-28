@@ -17,11 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  builderSections,
-  calculateResumeStrength,
-  resumeTemplates,
-} from "../utils/resume-data";
+import { builderSections, calculateResumeStrength, resumeTemplates } from "../utils/resume-data";
 import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
@@ -38,10 +34,7 @@ interface ResumeBuilderProps {
   initialStarter?: string;
 }
 
-export function ResumeBuilder({
-  initialTemplate,
-  initialStarter,
-}: ResumeBuilderProps) {
+export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilderProps) {
   const {
     data,
     templateId,
@@ -75,18 +68,12 @@ export function ResumeBuilder({
     resumeTemplates[0];
   const isFresherTemplate = template.audience === "fresher";
   const visibleSections = template.sections
-    .map((sectionId) =>
-      builderSections.find((section) => section.id === sectionId),
-    )
-    .filter((section): section is (typeof builderSections)[number] =>
-      Boolean(section),
-    );
+    .map((sectionId) => builderSections.find((section) => section.id === sectionId))
+    .filter((section): section is (typeof builderSections)[number] => Boolean(section));
   const strength = calculateResumeStrength(data, {
     fresher: isFresherTemplate,
   });
-  const activeIndex = visibleSections.findIndex(
-    (section) => section.id === activeSection,
-  );
+  const activeIndex = visibleSections.findIndex((section) => section.id === activeSection);
   const filteredTemplates = resumeTemplates.filter((item) => {
     if (templateFilter === "popular") return item.popular;
     if (templateFilter === "fresher") return item.audience === "fresher";
@@ -148,7 +135,7 @@ export function ResumeBuilder({
   useEffect(() => {
     if (!navScrollRef.current) return;
     const activeBtn = navScrollRef.current.querySelector<HTMLButtonElement>(
-      `[data-section-id="${activeSection}"]`,
+      `[data-section-id="${activeSection}"]`
     );
     if (activeBtn) {
       activeBtn.scrollIntoView({
@@ -223,7 +210,7 @@ export function ResumeBuilder({
 
   const addTargetKeywords = (keywords: string[]) => {
     const targetGroup = data.skillGroups.find(
-      (group) => group.name.toLowerCase() === "target role",
+      (group) => group.name.toLowerCase() === "target role"
     );
     const nextGroups = targetGroup
       ? data.skillGroups.map((group) =>
@@ -232,7 +219,7 @@ export function ResumeBuilder({
                 ...group,
                 skills: [...new Set([...group.skills, ...keywords])],
               }
-            : group,
+            : group
         )
       : [
           ...data.skillGroups,
@@ -259,9 +246,7 @@ export function ResumeBuilder({
           <div
             className={cn(
               "flex h-full items-center px-4 transition-all duration-150 sm:px-5",
-              !hideLeftSidebar
-                ? "lg:w-[220px] lg:shrink-0 lg:justify-center"
-                : "w-auto",
+              !hideLeftSidebar ? "lg:w-[220px] lg:shrink-0 lg:justify-center" : "w-auto"
             )}
           >
             <Link
@@ -283,14 +268,10 @@ export function ResumeBuilder({
               <p
                 className="max-w-[150px] truncate text-sm font-bold sm:max-w-[220px] md:max-w-[300px] lg:max-w-[380px]"
                 title={
-                  data.basics.fullName
-                    ? `${data.basics.fullName} — Resume`
-                    : "Untitled resume"
+                  data.basics.fullName ? `${data.basics.fullName} — Resume` : "Untitled resume"
                 }
               >
-                {data.basics.fullName
-                  ? `${data.basics.fullName} — Resume`
-                  : "Untitled resume"}
+                {data.basics.fullName ? `${data.basics.fullName} — Resume` : "Untitled resume"}
               </p>
             </div>
           </div>
@@ -350,20 +331,18 @@ export function ResumeBuilder({
         ref={containerRef}
         className={cn(
           "relative flex h-[calc(100dvh-4rem)] w-full overflow-hidden",
-          isResizing && "select-none",
+          isResizing && "select-none"
         )}
       >
         <aside
           className={cn(
             "no-print hidden w-[220px] shrink-0 flex-col border-r border-black/10 bg-[#eeeee8] lg:flex",
-            hideLeftSidebar && "lg:hidden",
+            hideLeftSidebar && "lg:hidden"
           )}
         >
           <div className="border-b border-black/10 px-5 py-5">
             <div className="mb-2 flex items-center justify-between text-xs font-bold">
-              <span>
-                {isFresherTemplate ? "Fresher readiness" : "Resume strength"}
-              </span>
+              <span>{isFresherTemplate ? "Fresher readiness" : "Resume strength"}</span>
               <span>{strength}%</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-black/10">
@@ -379,10 +358,7 @@ export function ResumeBuilder({
             </p>
           </div>
 
-          <nav
-            className="flex-1 space-y-1 overflow-y-auto px-3 py-4"
-            aria-label="Resume sections"
-          >
+          <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4" aria-label="Resume sections">
             {visibleSections.map((section, index) => {
               const isActive = activeSection === section.id;
               const isComplete = index < activeIndex;
@@ -395,7 +371,7 @@ export function ResumeBuilder({
                     "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition",
                     isActive
                       ? "bg-[var(--brand-ink)] text-white shadow-sm"
-                      : "text-[var(--brand-muted)] hover:bg-white/70 hover:text-[var(--brand-ink)]",
+                      : "text-[var(--brand-muted)] hover:bg-white/70 hover:text-[var(--brand-ink)]"
                   )}
                 >
                   <span
@@ -405,7 +381,7 @@ export function ResumeBuilder({
                         ? "border-white/20 bg-white/10 text-[var(--brand-lime)]"
                         : isComplete
                           ? "border-[#9ebd56] bg-[var(--brand-lime)] text-[var(--brand-ink)]"
-                          : "border-black/15",
+                          : "border-black/15"
                     )}
                   >
                     {isComplete ? <Check className="size-3" /> : index + 1}
@@ -433,10 +409,8 @@ export function ResumeBuilder({
           <section
             className={cn(
               "no-print flex min-h-0 flex-col border-r border-black/10 bg-[#f7f6f1]",
-              isResizing
-                ? "transition-none"
-                : "transition-[width] duration-150 ease-out",
-              isRightCollapsed ? "flex-1" : "shrink-0",
+              isResizing ? "transition-none" : "transition-[width] duration-150 ease-out",
+              isRightCollapsed ? "flex-1" : "shrink-0"
             )}
             style={
               isRightCollapsed
@@ -452,14 +426,14 @@ export function ResumeBuilder({
             <div
               className={cn(
                 "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5 px-3",
-                !hideLeftSidebar && "hidden",
+                !hideLeftSidebar && "hidden"
               )}
             >
               {/* Left Edge Fade Overlay */}
               <div
                 className={cn(
                   "pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
-                  showLeftFade ? "opacity-100" : "opacity-0",
+                  showLeftFade ? "opacity-100" : "opacity-0"
                 )}
               />
 
@@ -478,7 +452,7 @@ export function ResumeBuilder({
                       "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150",
                       activeSection === section.id
                         ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
-                        : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]",
+                        : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]"
                     )}
                   >
                     <span className="text-[10px] opacity-80">{index + 1}</span>
@@ -491,16 +465,14 @@ export function ResumeBuilder({
               <div
                 className={cn(
                   "pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
-                  showRightFade ? "opacity-100" : "opacity-0",
+                  showRightFade ? "opacity-100" : "opacity-0"
                 )}
               />
             </div>
 
             {/* Carousel Navigation Control Bar - Only visible when overflowing AND left sidebar is hidden */}
             {hideLeftSidebar && (showLeftFade || showRightFade) && (
-              <div
-                className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in"
-              >
+              <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in">
                 <button
                   type="button"
                   onClick={() => goToRelativeSection(-1)}
@@ -526,7 +498,7 @@ export function ResumeBuilder({
                           "transition-all duration-150",
                           isActive
                             ? "size-2 rounded-full bg-[var(--brand-ink)] ring-1 ring-black/20"
-                            : "size-2 rounded-full border border-black/30 bg-black/10 hover:bg-black/40",
+                            : "size-2 rounded-full border border-black/30 bg-black/10 hover:bg-black/40"
                         )}
                       />
                     );
@@ -581,9 +553,7 @@ export function ResumeBuilder({
                 }}
                 className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 text-xs font-bold text-white hover:bg-[#293630] sm:text-sm"
               >
-                {activeIndex === visibleSections.length - 1
-                  ? "Preview"
-                  : "Continue"}
+                {activeIndex === visibleSections.length - 1 ? "Preview" : "Continue"}
                 {activeIndex === visibleSections.length - 1 ? (
                   <Eye className="size-4" />
                 ) : (
@@ -605,7 +575,7 @@ export function ResumeBuilder({
           <div
             className={cn(
               "h-full w-px bg-black/20 transition-colors duration-150 group-hover:bg-emerald-500",
-              isResizing && "bg-emerald-500 shadow-sm",
+              isResizing && "bg-emerald-500 shadow-sm"
             )}
           />
 
@@ -637,16 +607,14 @@ export function ResumeBuilder({
           <section
             className={cn(
               "resume-preview-panel relative min-h-0 flex-1 overflow-hidden bg-[#dfe1dc] lg:block",
-              showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden",
+              showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden"
             )}
           >
             <InteractiveCanvas
               data={data}
               template={template}
               previewTemplate={previewTemplate}
-              showPhoto={Boolean(
-                resumeStyle.showPhoto && template.supportsPhoto,
-              )}
+              showPhoto={Boolean(resumeStyle.showPhoto && template.supportsPhoto)}
               font={resumeStyle.font}
               resumeStyle={resumeStyle}
               zoom={zoom}
@@ -662,9 +630,7 @@ export function ResumeBuilder({
         )}
       </div>
 
-      {isResizing && (
-        <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />
-      )}
+      {isResizing && <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />}
 
       {showTemplates && (
         <div className="no-print fixed inset-0 z-[200] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
@@ -674,12 +640,9 @@ export function ResumeBuilder({
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
                   Original collection
                 </p>
-                <h2 className="mt-1 text-2xl font-bold tracking-[-0.035em]">
-                  Choose a template
-                </h2>
+                <h2 className="mt-1 text-2xl font-bold tracking-[-0.035em]">Choose a template</h2>
                 <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                  Your content stays. Select any template layout for your
-                  resume.
+                  Your content stays. Select any template layout for your resume.
                 </p>
               </div>
               <button
@@ -709,7 +672,7 @@ export function ResumeBuilder({
                     "shrink-0 rounded-full px-3.5 py-2 text-[11px] font-bold transition",
                     templateFilter === id
                       ? "bg-[var(--brand-ink)] text-white"
-                      : "border border-black/10 bg-white text-[var(--brand-muted)]",
+                      : "border border-black/10 bg-white text-[var(--brand-muted)]"
                   )}
                 >
                   {label}
@@ -729,21 +692,15 @@ export function ResumeBuilder({
                     "group rounded-2xl border p-2 text-left transition hover:-translate-y-1",
                     templateId === item.id
                       ? "border-[#315f45] bg-[#edf4ef] ring-2 ring-[#315f45]/10"
-                      : "border-black/10 bg-white hover:shadow-lg",
+                      : "border-black/10 bg-white hover:shadow-lg"
                   )}
                 >
-                  <TemplateThumbnail
-                    template={item}
-                    size="picker"
-                    className="mx-auto shadow-md"
-                  />
+                  <TemplateThumbnail template={item} size="picker" className="mx-auto shadow-md" />
                   <div className="flex items-center justify-between gap-1 px-1 pb-1 pt-2.5">
                     <div className="min-w-0">
                       <p className="truncate text-xs font-bold">{item.name}</p>
                       <p className="truncate text-[9px] text-[var(--brand-muted)]">
-                        {item.layout === "sidebar"
-                          ? "Sidebar"
-                          : "Single column"}
+                        {item.layout === "sidebar" ? "Sidebar" : "Single column"}
                         {" · "}
                         {item.supportsPhoto ? "Photo" : "Photo-free"}
                       </p>

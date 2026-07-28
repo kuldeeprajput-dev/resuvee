@@ -84,9 +84,7 @@ export function FileUpload() {
   return (
     <Card className="w-full max-w-3xl">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
-          Resume Analyzer
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">Resume Analyzer</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
@@ -101,9 +99,7 @@ export function FileUpload() {
             />
             <Upload className="h-5 w-5 text-muted-foreground" />
           </div>
-          <p className="text-sm text-muted-foreground">
-            Supported formats: PDF, DOC, DOCX
-          </p>
+          <p className="text-sm text-muted-foreground">Supported formats: PDF, DOC, DOCX</p>
         </div>
 
         {selectedFile && (
@@ -116,11 +112,7 @@ export function FileUpload() {
           </div>
         )}
 
-        <Button 
-          onClick={handleUpload} 
-          className="w-full" 
-          disabled={!selectedFile || isAnalyzing}
-        >
+        <Button onClick={handleUpload} className="w-full" disabled={!selectedFile || isAnalyzing}>
           {isAnalyzing ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -165,17 +157,13 @@ export function FileUpload() {
               <div className="p-4 border rounded-lg bg-green-50/50 dark:bg-green-950/20">
                 <div className="flex items-center gap-2 mb-3">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <h4 className="font-semibold text-green-700 dark:text-green-400">
-                    Strengths
-                  </h4>
+                  <h4 className="font-semibold text-green-700 dark:text-green-400">Strengths</h4>
                 </div>
                 <ul className="space-y-2">
                   {analysis.strengths.map((strength, index) => (
                     <li key={index} className="text-sm flex items-start gap-2">
                       <span className="text-green-600 mt-0.5">•</span>
-                      <span className="text-green-800 dark:text-green-300">
-                        {strength}
-                      </span>
+                      <span className="text-green-800 dark:text-green-300">{strength}</span>
                     </li>
                   ))}
                 </ul>
@@ -192,9 +180,7 @@ export function FileUpload() {
                   {analysis.weaknesses.map((weakness, index) => (
                     <li key={index} className="text-sm flex items-start gap-2">
                       <span className="text-red-600 mt-0.5">•</span>
-                      <span className="text-red-800 dark:text-red-300">
-                        {weakness}
-                      </span>
+                      <span className="text-red-800 dark:text-red-300">{weakness}</span>
                     </li>
                   ))}
                 </ul>
@@ -204,17 +190,13 @@ export function FileUpload() {
             <div className="p-4 border rounded-lg bg-blue-50/50 dark:bg-blue-950/20">
               <div className="flex items-center gap-2 mb-3">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
-                <h4 className="font-semibold text-blue-700 dark:text-blue-400">
-                  Suggestions
-                </h4>
+                <h4 className="font-semibold text-blue-700 dark:text-blue-400">Suggestions</h4>
               </div>
               <ul className="space-y-2">
                 {analysis.suggestions.map((suggestion, index) => (
                   <li key={index} className="text-sm flex items-start gap-2">
                     <span className="text-blue-600 font-medium">{index + 1}.</span>
-                    <span className="text-blue-800 dark:text-blue-300">
-                      {suggestion}
-                    </span>
+                    <span className="text-blue-800 dark:text-blue-300">{suggestion}</span>
                   </li>
                 ))}
               </ul>

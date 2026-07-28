@@ -5,17 +5,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { defaultResumeStyle, type ResumeStyle } from "../components/CustomizePanel";
 import { createBlankResumeData, resumeTemplates } from "../utils/resume-data";
 import { getTemplateStarterData } from "../utils/resume-presets";
-import type {
-  BuilderSection,
-  ResumeData,
-  ResumeTemplateId,
-} from "../types/resume";
+import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";
 
-export type TemplateFilter =
-  | "all"
-  | "popular"
-  | "fresher"
-  | "professional";
+export type TemplateFilter = "all" | "popular" | "fresher" | "professional";
 
 interface PersistedBuilderState {
   data: ResumeData;
@@ -58,9 +50,7 @@ interface ResumeBuilderState extends PersistedBuilderState {
 const STORAGE_KEY = "resulyra-builder-v3";
 const LEGACY_STORAGE_KEYS = ["resulyra-draft-v1", "resumix-draft-v1"];
 
-export function isResumeTemplateId(
-  value: string | undefined,
-): value is ResumeTemplateId {
+export function isResumeTemplateId(value: string | undefined): value is ResumeTemplateId {
   return resumeTemplates.some((template) => template.id === value);
 }
 
@@ -95,10 +85,7 @@ function getLegacyDraft(): Partial<PersistedBuilderState> | null {
 }
 
 function firstAllowedSection(templateId: ResumeTemplateId) {
-  return (
-    resumeTemplates.find((template) => template.id === templateId)?.sections[0] ??
-    "basics"
-  );
+  return resumeTemplates.find((template) => template.id === templateId)?.sections[0] ?? "basics";
 }
 
 function cloneData(data: ResumeData): ResumeData {
@@ -133,11 +120,9 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
 
         const requestedTemplate = safeTemplateId(initialTemplate);
         const hasPersistedDraft =
-          typeof window !== "undefined" &&
-          Boolean(window.localStorage.getItem(STORAGE_KEY));
+          typeof window !== "undefined" && Boolean(window.localStorage.getItem(STORAGE_KEY));
         const legacyDraft = hasPersistedDraft ? null : getLegacyDraft();
-        const launchWithExample =
-          starter === "template" || starter === "fresher";
+        const launchWithExample = starter === "template" || starter === "fresher";
 
         if (launchWithExample && isResumeTemplateId(initialTemplate)) {
           set({
@@ -262,6 +247,6 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
           templateId: safeTemplateId(state.templateId),
         } as PersistedBuilderState;
       },
-    },
-  ),
+    }
+  )
 );

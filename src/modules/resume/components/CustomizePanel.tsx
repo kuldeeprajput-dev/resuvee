@@ -106,9 +106,7 @@ export function CustomizePanel({
               <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-[#bd593a]">
                 Design controls
               </p>
-              <h2 className="text-xl font-bold tracking-[-0.035em]">
-                Make it feel like you
-              </h2>
+              <h2 className="text-xl font-bold tracking-[-0.035em]">Make it feel like you</h2>
             </div>
           </div>
           <button
@@ -135,9 +133,8 @@ export function CustomizePanel({
               <label
                 className={cn(
                   "relative flex size-10 cursor-pointer items-center justify-center rounded-full border-4 border-white shadow-sm ring-offset-2 transition hover:scale-105 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
-                  !colors.some(
-                    (c) => c.value.toLowerCase() === activeAccent.toLowerCase(),
-                  ) && "ring-2 ring-black/65",
+                  !colors.some((c) => c.value.toLowerCase() === activeAccent.toLowerCase()) &&
+                    "ring-2 ring-black/65"
                 )}
                 title="Choose custom color"
               >
@@ -166,8 +163,7 @@ export function CustomizePanel({
 
               {/* Preset Color Swatches */}
               {colors.map((color) => {
-                const selected =
-                  activeAccent.toLowerCase() === color.value.toLowerCase();
+                const selected = activeAccent.toLowerCase() === color.value.toLowerCase();
                 return (
                   <button
                     key={color.value}
@@ -177,7 +173,7 @@ export function CustomizePanel({
                     aria-label={`Use ${color.name} accent`}
                     className={cn(
                       "flex size-10 items-center justify-center rounded-full border-4 border-white shadow-sm ring-offset-2 transition hover:scale-105",
-                      selected && "ring-2 ring-black/65",
+                      selected && "ring-2 ring-black/65"
                     )}
                     style={{ backgroundColor: color.value }}
                   >
@@ -203,20 +199,11 @@ export function CustomizePanel({
                     "rounded-2xl border bg-white p-4 text-left transition",
                     style.font === font.id
                       ? "border-[#537c45] ring-2 ring-[#8baa54]/15"
-                      : "border-black/10 hover:border-black/25",
+                      : "border-black/10 hover:border-black/25"
                   )}
                 >
-                  <span
-                    className={cn(
-                      "block text-2xl leading-none",
-                      font.sampleClass,
-                    )}
-                  >
-                    Aa
-                  </span>
-                  <span className="mt-3 block text-xs font-bold">
-                    {font.name}
-                  </span>
+                  <span className={cn("block text-2xl leading-none", font.sampleClass)}>Aa</span>
+                  <span className="mt-3 block text-xs font-bold">{font.name}</span>
                   <span className="mt-1 block text-[10px] text-[var(--brand-muted)]">
                     {font.description}
                   </span>
@@ -226,43 +213,39 @@ export function CustomizePanel({
           </section>
 
           {supportsPhoto && (
-          <section className="mt-8 border-t border-black/10 pt-7">
-            <div className="flex items-center gap-2">
-              <UserRound className="size-4 text-[#4d7141]" />
-              <h3 className="text-sm font-bold">Profile photo</h3>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={style.showPhoto}
-              onClick={() =>
-                onChange({ ...style, showPhoto: !style.showPhoto })
-              }
-              className="mt-4 flex w-full items-center justify-between rounded-2xl border border-black/10 bg-white p-4 text-left"
-            >
-              <span>
-                <span className="block text-xs font-bold">
-                  Show photo when supported
-                </span>
-                <span className="mt-1 block text-[10px] text-[var(--brand-muted)]">
-                  Some regions and roles prefer a photo-free resume.
-                </span>
-              </span>
-              <span
-                className={cn(
-                  "flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 transition",
-                  style.showPhoto ? "bg-[#668d49]" : "bg-black/15",
-                )}
+            <section className="mt-8 border-t border-black/10 pt-7">
+              <div className="flex items-center gap-2">
+                <UserRound className="size-4 text-[#4d7141]" />
+                <h3 className="text-sm font-bold">Profile photo</h3>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={style.showPhoto}
+                onClick={() => onChange({ ...style, showPhoto: !style.showPhoto })}
+                className="mt-4 flex w-full items-center justify-between rounded-2xl border border-black/10 bg-white p-4 text-left"
               >
+                <span>
+                  <span className="block text-xs font-bold">Show photo when supported</span>
+                  <span className="mt-1 block text-[10px] text-[var(--brand-muted)]">
+                    Some regions and roles prefer a photo-free resume.
+                  </span>
+                </span>
                 <span
                   className={cn(
-                    "size-5 rounded-full bg-white shadow-sm transition",
-                    style.showPhoto && "translate-x-5",
+                    "flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 transition",
+                    style.showPhoto ? "bg-[#668d49]" : "bg-black/15"
                   )}
-                />
-              </span>
-            </button>
-          </section>
+                >
+                  <span
+                    className={cn(
+                      "size-5 rounded-full bg-white shadow-sm transition",
+                      style.showPhoto && "translate-x-5"
+                    )}
+                  />
+                </span>
+              </button>
+            </section>
           )}
         </div>
 

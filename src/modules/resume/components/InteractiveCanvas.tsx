@@ -39,13 +39,7 @@ import { cn } from "@/shared/lib/utils";
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
 
 export interface SelectedCanvasElement {
-  section:
-    | "basics"
-    | "experience"
-    | "education"
-    | "projects"
-    | "skills"
-    | "certifications";
+  section: "basics" | "experience" | "education" | "projects" | "skills" | "certifications";
   id?: string;
   field?: string;
   highlightIndex?: number;
@@ -245,7 +239,17 @@ export function InteractiveCanvas({
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [isSpacePressed, zoom, onZoomChange, resetPanAndZoom, clearSelection, canUndo, canRedo, handleUndo, handleRedo]);
+  }, [
+    isSpacePressed,
+    zoom,
+    onZoomChange,
+    resetPanAndZoom,
+    clearSelection,
+    canUndo,
+    canRedo,
+    handleUndo,
+    handleRedo,
+  ]);
 
   // Wheel zoom & pan
   const handleWheel = useCallback(
@@ -261,17 +265,13 @@ export function InteractiveCanvas({
         }));
       }
     },
-    [zoom, onZoomChange],
+    [zoom, onZoomChange]
   );
 
   const activeHand = isHandTool || isSpacePressed;
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (
-      e.button === 1 ||
-      activeHand ||
-      (e.target as HTMLElement).classList.contains("canvas-bg")
-    ) {
+    if (e.button === 1 || activeHand || (e.target as HTMLElement).classList.contains("canvas-bg")) {
       e.preventDefault();
       setIsDragging(true);
       setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
@@ -317,7 +317,11 @@ export function InteractiveCanvas({
 
     // Granular text element: h1, h2, h3, h4, p, li, span, a, or direct target
     const elem = target.closest("h1, h2, h3, h4, p, li, span, a") || target;
-    if (!elem || elem.tagName.toLowerCase() === "article" || elem.tagName.toLowerCase() === "section") {
+    if (
+      !elem ||
+      elem.tagName.toLowerCase() === "article" ||
+      elem.tagName.toLowerCase() === "section"
+    ) {
       clearSelection();
       return;
     }
@@ -351,17 +355,37 @@ export function InteractiveCanvas({
     if (!found) {
       for (const item of data.experience) {
         if (clickedText === item.role) {
-          found = { section: "experience", id: item.id, field: "role", title: "Job Role", subtitle: item.company };
+          found = {
+            section: "experience",
+            id: item.id,
+            field: "role",
+            title: "Job Role",
+            subtitle: item.company,
+          };
           setInlineText(item.role);
           break;
         } else if (clickedText.includes(item.company)) {
-          found = { section: "experience", id: item.id, field: "company", title: "Company", subtitle: item.role };
+          found = {
+            section: "experience",
+            id: item.id,
+            field: "company",
+            title: "Company",
+            subtitle: item.role,
+          };
           setInlineText(item.company);
           break;
         } else {
-          const hIndex = item.highlights.findIndex((hl) => clickedText.includes(hl) || hl.includes(clickedText));
+          const hIndex = item.highlights.findIndex(
+            (hl) => clickedText.includes(hl) || hl.includes(clickedText)
+          );
           if (hIndex !== -1) {
-            found = { section: "experience", id: item.id, field: "highlight", highlightIndex: hIndex, title: "Highlight" };
+            found = {
+              section: "experience",
+              id: item.id,
+              field: "highlight",
+              highlightIndex: hIndex,
+              title: "Highlight",
+            };
             setInlineText(item.highlights[hIndex]);
             break;
           }
@@ -373,15 +397,32 @@ export function InteractiveCanvas({
     if (!found) {
       for (const item of data.education) {
         if (clickedText === item.degree) {
-          found = { section: "education", id: item.id, field: "degree", title: "Degree", subtitle: item.school };
+          found = {
+            section: "education",
+            id: item.id,
+            field: "degree",
+            title: "Degree",
+            subtitle: item.school,
+          };
           setInlineText(item.degree);
           break;
         } else if (clickedText === item.school) {
-          found = { section: "education", id: item.id, field: "school", title: "School", subtitle: item.degree };
+          found = {
+            section: "education",
+            id: item.id,
+            field: "school",
+            title: "School",
+            subtitle: item.degree,
+          };
           setInlineText(item.school);
           break;
         } else if (item.details && clickedText.includes(item.details)) {
-          found = { section: "education", id: item.id, field: "details", title: "Education Details" };
+          found = {
+            section: "education",
+            id: item.id,
+            field: "details",
+            title: "Education Details",
+          };
           setInlineText(item.details);
           break;
         }
@@ -396,7 +437,12 @@ export function InteractiveCanvas({
           setInlineText(item.name);
           break;
         } else if (clickedText === item.description) {
-          found = { section: "projects", id: item.id, field: "description", title: "Project Description" };
+          found = {
+            section: "projects",
+            id: item.id,
+            field: "description",
+            title: "Project Description",
+          };
           setInlineText(item.description);
           break;
         }
@@ -530,7 +576,10 @@ export function InteractiveCanvas({
           if (field === "skills") {
             return {
               ...group,
-              skills: newText.split(",").map((s) => s.trim()).filter(Boolean),
+              skills: newText
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean),
             };
           }
           return { ...group, name: newText };
@@ -666,14 +715,9 @@ export function InteractiveCanvas({
           ],
         });
       }
-    } else if (
-      selectedElement.section === "certifications" &&
-      selectedElement.id
-    ) {
+    } else if (selectedElement.section === "certifications" && selectedElement.id) {
       const certifications = data.certifications ?? [];
-      const target = certifications.find(
-        (item) => item.id === selectedElement.id,
-      );
+      const target = certifications.find((item) => item.id === selectedElement.id);
       if (target) {
         onUpdateData({
           ...data,
@@ -708,14 +752,11 @@ export function InteractiveCanvas({
         ...data,
         projects: data.projects.filter((i) => i.id !== selectedElement.id),
       });
-    } else if (
-      selectedElement.section === "certifications" &&
-      selectedElement.id
-    ) {
+    } else if (selectedElement.section === "certifications" && selectedElement.id) {
       onUpdateData({
         ...data,
         certifications: (data.certifications ?? []).filter(
-          (item) => item.id !== selectedElement.id,
+          (item) => item.id !== selectedElement.id
         ),
       });
     }
@@ -726,7 +767,8 @@ export function InteractiveCanvas({
   const themeStyles: Record<CanvasTheme, string> = {
     dots: "bg-[#e5e7e2] [background-image:radial-gradient(#b8beb5_1.2px,transparent_1.2px)] [background-size:20px_20px]",
     grid: "bg-[#e8e9e4] [background-image:linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] [background-size:24px_24px]",
-    studio: "bg-[#1e2320] [background-image:radial-gradient(#3a453f_1.5px,transparent_1.5px)] [background-size:24px_24px]",
+    studio:
+      "bg-[#1e2320] [background-image:radial-gradient(#3a453f_1.5px,transparent_1.5px)] [background-size:24px_24px]",
     clean: "bg-[#dfe2dc]",
   };
 
@@ -734,7 +776,7 @@ export function InteractiveCanvas({
     <div
       className={cn(
         "relative flex flex-col overflow-hidden select-none transition-all duration-300",
-        isFullscreen ? "fixed inset-0 z-[120] bg-black" : "h-full w-full",
+        isFullscreen ? "fixed inset-0 z-[120] bg-black" : "h-full w-full"
       )}
     >
       {/* Top Header Bar */}
@@ -796,7 +838,8 @@ export function InteractiveCanvas({
               }}
               className={cn(
                 "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3",
-                showDesignMenu && "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50 text-emerald-800"
+                showDesignMenu &&
+                  "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50 text-emerald-800"
               )}
             >
               <Palette className="size-3.5 text-emerald-600" />
@@ -809,7 +852,9 @@ export function InteractiveCanvas({
                 <div className="flex items-center justify-between pb-2.5 border-b border-black/10 mb-3">
                   <div className="flex items-center gap-2">
                     <Palette className="size-4 text-emerald-700" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">Canvas Design</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">
+                      Canvas Design
+                    </h3>
                   </div>
                   <button
                     type="button"
@@ -823,14 +868,18 @@ export function InteractiveCanvas({
                 {/* Accent Color Section */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold text-[var(--brand-ink)]">Accent Color</label>
+                    <label className="text-xs font-bold text-[var(--brand-ink)]">
+                      Accent Color
+                    </label>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-mono text-[var(--brand-muted)] font-bold">
                         {resumeStyle?.accent || template.accent || "#28785b"}
                       </span>
                       <span
                         className="size-3.5 rounded-full border border-black/20"
-                        style={{ backgroundColor: resumeStyle?.accent || template.accent || "#28785b" }}
+                        style={{
+                          backgroundColor: resumeStyle?.accent || template.accent || "#28785b",
+                        }}
                       />
                     </div>
                   </div>
@@ -840,14 +889,22 @@ export function InteractiveCanvas({
                     <label
                       className={cn(
                         "relative flex size-6 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
-                        !COLOR_SWATCHES.some(c => c.value.toLowerCase() === (resumeStyle?.accent || "").toLowerCase()) && "ring-2 ring-emerald-600 ring-offset-1"
+                        !COLOR_SWATCHES.some(
+                          (c) => c.value.toLowerCase() === (resumeStyle?.accent || "").toLowerCase()
+                        ) && "ring-2 ring-emerald-600 ring-offset-1"
                       )}
                       title="Pick Any Custom Color"
                     >
                       <input
                         type="color"
-                        value={(resumeStyle?.accent || template.accent || "#28785b").startsWith("#") ? (resumeStyle?.accent || template.accent || "#28785b") : "#28785b"}
-                        onChange={(e) => onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)}
+                        value={
+                          (resumeStyle?.accent || template.accent || "#28785b").startsWith("#")
+                            ? resumeStyle?.accent || template.accent || "#28785b"
+                            : "#28785b"
+                        }
+                        onChange={(e) =>
+                          onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)
+                        }
                         className="absolute inset-0 size-full cursor-pointer opacity-0"
                       />
                       <Pipette className="size-3 text-white drop-shadow-md" />
@@ -857,7 +914,9 @@ export function InteractiveCanvas({
                     <input
                       type="text"
                       value={resumeStyle?.accent || ""}
-                      onChange={(e) => onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)}
+                      onChange={(e) =>
+                        onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)
+                      }
                       placeholder={template.accent || "#28785b"}
                       className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] focus:outline-none focus:bg-white"
                     />
@@ -866,12 +925,16 @@ export function InteractiveCanvas({
 
                     {/* Preset Swatches */}
                     {COLOR_SWATCHES.map((color) => {
-                      const isSelected = (resumeStyle?.accent || template.accent).toLowerCase() === color.value.toLowerCase();
+                      const isSelected =
+                        (resumeStyle?.accent || template.accent).toLowerCase() ===
+                        color.value.toLowerCase();
                       return (
                         <button
                           key={color.value}
                           type="button"
-                          onClick={() => onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle)}
+                          onClick={() =>
+                            onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle)
+                          }
                           className={cn(
                             "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center",
                             isSelected && "ring-2 ring-emerald-600 ring-offset-1"
@@ -888,19 +951,33 @@ export function InteractiveCanvas({
 
                 {/* Typography / Font Section */}
                 <div className="mb-4 pt-3 border-t border-black/10">
-                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Font / Typography</label>
+                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                    Font / Typography
+                  </label>
                   <div className="grid grid-cols-2 gap-1.5">
-                    {([
-                      { id: "template", name: "Template", desc: "Designed pairing", cls: "font-sans" },
-                      { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
-                      { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
-                      { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
-                    ] satisfies {
-                      id: ResumeStyle["font"];
-                      name: string;
-                      desc: string;
-                      cls: string;
-                    }[]).map((f) => {
+                    {(
+                      [
+                        {
+                          id: "template",
+                          name: "Template",
+                          desc: "Designed pairing",
+                          cls: "font-sans",
+                        },
+                        { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
+                        {
+                          id: "serif",
+                          name: "Editorial",
+                          desc: "Classic & Formal",
+                          cls: "font-serif",
+                        },
+                        { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
+                      ] satisfies {
+                        id: ResumeStyle["font"];
+                        name: string;
+                        desc: string;
+                        cls: string;
+                      }[]
+                    ).map((f) => {
                       const isSelected = (resumeStyle?.font || "template") === f.id;
                       return (
                         <button
@@ -919,7 +996,9 @@ export function InteractiveCanvas({
                               : "border-black/10 bg-white hover:border-black/25"
                           )}
                         >
-                          <span className={cn("text-base font-bold leading-none mb-1", f.cls)}>Aa</span>
+                          <span className={cn("text-base font-bold leading-none mb-1", f.cls)}>
+                            Aa
+                          </span>
                           <span className="text-[11px] font-bold leading-tight">{f.name}</span>
                           <span className="text-[9px] text-[var(--brand-muted)]">{f.desc}</span>
                         </button>
@@ -930,16 +1009,20 @@ export function InteractiveCanvas({
 
                 {/* Layout Spacing Options */}
                 <div className="pt-3 border-t border-black/10">
-                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Page Spacing</label>
+                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                    Page Spacing
+                  </label>
                   <div className="flex gap-1.5">
-                    {([
-                      { id: "compact", label: "Compact" },
-                      { id: "normal", label: "Normal" },
-                      { id: "spacious", label: "Spacious" },
-                    ] satisfies {
-                      id: NonNullable<ResumeStyle["pagePadding"]>;
-                      label: string;
-                    }[]).map((p) => {
+                    {(
+                      [
+                        { id: "compact", label: "Compact" },
+                        { id: "normal", label: "Normal" },
+                        { id: "spacious", label: "Spacious" },
+                      ] satisfies {
+                        id: NonNullable<ResumeStyle["pagePadding"]>;
+                        label: string;
+                      }[]
+                    ).map((p) => {
                       const isSelected = (resumeStyle?.pagePadding || "normal") === p.id;
                       return (
                         <button
@@ -975,11 +1058,7 @@ export function InteractiveCanvas({
             className="builder-icon-button shrink-0"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
           >
-            {isFullscreen ? (
-              <Minimize2 className="size-4" />
-            ) : (
-              <Maximize2 className="size-4" />
-            )}
+            {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
           </button>
         </div>
       </div>
@@ -995,11 +1074,7 @@ export function InteractiveCanvas({
         className={cn(
           "canvas-bg relative flex-1 overflow-hidden transition-colors duration-300",
           themeStyles[canvasTheme],
-          activeHand
-            ? isDragging
-              ? "cursor-grabbing"
-              : "cursor-grab"
-            : "cursor-default",
+          activeHand ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
         )}
       >
         {/* Visual Granular Selection Bounding Box Overlay */}
@@ -1150,7 +1225,11 @@ export function InteractiveCanvas({
                   >
                     <input
                       type="color"
-                      value={(resumeStyle?.accent || template.accent || "#28785b").startsWith("#") ? (resumeStyle?.accent || template.accent || "#28785b") : "#28785b"}
+                      value={
+                        (resumeStyle?.accent || template.accent || "#28785b").startsWith("#")
+                          ? resumeStyle?.accent || template.accent || "#28785b"
+                          : "#28785b"
+                      }
                       onChange={(e) => {
                         const val = e.target.value;
                         if (selectedDomRef.current) {
@@ -1228,11 +1307,7 @@ export function InteractiveCanvas({
             )}
 
             {/* Close Toolbar */}
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="builder-icon-button"
-            >
+            <button type="button" onClick={clearSelection} className="builder-icon-button">
               <X className="size-3.5" />
             </button>
           </div>
@@ -1281,7 +1356,7 @@ export function InteractiveCanvas({
               "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
               !isHandTool && !isSpacePressed
                 ? "bg-white text-[var(--brand-ink)] shadow-xs"
-                : "text-[var(--brand-muted)] hover:text-black",
+                : "text-[var(--brand-muted)] hover:text-black"
             )}
             title="Select Mode (Click text on PDF to highlight & edit)"
           >
@@ -1294,7 +1369,7 @@ export function InteractiveCanvas({
               "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
               isHandTool || isSpacePressed
                 ? "bg-[var(--brand-ink)] text-white shadow-xs"
-                : "text-[var(--brand-muted)] hover:text-black",
+                : "text-[var(--brand-muted)] hover:text-black"
             )}
             title="Pan / Hand Tool (Drag Canvas)"
           >
@@ -1361,14 +1436,11 @@ export function InteractiveCanvas({
                   }}
                   className={cn(
                     "flex w-full items-center justify-between rounded-lg px-2.5 py-1 text-[11px] font-medium transition hover:bg-black/5",
-                    Math.round(zoom) === preset.value &&
-                      "font-bold text-emerald-700 bg-emerald-50",
+                    Math.round(zoom) === preset.value && "font-bold text-emerald-700 bg-emerald-50"
                   )}
                 >
                   <span>{preset.label}</span>
-                  {Math.round(zoom) === preset.value && (
-                    <Check className="size-3" />
-                  )}
+                  {Math.round(zoom) === preset.value && <Check className="size-3" />}
                 </button>
               ))}
             </div>
@@ -1452,8 +1524,7 @@ export function InteractiveCanvas({
                   }}
                   className={cn(
                     "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[11px] font-medium hover:bg-black/5",
-                    canvasTheme === theme.id &&
-                      "font-bold text-emerald-700 bg-emerald-50",
+                    canvasTheme === theme.id && "font-bold text-emerald-700 bg-emerald-50"
                   )}
                 >
                   <span>{theme.label}</span>

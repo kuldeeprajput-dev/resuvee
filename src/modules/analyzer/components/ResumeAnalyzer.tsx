@@ -24,13 +24,7 @@ import { ErrorState } from "./ErrorState";
 import { extractTextFromPDF } from "@/shared/lib/extractors/client-pdf";
 import type { ResumeAnalysis } from "../index";
 
-type AnalysisState =
-  | "idle"
-  | "extracting"
-  | "uploading"
-  | "analyzing"
-  | "success"
-  | "error";
+type AnalysisState = "idle" | "extracting" | "uploading" | "analyzing" | "success" | "error";
 
 interface AnalyzeResponse {
   success: boolean;
@@ -67,7 +61,7 @@ export function ResumeAnalyzer() {
       const file = event.dataTransfer.files[0];
       if (file) handleFileChange(file);
     },
-    [handleFileChange],
+    [handleFileChange]
   );
 
   const removeFile = useCallback(() => {
@@ -126,16 +120,8 @@ export function ResumeAnalyzer() {
     if (inputRef.current) inputRef.current.value = "";
   }, []);
 
-  if (
-    state === "analyzing" ||
-    state === "uploading" ||
-    state === "extracting"
-  ) {
-    return (
-      <LoadingState
-        phase={state === "extracting" ? "extracting" : "analyzing"}
-      />
-    );
+  if (state === "analyzing" || state === "uploading" || state === "extracting") {
+    return <LoadingState phase={state === "extracting" ? "extracting" : "analyzing"} />;
   }
 
   if (state === "success" && analysis) {
@@ -147,9 +133,7 @@ export function ResumeAnalyzer() {
               <BadgeCheck className="size-5" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-[var(--premium-ink)]">
-                Analysis complete
-              </h1>
+              <h1 className="text-xl font-semibold text-[var(--premium-ink)]">Analysis complete</h1>
               <p className="max-w-full truncate text-sm text-muted-foreground">
                 {selectedFile?.name}
               </p>
@@ -212,12 +196,8 @@ export function ResumeAnalyzer() {
                     <FileText className="size-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[var(--premium-ink)]">
-                      Resume intake
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      PDF and DOCX supported
-                    </p>
+                    <p className="text-sm font-semibold text-[var(--premium-ink)]">Resume intake</p>
+                    <p className="text-xs text-muted-foreground">PDF and DOCX supported</p>
                   </div>
                 </div>
                 <div className="hidden rounded-lg border border-[#d9c38b] bg-[#fbf5e6] px-3 py-1 text-xs font-medium text-[#6f5520] sm:block">
@@ -229,8 +209,8 @@ export function ResumeAnalyzer() {
                 Turn a resume into a focused ATS report.
               </h1>
               <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
-                Upload a resume to see score, keyword gaps, strengths, and
-                practical edits in one workspace.
+                Upload a resume to see score, keyword gaps, strengths, and practical edits in one
+                workspace.
               </p>
             </div>
 
@@ -241,8 +221,7 @@ export function ResumeAnalyzer() {
                 accept=".pdf,.docx"
                 className="hidden"
                 onChange={(event) =>
-                  event.target.files?.[0] &&
-                  handleFileChange(event.target.files[0])
+                  event.target.files?.[0] && handleFileChange(event.target.files[0])
                 }
               />
 
@@ -276,9 +255,7 @@ export function ResumeAnalyzer() {
                     <p className="truncate font-semibold text-[var(--premium-ink)]">
                       {isDragging ? "Release to upload" : "Select resume file"}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      PDF or DOCX
-                    </p>
+                    <p className="text-sm text-muted-foreground">PDF or DOCX</p>
                   </div>
                   <div className="hidden shrink-0 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm font-medium text-[var(--premium-ink)] shadow-sm sm:inline-flex">
                     Browse files
@@ -330,9 +307,7 @@ export function ResumeAnalyzer() {
           <div>
             <div className="mb-5 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-white">
-                  Review pipeline
-                </p>
+                <p className="text-sm font-semibold text-white">Review pipeline</p>
                 <p className="text-xs text-white/60">Live session state</p>
               </div>
               <div className="flex size-10 items-center justify-center rounded-lg bg-white/10">
@@ -347,9 +322,7 @@ export function ResumeAnalyzer() {
                   className="rounded-lg border border-white/10 bg-white/[0.06] p-4"
                 >
                   <item.icon className="mb-4 size-5 text-[#f1d58b]" />
-                  <p className="text-sm font-medium text-white">
-                    {item.label}
-                  </p>
+                  <p className="text-sm font-medium text-white">{item.label}</p>
                   <p className="mt-1 text-xs text-white/60">{item.value}</p>
                 </div>
               ))}
@@ -362,24 +335,20 @@ export function ResumeAnalyzer() {
               <span>4 modules</span>
             </div>
             <div className="space-y-3">
-              {["ATS score", "Keyword gaps", "Strength map", "Edit plan"].map(
-                (label, index) => (
-                  <div key={label} className="flex items-center gap-3">
-                    <div className="flex size-6 items-center justify-center rounded-full bg-white/10 text-[11px] font-semibold text-[#f1d58b]">
-                      {index + 1}
-                    </div>
-                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
-                      <div
-                        className="h-full rounded-full bg-[linear-gradient(90deg,var(--premium-gold),#d8c28a)]"
-                        style={{ width: `${92 - index * 12}%` }}
-                      />
-                    </div>
-                    <span className="w-24 truncate text-right text-xs text-white/70">
-                      {label}
-                    </span>
+              {["ATS score", "Keyword gaps", "Strength map", "Edit plan"].map((label, index) => (
+                <div key={label} className="flex items-center gap-3">
+                  <div className="flex size-6 items-center justify-center rounded-full bg-white/10 text-[11px] font-semibold text-[#f1d58b]">
+                    {index + 1}
                   </div>
-                ),
-              )}
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-[linear-gradient(90deg,var(--premium-gold),#d8c28a)]"
+                      style={{ width: `${92 - index * 12}%` }}
+                    />
+                  </div>
+                  <span className="w-24 truncate text-right text-xs text-white/70">{label}</span>
+                </div>
+              ))}
             </div>
           </div>
         </aside>

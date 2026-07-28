@@ -335,7 +335,8 @@ const blueprintData = professionalPreset({
   degree: "BS, Computer Science",
   school: "Colorado State University",
   project: "Platform Reliability Console",
-  projectDescription: "An internal observability workspace for service owners and incident response.",
+  projectDescription:
+    "An internal observability workspace for service owners and incident response.",
   experienceHighlights: [
     [
       "Led reliability work that raised customer-facing availability from 99.82% to 99.97%.",
@@ -599,7 +600,8 @@ const salesData = professionalPreset({
   degree: "BBA, Marketing",
   school: "University of Colorado Denver",
   project: "Enterprise Discovery Playbook",
-  projectDescription: "A repeatable discovery and account-planning system for strategic opportunities.",
+  projectDescription:
+    "A repeatable discovery and account-planning system for strategic opportunities.",
   experienceHighlights: [
     [
       "Led a 12-person team to 118% of a $24M annual target while improving forecast accuracy.",
@@ -782,9 +784,21 @@ const launchpadData: ResumeData = {
     },
   ],
   skillGroups: [
-    { id: "arjun-skills-1", name: "Development", skills: ["TypeScript", "React", "JavaScript", "HTML", "CSS"] },
-    { id: "arjun-skills-2", name: "Data & tools", skills: ["SQL", "Git", "REST APIs", "Vitest", "Figma"] },
-    { id: "arjun-skills-3", name: "Foundations", skills: ["Data structures", "OOP", "Accessibility", "Agile"] },
+    {
+      id: "arjun-skills-1",
+      name: "Development",
+      skills: ["TypeScript", "React", "JavaScript", "HTML", "CSS"],
+    },
+    {
+      id: "arjun-skills-2",
+      name: "Data & tools",
+      skills: ["SQL", "Git", "REST APIs", "Vitest", "Figma"],
+    },
+    {
+      id: "arjun-skills-3",
+      name: "Foundations",
+      skills: ["Data structures", "OOP", "Accessibility", "Agile"],
+    },
   ],
 };
 
@@ -830,7 +844,11 @@ const firstStepData: ResumeData = {
   ],
   skillGroups: [
     { id: "finn-skills-1", name: "Analysis", skills: ["Excel", "SQL", "Tableau", "Forecasting"] },
-    { id: "finn-skills-2", name: "Collaboration", skills: ["Presentations", "Research", "Teamwork"] },
+    {
+      id: "finn-skills-2",
+      name: "Collaboration",
+      skills: ["Presentations", "Research", "Teamwork"],
+    },
     { id: "finn-skills-3", name: "Coursework", skills: ["Statistics", "Economics", "Operations"] },
   ],
 };
@@ -851,7 +869,8 @@ const pivotData = professionalPreset({
   degree: "BA, Communications",
   school: "Fordham University",
   project: "Customer Insight Repository",
-  projectDescription: "A structured research library connecting customer evidence to product decisions.",
+  projectDescription:
+    "A structured research library connecting customer evidence to product decisions.",
   experienceHighlights: [
     [
       "Reduced preventable churn by 18% through a risk model combining usage and customer signals.",
@@ -918,23 +937,21 @@ export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData)
     Object.entries(starter.basics).map(([key, sampleValue]) => {
       const currentValue = current.basics[key as keyof ResumeData["basics"]];
       return [key, currentValue?.trim() ? currentValue : sampleValue];
-    }),
+    })
   ) as unknown as ResumeData["basics"];
 
   const hasExperience = current.experience.some((item) =>
-    hasText([item.role, item.company, ...item.highlights]),
+    hasText([item.role, item.company, ...item.highlights])
   );
   const hasEducation = current.education.some((item) =>
-    hasText([item.degree, item.school, item.details]),
+    hasText([item.degree, item.school, item.details])
   );
   const hasProjects = current.projects.some((item) =>
-    hasText([item.name, item.description, ...item.highlights]),
+    hasText([item.name, item.description, ...item.highlights])
   );
-  const hasSkills = current.skillGroups.some((group) =>
-    hasText([group.name, ...group.skills]),
-  );
+  const hasSkills = current.skillGroups.some((group) => hasText([group.name, ...group.skills]));
   const hasCertifications = (current.certifications ?? []).some((item) =>
-    hasText([item.title, item.issuer, item.description]),
+    hasText([item.title, item.issuer, item.description])
   );
 
   return {

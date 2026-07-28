@@ -18,10 +18,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
-import type {
-  ApplicationStatus,
-  JobApplication,
-} from "../types/application";
+import type { ApplicationStatus, JobApplication } from "../types/application";
 
 const STORAGE_KEY = "resulyra-applications-v1";
 
@@ -96,10 +93,7 @@ export function JobTracker() {
     setSaveLabel("Saving…");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(applications),
-      );
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
       setSaveLabel("Saved locally");
     }, 350);
     return () => {
@@ -114,18 +108,14 @@ export function JobTracker() {
       [item.company, item.role, item.location, item.notes]
         .join(" ")
         .toLowerCase()
-        .includes(normalized),
+        .includes(normalized)
     );
   }, [applications, query]);
 
-  const saveApplication = (
-    draft: Omit<JobApplication, "id" | "createdAt">,
-  ) => {
+  const saveApplication = (draft: Omit<JobApplication, "id" | "createdAt">) => {
     if (editing) {
       setApplications((items) =>
-        items.map((item) =>
-          item.id === editing.id ? { ...item, ...draft } : item,
-        ),
+        items.map((item) => (item.id === editing.id ? { ...item, ...draft } : item))
       );
       setEditing(null);
       return;
@@ -142,25 +132,18 @@ export function JobTracker() {
     setCreating(false);
   };
 
-  const moveApplication = (
-    application: JobApplication,
-    status: ApplicationStatus,
-  ) => {
+  const moveApplication = (application: JobApplication, status: ApplicationStatus) => {
     setApplications((items) =>
-      items.map((item) =>
-        item.id === application.id ? { ...item, status } : item,
-      ),
+      items.map((item) => (item.id === application.id ? { ...item, status } : item))
     );
   };
 
   const removeApplication = (application: JobApplication) => {
     const confirmed = window.confirm(
-      `Remove ${application.role} at ${application.company} from your tracker?`,
+      `Remove ${application.role} at ${application.company} from your tracker?`
     );
     if (!confirmed) return;
-    setApplications((items) =>
-      items.filter((item) => item.id !== application.id),
-    );
+    setApplications((items) => items.filter((item) => item.id !== application.id));
     setEditing(null);
   };
 
@@ -169,11 +152,7 @@ export function JobTracker() {
       <header className="sticky top-0 z-40 border-b border-black/10 bg-[var(--brand-paper)]/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              aria-label="Back to home"
-              className="builder-icon-button lg:hidden"
-            >
+            <Link href="/" aria-label="Back to home" className="builder-icon-button lg:hidden">
               <ArrowLeft className="size-4" />
             </Link>
             <div className="hidden lg:block">
@@ -209,9 +188,8 @@ export function JobTracker() {
               Keep every next step visible.
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--brand-muted)]">
-              Track roles from first save to final decision without a
-              spreadsheet. Your board remains in this browser until you add
-              an account later.
+              Track roles from first save to final decision without a spreadsheet. Your board
+              remains in this browser until you add an account later.
             </p>
           </div>
           <label className="flex h-11 min-w-[280px] items-center gap-2 rounded-xl border border-black/10 bg-white px-3.5 shadow-sm">
@@ -227,9 +205,7 @@ export function JobTracker() {
 
         <section className="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {columns.map((column) => {
-            const count = applications.filter(
-              (item) => item.status === column.id,
-            ).length;
+            const count = applications.filter((item) => item.status === column.id).length;
             return (
               <div
                 key={column.id}
@@ -240,14 +216,10 @@ export function JobTracker() {
                     className="size-2.5 rounded-full"
                     style={{ backgroundColor: column.color }}
                   />
-                  <span className="text-xl font-bold tracking-[-0.04em]">
-                    {count}
-                  </span>
+                  <span className="text-xl font-bold tracking-[-0.04em]">{count}</span>
                 </div>
                 <p className="mt-3 text-xs font-bold">{column.label}</p>
-                <p className="mt-1 text-[10px] text-[var(--brand-muted)]">
-                  {column.description}
-                </p>
+                <p className="mt-1 text-[10px] text-[var(--brand-muted)]">{column.description}</p>
               </div>
             );
           })}
@@ -255,9 +227,7 @@ export function JobTracker() {
 
         <section className="mt-6 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {columns.map((column) => {
-            const items = filtered.filter(
-              (application) => application.status === column.id,
-            );
+            const items = filtered.filter((application) => application.status === column.id);
             return (
               <div
                 key={column.id}
@@ -282,9 +252,7 @@ export function JobTracker() {
                       key={application.id}
                       application={application}
                       onEdit={() => setEditing(application)}
-                      onMove={(status) =>
-                        moveApplication(application, status)
-                      }
+                      onMove={(status) => moveApplication(application, status)}
                     />
                   ))}
                   {!items.length && (
@@ -314,8 +282,8 @@ export function JobTracker() {
               <div>
                 <h2 className="text-lg font-bold">Build your first pipeline</h2>
                 <p className="mt-1 text-xs leading-5 text-white/55">
-                  Add a role you are considering, record the next action, and
-                  move it across the board as the conversation progresses.
+                  Add a role you are considering, record the next action, and move it across the
+                  board as the conversation progresses.
                 </p>
               </div>
               <Button
@@ -335,9 +303,7 @@ export function JobTracker() {
         <ApplicationDialog
           application={editing}
           onSave={saveApplication}
-          onDelete={
-            editing ? () => removeApplication(editing) : undefined
-          }
+          onDelete={editing ? () => removeApplication(editing) : undefined}
           onClose={() => {
             setCreating(false);
             setEditing(null);
@@ -372,12 +338,8 @@ function ApplicationCard({
           <Pencil className="size-3.5" />
         </button>
       </div>
-      <h3 className="mt-4 text-sm font-bold leading-5">
-        {application.role}
-      </h3>
-      <p className="mt-1 text-xs font-semibold text-[var(--brand-muted)]">
-        {application.company}
-      </p>
+      <h3 className="mt-4 text-sm font-bold leading-5">{application.role}</h3>
+      <p className="mt-1 text-xs font-semibold text-[var(--brand-muted)]">{application.company}</p>
       {application.location && (
         <p className="mt-2 flex items-center gap-1.5 text-[10px] text-black/45">
           <MapPin className="size-3" />
@@ -395,9 +357,7 @@ function ApplicationCard({
             {application.nextStep || "Follow up"}
           </p>
           {application.dueDate && (
-            <p className="mt-1 text-[9px] text-[var(--brand-muted)]">
-              Due {application.dueDate}
-            </p>
+            <p className="mt-1 text-[9px] text-[var(--brand-muted)]">Due {application.dueDate}</p>
           )}
         </div>
       )}
@@ -406,9 +366,7 @@ function ApplicationCard({
         <select
           aria-label={`Move ${application.role}`}
           value={application.status}
-          onChange={(event) =>
-            onMove(event.target.value as ApplicationStatus)
-          }
+          onChange={(event) => onMove(event.target.value as ApplicationStatus)}
           className="h-9 min-w-0 flex-1 rounded-lg border border-black/10 bg-white px-2 text-[10px] font-bold outline-none"
         >
           {columns.map((column) => (
@@ -420,9 +378,7 @@ function ApplicationCard({
         {application.link && (
           <a
             href={
-              application.link.startsWith("http")
-                ? application.link
-                : `https://${application.link}`
+              application.link.startsWith("http") ? application.link : `https://${application.link}`
             }
             target="_blank"
             rel="noreferrer"
@@ -448,14 +404,12 @@ function ApplicationDialog({
   onDelete?: () => void;
   onClose: () => void;
 }) {
-  const [draft, setDraft] = useState<
-    Omit<JobApplication, "id" | "createdAt">
-  >(application ?? emptyApplication);
+  const [draft, setDraft] = useState<Omit<JobApplication, "id" | "createdAt">>(
+    application ?? emptyApplication
+  );
 
-  const update = (
-    field: keyof Omit<JobApplication, "id" | "createdAt">,
-    value: string,
-  ) => setDraft((current) => ({ ...current, [field]: value }));
+  const update = (field: keyof Omit<JobApplication, "id" | "createdAt">, value: string) =>
+    setDraft((current) => ({ ...current, [field]: value }));
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/35 backdrop-blur-sm sm:items-center sm:p-5">

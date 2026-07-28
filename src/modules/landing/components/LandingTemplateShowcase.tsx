@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  ImageOff,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ImageOff, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TemplateThumbnail, resumeTemplates } from "@/modules/resume";
 import { cn } from "@/shared/lib/utils";
@@ -28,8 +22,7 @@ const filters: {
   {
     id: "fresher",
     label: "Fresher",
-    count: resumeTemplates.filter((item) => item.audience === "fresher")
-      .length,
+    count: resumeTemplates.filter((item) => item.audience === "fresher").length,
   },
   {
     id: "photo-free",
@@ -61,10 +54,7 @@ export function LandingTemplateShowcase() {
     if (!carousel) return;
 
     const updatePages = () => {
-      const count = Math.max(
-        1,
-        Math.ceil(carousel.scrollWidth / carousel.clientWidth),
-      );
+      const count = Math.max(1, Math.ceil(carousel.scrollWidth / carousel.clientWidth));
       setPageCount(count);
       setActivePage((current) => Math.min(current, count - 1));
     };
@@ -115,14 +105,14 @@ export function LandingTemplateShowcase() {
               "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition",
               filter === item.id
                 ? "bg-[var(--brand-ink)] text-white"
-                : "border border-black/10 bg-white/75 text-[var(--brand-muted)] hover:bg-white",
+                : "border border-black/10 bg-white/75 text-[var(--brand-muted)] hover:bg-white"
             )}
           >
             {item.label}
             <span
               className={cn(
                 "rounded-full px-1.5 py-0.5 text-[9px]",
-                filter === item.id ? "bg-white/12" : "bg-black/5",
+                filter === item.id ? "bg-white/12" : "bg-black/5"
               )}
             >
               {item.count}
@@ -166,17 +156,13 @@ export function LandingTemplateShowcase() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-xl font-bold tracking-[-0.025em]">
-                      {template.name}
-                    </h3>
+                    <h3 className="text-xl font-bold tracking-[-0.025em]">{template.name}</h3>
                     <span
                       className="size-2.5 rounded-full"
                       style={{ backgroundColor: template.accent }}
                     />
                   </div>
-                  <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                    {template.suitableFor}
-                  </p>
+                  <p className="mt-1 text-sm text-[var(--brand-muted)]">{template.suitableFor}</p>
                 </div>
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)]">
                   <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:rotate-0" />
@@ -225,7 +211,7 @@ export function LandingTemplateShowcase() {
                   "size-2.5 rounded-full border-2 border-[var(--brand-canvas)] ring-1 ring-black/20 transition",
                   activePage === index
                     ? "scale-125 bg-[var(--brand-ink)]"
-                    : "bg-[#c6cbc4] hover:bg-[var(--brand-lime)]",
+                    : "bg-[#c6cbc4] hover:bg-[var(--brand-lime)]"
                 )}
               />
             ))}

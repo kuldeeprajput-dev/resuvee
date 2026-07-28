@@ -70,9 +70,7 @@ function InsightList({ title, icon: Icon, items, tone }: InsightListProps) {
   return (
     <Card className={`${tone.card} py-0 shadow-sm`}>
       <CardHeader className="border-b border-black/10 p-4">
-        <CardTitle
-          className={`flex items-center gap-2 text-base ${tone.title}`}
-        >
+        <CardTitle className={`flex items-center gap-2 text-base ${tone.title}`}>
           <Icon className="size-4" />
           {title}
         </CardTitle>
@@ -81,9 +79,7 @@ function InsightList({ title, icon: Icon, items, tone }: InsightListProps) {
         <ul className="space-y-3">
           {visibleItems.map((item, index) => (
             <li key={index} className="flex items-start gap-3">
-              <span
-                className={`mt-1.5 size-2 shrink-0 rounded-full ${tone.marker}`}
-              />
+              <span className={`mt-1.5 size-2 shrink-0 rounded-full ${tone.marker}`} />
               <span className={`text-sm leading-6 ${tone.text}`}>{item}</span>
             </li>
           ))}
@@ -144,15 +140,11 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
               />
               <div className="min-w-0 space-y-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">
-                    ATS score
-                  </p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">ATS score</p>
                   <h2 className="mt-1 text-3xl font-semibold text-[var(--premium-ink)]">
                     {analysis.score}/100
                   </h2>
-                  <p className={`text-sm font-medium ${scoreTone.text}`}>
-                    {scoreTone.label}
-                  </p>
+                  <p className={`text-sm font-medium ${scoreTone.text}`}>{scoreTone.label}</p>
                 </div>
                 <div className="flex h-2 overflow-hidden rounded-full bg-white/80 ring-1 ring-black/10">
                   {scoreBands.map((band) => (
@@ -168,9 +160,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
 
             <div className="mt-5 border-t border-black/10 pt-4">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-[var(--premium-ink)]">
-                  Score signals
-                </p>
+                <p className="text-sm font-semibold text-[var(--premium-ink)]">Score signals</p>
                 <span className={`text-xs font-semibold ${scoreTone.text}`}>
                   {scoreTone.label} band
                 </span>
@@ -183,12 +173,8 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                     className={`rounded-lg border border-black/10 p-3 ${signal.className}`}
                   >
                     <signal.icon className="mb-3 size-4" />
-                    <p className="text-2xl font-semibold leading-none">
-                      {signal.value}
-                    </p>
-                    <p className="mt-1 text-xs font-medium text-muted-foreground">
-                      {signal.label}
-                    </p>
+                    <p className="text-2xl font-semibold leading-none">{signal.value}</p>
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">{signal.label}</p>
                   </div>
                 ))}
               </div>
@@ -204,9 +190,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                     style={{ width: `${normalizedScore}%` }}
                   />
                 </div>
-                <p className="mt-3 text-sm leading-5 text-[var(--premium-ink)]">
-                  {scoreSummary}
-                </p>
+                <p className="mt-3 text-sm leading-5 text-[var(--premium-ink)]">{scoreSummary}</p>
               </div>
             </div>
           </CardContent>
@@ -223,9 +207,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                 <h2 className="text-2xl font-semibold leading-tight text-[var(--premium-ink)]">
                   {analysis.role}
                 </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {analysis.level}
-                </p>
+                <p className="mt-1 text-sm text-muted-foreground">{analysis.level}</p>
               </div>
               <div className="flex w-fit items-center gap-2 rounded-lg border border-black/10 bg-[linear-gradient(135deg,var(--premium-panel),var(--premium-aubergine))] px-3 py-2 text-sm font-medium text-white">
                 <Gauge className="size-4 text-[#f1d58b]" />
@@ -250,9 +232,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-sm text-muted-foreground">
-                    No tech stack detected.
-                  </span>
+                  <span className="text-sm text-muted-foreground">No tech stack detected.</span>
                 )}
               </div>
             </div>
@@ -306,9 +286,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                 </Badge>
               ))
             ) : (
-              <span className="text-sm text-[#6f5520]">
-                No missing keywords returned.
-              </span>
+              <span className="text-sm text-[#6f5520]">No missing keywords returned.</span>
             )}
           </div>
         </CardContent>
@@ -331,9 +309,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-[var(--premium-teal)] text-xs font-semibold text-white">
                   {index + 1}
                 </span>
-                <span className="pt-0.5 text-sm leading-6 text-[#123c38]">
-                  {suggestion}
-                </span>
+                <span className="pt-0.5 text-sm leading-6 text-[#123c38]">{suggestion}</span>
               </li>
             ))}
           </ol>
@@ -351,9 +327,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
                 <BadgeCheck className="size-4 text-[var(--premium-teal)]" />
                 Career advice
               </div>
-              <p className="text-sm leading-6 text-muted-foreground">
-                {analysis.advice}
-              </p>
+              <p className="text-sm leading-6 text-muted-foreground">{analysis.advice}</p>
             </div>
             <div className="ml-auto hidden rounded-lg border border-black/10 bg-[#fbf5e6] px-3 py-2 text-xs font-medium text-[var(--premium-ink)] md:flex md:items-center md:gap-2">
               <Zap className="size-3.5 text-[var(--premium-gold)]" />

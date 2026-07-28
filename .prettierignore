@@ -1,0 +1,8 @@
+node_modules
+.next
+dist
+build
+.bun
+package-lock.json
+bun.lockb
+bun.lock
