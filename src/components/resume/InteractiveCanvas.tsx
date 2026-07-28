@@ -25,7 +25,6 @@ import {
   Redo2,
   RotateCcw,
   Trash2,
-  Type,
   Undo2,
   X,
 } from "lucide-react";
@@ -544,22 +543,6 @@ export function InteractiveCanvas({
     requestAnimationFrame(() => updateSelectionBounds());
   };
 
-  // Adjust Page Padding (Margins)
-  const cyclePagePadding = () => {
-    if (!onUpdateStyle || !resumeStyle) return;
-    const current = resumeStyle.pagePadding || "normal";
-    const next = current === "compact" ? "normal" : current === "normal" ? "spacious" : "compact";
-    onUpdateStyle({ ...resumeStyle, pagePadding: next });
-  };
-
-  // Adjust Section Spacing / Gaps
-  const cycleSectionSpacing = () => {
-    if (!onUpdateStyle || !resumeStyle) return;
-    const current = resumeStyle.sectionSpacing || "normal";
-    const next = current === "compact" ? "normal" : current === "normal" ? "spacious" : "compact";
-    onUpdateStyle({ ...resumeStyle, sectionSpacing: next });
-  };
-
   // Duplicate Selected Item
   const duplicateSelected = () => {
     if (!selectedElement || !onUpdateData) return;
@@ -777,18 +760,26 @@ export function InteractiveCanvas({
                 <div className="mb-4 pt-3 border-t border-black/10">
                   <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Font / Typography</label>
                   <div className="grid grid-cols-2 gap-1.5">
-                    {[
+                    {([
                       { id: "template", name: "Template", desc: "Designed pairing", cls: "font-sans" },
                       { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
                       { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
                       { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
-                    ].map((f) => {
+                    ] satisfies {
+                      id: ResumeStyle["font"];
+                      name: string;
+                      desc: string;
+                      cls: string;
+                    }[]).map((f) => {
                       const isSelected = (resumeStyle?.font || "template") === f.id;
                       return (
                         <button
                           key={f.id}
                           type="button"
-                          onClick={() => onUpdateStyle?.({ ...resumeStyle, font: f.id as any } as ResumeStyle)}
+                          onClick={() =>
+                            resumeStyle &&
+                            onUpdateStyle?.({ ...resumeStyle, font: f.id })
+                          }
                           className={cn(
                             "flex flex-col items-start rounded-xl border p-2 text-left transition",
                             isSelected
@@ -809,17 +800,26 @@ export function InteractiveCanvas({
                 <div className="pt-3 border-t border-black/10">
                   <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">Page Spacing</label>
                   <div className="flex gap-1.5">
-                    {[
+                    {([
                       { id: "compact", label: "Compact" },
                       { id: "normal", label: "Normal" },
                       { id: "spacious", label: "Spacious" },
-                    ].map((p) => {
+                    ] satisfies {
+                      id: NonNullable<ResumeStyle["pagePadding"]>;
+                      label: string;
+                    }[]).map((p) => {
                       const isSelected = (resumeStyle?.pagePadding || "normal") === p.id;
                       return (
                         <button
                           key={p.id}
                           type="button"
-                          onClick={() => onUpdateStyle?.({ ...resumeStyle, pagePadding: p.id as any } as ResumeStyle)}
+                          onClick={() =>
+                            resumeStyle &&
+                            onUpdateStyle?.({
+                              ...resumeStyle,
+                              pagePadding: p.id,
+                            })
+                          }
                           className={cn(
                             "flex-1 rounded-lg border py-1 text-center text-[10px] font-bold transition",
                             isSelected
@@ -1060,7 +1060,7 @@ export function InteractiveCanvas({
 
         {/* Rendered Document Sheet Container */}
         <div
-          className="canvas-bg absolute inset-0 flex items-center justify-center pointer-events-none"
+          className="canvas-bg resume-preview-stage absolute inset-0 flex items-center justify-center pointer-events-none"
           style={{
             transform: `translate3d(${pan.x}px, ${pan.y}px, 0)`,
             transition: isDragging ? "none" : "transform 0.15s ease-out",
@@ -1069,7 +1069,7 @@ export function InteractiveCanvas({
           <div
             ref={sheetRef}
             onClick={handleSheetClick}
-            className="pointer-events-auto relative transition-transform duration-100 ease-out shadow-[0_28px_85px_rgba(0,0,0,0.22)]"
+            className="resume-preview-sheet pointer-events-auto relative transition-transform duration-100 ease-out shadow-[0_28px_85px_rgba(0,0,0,0.22)]"
             style={{
               transform: `scale(${zoom / 100})`,
               transformOrigin: "center center",
