@@ -340,3 +340,134 @@
     @apply h-11 w-full rounded-xl border border-black/10 bg-white px-3.5 text-sm outline-none transition focus:border-[#537c45] focus:ring-3 focus:ring-[#a8ca59]/20;
   }
 }
+
+/* Dynamic Page Spacing (Compact / Normal / Spacious) Overrides for Resume Templates */
+.resume-padding-compact,
+.resume-padding-compact.px-8,
+.resume-padding-compact.px-9,
+.resume-padding-compact.px-10,
+.resume-padding-compact.px-11,
+.resume-padding-compact.py-7,
+.resume-padding-compact.py-8,
+.resume-padding-compact.py-9,
+.resume-padding-compact.py-10 {
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.resume-padding-compact header {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.resume-padding-compact main,
+.resume-padding-compact aside {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.resume-padding-compact .px-11,
+.resume-padding-compact .px-10,
+.resume-padding-compact .px-9,
+.resume-padding-compact .px-8,
+.resume-padding-compact .p-8,
+.resume-padding-compact .p-9,
+.resume-padding-compact .p-10,
+.resume-padding-compact .p-11 {
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+.resume-padding-compact .py-7,
+.resume-padding-compact .py-8,
+.resume-padding-compact .py-9,
+.resume-padding-compact .py-10,
+.resume-padding-compact .pb-10,
+.resume-padding-compact .pb-9,
+.resume-padding-compact .pb-8,
+.resume-padding-compact .pt-9 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.resume-padding-compact .space-y-3 > * + *,
+.resume-padding-compact .space-y-4 > * + *,
+.resume-padding-compact .space-y-5 > * + *,
+.resume-padding-compact .space-y-6 > * + *,
+.resume-padding-compact .space-y-7 > * + *,
+.resume-padding-compact .space-y-8 > * + * {
+  margin-top: 0.6rem !important;
+}
+
+.resume-padding-compact .gap-5,
+.resume-padding-compact .gap-6,
+.resume-padding-compact .gap-7,
+.resume-padding-compact .gap-8 {
+  gap: 0.85rem !important;
+}
+
+/* Spacious Page Spacing */
+.resume-padding-spacious,
+.resume-padding-spacious.px-8,
+.resume-padding-spacious.px-9,
+.resume-padding-spacious.px-10,
+.resume-padding-spacious.px-11,
+.resume-padding-spacious.py-7,
+.resume-padding-spacious.py-8,
+.resume-padding-spacious.py-9,
+.resume-padding-spacious.py-10 {
+  padding-left: 3.25rem !important;
+  padding-right: 3.25rem !important;
+  padding-top: 2.75rem !important;
+  padding-bottom: 2.75rem !important;
+}
+
+.resume-padding-spacious header {
+  padding-top: 2.5rem !important;
+  padding-bottom: 1.75rem !important;
+}
+
+.resume-padding-spacious main,
+.resume-padding-spacious aside {
+  padding-top: 1.75rem !important;
+  padding-bottom: 1.75rem !important;
+}
+
+.resume-padding-spacious .px-11,
+.resume-padding-spacious .px-10,
+.resume-padding-spacious .px-9,
+.resume-padding-spacious .px-8,
+.resume-padding-spacious .p-8,
+.resume-padding-spacious .p-9,
+.resume-padding-spacious .p-10,
+.resume-padding-spacious .p-11 {
+  padding-left: 3.25rem !important;
+  padding-right: 3.25rem !important;
+}
+
+.resume-padding-spacious .py-7,
+.resume-padding-spacious .py-8,
+.resume-padding-spacious .py-9,
+.resume-padding-spacious .py-10,
+.resume-padding-spacious .pb-10,
+.resume-padding-spacious .pb-9,
+.resume-padding-spacious .pb-8 {
+  padding-top: 2.5rem !important;
+  padding-bottom: 2.5rem !important;
+}
+
+.resume-padding-spacious .space-y-3 > * + *,
+.resume-padding-spacious .space-y-4 > * + *,
+.resume-padding-spacious .space-y-5 > * + *,
+.resume-padding-spacious .space-y-6 > * + * {
+  margin-top: 1.75rem !important;
+}
+
+.resume-padding-spacious .gap-4,
+.resume-padding-spacious .gap-5,
+.resume-padding-spacious .gap-6,
+.resume-padding-spacious .gap-7 {
+  gap: 2.25rem !important;
+}

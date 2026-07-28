@@ -907,8 +907,10 @@ export function InteractiveCanvas({
                           key={f.id}
                           type="button"
                           onClick={() =>
-                            resumeStyle &&
-                            onUpdateStyle?.({ ...resumeStyle, font: f.id })
+                            onUpdateStyle?.({
+                              ...(resumeStyle || {}),
+                              font: f.id,
+                            } as ResumeStyle)
                           }
                           className={cn(
                             "flex flex-col items-start rounded-xl border p-2 text-left transition",
@@ -944,11 +946,10 @@ export function InteractiveCanvas({
                           key={p.id}
                           type="button"
                           onClick={() =>
-                            resumeStyle &&
                             onUpdateStyle?.({
-                              ...resumeStyle,
+                              ...(resumeStyle || {}),
                               pagePadding: p.id,
-                            })
+                            } as ResumeStyle)
                           }
                           className={cn(
                             "flex-1 rounded-lg border py-1 text-center text-[10px] font-bold transition",

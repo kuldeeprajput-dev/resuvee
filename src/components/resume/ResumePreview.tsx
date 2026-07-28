@@ -444,15 +444,20 @@ function Sheet({
   children,
   className,
   style,
+  pagePadding = "normal",
 }: {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  pagePadding?: "compact" | "normal" | "spacious";
 }) {
   return (
     <article
+      data-page-padding={pagePadding}
       className={cn(
         "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)] transition-all duration-200",
+        pagePadding === "compact" && "resume-padding-compact",
+        pagePadding === "spacious" && "resume-padding-spacious",
         className,
       )}
       style={style}
@@ -462,14 +467,10 @@ function Sheet({
   );
 }
 
-function MeridianTemplate({
-  data,
-  template,
-  className,
-  showPhoto = true,
-}: ResumePreviewProps) {
+function MeridianTemplate(props: ResumePreviewProps) {
+  const { data, template, className, showPhoto = true, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-[#fbfdfb]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-[#fbfdfb]", className)}>
       <div className="absolute -left-16 -top-20 size-60 rounded-full bg-[#d9f1e4]" />
       <div className="absolute left-10 top-8 size-[100px] rounded-[32px] bg-[#9ddbb8]/70" />
       <header className="relative grid grid-cols-[112px_1fr] items-center gap-6 px-11 pb-7 pt-9">
@@ -525,13 +526,10 @@ function MeridianTemplate({
   );
 }
 
-function EditorialTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function EditorialTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}>
       <header className="border-b border-black/55 pb-4 text-center">
         <h1 className="text-[27px] font-semibold uppercase leading-none tracking-[0.08em] text-black/85">
           {data.basics.fullName || "Your Name"}
@@ -578,14 +576,11 @@ function EditorialTemplate({
   );
 }
 
-function SummitTemplate({
-  data,
-  template,
-  className,
-  showPhoto = true,
-}: ResumePreviewProps) {
+function SummitTemplate(props: ResumePreviewProps) {
+  const { data, template, className, showPhoto = true, pagePadding } = props;
   return (
     <Sheet
+      pagePadding={pagePadding}
       className={cn(
         "grid grid-cols-[1fr_178px] bg-[#fcfdff]",
         className,
@@ -645,13 +640,10 @@ function SummitTemplate({
   );
 }
 
-function ColumnTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function ColumnTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-white px-11 py-10", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-11 py-10", className)}>
       <header className="mb-6 flex items-end justify-between gap-6 border-b border-black/70 pb-4">
         <div>
           <h1 className="text-[30px] font-light leading-none tracking-[-0.05em] text-black/90">
@@ -696,14 +688,10 @@ function ColumnTemplate({
   );
 }
 
-function HorizonTemplate({
-  data,
-  template,
-  className,
-  showPhoto = true,
-}: ResumePreviewProps) {
+function HorizonTemplate(props: ResumePreviewProps) {
+  const { data, template, className, showPhoto = true, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-[#fbfdff]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-[#fbfdff]", className)}>
       <div className="absolute -right-16 -top-24 h-52 w-[430px] rotate-6 rounded-[50%] bg-[#dceeff]" />
       <div className="absolute -right-6 -top-20 h-44 w-[350px] rotate-6 rounded-[50%] border-[18px] border-white/55" />
       <header className="relative flex min-h-[150px] items-center justify-between gap-6 px-10 py-8">
@@ -830,13 +818,10 @@ function BlueprintTemplate({
   );
 }
 
-function ChronologicalTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function ChronologicalTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-white px-11 py-10", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-11 py-10", className)}>
       <header
         className="border-b-2 pb-4"
         style={{ borderColor: template.accent }}
@@ -886,13 +871,10 @@ function ChronologicalTemplate({
   );
 }
 
-function CompactTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function CompactTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-white px-9 py-8", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-9 py-8", className)}>
       <header className="grid grid-cols-[1fr_225px] items-end gap-5 border-b border-black/45 pb-4">
         <div>
           <p
@@ -927,13 +909,10 @@ function CompactTemplate({
   );
 }
 
-function HybridTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function HybridTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-white px-10 py-9", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-10 py-9", className)}>
       <header>
         <div className="flex items-center justify-between gap-6">
           <div>
@@ -981,13 +960,10 @@ function HybridTemplate({
   );
 }
 
-function FinanceTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function FinanceTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-[#fffefd]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-[#fffefd]", className)}>
       <header className="border-b-[3px] px-10 pb-5 pt-9" style={{ borderColor: template.accent }}>
         <div className="flex items-end justify-between gap-8">
           <div>
@@ -1031,13 +1007,10 @@ function FinanceTemplate({
   );
 }
 
-function HealthcareTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function HealthcareTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("grid grid-cols-[174px_1fr] bg-[#fcfefe]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[174px_1fr] bg-[#fcfefe]", className)}>
       <aside className="relative bg-[#e7f2f0] px-6 py-8">
         <div
           aria-hidden="true"
@@ -1084,13 +1057,10 @@ function HealthcareTemplate({
   );
 }
 
-function SalesTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function SalesTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-[#fffdfb]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-[#fffdfb]", className)}>
       <div className="h-3 w-full" style={{ backgroundColor: template.accent }} />
       <header className="mx-9 flex items-end justify-between gap-7 border-b border-black/20 pb-5 pt-7">
         <div>
@@ -1137,15 +1107,12 @@ function AnalystRuleTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AnalystTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function AnalystTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   const certifications = data.certifications ?? [];
 
   return (
-    <Sheet className={cn("bg-white px-8 py-7 font-serif text-[#202020]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-8 py-7 font-serif text-[#202020]", className)}>
       <header className="text-center">
         <h1 className="text-[27px] font-semibold leading-none tracking-[0.045em]">
           {data.basics.fullName || "Your Name"}
@@ -1304,13 +1271,10 @@ function AnalystTemplate({
   );
 }
 
-function FresherTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function FresherTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("bg-white px-11 py-10", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("bg-white px-11 py-10", className)}>
       <header className="text-center">
         <h1 className="text-[29px] font-bold leading-none tracking-[-0.045em] text-black/90">
           {data.basics.fullName || "Your Name"}
@@ -1350,13 +1314,10 @@ function FresherTemplate({
   );
 }
 
-function FirstStepTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function FirstStepTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("grid grid-cols-[176px_1fr] bg-[#fbfcff]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[176px_1fr] bg-[#fbfcff]", className)}>
       <aside className="relative bg-[#edf3f9] px-6 py-9">
         <div
           className="absolute inset-x-0 top-0 h-2"
@@ -1396,13 +1357,10 @@ function FirstStepTemplate({
   );
 }
 
-function PivotTemplate({
-  data,
-  template,
-  className,
-}: ResumePreviewProps) {
+function PivotTemplate(props: ResumePreviewProps) {
+  const { data, template, className, pagePadding } = props;
   return (
-    <Sheet className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}>
+    <Sheet pagePadding={pagePadding} className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}>
       <aside className="flex flex-col bg-[#f3edef] px-5 py-8">
         <div
           aria-hidden="true"
