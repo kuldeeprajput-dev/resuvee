@@ -23,6 +23,7 @@ import {
   Pipette,
   Plus,
   Redo2,
+  RemoveFormatting,
   RotateCcw,
   Trash2,
   Undo2,
@@ -599,6 +600,35 @@ export function InteractiveCanvas({
     requestAnimationFrame(() => updateSelectionBounds());
   };
 
+  const clearFormatting = () => {
+    if (!selectedDomRef.current) return;
+    selectedDomRef.current.style.fontSize = "";
+    selectedDomRef.current.style.fontWeight = "";
+    selectedDomRef.current.style.fontStyle = "";
+    selectedDomRef.current.style.textAlign = "";
+    selectedDomRef.current.style.color = "";
+    selectedDomRef.current.style.textTransform = "";
+    selectedDomRef.current.style.letterSpacing = "";
+    selectedDomRef.current.style.lineHeight = "";
+    selectedDomRef.current.style.textDecoration = "";
+    selectedDomRef.current.style.background = "";
+    selectedDomRef.current.style.backgroundColor = "";
+
+    const children = selectedDomRef.current.querySelectorAll("*");
+    children.forEach((child) => {
+      if (child instanceof HTMLElement) {
+        child.style.fontSize = "";
+        child.style.fontWeight = "";
+        child.style.fontStyle = "";
+        child.style.textAlign = "";
+        child.style.color = "";
+        child.style.textTransform = "";
+      }
+    });
+
+    requestAnimationFrame(() => updateSelectionBounds());
+  };
+
   // Duplicate Selected Item
   const duplicateSelected = () => {
     if (!selectedElement || !onUpdateData) return;
@@ -1044,6 +1074,16 @@ export function InteractiveCanvas({
               title="Cycle Text Case (UPPER / Title / lower)"
             >
               <CaseUpper className="size-3.5" />
+            </button>
+
+            {/* Clear Formatting (Tx Icon) */}
+            <button
+              type="button"
+              onClick={clearFormatting}
+              className="builder-icon-button"
+              title="Clear Formatting (Reset font size, weight, style & color to template defaults)"
+            >
+              <RemoveFormatting className="size-3.5 text-[var(--brand-ink)]" />
             </button>
 
             <span className="h-5 w-px bg-black/10 mx-0.5" />
