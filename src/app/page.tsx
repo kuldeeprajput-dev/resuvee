@@ -11,12 +11,11 @@ import {
   ScanSearch,
   Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { HeroResumeStack } from "@/components/home/HeroResumeStack";
-import { LandingTemplateShowcase } from "@/components/home/LandingTemplateShowcase";
-import { resumeTemplates } from "@/lib/resume-data";
+import { Button } from "@/shared/components/ui/button";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { HeroResumeStack, LandingTemplateShowcase } from "@/modules/landing";
+import { resumeTemplates } from "@/modules/resume";
 
 const productBenefits = [
   `${resumeTemplates.length} original templates across proven resume formats`,

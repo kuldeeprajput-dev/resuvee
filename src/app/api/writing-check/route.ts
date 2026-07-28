@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeResumeWriting } from "@/lib/services/writing-analyzer";
-import type { WritingTarget } from "@/types/writing";
+import { analyzeResumeWriting } from "@/modules/analyzer";
+import type { WritingTarget } from "@/modules/resume";
 
 const MAX_TARGETS = 60;
 const MAX_TARGET_LENGTH = 1600;

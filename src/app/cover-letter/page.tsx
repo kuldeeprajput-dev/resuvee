@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CoverLetterStudio } from "@/components/cover-letter/CoverLetterStudio";
+import { CoverLetterStudio } from "@/modules/cover-letter";
 
 export const metadata: Metadata = {
   title: "Cover Letter Builder | Resulyra",

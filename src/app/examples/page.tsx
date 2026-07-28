@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { ExamplesLibrary } from "@/components/examples/ExamplesLibrary";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ExamplesLibrary } from "@/modules/examples";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Resume Examples by Role | Resulyra",

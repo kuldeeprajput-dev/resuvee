@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeResume } from "@/lib/services/ai-analyzer";
-import { extractTextFromDOCX } from "@/lib/extractors/docx";
-import type { AnalyzeResponse } from "@/types";
+import { analyzeResume, type AnalyzeResponse } from "@/modules/analyzer";
+import { extractTextFromDOCX } from "@/shared/lib/extractors/docx";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 

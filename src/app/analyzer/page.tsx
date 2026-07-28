@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, PenLine } from "lucide-react";
-import { ResumeAnalyzer } from "@/components/home/ResumeAnalyzer";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ResumeAnalyzer } from "@/modules/analyzer";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 
 export const metadata: Metadata = {
   title: "ATS Resume Analyzer",

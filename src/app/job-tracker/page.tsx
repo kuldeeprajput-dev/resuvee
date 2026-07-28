@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JobTracker } from "@/components/job-tracker/JobTracker";
+import { JobTracker } from "@/modules/job-tracker";
 
 export const metadata: Metadata = {
   title: "Job Application Tracker | Resulyra",
