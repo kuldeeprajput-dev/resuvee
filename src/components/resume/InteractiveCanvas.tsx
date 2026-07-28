@@ -10,6 +10,7 @@ import {
   Check,
   ChevronDown,
   Copy,
+  Download,
   Edit3,
   Grid,
   Hand,
@@ -761,6 +762,18 @@ export function InteractiveCanvas({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
+          {/* Export PDF Button - Only visible in Fullscreen / Zoom mode */}
+          {isFullscreen && (
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in"
+              title="Export PDF Document"
+            >
+              <Download className="size-3.5 text-emerald-600" />
+              <span className="whitespace-nowrap">Export PDF</span>
+            </button>
+          )}
 
           {/* Template Selector Button */}
           <button
