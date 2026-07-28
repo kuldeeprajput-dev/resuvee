@@ -2,7 +2,7 @@ import type {
   BuilderSection,
   ResumeData,
   ResumeTemplate,
-} from "@/types/resume";
+} from "../types/resume";
 
 export const resumeTemplates: ResumeTemplate[] = [
   {

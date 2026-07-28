@@ -8,8 +8,8 @@ import {
 import type {
   ResumeData,
   ResumeTemplate,
-} from "@/types/resume";
-import { cn } from "@/lib/utils";
+} from "../types/resume";
+import { cn } from "@/shared/lib/utils";
 
 interface ResumePreviewProps {
   data: ResumeData;

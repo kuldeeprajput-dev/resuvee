@@ -12,15 +12,15 @@ import type {
   ResumeProject,
   ResumeSkillGroup,
   ResumeTemplate,
-} from "@/types/resume";
+} from "../types/resume";
 import {
   getEmptyEducation,
   getEmptyExperience,
   getEmptyCertification,
   getEmptyProject,
   getEmptySkillGroup,
-} from "@/lib/resume-data";
-import { cn } from "@/lib/utils";
+} from "../utils/resume-data";
+import { cn } from "@/shared/lib/utils";
 import {
   AddItemButton,
   BulletEditor,

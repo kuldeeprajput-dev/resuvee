@@ -1,8 +1,8 @@
 "use client";
 
 import { Check, Palette, Pipette, RotateCcw, Type, UserRound, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 export interface ResumeStyle {
   accent: string;

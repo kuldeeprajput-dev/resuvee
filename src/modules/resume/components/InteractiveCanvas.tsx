@@ -30,11 +30,11 @@ import {
   Undo2,
   X,
 } from "lucide-react";
-import type { BuilderSection, ResumeData, ResumeTemplate } from "@/types/resume";
-import { useResumeBuilderStore } from "@/stores/useResumeBuilderStore";
+import type { BuilderSection, ResumeData, ResumeTemplate } from "../types/resume";
+import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
 import { ResumePreview } from "./ResumePreview";
 import { resumeFontClass, type ResumeStyle } from "./CustomizePanel";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
 

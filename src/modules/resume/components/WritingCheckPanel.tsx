@@ -12,18 +12,18 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   applyWritingIssue,
   applyWritingIssues,
   getResumeWritingTargets,
-} from "@/lib/resume-writing";
-import { cn } from "@/lib/utils";
-import type { ResumeData } from "@/types/resume";
+} from "../utils/resume-writing";
+import { cn } from "@/shared/lib/utils";
+import type { ResumeData } from "../types/resume";
 import type {
   WritingCheckResponse,
   WritingIssue,
-} from "@/types/writing";
+} from "../types/writing";
 
 interface WritingCheckPanelProps {
   data: ResumeData;

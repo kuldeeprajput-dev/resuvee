@@ -9,9 +9,9 @@ import {
   Target,
   X,
 } from "lucide-react";
-import type { ResumeData } from "@/types/resume";
-import { analyzeJobMatch } from "@/lib/job-match";
-import { Button } from "@/components/ui/button";
+import type { ResumeData } from "../types/resume";
+import { analyzeJobMatch } from "@/modules/analyzer";
+import { Button } from "@/shared/components/ui/button";
 
 interface TailorPanelProps {
   data: ResumeData;

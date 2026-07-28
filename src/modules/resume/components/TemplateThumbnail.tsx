@@ -1,6 +1,6 @@
-import type { ResumeTemplate } from "@/types/resume";
-import { getTemplateStarterData } from "@/lib/resume-presets";
-import { cn } from "@/lib/utils";
+import type { ResumeTemplate } from "../types/resume";
+import { getTemplateStarterData } from "../utils/resume-presets";
+import { cn } from "@/shared/lib/utils";
 import { ResumePreview } from "./ResumePreview";
 
 interface TemplateThumbnailProps {

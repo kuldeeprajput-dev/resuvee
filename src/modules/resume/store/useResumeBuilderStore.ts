@@ -2,14 +2,14 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { defaultResumeStyle, type ResumeStyle } from "@/components/resume/CustomizePanel";
-import { createBlankResumeData, resumeTemplates } from "@/lib/resume-data";
-import { getTemplateStarterData } from "@/lib/resume-presets";
+import { defaultResumeStyle, type ResumeStyle } from "../components/CustomizePanel";
+import { createBlankResumeData, resumeTemplates } from "../utils/resume-data";
+import { getTemplateStarterData } from "../utils/resume-presets";
 import type {
   BuilderSection,
   ResumeData,
   ResumeTemplateId,
-} from "@/types/resume";
+} from "../types/resume";
 
 export type TemplateFilter =
   | "all"

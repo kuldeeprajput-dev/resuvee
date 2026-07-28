@@ -21,11 +21,11 @@ import {
   builderSections,
   calculateResumeStrength,
   resumeTemplates,
-} from "@/lib/resume-data";
-import { useResumeBuilderStore } from "@/stores/useResumeBuilderStore";
-import { Brand } from "@/components/layout/SiteHeader";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "../utils/resume-data";
+import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
+import { Brand } from "@/shared/components/layout/SiteHeader";
+import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 import { ResumeEditor } from "./ResumeEditor";
 import { InteractiveCanvas } from "./InteractiveCanvas";
 import { TemplateThumbnail } from "./TemplateThumbnail";

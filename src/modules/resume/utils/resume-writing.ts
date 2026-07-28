@@ -1,5 +1,5 @@
-import type { ResumeData } from "@/types/resume";
-import type { WritingIssue, WritingTarget } from "@/types/writing";
+import type { ResumeData } from "../types/resume";
+import type { WritingIssue, WritingTarget } from "../types/writing";
 
 export function getResumeWritingTargets(data: ResumeData): WritingTarget[] {
   const targets: WritingTarget[] = [

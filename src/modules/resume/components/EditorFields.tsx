@@ -6,7 +6,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface FieldProps
   extends Omit<React.ComponentProps<"input">, "onChange"> {

@@ -1,4 +1,4 @@
-import type { ResumeData, ResumeTemplateId } from "@/types/resume";
+import type { ResumeData, ResumeTemplateId } from "../types/resume";
 
 interface ProfessionalSeed {
   name: string;
