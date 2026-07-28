@@ -16,6 +16,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { HeroResumeStack } from "@/components/home/HeroResumeStack";
 import { LandingTemplateShowcase } from "@/components/home/LandingTemplateShowcase";
+import { resumeTemplates } from "@/lib/resume-data";
 
 const productBenefits = [
   "12 original templates across proven resume formats",
@@ -29,7 +30,7 @@ const workflow = [
     icon: LayoutTemplate,
     title: "Choose your direction",
     description:
-      "Pick one of six original templates made for different careers and levels.",
+      "Pick from curated formats made for different careers and experience levels.",
   },
   {
     number: "02",
@@ -167,7 +168,7 @@ export default function Home() {
         <section className="bg-[var(--brand-ink)] text-white">
           <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
-              ["18", "original templates"],
+              [String(resumeTemplates.length), "curated templates"],
               ["4", "connected career tools"],
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
@@ -193,16 +194,16 @@ export default function Home() {
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-                Template screenshot library
+                Live template library
               </p>
               <h2 className="max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
                 Start with a format people already understand.
               </h2>
             </div>
             <p className="max-w-md text-base leading-7 text-[var(--brand-muted)]">
-              Browse realistic previews of reverse-chronological, hybrid,
-              role-focused, and fresher layouts. Every page stays white,
-              readable, editable, and original to Resulyra.
+              Every card is rendered from the same layout and starter content
+              used by the builder, so the template you choose is the document
+              you edit. Each design is original to Resulyra.
             </p>
           </div>
 

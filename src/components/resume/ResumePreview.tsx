@@ -91,7 +91,7 @@ function SectionTitle({
     return (
       <h2
         className={cn(
-          "mb-2.5 inline-flex rounded-[3px] px-2 py-1 text-[7px] font-extrabold uppercase tracking-[0.13em]",
+          "mb-2.5 inline-flex rounded-[3px] px-2 py-1 text-[8px] font-extrabold uppercase tracking-[0.13em]",
           inverted ? "bg-white/12 text-white" : "text-white",
         )}
         style={!inverted ? { backgroundColor: accent } : undefined}
@@ -119,7 +119,7 @@ function SectionTitle({
       )}
       <h2
         className={cn(
-          "shrink-0 text-[8px] font-extrabold uppercase tracking-[0.13em]",
+          "shrink-0 text-[9px] font-extrabold uppercase tracking-[0.13em]",
           inverted ? "text-white/85" : "text-black/80",
         )}
       >
@@ -156,7 +156,7 @@ function ContactList({
   return (
     <div
       className={cn(
-        "text-[6.5px] leading-[1.45]",
+        "text-[8px] leading-[1.42]",
         horizontal
           ? "flex flex-wrap items-center gap-x-3 gap-y-1"
           : "space-y-2",
@@ -187,8 +187,8 @@ function SummarySection({
       </SectionTitle>
       <p
         className={cn(
-          compact ? "text-[7px]" : "text-[7.5px]",
-          "leading-[1.55]",
+          compact ? "text-[9.2px]" : "text-[9.8px]",
+          "leading-[1.5]",
           inverted ? "text-white/65" : "text-black/62",
         )}
       >
@@ -218,7 +218,7 @@ function ExperienceSection({
               <div className="min-w-0">
                 <h3
                   className={cn(
-                    "text-[8.5px] font-extrabold leading-tight",
+                    "text-[10px] font-extrabold leading-tight",
                     inverted ? "text-white" : "text-black/85",
                   )}
                 >
@@ -226,7 +226,7 @@ function ExperienceSection({
                 </h3>
                 <p
                   className={cn(
-                    "mt-0.5 text-[7px] font-bold",
+                    "mt-0.5 text-[8.5px] font-bold",
                     inverted && "text-white/65",
                   )}
                   style={!inverted ? { color: accent } : undefined}
@@ -237,7 +237,7 @@ function ExperienceSection({
               </div>
               <p
                 className={cn(
-                  "shrink-0 text-[6px] font-semibold",
+                  "shrink-0 text-[7.5px] font-semibold",
                   inverted ? "text-white/45" : "text-black/42",
                 )}
               >
@@ -252,7 +252,7 @@ function ExperienceSection({
                   key={`${item.id}-${index}`}
                   className={cn(
                     "flex gap-1.5 leading-[1.42]",
-                    compact ? "text-[6.4px]" : "text-[6.8px]",
+                    compact ? "text-[8.7px]" : "text-[9.2px]",
                     inverted ? "text-white/62" : "text-black/58",
                   )}
                 >
@@ -291,7 +291,7 @@ function EducationSection({
           <article key={item.id}>
             <h3
               className={cn(
-                "text-[7.5px] font-extrabold leading-tight",
+                "text-[9.2px] font-extrabold leading-tight",
                 inverted ? "text-white" : "text-black/82",
               )}
             >
@@ -299,7 +299,7 @@ function EducationSection({
             </h3>
             <p
               className={cn(
-                "mt-0.5 text-[6.5px] leading-snug",
+                "mt-0.5 text-[8.2px] leading-snug",
                 inverted ? "text-white/62" : "text-black/55",
               )}
             >
@@ -307,7 +307,7 @@ function EducationSection({
             </p>
             <div
               className={cn(
-                "mt-0.5 flex flex-wrap justify-between gap-1 text-[5.8px]",
+                "mt-0.5 flex flex-wrap justify-between gap-1 text-[7.2px]",
                 inverted ? "text-white/40" : "text-black/38",
               )}
             >
@@ -340,7 +340,7 @@ function SkillsSection({
           <div key={group.id}>
             <h3
               className={cn(
-                "mb-1 text-[6.5px] font-extrabold",
+                "mb-1 text-[8px] font-extrabold",
                 inverted ? "text-white/88" : "text-black/72",
               )}
             >
@@ -352,7 +352,7 @@ function SkillsSection({
                   <span
                     key={`${group.id}-${index}`}
                     className={cn(
-                      "rounded-[3px] px-1.5 py-0.5 text-[5.8px]",
+                      "rounded-[3px] px-1.5 py-0.5 text-[7.3px]",
                       inverted
                         ? "bg-white/10 text-white/65"
                         : "bg-black/[0.045] text-black/58",
@@ -364,7 +364,7 @@ function SkillsSection({
               ) : (
                 <p
                   className={cn(
-                    "text-[6.3px] leading-[1.55]",
+                    "text-[8.1px] leading-[1.5]",
                     inverted ? "text-white/58" : "text-black/52",
                   )}
                 >
@@ -397,7 +397,7 @@ function ProjectsSection({
             <div className="flex items-baseline justify-between gap-2">
               <h3
                 className={cn(
-                  "text-[7.5px] font-extrabold",
+                  "text-[9.2px] font-extrabold",
                   inverted ? "text-white" : "text-black/82",
                 )}
               >
@@ -406,7 +406,7 @@ function ProjectsSection({
               {project.link && (
                 <span
                   className={cn(
-                    "text-[5.5px]",
+                    "text-[6.8px]",
                     inverted ? "text-white/38" : "text-black/35",
                   )}
                 >
@@ -416,7 +416,7 @@ function ProjectsSection({
             </div>
             <p
               className={cn(
-                "mt-0.5 text-[6.3px] leading-[1.45]",
+                "mt-0.5 text-[8.1px] leading-[1.45]",
                 inverted ? "text-white/58" : "text-black/52",
               )}
             >
@@ -426,7 +426,7 @@ function ProjectsSection({
               <p
                 key={`${project.id}-${index}`}
                 className={cn(
-                  "mt-0.5 text-[6px] leading-[1.4]",
+                  "mt-0.5 text-[7.7px] leading-[1.4]",
                   inverted ? "text-white/45" : "text-black/45",
                 )}
               >

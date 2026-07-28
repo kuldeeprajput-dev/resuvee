@@ -17,6 +17,13 @@ interface ProfessionalSeed {
   school: string;
   project: string;
   projectDescription: string;
+  experienceHighlights: [string[], string[]];
+  projectHighlights: string[];
+  secondaryProject: {
+    name: string;
+    description: string;
+    highlight: string;
+  };
   skills: [string[], string[], string[]];
 }
 
@@ -41,11 +48,7 @@ function professionalPreset(seed: ProfessionalSeed): ResumeData {
         startDate: "2021",
         endDate: "Present",
         current: true,
-        highlights: [
-          "Led a cross-functional program that improved delivery speed by 28% while maintaining quality targets.",
-          "Built a quarterly planning system used by more than 40 stakeholders across product and operations.",
-          "Introduced measurable success criteria that reduced avoidable rework by 21% in one year.",
-        ],
+        highlights: seed.experienceHighlights[0],
       },
       {
         id: `${seed.name}-experience-2`,
@@ -55,10 +58,7 @@ function professionalPreset(seed: ProfessionalSeed): ResumeData {
         startDate: "2017",
         endDate: "2021",
         current: false,
-        highlights: [
-          "Delivered customer-focused improvements that increased adoption by 19% across two releases.",
-          "Created repeatable reporting and documentation that saved the team 10 hours each month.",
-        ],
+        highlights: seed.experienceHighlights[1],
       },
     ],
     education: [
@@ -78,17 +78,14 @@ function professionalPreset(seed: ProfessionalSeed): ResumeData {
         name: seed.project,
         description: seed.projectDescription,
         link: seed.website,
-        highlights: [
-          "Designed the operating model and delivered the first release in twelve weeks.",
-          "Measured a 24% improvement in the team’s primary success metric.",
-        ],
+        highlights: seed.projectHighlights,
       },
       {
         id: `${seed.name}-project-2`,
-        name: "Community Mentoring Circle",
-        description: "A practical monthly coaching program for early-career professionals.",
+        name: seed.secondaryProject.name,
+        description: seed.secondaryProject.description,
         link: "",
-        highlights: ["Supported 35 participants through portfolio and career reviews."],
+        highlights: [seed.secondaryProject.highlight],
       },
     ],
     skillGroups: [
@@ -117,6 +114,26 @@ const meridianData = professionalPreset({
   school: "University of Texas at Austin",
   project: "Operating Rhythm Toolkit",
   projectDescription: "A reusable planning toolkit for product and delivery teams.",
+  experienceHighlights: [
+    [
+      "Rebuilt quarterly planning across six product squads, reducing committed-work carryover by 31%.",
+      "Standardized launch readiness reviews and improved on-time releases from 76% to 92%.",
+      "Connected product analytics with customer evidence to retire 14 low-value roadmap requests.",
+    ],
+    [
+      "Automated portfolio reporting and returned 18 hours each month to program leads.",
+      "Facilitated discovery and prioritization for a platform used by 22,000 small businesses.",
+    ],
+  ],
+  projectHighlights: [
+    "Piloted the toolkit with three teams before company-wide adoption.",
+    "Raised planning-confidence scores by 24% in one quarter.",
+  ],
+  secondaryProject: {
+    name: "Customer Signal Library",
+    description: "A tagged research repository connecting customer evidence to roadmap decisions.",
+    highlight: "Consolidated 480 interviews and support themes into one searchable source.",
+  },
   skills: [
     ["Product operations", "Roadmaps", "Research synthesis", "Analytics"],
     ["Team facilitation", "Executive updates", "Change management"],
@@ -141,6 +158,26 @@ const editorialData = professionalPreset({
   school: "Northwestern University",
   project: "Regulatory Evidence Index",
   projectDescription: "A searchable reference system for multi-state regulatory decisions.",
+  experienceHighlights: [
+    [
+      "Authored 85+ legal memoranda used by counsel in matters spanning 12 jurisdictions.",
+      "Built an evidence matrix that shortened senior-attorney review cycles by 30%.",
+      "Tracked regulatory developments and briefed policy leaders on material operational risk.",
+    ],
+    [
+      "Synthesized case law and public comments into concise recommendations for advocacy teams.",
+      "Created citation and peer-review standards adopted by a 16-person research group.",
+    ],
+  ],
+  projectHighlights: [
+    "Indexed 1,200 decisions with verified citations and issue tags.",
+    "Reduced duplicate research requests by 26% during the first semester.",
+  ],
+  secondaryProject: {
+    name: "Public Interest Research Clinic",
+    description: "A supervised research program pairing analysts with nonprofit counsel.",
+    highlight: "Mentored nine fellows through client-ready research and writing.",
+  },
   skills: [
     ["Legal research", "Regulatory analysis", "Case synthesis", "Writing"],
     ["Counsel collaboration", "Peer review", "Stakeholder interviews"],
@@ -166,6 +203,26 @@ const summitData = professionalPreset({
   school: "University of Washington",
   project: "Regional Scale Program",
   projectDescription: "A multi-market operating model supporting three new regional launches.",
+  experienceHighlights: [
+    [
+      "Integrated four regional operating teams while improving contribution margin by 8 points.",
+      "Introduced weekly business reviews that cut unresolved executive actions by 42%.",
+      "Coached 11 directors and established succession plans for every critical leadership role.",
+    ],
+    [
+      "Redesigned fulfillment capacity planning and reduced peak-period overtime by 21%.",
+      "Built the operating playbook used to launch three markets within approved budgets.",
+    ],
+  ],
+  projectHighlights: [
+    "Defined staffing, service, and risk thresholds for each launch stage.",
+    "Reached target unit economics two quarters earlier than forecast.",
+  ],
+  secondaryProject: {
+    name: "Frontline Leader Academy",
+    description: "A practical management program for newly promoted operations leaders.",
+    highlight: "Graduated 68 managers with a 94% completion rate.",
+  },
   skills: [
     ["Operating strategy", "P&L management", "Capacity planning", "Risk"],
     ["Executive leadership", "Board reporting", "Org design", "Coaching"],
@@ -190,6 +247,26 @@ const columnData = professionalPreset({
   school: "University of California, Berkeley",
   project: "Delivery Efficiency Program",
   projectDescription: "A cross-team workflow for planning dependencies and delivery risks.",
+  experienceHighlights: [
+    [
+      "Coordinated 14 teams through an $8M platform migration delivered within the approved window.",
+      "Established dependency reviews that reduced late-stage delivery blockers by 37%.",
+      "Launched portfolio dashboards used by executives to prioritize capacity across 40 initiatives.",
+    ],
+    [
+      "Managed three concurrent product programs with distributed engineering partners.",
+      "Improved milestone forecast accuracy from 71% to 91% through common planning standards.",
+    ],
+  ],
+  projectHighlights: [
+    "Mapped ownership and handoffs across 26 critical delivery steps.",
+    "Reduced average decision latency from nine days to four.",
+  ],
+  secondaryProject: {
+    name: "Program Manager Community",
+    description: "A monthly practice group for templates, retrospectives, and peer coaching.",
+    highlight: "Scaled participation from 12 to 55 program managers.",
+  },
   skills: [
     ["Program management", "Roadmapping", "Risk management", "Planning"],
     ["Cross-functional leadership", "Facilitation", "Vendor management"],
@@ -215,6 +292,26 @@ const horizonData = professionalPreset({
   school: "North Carolina State University",
   project: "Manager Learning Lab",
   projectDescription: "A cohort-based leadership curriculum for first-time managers.",
+  experienceHighlights: [
+    [
+      "Designed a blended manager curriculum completed by 1,600 learners across five regions.",
+      "Raised six-month skill application by 23% through practice labs and manager reinforcement.",
+      "Introduced accessible content standards aligned with WCAG 2.2 AA.",
+    ],
+    [
+      "Built 18 instructor-led and asynchronous modules from learner and subject-matter research.",
+      "Improved course completion from 72% to 89% after simplifying navigation and assessment.",
+    ],
+  ],
+  projectHighlights: [
+    "Validated the curriculum through two pilot cohorts and 46 learner interviews.",
+    "Earned a 4.7/5 usefulness rating in the first full launch.",
+  ],
+  secondaryProject: {
+    name: "Facilitator Field Guide",
+    description: "A modular guide for inclusive workshops in hybrid environments.",
+    highlight: "Adopted by 34 facilitators across eight learning programs.",
+  },
   skills: [
     ["Curriculum design", "Adult learning", "Research", "Assessment"],
     ["Workshop facilitation", "Coaching", "Inclusive design"],
@@ -239,6 +336,26 @@ const blueprintData = professionalPreset({
   school: "Colorado State University",
   project: "Platform Reliability Console",
   projectDescription: "An internal observability workspace for service owners and incident response.",
+  experienceHighlights: [
+    [
+      "Led reliability work that raised customer-facing availability from 99.82% to 99.97%.",
+      "Cut median CI duration by 41% while increasing automated coverage of critical workflows.",
+      "Established architecture reviews for 28 services and mentored six senior engineers.",
+    ],
+    [
+      "Decomposed a high-traffic checkout service with no customer-visible migration downtime.",
+      "Reduced mean time to recovery by 35% through service ownership and runbook standards.",
+    ],
+  ],
+  projectHighlights: [
+    "Unified alerts, service objectives, deployments, and ownership in one interface.",
+    "Reduced incident triage time by 32% across the platform group.",
+  ],
+  secondaryProject: {
+    name: "Engineering Decision Records",
+    description: "A lightweight repository for durable architecture context and tradeoffs.",
+    highlight: "Reached 90% adoption across seven engineering teams.",
+  },
   skills: [
     ["TypeScript", "React", "Node.js", "Distributed systems"],
     ["Technical leadership", "Architecture", "Mentoring", "Code review"],
@@ -263,6 +380,26 @@ const standardData = professionalPreset({
   school: "Boston University",
   project: "Customer Operations Modernization",
   projectDescription: "A service redesign spanning workflow, reporting, and team enablement.",
+  experienceHighlights: [
+    [
+      "Delivered a nine-workstream modernization program three weeks ahead of the committed date.",
+      "Introduced outcome-based governance that reduced escalated decisions by 34%.",
+      "Led adoption planning for 620 employees and achieved 88% active use in eight weeks.",
+    ],
+    [
+      "Managed a portfolio of customer-service improvements with a $4.2M annual budget.",
+      "Automated executive reporting and reduced preparation time by 16 hours each month.",
+    ],
+  ],
+  projectHighlights: [
+    "Mapped 42 service journeys and prioritized six high-friction handoffs.",
+    "Reduced average case resolution time by 19% after launch.",
+  ],
+  secondaryProject: {
+    name: "Program Governance Playbook",
+    description: "A reusable framework for decisions, risks, and executive communication.",
+    highlight: "Adopted by five enterprise programs in its first year.",
+  },
   skills: [
     ["Program delivery", "Process improvement", "Planning", "Analytics"],
     ["Stakeholder management", "Team leadership", "Communication"],
@@ -287,6 +424,26 @@ const compactData = professionalPreset({
   school: "Georgia Institute of Technology",
   project: "Service Resilience Framework",
   projectDescription: "A platform standard for reliability reviews and production readiness.",
+  experienceHighlights: [
+    [
+      "Designed a multi-region platform sustaining 99.99% availability for 140 business services.",
+      "Reduced annual infrastructure spend by 23% through workload rightsizing and capacity controls.",
+      "Set technical strategy and reliability standards for a 32-person platform organization.",
+    ],
+    [
+      "Migrated 70% of production workloads to infrastructure as code without a priority incident.",
+      "Created incident review practices that cut repeat failure modes by 38%.",
+    ],
+  ],
+  projectHighlights: [
+    "Defined measurable service tiers, recovery objectives, and launch controls.",
+    "Passed all production-readiness audits in the first two release cycles.",
+  ],
+  secondaryProject: {
+    name: "Principal Engineer Forum",
+    description: "A cross-domain architecture group for high-impact technical decisions.",
+    highlight: "Resolved 17 organization-wide design questions in six months.",
+  },
   skills: [
     ["Systems architecture", "Reliability", "Security", "Performance"],
     ["Technical strategy", "Mentoring", "Incident leadership"],
@@ -311,6 +468,26 @@ const bridgeData = professionalPreset({
   school: "George Mason University",
   project: "Incident Readiness Playbook",
   projectDescription: "A role-based response system for high-priority security events.",
+  experienceHighlights: [
+    [
+      "Raised NIST CSF control maturity across identity, detection, and response workstreams.",
+      "Reduced mean time to contain priority incidents by 36% through clear roles and automation.",
+      "Ran tabletop exercises for 350 employees and briefed executives on remediation priorities.",
+    ],
+    [
+      "Triaged cloud and endpoint alerts while maintaining a 98% service-level response rate.",
+      "Built repeatable investigation guides that reduced analyst onboarding time by four weeks.",
+    ],
+  ],
+  projectHighlights: [
+    "Mapped response actions to six realistic threat scenarios and named accountable owners.",
+    "Validated the playbook through two cross-functional simulations.",
+  ],
+  secondaryProject: {
+    name: "Security Champions Network",
+    description: "A practical enablement program embedded in product and engineering teams.",
+    highlight: "Recruited 28 champions and increased early risk reviews by 45%.",
+  },
   skills: [
     ["Threat analysis", "Incident response", "Risk assessment", "IAM"],
     ["Security training", "Cross-team response", "Policy design"],
@@ -432,6 +609,26 @@ const pivotData = professionalPreset({
   school: "Fordham University",
   project: "Customer Insight Repository",
   projectDescription: "A structured research library connecting customer evidence to product decisions.",
+  experienceHighlights: [
+    [
+      "Reduced preventable churn by 18% through a risk model combining usage and customer signals.",
+      "Led 60 customer interviews and translated recurring needs into prioritized product proposals.",
+      "Partnered with product on an onboarding redesign that improved activation by 14%.",
+    ],
+    [
+      "Managed a $3.8M customer portfolio and maintained 96% gross retention.",
+      "Built executive business reviews that surfaced expansion and workflow opportunities.",
+    ],
+  ],
+  projectHighlights: [
+    "Defined a common taxonomy for needs, severity, segment, and supporting evidence.",
+    "Connected 220 research notes to 34 product decisions in six months.",
+  ],
+  secondaryProject: {
+    name: "Product Discovery Sprint",
+    description: "A cross-functional concept test for a new workflow automation feature.",
+    highlight: "Validated the core problem with 17 of 20 target customers.",
+  },
   skills: [
     ["Customer discovery", "Product strategy", "Prioritization", "Analytics"],
     ["Stakeholder management", "Facilitation", "Change leadership"],
