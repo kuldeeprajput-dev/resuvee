@@ -5,6 +5,7 @@ import { Columns3, ImagePlus, LayoutPanelTop, UserRound, X } from "lucide-react"
 import { useRef, useState } from "react";
 import type {
   BuilderSection,
+  ResumeCertification,
   ResumeData,
   ResumeEducation,
   ResumeExperience,
@@ -15,6 +16,7 @@ import type {
 import {
   getEmptyEducation,
   getEmptyExperience,
+  getEmptyCertification,
   getEmptyProject,
   getEmptySkillGroup,
 } from "@/lib/resume-data";
@@ -557,6 +559,13 @@ function ProjectsEditor({
                 onChange={(value) => updateItem(item.id, { link: value })}
                 placeholder="project.example.com"
               />
+              <Field
+                label="Date or timeframe"
+                value={item.date ?? ""}
+                onChange={(value) => updateItem(item.id, { date: value })}
+                placeholder="Mar 2025 – Apr 2025"
+                className="min-[500px]:col-span-2"
+              />
               <TextAreaField
                 label="Short description"
                 value={item.description}
@@ -678,6 +687,100 @@ function SkillsEditor({
   );
 }
 
+function CertificationsEditor({
+  data,
+  onChange,
+  stepLabel,
+}: ResumeEditorContentProps) {
+  const certifications = data.certifications ?? [];
+  const updateItem = (
+    id: string,
+    updates: Partial<ResumeCertification>,
+  ) => {
+    onChange({
+      ...data,
+      certifications: certifications.map((item) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
+    });
+  };
+
+  return (
+    <EditorSection
+      eyebrow={stepLabel}
+      title="Add awards and certifications"
+      description="Include relevant credentials, competitive achievements, and recognition that strengthen your target-role evidence."
+    >
+      <div className="space-y-4">
+        {certifications.map((item) => (
+          <ItemCard
+            key={item.id}
+            title={item.title || "Untitled credential"}
+            subtitle={[item.issuer, item.date].filter(Boolean).join(" · ")}
+            onRemove={() =>
+              onChange({
+                ...data,
+                certifications: certifications.filter(
+                  (certification) => certification.id !== item.id,
+                ),
+              })
+            }
+          >
+            <div className="grid grid-cols-1 gap-4 min-[500px]:grid-cols-2">
+              <Field
+                label="Award or certification"
+                value={item.title}
+                onChange={(value) => updateItem(item.id, { title: value })}
+                placeholder="Power BI Data Analyst Associate"
+                className="min-[500px]:col-span-2"
+              />
+              <Field
+                label="Issuer"
+                value={item.issuer}
+                onChange={(value) => updateItem(item.id, { issuer: value })}
+                placeholder="Microsoft"
+              />
+              <Field
+                label="Date"
+                value={item.date}
+                onChange={(value) => updateItem(item.id, { date: value })}
+                placeholder="2025"
+              />
+              <TextAreaField
+                label="Why it matters"
+                value={item.description}
+                onChange={(value) =>
+                  updateItem(item.id, { description: value })
+                }
+                placeholder="Describe the assessment, recognition, or demonstrated result."
+                rows={3}
+                className="min-[500px]:col-span-2"
+              />
+            </div>
+          </ItemCard>
+        ))}
+        <AddItemButton
+          onClick={() =>
+            onChange({
+              ...data,
+              certifications: [
+                ...certifications,
+                getEmptyCertification(certifications.length),
+              ],
+            })
+          }
+        >
+          Add award or certification
+        </AddItemButton>
+        <WritingTip>
+          Prioritize recognized credentials and competitive achievements that
+          directly support the role. Add scale or ranking where it is useful.
+        </WritingTip>
+      </div>
+    </EditorSection>
+  );
+}
+
 export function ResumeEditor({
   activeSection,
   data,
@@ -705,5 +808,7 @@ export function ResumeEditor({
       return <ProjectsEditor {...sharedProps} />;
     case "skills":
       return <SkillsEditor {...sharedProps} />;
+    case "certifications":
+      return <CertificationsEditor {...sharedProps} />;
   }
 }

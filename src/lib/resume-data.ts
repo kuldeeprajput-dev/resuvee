@@ -57,6 +57,31 @@ export const resumeTemplates: ResumeTemplate[] = [
     popular: true,
   },
   {
+    id: "analyst",
+    renderer: "analyst",
+    name: "Data Analyst",
+    eyebrow: "Project led",
+    description:
+      "A dense, evidence-led format for analytics skills, projects, certifications, and early experience.",
+    accent: "#202020",
+    background: "#efefec",
+    suitableFor: "Data, business intelligence and analytics",
+    layout: "single",
+    supportsPhoto: false,
+    sections: [
+      "basics",
+      "summary",
+      "skills",
+      "experience",
+      "projects",
+      "certifications",
+      "education",
+    ],
+    sidebarSections: [],
+    audience: "fresher",
+    popular: true,
+  },
+  {
     id: "compact",
     renderer: "compact",
     name: "Compact Pro",
@@ -266,6 +291,11 @@ export const builderSections: {
   { id: "education", label: "Education", shortLabel: "Education" },
   { id: "projects", label: "Selected projects", shortLabel: "Projects" },
   { id: "skills", label: "Skills & tools", shortLabel: "Skills" },
+  {
+    id: "certifications",
+    label: "Awards & certifications",
+    shortLabel: "Awards",
+  },
 ];
 
 export const defaultResumeData: ResumeData = {
@@ -387,6 +417,7 @@ export const defaultResumeData: ResumeData = {
       skills: ["Figma", "Amplitude", "SQL", "Notion", "Jira"],
     },
   ],
+  certifications: [],
 };
 
 export const fresherResumeData: ResumeData = {
@@ -455,6 +486,7 @@ export const fresherResumeData: ResumeData = {
       skills: ["Data structures", "OOP", "Accessibility", "Agile"],
     },
   ],
+  certifications: [],
 };
 
 export function createBlankResumeData(): ResumeData {
@@ -473,6 +505,7 @@ export function createBlankResumeData(): ResumeData {
     education: [],
     projects: [],
     skillGroups: [],
+    certifications: [],
   };
 }
 
@@ -507,6 +540,7 @@ export function getEmptyProject(index: number) {
     name: "",
     description: "",
     link: "",
+    date: "",
     highlights: [""],
   };
 }
@@ -516,6 +550,16 @@ export function getEmptySkillGroup(index: number) {
     id: `skills-${Date.now()}-${index}`,
     name: "",
     skills: [],
+  };
+}
+
+export function getEmptyCertification(index: number) {
+  return {
+    id: `certification-${Date.now()}-${index}`,
+    title: "",
+    issuer: "",
+    date: "",
+    description: "",
   };
 }
 

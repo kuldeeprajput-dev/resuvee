@@ -627,6 +627,117 @@ const salesData = professionalPreset({
   ],
 });
 
+const analystData: ResumeData = {
+  basics: {
+    fullName: "Kabir Malhotra",
+    headline: "Data Analyst",
+    photo: "",
+    email: "kabir.malhotra@example.com",
+    phone: "+91 98765 41028",
+    location: "New Delhi, India",
+    website: "linkedin.com/in/kabirmalhotra",
+    summary:
+      "Data analyst with practical experience using SQL, Python, Excel, and Power BI to clean complex datasets, build decision-ready dashboards, and explain performance trends to business teams.",
+  },
+  experience: [
+    {
+      id: "kabir-experience-1",
+      role: "Data Analyst Intern",
+      company: "PulseMetrics Analytics",
+      location: "Remote · Excel, SQL, Power BI",
+      startDate: "Apr 2025",
+      endDate: "Jun 2025",
+      current: false,
+      highlights: [
+        "Standardized 120,000+ transaction rows across five regions for weekly revenue and retention reporting.",
+        "Built reusable Excel templates with lookup and pivot logic, reducing reporting preparation by 42%.",
+        "Developed four Power BI pages covering revenue, product mix, returns, and monthly performance.",
+        "Partnered with six analysts and managers to define seven KPI rules and improve report consistency.",
+      ],
+    },
+  ],
+  education: [
+    {
+      id: "kabir-education-1",
+      degree: "BSc, Statistics & Data Science",
+      school: "University of Delhi",
+      location: "New Delhi, India",
+      startDate: "2022",
+      endDate: "2025",
+      details: "CGPA: 8.4/10 · Final-year analytics distinction",
+    },
+  ],
+  projects: [
+    {
+      id: "kabir-project-1",
+      name: "Subscription Churn Analysis",
+      description: "Python · pandas · seaborn",
+      link: "github.com/kabir-data/churn",
+      date: "Mar 2025 – Apr 2025",
+      highlights: [
+        "Analyzed 8,240 customer records to identify churn patterns by tenure, plan, and monthly spend.",
+        "Engineered tenure bands and engagement features to improve segment comparison.",
+        "Produced 12 visualizations and identified a 35% churn concentration among new monthly subscribers.",
+      ],
+    },
+    {
+      id: "kabir-project-2",
+      name: "Regional Sales Performance Dashboard",
+      description: "SQL · Power BI",
+      link: "github.com/kabir-data/sales",
+      date: "Jan 2025 – Feb 2025",
+      highlights: [
+        "Joined four sales tables covering 32,000 rows and 18 months using documented SQL transformations.",
+        "Built 11 dynamic measures with drilldowns for region, category, channel, and time.",
+        "Found a 16% post-campaign decline in one region and presented a recovery opportunity.",
+      ],
+    },
+  ],
+  skillGroups: [
+    {
+      id: "kabir-skills-1",
+      name: "Programming & querying",
+      skills: ["SQL", "Python", "pandas"],
+    },
+    {
+      id: "kabir-skills-2",
+      name: "Visualization tools",
+      skills: ["Advanced Excel", "Power BI", "Tableau"],
+    },
+    {
+      id: "kabir-skills-3",
+      name: "Analytical methods",
+      skills: ["Data cleaning", "EDA", "Descriptive statistics", "Insight generation"],
+    },
+  ],
+  certifications: [
+    {
+      id: "kabir-certification-1",
+      title: "Power BI Data Analyst Associate",
+      issuer: "Microsoft",
+      date: "2025",
+      description:
+        "Completed practical assessments in data preparation, modeling, visualization, and analysis.",
+    },
+    {
+      id: "kabir-certification-2",
+      title: "Advanced SQL Skills Certification",
+      issuer: "HackerRank",
+      date: "2024",
+      description:
+        "Demonstrated advanced joins, window functions, aggregation, and query optimization.",
+    },
+    {
+      id: "kabir-certification-3",
+      title: "University Analytics Challenge — Finalist",
+      issuer: "Delhi Data Society",
+      date: "2025",
+      description:
+        "Built a forecasting dashboard and placed among the top eight of 140 participating teams.",
+    },
+  ],
+};
+
 const launchpadData: ResumeData = {
   basics: {
     fullName: "Arjun Rao",
@@ -780,6 +891,7 @@ export const templateStarterData: Record<ResumeTemplateId, ResumeData> = {
   finance: financeData,
   healthcare: healthcareData,
   sales: salesData,
+  analyst: analystData,
   hybrid: bridgeData,
   fresher: launchpadData,
   internship: firstStepData,
@@ -793,6 +905,7 @@ export function cloneResumeData(data: ResumeData): ResumeData {
     education: data.education.map((item) => ({ ...item })),
     projects: data.projects.map((item) => ({ ...item, highlights: [...item.highlights] })),
     skillGroups: data.skillGroups.map((group) => ({ ...group, skills: [...group.skills] })),
+    certifications: (data.certifications ?? []).map((item) => ({ ...item })),
   };
 }
 
@@ -820,6 +933,9 @@ export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData)
   const hasSkills = current.skillGroups.some((group) =>
     hasText([group.name, ...group.skills]),
   );
+  const hasCertifications = (current.certifications ?? []).some((item) =>
+    hasText([item.title, item.issuer, item.description]),
+  );
 
   return {
     basics,
@@ -827,6 +943,9 @@ export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData)
     education: hasEducation ? current.education : cloneResumeData(starter).education,
     projects: hasProjects ? current.projects : cloneResumeData(starter).projects,
     skillGroups: hasSkills ? current.skillGroups : cloneResumeData(starter).skillGroups,
+    certifications: hasCertifications
+      ? current.certifications
+      : cloneResumeData(starter).certifications,
   };
 }
 

@@ -37,7 +37,13 @@ import { cn } from "@/lib/utils";
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
 
 export interface SelectedCanvasElement {
-  section: "basics" | "experience" | "education" | "projects" | "skills";
+  section:
+    | "basics"
+    | "experience"
+    | "education"
+    | "projects"
+    | "skills"
+    | "certifications";
   id?: string;
   field?: string;
   highlightIndex?: number;
@@ -410,6 +416,43 @@ export function InteractiveCanvas({
       }
     }
 
+    // Awards and certifications
+    if (!found) {
+      for (const item of data.certifications ?? []) {
+        if (clickedText === item.title) {
+          found = {
+            section: "certifications",
+            id: item.id,
+            field: "title",
+            title: "Award or certification",
+            subtitle: item.issuer,
+          };
+          setInlineText(item.title);
+          break;
+        } else if (clickedText === item.issuer) {
+          found = {
+            section: "certifications",
+            id: item.id,
+            field: "issuer",
+            title: "Issuer",
+            subtitle: item.title,
+          };
+          setInlineText(item.issuer);
+          break;
+        } else if (clickedText === item.description) {
+          found = {
+            section: "certifications",
+            id: item.id,
+            field: "description",
+            title: "Credential detail",
+            subtitle: item.title,
+          };
+          setInlineText(item.description);
+          break;
+        }
+      }
+    }
+
     // Fallback
     if (!found) {
       found = {
@@ -489,6 +532,19 @@ export function InteractiveCanvas({
             };
           }
           return { ...group, name: newText };
+        }),
+      });
+    } else if (section === "certifications" && id) {
+      onUpdateData({
+        ...data,
+        certifications: (data.certifications ?? []).map((item) => {
+          if (item.id !== id) return item;
+          if (field === "issuer") return { ...item, issuer: newText };
+          if (field === "description") {
+            return { ...item, description: newText };
+          }
+          if (field === "date") return { ...item, date: newText };
+          return { ...item, title: newText };
         }),
       });
     }
@@ -579,6 +635,27 @@ export function InteractiveCanvas({
           ],
         });
       }
+    } else if (
+      selectedElement.section === "certifications" &&
+      selectedElement.id
+    ) {
+      const certifications = data.certifications ?? [];
+      const target = certifications.find(
+        (item) => item.id === selectedElement.id,
+      );
+      if (target) {
+        onUpdateData({
+          ...data,
+          certifications: [
+            ...certifications,
+            {
+              ...target,
+              id: `cert-${Date.now()}`,
+              title: `${target.title} (Copy)`,
+            },
+          ],
+        });
+      }
     }
   };
 
@@ -599,6 +676,16 @@ export function InteractiveCanvas({
       onUpdateData({
         ...data,
         projects: data.projects.filter((i) => i.id !== selectedElement.id),
+      });
+    } else if (
+      selectedElement.section === "certifications" &&
+      selectedElement.id
+    ) {
+      onUpdateData({
+        ...data,
+        certifications: (data.certifications ?? []).filter(
+          (item) => item.id !== selectedElement.id,
+        ),
       });
     }
     clearSelection();

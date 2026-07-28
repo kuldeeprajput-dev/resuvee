@@ -13,7 +13,8 @@ export type ResumeTemplateId =
   | "career-change"
   | "finance"
   | "healthcare"
-  | "sales";
+  | "sales"
+  | "analyst";
 
 export type ResumeRendererId =
   | "meridian"
@@ -30,7 +31,8 @@ export type ResumeRendererId =
   | "pivot"
   | "finance"
   | "healthcare"
-  | "sales";
+  | "sales"
+  | "analyst";
 
 export interface ResumeBasics {
   fullName: string;
@@ -69,6 +71,7 @@ export interface ResumeProject {
   name: string;
   description: string;
   link: string;
+  date?: string;
   highlights: string[];
 }
 
@@ -78,12 +81,21 @@ export interface ResumeSkillGroup {
   skills: string[];
 }
 
+export interface ResumeCertification {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  description: string;
+}
+
 export interface ResumeData {
   basics: ResumeBasics;
   experience: ResumeExperience[];
   education: ResumeEducation[];
   projects: ResumeProject[];
   skillGroups: ResumeSkillGroup[];
+  certifications?: ResumeCertification[];
 }
 
 export interface ResumeTemplate {
@@ -110,4 +122,5 @@ export type BuilderSection =
   | "experience"
   | "education"
   | "projects"
-  | "skills";
+  | "skills"
+  | "certifications";
