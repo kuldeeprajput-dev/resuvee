@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, FileCheck2, Layers3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 
 const navigation = [
   { href: "/builder", label: "Build" },
