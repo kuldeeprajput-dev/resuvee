@@ -9,9 +9,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
-import { resumeTemplates } from "@/lib/resume-data";
-import { cn } from "@/lib/utils";
+import { TemplateThumbnail, resumeTemplates } from "@/modules/resume";
+import { cn } from "@/shared/lib/utils";
 
 type TemplateFilter = "popular" | "all" | "fresher" | "photo-free";
 

@@ -15,9 +15,9 @@ import {
   Settings2,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { ResumeTemplateId } from "@/types/resume";
+import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/utils";
+import type { ResumeTemplateId } from "@/modules/resume";
 
 type ExampleCategory =
   | "All"
