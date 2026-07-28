@@ -448,9 +448,10 @@ export function ResumeBuilder({
                   }
             }
           >
+            {/* Horizontal Step Pill Track (Only visible when left sidebar is hidden) */}
             <div
               className={cn(
-                "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5",
+                "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5 px-3",
                 !hideLeftSidebar && "hidden",
               )}
             >
@@ -465,7 +466,7 @@ export function ResumeBuilder({
               {/* Carousel Track */}
               <div
                 ref={navScrollRef}
-                className="flex w-full gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-4 py-0.5"
+                className="flex w-full gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-1 py-0.5"
               >
                 {visibleSections.map((section, index) => (
                   <button
@@ -474,7 +475,7 @@ export function ResumeBuilder({
                     data-section-id={section.id}
                     onClick={() => setActiveSection(section.id)}
                     className={cn(
-                      "flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-all duration-150",
+                      "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150",
                       activeSection === section.id
                         ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
                         : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]",
@@ -495,56 +496,56 @@ export function ResumeBuilder({
               />
             </div>
 
-            {/* Carousel Navigation Control Bar (Hidden for now, preserved for future feature activation) */}
-            <div
-              className={cn(
-                "hidden items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1",
-              )}
-            >
-              <button
-                type="button"
-                onClick={() => goToRelativeSection(-1)}
-                disabled={activeIndex === 0}
-                aria-label="Previous section"
-                className="flex size-5 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+            {/* Carousel Navigation Control Bar - Only visible when overflowing AND left sidebar is hidden */}
+            {hideLeftSidebar && (showLeftFade || showRightFade) && (
+              <div
+                className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in"
               >
-                <ChevronLeft className="size-3" />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => goToRelativeSection(-1)}
+                  disabled={activeIndex === 0}
+                  aria-label="Previous section"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="size-3.5" />
+                </button>
 
-              <div className="h-[1px] flex-1 bg-black/10" />
+                <div className="h-[1px] flex-1 bg-black/10" />
 
-              <div className="flex items-center gap-1 px-1">
-                {visibleSections.map((sec) => {
-                  const isActive = activeSection === sec.id;
-                  return (
-                    <button
-                      key={sec.id}
-                      type="button"
-                      onClick={() => setActiveSection(sec.id)}
-                      title={sec.label}
-                      className={cn(
-                        "transition-all duration-150",
-                        isActive
-                          ? "size-2 rounded-full bg-[var(--brand-ink)] ring-1 ring-black/20"
-                          : "size-1.5 rounded-full border border-black/30 bg-black/10 hover:bg-black/40",
-                      )}
-                    />
-                  );
-                })}
+                <div className="flex items-center gap-1.5 px-1">
+                  {visibleSections.map((sec) => {
+                    const isActive = activeSection === sec.id;
+                    return (
+                      <button
+                        key={sec.id}
+                        type="button"
+                        onClick={() => setActiveSection(sec.id)}
+                        title={sec.label}
+                        className={cn(
+                          "transition-all duration-150",
+                          isActive
+                            ? "size-2 rounded-full bg-[var(--brand-ink)] ring-1 ring-black/20"
+                            : "size-2 rounded-full border border-black/30 bg-black/10 hover:bg-black/40",
+                        )}
+                      />
+                    );
+                  })}
+                </div>
+
+                <div className="h-[1px] flex-1 bg-black/10" />
+
+                <button
+                  type="button"
+                  onClick={() => goToRelativeSection(1)}
+                  disabled={activeIndex === visibleSections.length - 1}
+                  aria-label="Next section"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="size-3.5" />
+                </button>
               </div>
-
-              <div className="h-[1px] flex-1 bg-black/10" />
-
-              <button
-                type="button"
-                onClick={() => goToRelativeSection(1)}
-                disabled={activeIndex === visibleSections.length - 1}
-                aria-label="Next section"
-                className="flex size-5 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
-              >
-                <ChevronRight className="size-3" />
-              </button>
-            </div>
+            )}
 
             <div className="min-h-0 flex-1 overflow-y-auto">
               <ResumeEditor
