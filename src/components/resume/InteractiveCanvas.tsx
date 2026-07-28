@@ -1088,7 +1088,45 @@ export function InteractiveCanvas({
               </button>
 
               {showColorPicker && (
-                <div className="absolute top-10 left-0 z-50 flex items-center gap-1.5 rounded-xl border border-black/10 bg-white p-2 shadow-xl">
+                <div className="absolute top-10 left-0 z-50 flex items-center gap-2 rounded-2xl border border-black/15 bg-white p-2.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 min-w-[240px]">
+                  {/* Custom Color Wheel Swatch */}
+                  <label
+                    className="relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500"
+                    title="Pick Any Custom Color"
+                  >
+                    <input
+                      type="color"
+                      value={(resumeStyle?.accent || template.accent || "#28785b").startsWith("#") ? (resumeStyle?.accent || template.accent || "#28785b") : "#28785b"}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (selectedDomRef.current) {
+                          selectedDomRef.current.style.color = val;
+                        }
+                        onUpdateStyle?.({ ...resumeStyle, accent: val } as ResumeStyle);
+                      }}
+                      className="absolute inset-0 size-full cursor-pointer opacity-0"
+                    />
+                    <Pipette className="size-3 text-white drop-shadow-md" />
+                  </label>
+
+                  {/* Custom Hex Code Input */}
+                  <input
+                    type="text"
+                    value={resumeStyle?.accent || ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (selectedDomRef.current && val.startsWith("#") && val.length >= 4) {
+                        selectedDomRef.current.style.color = val;
+                      }
+                      onUpdateStyle?.({ ...resumeStyle, accent: val } as ResumeStyle);
+                    }}
+                    placeholder={template.accent || "#202020"}
+                    className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] focus:outline-none focus:bg-white"
+                  />
+
+                  <span className="h-4 w-px bg-black/15 mx-0.5" />
+
+                  {/* Preset Swatches */}
                   {COLOR_SWATCHES.map((color) => (
                     <button
                       key={color.name}
@@ -1097,9 +1135,10 @@ export function InteractiveCanvas({
                         if (selectedDomRef.current) {
                           selectedDomRef.current.style.color = color.value;
                         }
+                        onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle);
                         setShowColorPicker(false);
                       }}
-                      className="size-5 rounded-full border border-black/10 transition hover:scale-110"
+                      className="size-5 rounded-full border border-black/10 transition hover:scale-110 shrink-0"
                       style={{ backgroundColor: color.value }}
                       title={color.name}
                     />
