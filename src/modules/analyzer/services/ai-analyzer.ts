@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { createHash } from "crypto";
-import type { ResumeAnalysis } from "@/types";
+import type { ResumeAnalysis } from "../index";
 
 const SYSTEM_PROMPT = `You are an enterprise-grade ATS scoring engine. You output ONLY valid JSON. No text, no explanation, no markdown — just a single JSON object.
 

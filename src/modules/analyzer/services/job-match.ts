@@ -1,4 +1,4 @@
-import type { ResumeData } from "@/types/resume";
+import type { ResumeData } from "@/modules/resume";
 
 const STOP_WORDS = new Set([
   "about",

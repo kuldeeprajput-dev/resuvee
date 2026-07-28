@@ -15,14 +15,14 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent } from "@/shared/components/ui/card";
 
 import { ATSDashboard } from "./ATSDashboard";
 import { LoadingState } from "./LoadingState";
 import { ErrorState } from "./ErrorState";
-import { extractTextFromPDF } from "@/lib/extractors/client-pdf";
-import type { ResumeAnalysis } from "@/types";
+import { extractTextFromPDF } from "@/shared/lib/extractors/client-pdf";
+import type { ResumeAnalysis } from "../index";
 
 type AnalysisState =
   | "idle"

@@ -4,7 +4,7 @@ import type {
   WritingIssue,
   WritingIssueType,
   WritingTarget,
-} from "@/types/writing";
+} from "@/modules/resume";
 
 const SYSTEM_PROMPT = `You are a careful resume copy editor. Return ONLY valid JSON with this exact shape:
 {"issues":[{"targetId":"exact supplied id","type":"spelling|grammar|clarity","original":"exact substring from supplied text","replacement":"corrected substring","explanation":"one concise sentence"}]}

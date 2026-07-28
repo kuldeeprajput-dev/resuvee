@@ -9,7 +9,7 @@ import {
   Sparkles,
   Target,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/shared/components/ui/card";
 
 interface LoadingStateProps {
   phase?: "extracting" | "analyzing";

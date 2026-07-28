@@ -13,10 +13,10 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { CircularProgress } from "@/components/ui/circular-progress";
-import type { ResumeAnalysis } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Badge } from "@/shared/components/ui/badge";
+import { CircularProgress } from "@/shared/components/ui/circular-progress";
+import type { ResumeAnalysis } from "../index";
 
 interface ATSDashboardProps {
   analysis: ResumeAnalysis;
@@ -323,7 +323,7 @@ export function ATSDashboard({ analysis }: ATSDashboardProps) {
         </CardHeader>
         <CardContent className="px-4 pb-4">
           <ol className="space-y-3">
-            {(analysis.suggestions.length
+            {(analysis.suggestions?.length
               ? analysis.suggestions
               : ["No suggestions returned."]
             ).map((suggestion, index) => (
