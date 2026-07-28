@@ -471,7 +471,7 @@ function MeridianTemplate({
   return (
     <Sheet className={cn("bg-[#fbfdfb]", className)}>
       <div className="absolute -left-16 -top-20 size-60 rounded-full bg-[#d9f1e4]" />
-      <div className="absolute left-16 top-4 size-24 rounded-[32px] bg-[#9ddbb8]/70" />
+      <div className="absolute left-10 top-8 size-[100px] rounded-[32px] bg-[#9ddbb8]/70" />
       <header className="relative grid grid-cols-[112px_1fr] items-center gap-6 px-11 pb-7 pt-9">
         <ProfilePhoto
           data={data}
@@ -1040,12 +1040,11 @@ function HealthcareTemplate({
     <Sheet className={cn("grid grid-cols-[174px_1fr] bg-[#fcfefe]", className)}>
       <aside className="relative bg-[#e7f2f0] px-6 py-8">
         <div
-          className="flex size-14 items-center justify-center rounded-2xl text-[18px] font-bold text-white shadow-sm"
+          aria-hidden="true"
+          className="mb-7 h-1 w-12 rounded-full"
           style={{ backgroundColor: template.accent }}
-        >
-          {initials(data.basics.fullName)}
-        </div>
-        <section className="mt-7">
+        />
+        <section>
           <SectionTitle accent={template.accent}>Contact</SectionTitle>
           <ContactList data={data} />
         </section>
@@ -1406,7 +1405,8 @@ function PivotTemplate({
     <Sheet className={cn("grid grid-cols-[164px_1fr] bg-[#fffdfd]", className)}>
       <aside className="flex flex-col bg-[#f3edef] px-5 py-8">
         <div
-          className="mb-7 h-10 w-10 rounded-xl"
+          aria-hidden="true"
+          className="mb-7 h-1 w-12 rounded-full"
           style={{ backgroundColor: template.accent }}
         />
         <div className="space-y-6">
