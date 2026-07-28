@@ -19,7 +19,7 @@ import { LandingTemplateShowcase } from "@/components/home/LandingTemplateShowca
 import { resumeTemplates } from "@/lib/resume-data";
 
 const productBenefits = [
-  "12 original templates across proven resume formats",
+  `${resumeTemplates.length} original templates across proven resume formats`,
   "Dedicated fresher layouts with no experience section",
   "Switch designs without losing any of your work",
 ];
@@ -95,7 +95,7 @@ export default function Home() {
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] shadow-sm">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
-                12 original, white-page resume templates
+                {resumeTemplates.length} original, white-page resume templates
               </div>
 
               <h1 className="text-balance text-[clamp(3.5rem,7.1vw,7.1rem)] font-bold leading-[0.88] tracking-[-0.075em]">

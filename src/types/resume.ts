@@ -10,7 +10,10 @@ export type ResumeTemplateId =
   | "hybrid"
   | "fresher"
   | "internship"
-  | "career-change";
+  | "career-change"
+  | "finance"
+  | "healthcare"
+  | "sales";
 
 export type ResumeRendererId =
   | "meridian"
@@ -24,7 +27,10 @@ export type ResumeRendererId =
   | "hybrid"
   | "fresher"
   | "first-step"
-  | "pivot";
+  | "pivot"
+  | "finance"
+  | "healthcare"
+  | "sales";
 
 export interface ResumeBasics {
   fullName: string;

@@ -495,6 +495,138 @@ const bridgeData = professionalPreset({
   ],
 });
 
+const financeData = professionalPreset({
+  name: "Rohan Mehta",
+  headline: "Financial Planning & Analysis Manager",
+  email: "rohan.mehta@example.com",
+  phone: "+1 312 555 0135",
+  location: "Chicago, IL",
+  website: "rohanmehta.finance",
+  summary:
+    "FP&A leader with nine years of experience turning operating data into clear forecasts, investment choices, and executive decisions across multi-site businesses.",
+  role: "FP&A Manager",
+  company: "Arbor Foods",
+  previousRole: "Senior Financial Analyst",
+  previousCompany: "Northlake Consumer",
+  degree: "MBA, Finance & Strategy",
+  school: "Indiana University",
+  project: "Rolling Forecast Model",
+  projectDescription: "A driver-based planning model connecting demand, labor, and margin.",
+  experienceHighlights: [
+    [
+      "Led annual planning for a $480M business and aligned 14 department owners on investment priorities.",
+      "Built scenario models that identified $6.2M in cost actions without reducing growth capacity.",
+      "Shortened monthly performance reporting from eight days to four through automated data flows.",
+    ],
+    [
+      "Produced revenue and margin forecasts within 2% of actuals across six consecutive quarters.",
+      "Partnered with commercial teams on pricing decisions that added 1.8 points of gross margin.",
+    ],
+  ],
+  projectHighlights: [
+    "Replaced 19 disconnected spreadsheets with one governed planning model.",
+    "Improved forecast-cycle completion by five business days.",
+  ],
+  secondaryProject: {
+    name: "Executive Margin Bridge",
+    description: "A concise monthly view of price, volume, mix, and cost movement.",
+    highlight: "Adopted as the standard performance view for board reporting.",
+  },
+  skills: [
+    ["Financial modeling", "Forecasting", "Variance analysis", "Business cases"],
+    ["Executive partnering", "Planning leadership", "Decision support"],
+    ["Excel", "Power BI", "Anaplan", "SQL", "NetSuite"],
+  ],
+});
+
+const healthcareData = professionalPreset({
+  name: "Jordan Lee",
+  headline: "Clinical Operations Manager",
+  email: "jordan.lee@example.com",
+  phone: "+1 206 555 0174",
+  location: "Seattle, WA",
+  website: "jordanlee.health",
+  summary:
+    "Clinical operations manager with eight years of experience improving patient access, care-team workflows, and quality performance in multi-site ambulatory settings.",
+  role: "Clinical Operations Manager",
+  company: "Evergreen Health Partners",
+  previousRole: "Practice Operations Lead",
+  previousCompany: "Harborview Clinics",
+  degree: "BS, Health Informatics",
+  school: "University of Washington",
+  project: "Care Coordination Dashboard",
+  projectDescription: "A daily view of referral, scheduling, and follow-up risk across clinics.",
+  experienceHighlights: [
+    [
+      "Improved new-patient access by 22% across nine clinics while maintaining quality targets.",
+      "Redesigned referral handoffs and reduced incomplete specialist follow-ups by 31%.",
+      "Led 45 clinical and administrative staff through a new scheduling and triage workflow.",
+    ],
+    [
+      "Standardized staffing plans for four practices and reduced premium labor spend by 18%.",
+      "Prepared quality evidence for two successful accreditation review cycles.",
+    ],
+  ],
+  projectHighlights: [
+    "Combined EHR work queues and operational measures into one role-based view.",
+    "Reduced manual status checking by 14 hours per clinic each month.",
+  ],
+  secondaryProject: {
+    name: "Patient Access Huddle",
+    description: "A structured daily review for urgent demand, capacity, and escalation.",
+    highlight: "Raised same-week resolution of access issues from 68% to 91%.",
+  },
+  skills: [
+    ["Clinical operations", "Patient access", "Quality improvement", "Capacity"],
+    ["Change leadership", "Care-team facilitation", "Compliance"],
+    ["Epic", "Tableau", "Excel", "Lean", "HIPAA"],
+  ],
+});
+
+const salesData = professionalPreset({
+  name: "Diego Alvarez",
+  headline: "Enterprise Sales Director",
+  email: "diego.alvarez@example.com",
+  phone: "+1 720 555 0191",
+  location: "Denver, CO",
+  website: "diegoalvarez.co",
+  summary:
+    "Enterprise sales leader with 11+ years of experience building durable customer relationships, developing high-performing teams, and growing complex software accounts.",
+  role: "Enterprise Sales Director",
+  company: "Northstar Cloud",
+  previousRole: "Regional Sales Manager",
+  previousCompany: "Bluepeak Systems",
+  degree: "BBA, Marketing",
+  school: "University of Colorado Denver",
+  project: "Enterprise Discovery Playbook",
+  projectDescription: "A repeatable discovery and account-planning system for strategic opportunities.",
+  experienceHighlights: [
+    [
+      "Led a 12-person team to 118% of a $24M annual target while improving forecast accuracy.",
+      "Expanded revenue in the top 20 accounts by 27% through multi-threaded account plans.",
+      "Coached four first-time managers and promoted seven sellers into larger territories.",
+    ],
+    [
+      "Grew regional recurring revenue from $8.1M to $13.6M across three years.",
+      "Won the company’s largest new logo through a nine-month executive buying process.",
+    ],
+  ],
+  projectHighlights: [
+    "Standardized qualification, value mapping, mutual plans, and executive alignment.",
+    "Improved late-stage win rate by 12 points in two quarters.",
+  ],
+  secondaryProject: {
+    name: "Partner Growth Program",
+    description: "A joint-pipeline motion with consulting and technology partners.",
+    highlight: "Sourced $4.8M in qualified pipeline during the first year.",
+  },
+  skills: [
+    ["Enterprise sales", "Account strategy", "Forecasting", "Negotiation"],
+    ["Team coaching", "Executive relationships", "Partner development"],
+    ["Salesforce", "Clari", "Gong", "LinkedIn Sales Navigator"],
+  ],
+});
+
 const launchpadData: ResumeData = {
   basics: {
     fullName: "Arjun Rao",
@@ -645,6 +777,9 @@ export const templateStarterData: Record<ResumeTemplateId, ResumeData> = {
   terminal: blueprintData,
   standard: standardData,
   compact: compactData,
+  finance: financeData,
+  healthcare: healthcareData,
+  sales: salesData,
   hybrid: bridgeData,
   fresher: launchpadData,
   internship: firstStepData,
