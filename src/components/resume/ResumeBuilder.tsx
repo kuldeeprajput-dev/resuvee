@@ -739,7 +739,11 @@ export function ResumeBuilder({
                       : "border-black/10 bg-white hover:shadow-lg",
                   )}
                 >
-                  <TemplateThumbnail template={item} className="shadow-md" />
+                  <TemplateThumbnail
+                    template={item}
+                    size="picker"
+                    className="mx-auto shadow-md"
+                  />
                   <div className="flex items-center justify-between gap-1 px-1 pb-1 pt-2.5">
                     <div className="min-w-0">
                       <p className="truncate text-xs font-bold">{item.name}</p>

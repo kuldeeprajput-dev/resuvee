@@ -94,7 +94,6 @@ export interface ResumeTemplate {
   photoShape?: "circle" | "rounded" | "square";
   sections: BuilderSection[];
   sidebarSections: BuilderSection[];
-  previewImage: string;
   audience: "experienced" | "fresher" | "career-change";
   popular?: boolean;
 }

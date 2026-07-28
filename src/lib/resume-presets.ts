@@ -229,7 +229,6 @@ const blueprintData = professionalPreset({
   phone: "+1 303 555 0124",
   location: "Denver, CO",
   website: "github.com/calebstone",
-  photo: "/assets/template-portraits/caleb-stone.webp",
   summary:
     "Senior software engineer with 9+ years of experience building reliable web platforms and developer tooling. Focused on pragmatic architecture, observability, and effective technical leadership.",
   role: "Senior Software Engineer",
