@@ -16,12 +16,12 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Brand } from "@/components/layout/SiteHeader";
-import { Button } from "@/components/ui/button";
+import { Brand } from "@/shared/components/layout/SiteHeader";
+import { Button } from "@/shared/components/ui/button";
 import type {
   ApplicationStatus,
   JobApplication,
-} from "@/types/application";
+} from "../types/application";
 
 const STORAGE_KEY = "resulyra-applications-v1";
 

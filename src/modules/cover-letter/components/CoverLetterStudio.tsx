@@ -10,14 +10,14 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Brand } from "@/components/layout/SiteHeader";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Brand } from "@/shared/components/layout/SiteHeader";
+import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 import type {
   CoverLetterData,
   CoverLetterTheme,
-} from "@/types/cover-letter";
-import type { ResumeData } from "@/types/resume";
+} from "../types/cover-letter";
+import type { ResumeData } from "@/modules/resume";
 
 const STORAGE_KEY = "resulyra-cover-letter-v1";
 const RESUME_KEY = "resulyra-draft-v1";
