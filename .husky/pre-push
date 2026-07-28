@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "Running pre-push validation"
+
+npm run check
+npm run build
+
+echo "Pre-push validation passed"

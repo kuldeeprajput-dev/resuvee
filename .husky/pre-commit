@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "Running staged-file checks"
+
+git diff --cached --check
+
+npx --no-install lint-staged
+
+echo "Staged-file checks passed"
