@@ -406,10 +406,10 @@ export function CoverLetterStudio() {
   };
 
   useEffect(() => {
-    if (isHandTool || isSpacePressed) {
+    if (isHandTool || isSpacePressed || showDesignMenu || showTemplatesMenu) {
       clearSelection();
     }
-  }, [isHandTool, isSpacePressed]);
+  }, [isHandTool, isSpacePressed, showDesignMenu, showTemplatesMenu]);
 
   const SECTION_ORDER: (keyof CoverLetterData)[] = [
     "greeting",
