@@ -94,7 +94,7 @@ const productTools = [
     description:
       "Create a focused cover letter that reuses your local resume details and matches your visual direction.",
     features: ["Resume-aware", "Role focused"],
-    href: "/cover-letter",
+    href: "/letters",
     action: "Write a letter",
     accent: "bg-[#ffd8ca]",
     wash: "from-[#fff0e9] to-[#fffefa]",

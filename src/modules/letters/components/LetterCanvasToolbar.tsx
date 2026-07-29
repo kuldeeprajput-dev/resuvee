@@ -3,7 +3,7 @@
 import React from "react";
 import { MousePointer, Hand, ZoomOut, ZoomIn, RotateCcw, Undo2, Redo2, Grid, Check } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { CanvasTheme } from "../types/cover-letter";
+import type { CanvasTheme } from "../types/letter";
 
 interface LetterCanvasToolbarProps {
   isHandTool: boolean;

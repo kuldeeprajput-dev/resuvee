@@ -7,24 +7,24 @@ import { Brand } from "@/shared/components/layout/SiteHeader";
 import { cn } from "@/shared/lib/utils";
 import type { ResumeData } from "@/modules/resume/types/resume";
 import type {
-  CoverLetterData,
-  CoverLetterTheme,
+  LetterData,
+  LetterTheme,
   CanvasTheme,
   TypographyFont,
   PageSpacing,
   ThemeOption,
   ColorSwatch,
-} from "../types/cover-letter";
+} from "../types/letter";
 import { LetterFormPanel } from "./LetterFormPanel";
 import { LetterCanvasHeader } from "./LetterCanvasHeader";
 import { LetterCanvasToolbar } from "./LetterCanvasToolbar";
 import { LetterFormattingToolbar } from "./LetterFormattingToolbar";
 import { LetterPreview } from "./LetterPreview";
 
-const STORAGE_KEY = "resulyra_cover_letter";
+const STORAGE_KEY = "resulyra_letter";
 const RESUME_KEY = "resulyra_builder_draft";
 
-const emptyLetter: CoverLetterData = {
+const emptyLetter: LetterData = {
   fullName: "",
   headline: "",
   email: "",
@@ -85,7 +85,7 @@ const themeStyles: Record<CanvasTheme, string> = {
   clean: "bg-[#f1f3f0]",
 };
 
-function getStarterCopy(data: CoverLetterData) {
+function getStarterCopy(data: LetterData) {
   const role = data.role || "this role";
   const company = data.company || "your team";
   return {
@@ -97,8 +97,8 @@ function getStarterCopy(data: CoverLetterData) {
 }
 
 export function LetterStudio() {
-  const [data, setData] = useState<CoverLetterData>(emptyLetter);
-  const [theme, setTheme] = useState<CoverLetterTheme>("linen");
+  const [data, setData] = useState<LetterData>(emptyLetter);
+  const [theme, setTheme] = useState<LetterTheme>("linen");
   const [customAccent, setCustomAccent] = useState<string | null>(null);
   const [saveLabel, setSaveLabel] = useState("Saved locally");
   const hasLoaded = useRef(false);
@@ -113,8 +113,8 @@ export function LetterStudio() {
   const isRightCollapsed = splitPercent >= 99;
 
   // Undo / Redo History Stack
-  const [history, setHistory] = useState<CoverLetterData[]>([]);
-  const [future, setFuture] = useState<CoverLetterData[]>([]);
+  const [history, setHistory] = useState<LetterData[]>([]);
+  const [future, setFuture] = useState<LetterData[]>([]);
 
   // Interactive Canvas & Design States
   const [font, setFont] = useState<TypographyFont>("template");
@@ -133,7 +133,7 @@ export function LetterStudio() {
   const [showTemplatesMenu, setShowTemplatesMenu] = useState(false);
 
   // On-Canvas Selection & Floating Formatting Bar State
-  const [selectedField, setSelectedField] = useState<keyof CoverLetterData | null>(null);
+  const [selectedField, setSelectedField] = useState<keyof LetterData | null>(null);
   const [highlightRect, setHighlightRect] = useState<{
     top: number;
     left: number;
@@ -204,8 +204,8 @@ export function LetterStudio() {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as {
-          data?: CoverLetterData;
-          theme?: CoverLetterTheme;
+          data?: LetterData;
+          theme?: LetterTheme;
           customAccent?: string;
         };
         if (parsed.data) setData(parsed.data);
@@ -248,7 +248,7 @@ export function LetterStudio() {
     }, 400);
   }, [data, theme, customAccent]);
 
-  const update = (field: keyof CoverLetterData, value: string) => {
+  const update = (field: keyof LetterData, value: string) => {
     setHistory((prev) => [...prev, data]);
     setFuture([]);
     setData((current) => ({ ...current, [field]: value }));
@@ -338,7 +338,7 @@ export function LetterStudio() {
     });
   }, []);
 
-  const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => {
+  const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => {
     e.stopPropagation();
     setSelectedField(field);
     selectedDomRef.current = e.currentTarget;
@@ -600,5 +600,3 @@ export function LetterStudio() {
     </div>
   );
 }
-
-export const CoverLetterStudio = LetterStudio;

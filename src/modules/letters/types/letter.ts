@@ -1,9 +1,9 @@
-export type CoverLetterTheme = "linen" | "signal" | "ledger";
+export type LetterTheme = "linen" | "signal" | "ledger";
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
 export type TypographyFont = "template" | "sans" | "serif" | "mono";
 export type PageSpacing = "compact" | "normal" | "spacious";
 
-export interface CoverLetterData {
+export interface LetterData {
   fullName: string;
   headline: string;
   email: string;
@@ -22,7 +22,7 @@ export interface CoverLetterData {
 }
 
 export interface ThemeOption {
-  id: CoverLetterTheme;
+  id: LetterTheme;
   name: string;
   description: string;
   accent: string;

@@ -2,16 +2,16 @@
 
 import React from "react";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../types/cover-letter";
+import type { LetterData, LetterTheme, TypographyFont, PageSpacing } from "../types/letter";
 
 interface LetterPreviewProps {
-  data: CoverLetterData;
-  theme: CoverLetterTheme;
+  data: LetterData;
+  theme: LetterTheme;
   accent: string;
   font?: TypographyFont;
   pageSpacing?: PageSpacing;
-  onSelectField?: (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => void;
-  selectedField?: keyof CoverLetterData | null;
+  onSelectField?: (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => void;
+  selectedField?: keyof LetterData | null;
 }
 
 export function LetterPreview({
@@ -196,5 +196,3 @@ export function LetterPreview({
     </article>
   );
 }
-
-export const CoverLetterPreview = LetterPreview;

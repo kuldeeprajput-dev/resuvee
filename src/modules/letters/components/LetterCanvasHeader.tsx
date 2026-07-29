@@ -3,7 +3,7 @@
 import React from "react";
 import { Download, LayoutTemplate, Palette, Pipette, Check, X, Maximize2, Minimize2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../types/cover-letter";
+import type { LetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../types/letter";
 
 interface LetterCanvasHeaderProps {
   isFullscreen: boolean;
@@ -12,8 +12,8 @@ interface LetterCanvasHeaderProps {
   setShowTemplatesMenu: (value: boolean) => void;
   showDesignMenu: boolean;
   setShowDesignMenu: (value: boolean) => void;
-  theme: CoverLetterTheme;
-  setTheme: (theme: CoverLetterTheme) => void;
+  theme: LetterTheme;
+  setTheme: (theme: LetterTheme) => void;
   themes: ThemeOption[];
   activeAccent: string;
   setCustomAccent: (color: string) => void;
@@ -87,7 +87,7 @@ export function LetterCanvasHeader({
           {showTemplatesMenu && (
             <div className="absolute top-10 right-0 z-50 w-64 rounded-2xl border border-black/15 bg-white p-2.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95">
               <p className="px-2 pb-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)] border-b border-black/10 mb-1.5">
-                Cover Letter Templates
+                Letter Templates
               </p>
               {themes.map((t) => (
                 <button

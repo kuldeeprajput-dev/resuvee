@@ -4,16 +4,16 @@ import React from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterData, CoverLetterTheme, ThemeOption } from "../types/cover-letter";
+import type { LetterData, LetterTheme, ThemeOption } from "../types/letter";
 
 interface LetterFormPanelProps {
-  data: CoverLetterData;
-  theme: CoverLetterTheme;
+  data: LetterData;
+  theme: LetterTheme;
   themes: ThemeOption[];
-  update: (field: keyof CoverLetterData, value: string) => void;
-  setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
-  setTheme: (theme: CoverLetterTheme) => void;
-  getStarterCopy: (data: CoverLetterData) => { opening: string; evidence: string; closing: string };
+  update: (field: keyof LetterData, value: string) => void;
+  setData: React.Dispatch<React.SetStateAction<LetterData>>;
+  setTheme: (theme: LetterTheme) => void;
+  getStarterCopy: (data: LetterData) => { opening: string; evidence: string; closing: string };
   splitPercent: number;
   isResizing: boolean;
 }
