@@ -406,6 +406,58 @@ export function CoverLetterStudio() {
     }
   }, [zoom, pan, data, selectedField, updateSelectionBounds]);
 
+  const SECTION_ORDER: (keyof CoverLetterData)[] = [
+    "greeting",
+    "opening",
+    "evidence",
+    "closing",
+    "signoff",
+  ];
+
+  const handleMoveSectionUp = () => {
+    if (!selectedField) return;
+    const index = SECTION_ORDER.indexOf(selectedField);
+    if (index <= 0) return;
+
+    const prevField = SECTION_ORDER[index - 1];
+    const currentVal = data[selectedField];
+    const prevVal = data[prevField];
+
+    setHistory((prev) => [...prev, data]);
+    setFuture([]);
+    setData((current) => ({
+      ...current,
+      [selectedField]: prevVal,
+      [prevField]: currentVal,
+    }));
+
+    setSelectedField(prevField);
+    setInlineText(currentVal);
+    setTimeout(updateSelectionBounds, 30);
+  };
+
+  const handleMoveSectionDown = () => {
+    if (!selectedField) return;
+    const index = SECTION_ORDER.indexOf(selectedField);
+    if (index === -1 || index >= SECTION_ORDER.length - 1) return;
+
+    const nextField = SECTION_ORDER[index + 1];
+    const currentVal = data[selectedField];
+    const nextVal = data[nextField];
+
+    setHistory((prev) => [...prev, data]);
+    setFuture([]);
+    setData((current) => ({
+      ...current,
+      [selectedField]: nextVal,
+      [nextField]: currentVal,
+    }));
+
+    setSelectedField(nextField);
+    setInlineText(currentVal);
+    setTimeout(updateSelectionBounds, 30);
+  };
+
   const handleWheel = (e: React.WheelEvent) => {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
@@ -671,6 +723,8 @@ export function CoverLetterStudio() {
                   setCustomAccent={setCustomAccent}
                   colorSwatches={COLOR_SWATCHES}
                   clearSelection={clearSelection}
+                  onMoveUp={handleMoveSectionUp}
+                  onMoveDown={handleMoveSectionDown}
                 />
               )}
 

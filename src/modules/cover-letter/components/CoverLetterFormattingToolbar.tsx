@@ -17,6 +17,8 @@ import {
   Loader2,
   Maximize2,
   Minimize2,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CoverLetterData, ColorSwatch } from "../types/cover-letter";
@@ -35,6 +37,8 @@ interface CoverLetterFormattingToolbarProps {
   setCustomAccent: (color: string) => void;
   colorSwatches: ColorSwatch[];
   clearSelection: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 export function CoverLetterFormattingToolbar({
@@ -51,6 +55,8 @@ export function CoverLetterFormattingToolbar({
   setCustomAccent,
   colorSwatches,
   clearSelection,
+  onMoveUp,
+  onMoveDown,
 }: CoverLetterFormattingToolbarProps) {
   const [isRefining, setIsRefining] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -319,6 +325,29 @@ export function CoverLetterFormattingToolbar({
           title="Align Right"
         >
           <AlignRight className="size-3.5" />
+        </button>
+      </div>
+
+      <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
+
+      {/* Up / Down Section Re-order Buttons */}
+      <div className="flex items-center gap-0.5 shrink-0">
+        <button
+          type="button"
+          onClick={onMoveUp}
+          className="builder-icon-button cursor-pointer"
+          title="Move section up"
+        >
+          <ArrowUp className="size-3.5 text-[var(--brand-ink)]" />
+        </button>
+
+        <button
+          type="button"
+          onClick={onMoveDown}
+          className="builder-icon-button cursor-pointer"
+          title="Move section down"
+        >
+          <ArrowDown className="size-3.5 text-[var(--brand-ink)]" />
         </button>
       </div>
 
