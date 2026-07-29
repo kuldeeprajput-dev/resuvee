@@ -15,6 +15,8 @@ import {
   CaseSensitive,
   RemoveFormatting,
   Loader2,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CoverLetterData, ColorSwatch } from "../types/cover-letter";
@@ -51,6 +53,7 @@ export function CoverLetterFormattingToolbar({
   clearSelection,
 }: CoverLetterFormattingToolbarProps) {
   const [isRefining, setIsRefining] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleFontSize = (delta: number) => {
     if (!selectedDomRef.current) return;
@@ -109,20 +112,20 @@ export function CoverLetterFormattingToolbar({
     <div
       ref={toolbarRef}
       onClick={(e) => e.stopPropagation()}
-      className="no-print absolute z-50 flex flex-wrap items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
+      className="no-print absolute z-50 flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
       style={{
         top: `${toolbarPos.top}px`,
         left: `${toolbarPos.left}px`,
       }}
     >
       {/* AI Icon & Inline Text Input Pill Container */}
-      <div className="flex items-center gap-1.5 rounded-full bg-black/5 px-2 py-1 shrink-0">
+      <div className="relative flex items-center gap-1.5 rounded-full bg-black/5 px-2 py-1 shrink-0">
         <button
           type="button"
           onClick={handleAiRefine}
           disabled={isRefining}
-          className="flex size-6 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
-          title="AI Smart Refine Field Text"
+          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
+          title="AI Smart Refine Text"
         >
           {isRefining ? (
             <Loader2 className="size-3.5 text-[#059669] animate-spin" />
@@ -130,6 +133,7 @@ export function CoverLetterFormattingToolbar({
             <Sparkles className="size-3.5 text-[#059669]" />
           )}
         </button>
+
         <input
           type="text"
           value={inlineText}
@@ -137,9 +141,72 @@ export function CoverLetterFormattingToolbar({
             setInlineText(e.target.value);
             update(selectedField, e.target.value);
           }}
-          className="h-7 w-36 sm:w-48 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669]"
-          placeholder="Edit text inline..."
+          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
+          placeholder="Edit inline..."
         />
+
+        <button
+          type="button"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={cn(
+            "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
+            isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-[var(--brand-muted)]"
+          )}
+          title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
+        >
+          {isExpanded ? <Minimize2 className="size-3" /> : <Maximize2 className="size-3" />}
+        </button>
+
+        {/* Expandable Floating Paragraph Editor Card */}
+        {isExpanded && (
+          <div className="absolute top-12 left-0 z-[100] flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+            <div className="flex items-center justify-between border-b border-black/10 pb-2">
+              <div className="flex items-center gap-1.5">
+                <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
+                  {selectedField}
+                </span>
+                <span className="text-[10px] font-semibold text-[var(--brand-muted)]">
+                  {inlineText.length} chars
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleAiRefine}
+                  disabled={isRefining}
+                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-50"
+                >
+                  {isRefining ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Sparkles className="size-3" />
+                  )}
+                  <span>AI Refine</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsExpanded(false)}
+                  className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-[var(--brand-muted)] transition cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+            </div>
+
+            <textarea
+              rows={5}
+              value={inlineText}
+              onChange={(e) => {
+                setInlineText(e.target.value);
+                update(selectedField, e.target.value);
+              }}
+              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
+              placeholder="Type or edit full section text..."
+              autoFocus
+            />
+          </div>
+        )}
       </div>
 
       <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
