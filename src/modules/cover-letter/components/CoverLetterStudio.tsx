@@ -344,9 +344,9 @@ export function CoverLetterStudio() {
     let computedLeft = left + targetRect.width / 2 - toolbarWidth / 2;
     computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, computedLeft));
 
-    let computedTop = top - 52;
+    let computedTop = top - 64;
     if (computedTop < 65) {
-      computedTop = top + targetRect.height + 12;
+      computedTop = top + targetRect.height + 14;
     }
 
     setToolbarPos({
@@ -354,6 +354,22 @@ export function CoverLetterStudio() {
       left: computedLeft,
     });
   }, []);
+
+  useEffect(() => {
+    if (!selectedField || !selectedDomRef.current) return;
+    updateSelectionBounds();
+
+    const observer = new ResizeObserver(() => {
+      updateSelectionBounds();
+    });
+    observer.observe(selectedDomRef.current);
+    window.addEventListener("resize", updateSelectionBounds);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateSelectionBounds);
+    };
+  }, [selectedField, inlineText, data, zoom, pan, updateSelectionBounds]);
 
   const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => {
     if (isHandTool || isSpacePressed) return;
@@ -625,7 +641,7 @@ export function CoverLetterStudio() {
               {/* Visual Selection Bounding Box Overlay */}
               {highlightRect && (
                 <div
-                  className="no-print absolute z-30 pointer-events-none rounded-md ring-2 ring-emerald-500 bg-emerald-500/10 shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all duration-100 ease-out"
+                  className="no-print absolute z-30 pointer-events-none rounded-2xl border-2 border-[#059669] bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.25)] transition-all duration-100 ease-out"
                   style={{
                     top: `${highlightRect.top}px`,
                     left: `${highlightRect.left}px`,
@@ -633,8 +649,8 @@ export function CoverLetterStudio() {
                     height: `${highlightRect.height}px`,
                   }}
                 >
-                  <span className="absolute -bottom-2.5 right-1 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[7.5px] font-extrabold uppercase tracking-widest text-white shadow-xs">
-                    Selected
+                  <span className="absolute -bottom-3 right-2 rounded-full bg-[#059669] px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-wider text-white shadow-sm">
+                    SELECTED
                   </span>
                 </div>
               )}
