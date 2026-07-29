@@ -3,9 +3,9 @@
 import React from "react";
 import { MousePointer, Hand, ZoomOut, ZoomIn, RotateCcw, Undo2, Redo2, Grid, Check } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { CanvasTheme } from "../types/letter";
+import type { CanvasTheme } from "../types/cover-letter";
 
-interface LetterCanvasToolbarProps {
+interface CoverLetterCanvasToolbarProps {
   isHandTool: boolean;
   setIsHandTool: (value: boolean) => void;
   isSpacePressed: boolean;
@@ -26,7 +26,7 @@ interface LetterCanvasToolbarProps {
 
 const ZOOM_PRESETS = [50, 72, 85, 100, 125, 150];
 
-export function LetterCanvasToolbar({
+export function CoverLetterCanvasToolbar({
   isHandTool,
   setIsHandTool,
   isSpacePressed,
@@ -43,7 +43,7 @@ export function LetterCanvasToolbar({
   setShowThemeMenu,
   showPresetsMenu,
   setShowPresetsMenu,
-}: LetterCanvasToolbarProps) {
+}: CoverLetterCanvasToolbarProps) {
   return (
     <div className="no-print absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200">
       {/* Select Mode vs Hand/Pan Tool Switcher */}

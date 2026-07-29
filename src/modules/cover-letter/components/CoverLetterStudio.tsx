@@ -7,24 +7,24 @@ import { Brand } from "@/shared/components/layout/SiteHeader";
 import { cn } from "@/shared/lib/utils";
 import type { ResumeData } from "@/modules/resume/types/resume";
 import type {
-  LetterData,
-  LetterTheme,
+  CoverLetterData,
+  CoverLetterTheme,
   CanvasTheme,
   TypographyFont,
   PageSpacing,
   ThemeOption,
   ColorSwatch,
-} from "../types/letter";
-import { LetterFormPanel } from "./LetterFormPanel";
-import { LetterCanvasHeader } from "./LetterCanvasHeader";
-import { LetterCanvasToolbar } from "./LetterCanvasToolbar";
-import { LetterFormattingToolbar } from "./LetterFormattingToolbar";
-import { LetterPreview } from "./LetterPreview";
+} from "../types/cover-letter";
+import { CoverLetterFormPanel } from "./CoverLetterFormPanel";
+import { CoverLetterCanvasHeader } from "./CoverLetterCanvasHeader";
+import { CoverLetterCanvasToolbar } from "./CoverLetterCanvasToolbar";
+import { CoverLetterFormattingToolbar } from "./CoverLetterFormattingToolbar";
+import { CoverLetterPreview } from "./CoverLetterPreview";
 
-const STORAGE_KEY = "resulyra_letter";
+const STORAGE_KEY = "resulyra_cover_letter";
 const RESUME_KEY = "resulyra_builder_draft";
 
-const emptyLetter: LetterData = {
+const emptyLetter: CoverLetterData = {
   fullName: "",
   headline: "",
   email: "",
@@ -82,7 +82,7 @@ const themeStyles: Record<CanvasTheme, string> = {
   clean: "bg-[#dfe2dc]",
 };
 
-function getStarterCopy(data: LetterData) {
+function getStarterCopy(data: CoverLetterData) {
   const role = data.role || "this role";
   const company = data.company || "your team";
   return {
@@ -93,9 +93,9 @@ function getStarterCopy(data: LetterData) {
   };
 }
 
-export function LetterStudio() {
-  const [data, setData] = useState<LetterData>(emptyLetter);
-  const [theme, setTheme] = useState<LetterTheme>("linen");
+export function CoverLetterStudio() {
+  const [data, setData] = useState<CoverLetterData>(emptyLetter);
+  const [theme, setTheme] = useState<CoverLetterTheme>("linen");
   const [customAccent, setCustomAccent] = useState<string | null>(null);
   const [saveLabel, setSaveLabel] = useState("Saved locally");
   const hasLoaded = useRef(false);
@@ -110,8 +110,8 @@ export function LetterStudio() {
   const isRightCollapsed = splitPercent >= 99;
 
   // Undo / Redo History Stack
-  const [history, setHistory] = useState<LetterData[]>([]);
-  const [future, setFuture] = useState<LetterData[]>([]);
+  const [history, setHistory] = useState<CoverLetterData[]>([]);
+  const [future, setFuture] = useState<CoverLetterData[]>([]);
 
   // Interactive Canvas & Design States
   const [font, setFont] = useState<TypographyFont>("template");
@@ -130,7 +130,7 @@ export function LetterStudio() {
   const [showTemplatesMenu, setShowTemplatesMenu] = useState(false);
 
   // On-Canvas Selection & Floating Formatting Bar State
-  const [selectedField, setSelectedField] = useState<keyof LetterData | null>(null);
+  const [selectedField, setSelectedField] = useState<keyof CoverLetterData | null>(null);
   const [highlightRect, setHighlightRect] = useState<{
     top: number;
     left: number;
@@ -201,8 +201,8 @@ export function LetterStudio() {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as {
-          data?: LetterData;
-          theme?: LetterTheme;
+          data?: CoverLetterData;
+          theme?: CoverLetterTheme;
           customAccent?: string;
         };
         if (parsed.data) setData(parsed.data);
@@ -245,7 +245,7 @@ export function LetterStudio() {
     }, 400);
   }, [data, theme, customAccent]);
 
-  const update = (field: keyof LetterData, value: string) => {
+  const update = (field: keyof CoverLetterData, value: string) => {
     setHistory((prev) => [...prev, data]);
     setFuture([]);
     setData((current) => ({ ...current, [field]: value }));
@@ -335,7 +335,7 @@ export function LetterStudio() {
     });
   }, []);
 
-  const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => {
+  const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => {
     if (isHandTool || isSpacePressed) return;
     e.stopPropagation();
     setSelectedField(field);
@@ -445,7 +445,7 @@ export function LetterStudio() {
       >
         {/* Left Form Section with Independent Scrollbar */}
         {!isLeftCollapsed && (
-          <LetterFormPanel
+          <CoverLetterFormPanel
             data={data}
             theme={theme}
             themes={themes}
@@ -484,7 +484,7 @@ export function LetterStudio() {
             )}
           >
             {/* Top Studio Canvas Bar */}
-            <LetterCanvasHeader
+            <CoverLetterCanvasHeader
               isFullscreen={isFullscreen}
               setIsFullscreen={setIsFullscreen}
               showTemplatesMenu={showTemplatesMenu}
@@ -537,7 +537,7 @@ export function LetterStudio() {
 
               {/* Contextual Floating Formatting Bar */}
               {selectedField && toolbarPos && (
-                <LetterFormattingToolbar
+                <CoverLetterFormattingToolbar
                   toolbarRef={toolbarRef}
                   toolbarPos={toolbarPos}
                   selectedField={selectedField}
@@ -563,7 +563,7 @@ export function LetterStudio() {
                   }}
                   className="no-print-transform flex items-center justify-center shadow-2xl"
                 >
-                  <LetterPreview
+                  <CoverLetterPreview
                     data={data}
                     theme={theme}
                     accent={activeAccent}
@@ -577,7 +577,7 @@ export function LetterStudio() {
               </div>
 
               {/* Bottom Floating Canvas Control Toolbar Pill */}
-              <LetterCanvasToolbar
+              <CoverLetterCanvasToolbar
                 isHandTool={isHandTool}
                 setIsHandTool={setIsHandTool}
                 isSpacePressed={isSpacePressed}
@@ -605,3 +605,5 @@ export function LetterStudio() {
     </div>
   );
 }
+
+export const LetterStudio = CoverLetterStudio;

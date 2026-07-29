@@ -2,20 +2,20 @@
 
 import React from "react";
 import { cn } from "@/shared/lib/utils";
-import type { LetterData, LetterTheme, TypographyFont, PageSpacing } from "../types/letter";
+import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../types/cover-letter";
 
-interface LetterPreviewProps {
-  data: LetterData;
-  theme: LetterTheme;
+interface CoverLetterPreviewProps {
+  data: CoverLetterData;
+  theme: CoverLetterTheme;
   accent: string;
   font?: TypographyFont;
   pageSpacing?: PageSpacing;
-  onSelectField?: (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => void;
-  selectedField?: keyof LetterData | null;
+  onSelectField?: (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => void;
+  selectedField?: keyof CoverLetterData | null;
   isHandTool?: boolean;
 }
 
-export function LetterPreview({
+export function CoverLetterPreview({
   data,
   theme,
   accent,
@@ -24,7 +24,7 @@ export function LetterPreview({
   onSelectField,
   selectedField,
   isHandTool = false,
-}: LetterPreviewProps) {
+}: CoverLetterPreviewProps) {
   const fontClass =
     font === "template"
       ? theme === "ledger"
@@ -47,7 +47,7 @@ export function LetterPreview({
     .filter(Boolean)
     .join("  ·  ");
 
-  const getFieldClass = (field: keyof LetterData) =>
+  const getFieldClass = (field: keyof CoverLetterData) =>
     cn(
       isHandTool
         ? "cursor-inherit"

@@ -4,21 +4,21 @@ import React from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import type { LetterData, LetterTheme, ThemeOption } from "../types/letter";
+import type { CoverLetterData, CoverLetterTheme, ThemeOption } from "../types/cover-letter";
 
-interface LetterFormPanelProps {
-  data: LetterData;
-  theme: LetterTheme;
+interface CoverLetterFormPanelProps {
+  data: CoverLetterData;
+  theme: CoverLetterTheme;
   themes: ThemeOption[];
-  update: (field: keyof LetterData, value: string) => void;
-  setData: React.Dispatch<React.SetStateAction<LetterData>>;
-  setTheme: (theme: LetterTheme) => void;
-  getStarterCopy: (data: LetterData) => { opening: string; evidence: string; closing: string };
+  update: (field: keyof CoverLetterData, value: string) => void;
+  setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
+  setTheme: (theme: CoverLetterTheme) => void;
+  getStarterCopy: (data: CoverLetterData) => { opening: string; evidence: string; closing: string };
   splitPercent: number;
   isResizing: boolean;
 }
 
-export function LetterFormPanel({
+export function CoverLetterFormPanel({
   data,
   theme,
   themes,
@@ -28,7 +28,7 @@ export function LetterFormPanel({
   getStarterCopy,
   splitPercent,
   isResizing,
-}: LetterFormPanelProps) {
+}: CoverLetterFormPanelProps) {
   return (
     <section
       style={{ width: `${splitPercent}%` }}

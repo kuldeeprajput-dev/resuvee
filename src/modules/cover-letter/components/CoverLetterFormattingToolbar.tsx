@@ -13,15 +13,15 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { LetterData, ColorSwatch } from "../types/letter";
+import type { CoverLetterData, ColorSwatch } from "../types/cover-letter";
 
-interface LetterFormattingToolbarProps {
+interface CoverLetterFormattingToolbarProps {
   toolbarRef: React.RefObject<HTMLDivElement | null>;
   toolbarPos: { top: number; left: number };
-  selectedField: keyof LetterData;
+  selectedField: keyof CoverLetterData;
   inlineText: string;
   setInlineText: (text: string) => void;
-  update: (field: keyof LetterData, value: string) => void;
+  update: (field: keyof CoverLetterData, value: string) => void;
   selectedDomRef: React.RefObject<HTMLElement | null>;
   showColorPicker: boolean;
   setShowColorPicker: (value: boolean) => void;
@@ -31,7 +31,7 @@ interface LetterFormattingToolbarProps {
   clearSelection: () => void;
 }
 
-export function LetterFormattingToolbar({
+export function CoverLetterFormattingToolbar({
   toolbarRef,
   toolbarPos,
   selectedField,
@@ -45,7 +45,7 @@ export function LetterFormattingToolbar({
   setCustomAccent,
   colorSwatches,
   clearSelection,
-}: LetterFormattingToolbarProps) {
+}: CoverLetterFormattingToolbarProps) {
   return (
     <div
       ref={toolbarRef}

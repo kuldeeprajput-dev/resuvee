@@ -3,17 +3,17 @@
 import React from "react";
 import { Download, LayoutTemplate, Palette, Pipette, Check, X, Maximize2, Minimize2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { LetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../types/letter";
+import type { CoverLetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../types/cover-letter";
 
-interface LetterCanvasHeaderProps {
+interface CoverLetterCanvasHeaderProps {
   isFullscreen: boolean;
   setIsFullscreen: (value: boolean) => void;
   showTemplatesMenu: boolean;
   setShowTemplatesMenu: (value: boolean) => void;
   showDesignMenu: boolean;
   setShowDesignMenu: (value: boolean) => void;
-  theme: LetterTheme;
-  setTheme: (theme: LetterTheme) => void;
+  theme: CoverLetterTheme;
+  setTheme: (theme: CoverLetterTheme) => void;
   themes: ThemeOption[];
   activeAccent: string;
   setCustomAccent: (color: string) => void;
@@ -24,7 +24,7 @@ interface LetterCanvasHeaderProps {
   colorSwatches: ColorSwatch[];
 }
 
-export function LetterCanvasHeader({
+export function CoverLetterCanvasHeader({
   isFullscreen,
   setIsFullscreen,
   showTemplatesMenu,
@@ -41,7 +41,7 @@ export function LetterCanvasHeader({
   pageSpacing,
   setPageSpacing,
   colorSwatches,
-}: LetterCanvasHeaderProps) {
+}: CoverLetterCanvasHeaderProps) {
   return (
     <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
