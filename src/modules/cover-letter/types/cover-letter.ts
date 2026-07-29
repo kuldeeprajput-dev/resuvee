@@ -1,4 +1,7 @@
 export type CoverLetterTheme = "linen" | "signal" | "ledger";
+export type CanvasTheme = "dots" | "grid" | "studio" | "clean";
+export type TypographyFont = "template" | "sans" | "serif" | "mono";
+export type PageSpacing = "compact" | "normal" | "spacious";
 
 export interface CoverLetterData {
   fullName: string;
@@ -16,4 +19,16 @@ export interface CoverLetterData {
   evidence: string;
   closing: string;
   signoff: string;
+}
+
+export interface ThemeOption {
+  id: CoverLetterTheme;
+  name: string;
+  description: string;
+  accent: string;
+}
+
+export interface ColorSwatch {
+  name: string;
+  value: string;
 }
