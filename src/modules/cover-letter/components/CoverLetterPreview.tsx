@@ -51,8 +51,10 @@ export function CoverLetterPreview({
     cn(
       isHandTool
         ? "cursor-inherit"
-        : "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-      selectedField === field && !isHandTool && "ring-1 ring-emerald-500 rounded-xs",
+        : cn(
+            "cursor-pointer rounded-xs transition",
+            selectedField !== field && "hover:outline-dashed hover:outline-1 hover:outline-emerald-500"
+          ),
       !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
     );
 
