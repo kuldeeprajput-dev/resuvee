@@ -356,17 +356,34 @@ export function CoverLetterStudio() {
   }, []);
 
   useEffect(() => {
-    if (!selectedField || !selectedDomRef.current) return;
+    if (!selectedField) return;
+
+    const freshEl = containerRef.current?.querySelector(
+      `[data-field="${selectedField}"]`
+    ) as HTMLElement | null;
+    if (freshEl) {
+      selectedDomRef.current = freshEl;
+    }
+
+    if (!selectedDomRef.current) return;
+
     updateSelectionBounds();
 
     const observer = new ResizeObserver(() => {
       updateSelectionBounds();
     });
     observer.observe(selectedDomRef.current);
+
+    const handleScroll = () => {
+      updateSelectionBounds();
+    };
+
+    window.addEventListener("scroll", handleScroll, true);
     window.addEventListener("resize", updateSelectionBounds);
 
     return () => {
       observer.disconnect();
+      window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("resize", updateSelectionBounds);
     };
   }, [selectedField, inlineText, data, zoom, pan, updateSelectionBounds]);
@@ -393,18 +410,6 @@ export function CoverLetterStudio() {
       clearSelection();
     }
   }, [isHandTool, isSpacePressed]);
-
-  useEffect(() => {
-    if (!selectedField) return;
-    window.addEventListener("resize", updateSelectionBounds);
-    return () => window.removeEventListener("resize", updateSelectionBounds);
-  }, [selectedField, updateSelectionBounds]);
-
-  useEffect(() => {
-    if (selectedField) {
-      updateSelectionBounds();
-    }
-  }, [zoom, pan, data, selectedField, updateSelectionBounds]);
 
   const SECTION_ORDER: (keyof CoverLetterData)[] = [
     "greeting",
@@ -496,7 +501,22 @@ export function CoverLetterStudio() {
     setHistory((prev) => [...prev, data]);
     setFuture([]);
     setData(emptyLetter);
+    setCustomAccent("");
+    setTheme(themes[0].id);
     clearSelection();
+
+    if (containerRef.current) {
+      const styledEls = containerRef.current.querySelectorAll("[data-field]");
+      styledEls.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.color = "";
+        htmlEl.style.fontSize = "";
+        htmlEl.style.textAlign = "";
+        htmlEl.style.textTransform = "";
+        htmlEl.classList.remove("font-bold", "italic", "underline");
+      });
+    }
+
     setShowStartFreshModal(false);
   };
 
