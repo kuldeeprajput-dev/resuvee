@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { Brand } from "./SiteHeader";
+import { cn } from "@/shared/lib/utils";
 
 const footerGroups = [
   {
@@ -29,9 +30,14 @@ const footerGroups = [
   },
 ];
 
-export function SiteFooter() {
+export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean }) {
   return (
-    <footer className="border-t border-black/[0.08] bg-[#e9e7df]">
+    <footer
+      className={cn(
+        "border-t border-black/[0.08]",
+        blendWithPage ? "bg-[var(--brand-canvas)]" : "bg-[#e9e7df]"
+      )}
+    >
       <div className="mx-auto grid w-full max-w-[1440px] gap-9 px-5 py-8 sm:px-8 md:grid-cols-[0.85fr_1.15fr] md:gap-14 lg:px-12">
         <div className="max-w-md">
           <Brand />
