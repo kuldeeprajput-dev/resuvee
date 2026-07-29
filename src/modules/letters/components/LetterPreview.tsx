@@ -12,6 +12,7 @@ interface LetterPreviewProps {
   pageSpacing?: PageSpacing;
   onSelectField?: (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => void;
   selectedField?: keyof LetterData | null;
+  isHandTool?: boolean;
 }
 
 export function LetterPreview({
@@ -22,6 +23,7 @@ export function LetterPreview({
   pageSpacing = "normal",
   onSelectField,
   selectedField,
+  isHandTool = false,
 }: LetterPreviewProps) {
   const fontClass =
     font === "template"
@@ -45,6 +47,14 @@ export function LetterPreview({
     .filter(Boolean)
     .join("  ·  ");
 
+  const getFieldClass = (field: keyof LetterData) =>
+    cn(
+      isHandTool
+        ? "cursor-inherit"
+        : "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
+      selectedField === field && !isHandTool && "ring-1 ring-emerald-500 rounded-xs"
+    );
+
   return (
     <article
       className={cn(
@@ -62,19 +72,13 @@ export function LetterPreview({
       <header className="relative border-b pb-6" style={{ borderColor: accent }}>
         <h1
           onClick={(e) => onSelectField?.(e, "fullName")}
-          className={cn(
-            "text-[29px] font-bold leading-none tracking-[-0.045em] cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-            selectedField === "fullName" && "ring-1 ring-emerald-500 rounded-xs"
-          )}
+          className={cn("text-[29px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
         >
           {data.fullName || "Your Name"}
         </h1>
         <p
           onClick={(e) => onSelectField?.(e, "headline")}
-          className={cn(
-            "mt-2 text-[9px] font-bold uppercase tracking-[0.16em] cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-            selectedField === "headline" && "ring-1 ring-emerald-500 rounded-xs"
-          )}
+          className={cn("mt-2 text-[9px] font-bold uppercase tracking-[0.16em]", getFieldClass("headline"))}
           style={{ color: accent }}
         >
           {data.headline || "Professional title"}
@@ -86,38 +90,26 @@ export function LetterPreview({
           <div>
             <p
               onClick={(e) => onSelectField?.(e, "recipient")}
-              className={cn(
-                "font-bold text-[#1e2320] cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-                selectedField === "recipient" && "ring-1 ring-emerald-500 rounded-xs"
-              )}
+              className={cn("font-bold text-[#1e2320]", getFieldClass("recipient"))}
             >
               {data.recipient || "Hiring team"}
             </p>
             <p
               onClick={(e) => onSelectField?.(e, "company")}
-              className={cn(
-                "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-                selectedField === "company" && "ring-1 ring-emerald-500 rounded-xs"
-              )}
+              className={getFieldClass("company")}
             >
               {data.company || "Company name"}
             </p>
             <p
               onClick={(e) => onSelectField?.(e, "role")}
-              className={cn(
-                "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-                selectedField === "role" && "ring-1 ring-emerald-500 rounded-xs"
-              )}
+              className={getFieldClass("role")}
             >
               {data.role || "Job title"}
             </p>
           </div>
           <p
             onClick={(e) => onSelectField?.(e, "date")}
-            className={cn(
-              "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-              selectedField === "date" && "ring-1 ring-emerald-500 rounded-xs"
-            )}
+            className={getFieldClass("date")}
           >
             {data.date || "Date"}
           </p>
@@ -126,10 +118,7 @@ export function LetterPreview({
         <div className="pt-2">
           <p
             onClick={(e) => onSelectField?.(e, "greeting")}
-            className={cn(
-              "font-bold cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-              selectedField === "greeting" && "ring-1 ring-emerald-500 rounded-xs"
-            )}
+            className={cn("font-bold", getFieldClass("greeting"))}
           >
             {data.greeting || "Dear hiring team,"}
           </p>
@@ -137,10 +126,7 @@ export function LetterPreview({
 
         <p
           onClick={(e) => onSelectField?.(e, "opening")}
-          className={cn(
-            "whitespace-pre-line cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-            selectedField === "opening" && "ring-1 ring-emerald-500 rounded-xs"
-          )}
+          className={cn("whitespace-pre-line", getFieldClass("opening"))}
         >
           {data.opening ||
             "Explain why you are applying for this role and what makes this team compelling to you."}
@@ -148,10 +134,7 @@ export function LetterPreview({
 
         <p
           onClick={(e) => onSelectField?.(e, "evidence")}
-          className={cn(
-            "whitespace-pre-line cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-            selectedField === "evidence" && "ring-1 ring-emerald-500 rounded-xs"
-          )}
+          className={cn("whitespace-pre-line", getFieldClass("evidence"))}
         >
           {data.evidence ||
             "Highlight your most relevant work, practical experience, or specific outcomes that match the role requirements."}
@@ -159,10 +142,7 @@ export function LetterPreview({
 
         <p
           onClick={(e) => onSelectField?.(e, "closing")}
-          className={cn(
-            "whitespace-pre-line cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-            selectedField === "closing" && "ring-1 ring-emerald-500 rounded-xs"
-          )}
+          className={cn("whitespace-pre-line", getFieldClass("closing"))}
         >
           {data.closing || "Close with a warm, confident next step."}
         </p>
@@ -170,19 +150,13 @@ export function LetterPreview({
         <div className="pt-4">
           <p
             onClick={(e) => onSelectField?.(e, "signoff")}
-            className={cn(
-              "font-semibold cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-              selectedField === "signoff" && "ring-1 ring-emerald-500 rounded-xs"
-            )}
+            className={cn("font-semibold", getFieldClass("signoff"))}
           >
             {data.signoff || "Sincerely,"}
           </p>
           <p
             onClick={(e) => onSelectField?.(e, "fullName")}
-            className={cn(
-              "mt-2 font-bold cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-              selectedField === "fullName" && "ring-1 ring-emerald-500 rounded-xs"
-            )}
+            className={cn("mt-2 font-bold", getFieldClass("fullName"))}
           >
             {data.fullName || "Your Name"}
           </p>

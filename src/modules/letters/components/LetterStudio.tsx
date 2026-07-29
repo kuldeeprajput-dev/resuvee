@@ -76,10 +76,10 @@ const COLOR_SWATCHES: ColorSwatch[] = [
 ];
 
 const themeStyles: Record<CanvasTheme, string> = {
-  dots: "bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-[#f8faf7]",
-  grid: "bg-[linear-[#e2e8f0_1px,transparent_1px),linear-gradient(to_right,#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] bg-[#f8faf7]",
-  studio: "bg-[#181c19]",
-  clean: "bg-[#f1f3f0]",
+  dots: "bg-[#e5e7e2] [background-image:radial-gradient(#b8beb5_1.2px,transparent_1.2px)] [background-size:20px_20px]",
+  grid: "bg-[#e8e9e4] [background-image:linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] [background-size:24px_24px]",
+  studio: "bg-[#1e2320] [background-image:radial-gradient(#3a453f_1.5px,transparent_1.5px)] [background-size:24px_24px]",
+  clean: "bg-[#dfe2dc]",
 };
 
 function getStarterCopy(data: LetterData) {
@@ -336,6 +336,7 @@ export function LetterStudio() {
   }, []);
 
   const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof LetterData) => {
+    if (isHandTool || isSpacePressed) return;
     e.stopPropagation();
     setSelectedField(field);
     selectedDomRef.current = e.currentTarget;
@@ -350,6 +351,12 @@ export function LetterStudio() {
     setToolbarPos(null);
     setShowColorPicker(false);
   };
+
+  useEffect(() => {
+    if (isHandTool || isSpacePressed) {
+      clearSelection();
+    }
+  }, [isHandTool, isSpacePressed]);
 
   useEffect(() => {
     if (!selectedField) return;
@@ -564,6 +571,7 @@ export function LetterStudio() {
                     pageSpacing={pageSpacing}
                     onSelectField={handleSelectField}
                     selectedField={selectedField}
+                    isHandTool={isHandTool || isSpacePressed}
                   />
                 </div>
               </div>

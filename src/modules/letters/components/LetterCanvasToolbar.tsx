@@ -188,7 +188,7 @@ export function LetterCanvasToolbar({
           className="builder-icon-button cursor-pointer"
           title="Canvas Background Pattern"
         >
-          <Grid className="size-3.5 text-emerald-600" />
+          <Grid className="size-3.5" />
         </button>
 
         {showThemeMenu && (
