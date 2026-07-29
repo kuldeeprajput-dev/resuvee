@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Cloud, Download, FileText } from "lucide-react";
+import { Cloud, Download, FileText, Sparkles, RotateCcw, X, Loader2, Bot, Check, AlertTriangle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { cn } from "@/shared/lib/utils";
@@ -31,19 +31,15 @@ const emptyLetter: CoverLetterData = {
   phone: "",
   location: "",
   website: "",
-  recipient: "Hiring Manager",
+  recipient: "",
   company: "",
   role: "",
-  date: new Date().toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }),
-  greeting: "Dear hiring team,",
+  date: "",
+  greeting: "",
   opening: "",
   evidence: "",
   closing: "",
-  signoff: "Sincerely,",
+  signoff: "",
 };
 
 const themes: ThemeOption[] = [
@@ -86,10 +82,12 @@ function getStarterCopy(data: CoverLetterData) {
   const role = data.role || "this role";
   const company = data.company || "your team";
   return {
+    greeting: data.greeting || "Dear hiring team,",
     opening: `I am excited to apply for ${role} at ${company}. My background in ${data.headline || "building thoughtful, measurable work"} has taught me how to turn complex goals into focused action while keeping customers and collaborators at the center.`,
     evidence:
       "In my recent work, I have led cross-functional projects from early discovery through delivery, created practical systems that improved team performance, and communicated decisions clearly across technical and business groups. I would bring that same combination of curiosity, ownership, and steady execution to this opportunity.",
     closing: `I would welcome the chance to learn more about ${company} and discuss how my experience could support the team’s priorities. Thank you for your time and consideration.`,
+    signoff: data.signoff || "Sincerely,",
   };
 }
 
@@ -129,6 +127,17 @@ export function CoverLetterStudio() {
   const [showDesignMenu, setShowDesignMenu] = useState(false);
   const [showTemplatesMenu, setShowTemplatesMenu] = useState(false);
 
+  // Modals & AI Panel States
+  const [showStartFreshModal, setShowStartFreshModal] = useState(false);
+  const [showAiDrawer, setShowAiDrawer] = useState(false);
+  const [aiRole, setAiRole] = useState("");
+  const [aiCompany, setAiCompany] = useState("");
+  const [aiHeadline, setAiHeadline] = useState("");
+  const [aiKeyPoints, setAiKeyPoints] = useState("");
+  const [aiTone, setAiTone] = useState("Professional");
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [aiSuccessMessage, setAiSuccessMessage] = useState(false);
+
   // On-Canvas Selection & Floating Formatting Bar State
   const [selectedField, setSelectedField] = useState<keyof CoverLetterData | null>(null);
   const [highlightRect, setHighlightRect] = useState<{
@@ -144,6 +153,15 @@ export function CoverLetterStudio() {
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedDomRef = useRef<HTMLElement | null>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
+
+  // Synchronize AI drawer fields with current cover letter data when opened
+  useEffect(() => {
+    if (showAiDrawer) {
+      setAiRole(data.role || "");
+      setAiCompany(data.company || "");
+      setAiHeadline(data.headline || "");
+    }
+  }, [showAiDrawer, data.role, data.company, data.headline]);
 
   // Handle panel width resizing via dragging
   useEffect(() => {
@@ -185,16 +203,18 @@ export function CoverLetterStudio() {
     };
   }, [isResizing]);
 
-  // Escape key handler for fullscreen
+  // Escape key handler for fullscreen & modals
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isFullscreen) {
-        setIsFullscreen(false);
+      if (e.key === "Escape") {
+        if (isFullscreen) setIsFullscreen(false);
+        if (showStartFreshModal) setShowStartFreshModal(false);
+        if (showAiDrawer) setShowAiDrawer(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isFullscreen]);
+  }, [isFullscreen, showStartFreshModal, showAiDrawer]);
 
   useEffect(() => {
     try {
@@ -403,6 +423,63 @@ export function CoverLetterStudio() {
     setIsDragging(false);
   };
 
+  // Start fresh handler
+  const handleConfirmStartFresh = () => {
+    setHistory((prev) => [...prev, data]);
+    setFuture([]);
+    setData(emptyLetter);
+    clearSelection();
+    setShowStartFreshModal(false);
+  };
+
+  // Groq AI Generation Handler
+  const handleGenerateAiCoverLetter = async () => {
+    setIsGeneratingAi(true);
+    setAiSuccessMessage(false);
+    try {
+      const res = await fetch("/api/generate-cover-letter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: aiRole || data.role,
+          company: aiCompany || data.company,
+          headline: aiHeadline || data.headline,
+          keyPoints: aiKeyPoints,
+          tone: aiTone,
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.data) {
+        setHistory((prev) => [...prev, data]);
+        setFuture([]);
+        setData((current) => ({
+          ...current,
+          role: aiRole || current.role,
+          company: aiCompany || current.company,
+          headline: aiHeadline || current.headline,
+          greeting: json.data.greeting || current.greeting,
+          opening: json.data.opening || current.opening,
+          evidence: json.data.evidence || current.evidence,
+          closing: json.data.closing || current.closing,
+          signoff: json.data.signoff || current.signoff,
+        }));
+        setAiSuccessMessage(true);
+        setTimeout(() => setAiSuccessMessage(false), 4000);
+      }
+    } catch (err) {
+      console.error("AI Generation failed:", err);
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
+  // Export PDF Handler
+  const handleExportPdf = () => {
+    clearSelection();
+    window.print();
+  };
+
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const activeAccent = customAccent || activeTheme.accent;
 
@@ -426,14 +503,41 @@ export function CoverLetterStudio() {
             </p>
           </div>
         </div>
-        <Button
-          type="button"
-          onClick={() => window.print()}
-          className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white shadow-sm hover:bg-black/80 cursor-pointer"
-        >
-          <Download className="size-4" />
-          Export PDF
-        </Button>
+
+        {/* Top Header Action Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowAiDrawer(true)}
+            className="h-9 rounded-xl border border-black/15 bg-white px-3 sm:px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Open AI Cover Letter Assistant"
+          >
+            <Sparkles className="size-3.5 text-emerald-600 animate-pulse" />
+            <span className="hidden sm:inline">Writing with AI</span>
+            <span className="sm:hidden">AI Write</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowStartFreshModal(true)}
+            className="h-9 rounded-xl border border-black/15 bg-white px-3 sm:px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Start fresh with a clean cover letter"
+          >
+            <RotateCcw className="size-3.5 text-[var(--brand-muted)]" />
+            <span className="hidden sm:inline">Start fresh</span>
+            <span className="sm:hidden">Fresh</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            className="h-9 rounded-xl border border-black/15 bg-white px-3 sm:px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Export PDF Document"
+          >
+            <Download className="size-3.5 text-emerald-600" />
+            <span>Export PDF</span>
+          </button>
+        </div>
       </header>
 
       <main
@@ -478,7 +582,7 @@ export function CoverLetterStudio() {
           <section
             style={isFullscreen ? undefined : { width: `${100 - splitPercent}%` }}
             className={cn(
-              "relative flex flex-col overflow-hidden select-none transition-all duration-300 h-full shrink-0",
+              "resume-preview-panel relative flex flex-col overflow-hidden select-none transition-all duration-300 h-full shrink-0",
               isFullscreen ? "fixed inset-0 z-[120] w-full h-full bg-[#1e2320]" : "",
               isResizing ? "transition-none" : "transition-[width] duration-150 ease-out"
             )}
@@ -513,7 +617,7 @@ export function CoverLetterStudio() {
               onMouseUp={handleMouseUpCanvas}
               onMouseLeave={handleMouseUpCanvas}
               className={cn(
-                "canvas-bg relative flex-1 overflow-hidden transition-colors duration-300",
+                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300",
                 themeStyles[canvasTheme],
                 isHandTool || isSpacePressed ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
               )}
@@ -602,6 +706,179 @@ export function CoverLetterStudio() {
         {/* Global drag overlay safeguard during mouse resize */}
         {isResizing && <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />}
       </main>
+
+      {/* Start Fresh Confirmation Modal */}
+      {showStartFreshModal && (
+        <div className="no-print fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-6 shadow-2xl animate-in zoom-in-95">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                <RotateCcw className="size-5 text-emerald-700" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-[var(--brand-ink)]">Start fresh?</h3>
+                <p className="text-xs text-[var(--brand-muted)]">Clear all text and start blank</p>
+              </div>
+            </div>
+
+            <p className="text-xs leading-relaxed text-[var(--brand-muted)] mb-6">
+              All current letter sections and details will be cleared to a completely blank template. Are you sure you want to start fresh?
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowStartFreshModal(false)}
+                className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmStartFresh}
+                className="h-9 rounded-xl bg-emerald-700 px-4 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition cursor-pointer"
+              >
+                Start fresh
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Writing with AI Side-Over Drawer (Right Side Panel) */}
+      {showAiDrawer && (
+        <div className="no-print fixed inset-0 z-[150] flex justify-end bg-black/30 backdrop-blur-xs animate-in fade-in">
+          <div className="relative flex h-full w-full sm:w-[420px] flex-col border-l border-black/10 bg-white p-6 shadow-2xl animate-in slide-in-from-right duration-200">
+            <div className="flex items-center justify-between border-b border-black/10 pb-4 mb-5">
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
+                  <Bot className="size-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--brand-ink)]">
+                    AI Writing Assistant
+                  </h3>
+                  <p className="text-[10px] text-[var(--brand-muted)]">
+                    Generate tailored cover letter paragraphs
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAiDrawer(false)}
+                className="builder-icon-button cursor-pointer"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+              <div>
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+                  Target Role
+                </label>
+                <input
+                  type="text"
+                  value={aiRole}
+                  onChange={(e) => setAiRole(e.target.value)}
+                  placeholder="e.g. Senior Frontend Developer"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+                  Target Company
+                </label>
+                <input
+                  type="text"
+                  value={aiCompany}
+                  onChange={(e) => setAiCompany(e.target.value)}
+                  placeholder="e.g. Google"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+                  Your Title / Specialty
+                </label>
+                <input
+                  type="text"
+                  value={aiHeadline}
+                  onChange={(e) => setAiHeadline(e.target.value)}
+                  placeholder="e.g. Full Stack Engineer with 5+ yrs experience"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+                  Key Skills & Highlights
+                </label>
+                <textarea
+                  rows={3}
+                  value={aiKeyPoints}
+                  onChange={(e) => setAiKeyPoints(e.target.value)}
+                  placeholder="e.g. React, Next.js, performance optimization, leading cross-functional teams"
+                  className="w-full rounded-xl border border-black/15 bg-black/5 p-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+                  Tone & Style
+                </label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {["Professional", "Enthusiastic", "Executive", "Concise"].map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setAiTone(t)}
+                      className={cn(
+                        "rounded-xl border py-2 text-center text-xs font-bold transition cursor-pointer",
+                        aiTone === t
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900 font-extrabold"
+                          : "border-black/10 bg-white text-[var(--brand-ink)] hover:bg-black/5"
+                      )}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {aiSuccessMessage && (
+                <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-300 p-3 text-xs font-bold text-emerald-900 animate-in fade-in">
+                  <Check className="size-4 text-emerald-600 shrink-0" />
+                  <span>Cover letter successfully generated with AI!</span>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-4 border-t border-black/10 mt-4">
+              <button
+                type="button"
+                onClick={handleGenerateAiCoverLetter}
+                disabled={isGeneratingAi}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 text-xs font-bold text-white shadow-md transition hover:bg-emerald-800 disabled:opacity-50 cursor-pointer"
+              >
+                {isGeneratingAi ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin text-white" />
+                    <span>Writing with AI...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="size-4 text-emerald-200" />
+                    <span>Generate with AI</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

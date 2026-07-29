@@ -13,7 +13,7 @@ interface CoverLetterFormPanelProps {
   update: (field: keyof CoverLetterData, value: string) => void;
   setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
   setTheme: (theme: CoverLetterTheme) => void;
-  getStarterCopy: (data: CoverLetterData) => { opening: string; evidence: string; closing: string };
+  getStarterCopy: (data: CoverLetterData) => { greeting: string; opening: string; evidence: string; closing: string; signoff: string };
   splitPercent: number;
   isResizing: boolean;
 }
@@ -51,6 +51,29 @@ export function CoverLetterFormPanel({
         </div>
 
         <FormSection title="Application details">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() =>
+              setData((current) => ({
+                ...current,
+                role: current.role || "Product Manager",
+                company: current.company || "Northstar Labs",
+                recipient: current.recipient || "Hiring Manager",
+                date:
+                  current.date ||
+                  new Date().toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  }),
+              }))
+            }
+            className="mb-3 h-10 rounded-xl border-black/10 bg-white text-xs font-bold shadow-xs hover:bg-black/5 cursor-pointer"
+          >
+            <Sparkles className="size-4 text-[#537c45]" />
+            Create editable starter
+          </Button>
           <div className="grid gap-3 sm:grid-cols-2">
             <Field
               label="Role"
@@ -80,6 +103,23 @@ export function CoverLetterFormPanel({
         </FormSection>
 
         <FormSection title="Your details">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() =>
+              setData((current) => ({
+                ...current,
+                fullName: current.fullName || "Alex Morgan",
+                headline: current.headline || "Senior Product Specialist",
+                email: current.email || "alex.morgan@example.com",
+                phone: current.phone || "+1 555 0100",
+              }))
+            }
+            className="mb-3 h-10 rounded-xl border-black/10 bg-white text-xs font-bold shadow-xs hover:bg-black/5 cursor-pointer"
+          >
+            <Sparkles className="size-4 text-[#537c45]" />
+            Create editable starter
+          </Button>
           <div className="grid gap-3 sm:grid-cols-2">
             <Field
               label="Full name"
