@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ResumeAnalyzer } from "@/modules/analyzer";
-import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function AnalyzerPage() {
           <ResumeAnalyzer />
         </div>
       </main>
-      <SiteFooter blendWithPage />
     </div>
   );
 }
