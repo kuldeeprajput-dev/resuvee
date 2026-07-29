@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Bold,
   Italic,
@@ -14,6 +14,7 @@ import {
   Pipette,
   CaseSensitive,
   RemoveFormatting,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CoverLetterData, ColorSwatch } from "../types/cover-letter";
@@ -49,6 +50,8 @@ export function CoverLetterFormattingToolbar({
   colorSwatches,
   clearSelection,
 }: CoverLetterFormattingToolbarProps) {
+  const [isRefining, setIsRefining] = useState(false);
+
   const handleFontSize = (delta: number) => {
     if (!selectedDomRef.current) return;
     const currentSize = window.getComputedStyle(selectedDomRef.current).fontSize;
@@ -78,6 +81,30 @@ export function CoverLetterFormattingToolbar({
     update(selectedField, "");
   };
 
+  const handleAiRefine = async () => {
+    if (!inlineText || !inlineText.trim() || isRefining) return;
+    setIsRefining(true);
+
+    try {
+      const res = await fetch("/api/refine-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: inlineText, fieldName: selectedField }),
+      });
+
+      if (!res.ok) throw new Error("Refinement failed");
+      const data = await res.json();
+      if (data.refinedText) {
+        setInlineText(data.refinedText);
+        update(selectedField, data.refinedText);
+      }
+    } catch (err) {
+      console.error("AI Refine Error:", err);
+    } finally {
+      setIsRefining(false);
+    }
+  };
+
   return (
     <div
       ref={toolbarRef}
@@ -92,19 +119,16 @@ export function CoverLetterFormattingToolbar({
       <div className="flex items-center gap-1.5 rounded-full bg-black/5 px-2 py-1 shrink-0">
         <button
           type="button"
-          onClick={() => {
-            if (!selectedDomRef.current) return;
-            const currentVal = inlineText;
-            const enhanced = currentVal
-              ? `${currentVal.trim()} (Refined)`
-              : "Enhanced professional response detailing leadership and impact.";
-            setInlineText(enhanced);
-            update(selectedField, enhanced);
-          }}
-          className="flex size-6 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer"
-          title="AI Refine Field Text"
+          onClick={handleAiRefine}
+          disabled={isRefining}
+          className="flex size-6 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
+          title="AI Smart Refine Field Text"
         >
-          <Sparkles className="size-3.5 text-[#059669]" />
+          {isRefining ? (
+            <Loader2 className="size-3.5 text-[#059669] animate-spin" />
+          ) : (
+            <Sparkles className="size-3.5 text-[#059669]" />
+          )}
         </button>
         <input
           type="text"
