@@ -384,7 +384,6 @@ export function CoverLetterFormattingToolbar({
                 type="color"
                 value={activeAccent}
                 onChange={(e) => {
-                  setCustomAccent(e.target.value);
                   if (selectedDomRef.current) {
                     selectedDomRef.current.style.color = e.target.value;
                   }
@@ -399,7 +398,6 @@ export function CoverLetterFormattingToolbar({
               type="text"
               value={activeAccent}
               onChange={(e) => {
-                setCustomAccent(e.target.value);
                 if (selectedDomRef.current) {
                   selectedDomRef.current.style.color = e.target.value;
                 }
@@ -417,7 +415,6 @@ export function CoverLetterFormattingToolbar({
                   key={swatch.name}
                   type="button"
                   onClick={() => {
-                    setCustomAccent(swatch.value);
                     if (selectedDomRef.current) {
                       selectedDomRef.current.style.color = swatch.value;
                     }

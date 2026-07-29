@@ -74,15 +74,16 @@ export function CoverLetterPreview({
       )}
       <header className="relative border-b pb-6" style={{ borderColor: accent }}>
         <h1
+          data-field="fullName"
           onClick={(e) => onSelectField?.(e, "fullName")}
           className={cn("text-[29px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
         >
           {data.fullName}
         </h1>
         <p
+          data-field="headline"
           onClick={(e) => onSelectField?.(e, "headline")}
-          className={cn("mt-2 text-[9px] font-bold uppercase tracking-[0.16em]", getFieldClass("headline"))}
-          style={{ color: accent }}
+          className={cn("mt-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]", getFieldClass("headline"))}
         >
           {data.headline}
         </p>
@@ -92,18 +93,21 @@ export function CoverLetterPreview({
         <div className="flex items-baseline justify-between text-[11px] font-semibold text-[var(--brand-muted)]">
           <div>
             <p
+              data-field="recipient"
               onClick={(e) => onSelectField?.(e, "recipient")}
               className={cn("font-bold text-[#1e2320]", getFieldClass("recipient"))}
             >
               {data.recipient}
             </p>
             <p
+              data-field="company"
               onClick={(e) => onSelectField?.(e, "company")}
               className={getFieldClass("company")}
             >
               {data.company}
             </p>
             <p
+              data-field="role"
               onClick={(e) => onSelectField?.(e, "role")}
               className={getFieldClass("role")}
             >
@@ -111,6 +115,7 @@ export function CoverLetterPreview({
             </p>
           </div>
           <p
+            data-field="date"
             onClick={(e) => onSelectField?.(e, "date")}
             className={getFieldClass("date")}
           >
@@ -120,6 +125,7 @@ export function CoverLetterPreview({
 
         <div className="pt-2">
           <p
+            data-field="greeting"
             onClick={(e) => onSelectField?.(e, "greeting")}
             className={cn("font-bold", getFieldClass("greeting"))}
           >
@@ -128,6 +134,7 @@ export function CoverLetterPreview({
         </div>
 
         <p
+          data-field="opening"
           onClick={(e) => onSelectField?.(e, "opening")}
           className={cn("whitespace-pre-line", getFieldClass("opening"))}
         >
@@ -135,6 +142,7 @@ export function CoverLetterPreview({
         </p>
 
         <p
+          data-field="evidence"
           onClick={(e) => onSelectField?.(e, "evidence")}
           className={cn("whitespace-pre-line", getFieldClass("evidence"))}
         >
@@ -142,6 +150,7 @@ export function CoverLetterPreview({
         </p>
 
         <p
+          data-field="closing"
           onClick={(e) => onSelectField?.(e, "closing")}
           className={cn("whitespace-pre-line", getFieldClass("closing"))}
         >
@@ -150,12 +159,14 @@ export function CoverLetterPreview({
 
         <div className="pt-4">
           <p
+            data-field="signoff"
             onClick={(e) => onSelectField?.(e, "signoff")}
             className={cn("font-semibold", getFieldClass("signoff"))}
           >
             {data.signoff}
           </p>
           <p
+            data-field="fullName"
             onClick={(e) => onSelectField?.(e, "fullName")}
             className={cn("mt-2 font-bold", getFieldClass("fullName"))}
           >
