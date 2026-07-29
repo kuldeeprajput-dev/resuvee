@@ -118,7 +118,7 @@ export function LetterFormPanel({
                 ...getStarterCopy(current),
               }))
             }
-            className="mb-3 h-10 rounded-xl border-black/10 bg-white text-xs font-bold shadow-xs hover:bg-black/5"
+            className="mb-3 h-10 rounded-xl border-black/10 bg-white text-xs font-bold shadow-xs hover:bg-black/5 cursor-pointer"
           >
             <Sparkles className="size-4 text-[#537c45]" />
             Create editable starter
@@ -158,7 +158,7 @@ export function LetterFormPanel({
                 type="button"
                 onClick={() => setTheme(item.id)}
                 className={cn(
-                  "rounded-2xl border bg-white p-3 text-left transition shadow-xs hover:border-black/20",
+                  "rounded-2xl border bg-white p-3 text-left transition shadow-xs hover:border-black/20 cursor-pointer",
                   theme === item.id
                     ? "border-[#537c45] ring-2 ring-[#8baa54]/20 bg-emerald-50/50"
                     : "border-black/10"

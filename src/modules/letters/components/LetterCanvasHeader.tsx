@@ -57,7 +57,7 @@ export function LetterCanvasHeader({
           <button
             type="button"
             onClick={() => window.print()}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in"
+            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer"
             title="Export PDF Document"
           >
             <Download className="size-3.5 text-emerald-600" />
@@ -74,7 +74,7 @@ export function LetterCanvasHeader({
               setShowDesignMenu(false);
             }}
             className={cn(
-              "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition",
+              "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
               showTemplatesMenu
                 ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
                 : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
@@ -98,7 +98,7 @@ export function LetterCanvasHeader({
                     setShowTemplatesMenu(false);
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left transition mb-1",
+                    "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left transition mb-1 cursor-pointer",
                     theme === t.id
                       ? "bg-emerald-50 text-emerald-950 font-bold border border-emerald-500/30"
                       : "hover:bg-black/5 text-[var(--brand-ink)]"
@@ -132,7 +132,7 @@ export function LetterCanvasHeader({
               setShowTemplatesMenu(false);
             }}
             className={cn(
-              "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition",
+              "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
               showDesignMenu
                 ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
                 : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
@@ -154,7 +154,7 @@ export function LetterCanvasHeader({
                 <button
                   type="button"
                   onClick={() => setShowDesignMenu(false)}
-                  className="builder-icon-button"
+                  className="builder-icon-button cursor-pointer"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -215,7 +215,7 @@ export function LetterCanvasHeader({
                           type="button"
                           onClick={() => setCustomAccent(color.value)}
                           className={cn(
-                            "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center shrink-0",
+                            "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center shrink-0 cursor-pointer",
                             isSelected && "ring-2 ring-emerald-600 ring-offset-1"
                           )}
                           style={{ backgroundColor: color.value }}
@@ -248,7 +248,7 @@ export function LetterCanvasHeader({
                         type="button"
                         onClick={() => setFont(f.id as TypographyFont)}
                         className={cn(
-                          "flex flex-col items-start rounded-xl border p-2.5 text-left transition",
+                          "flex flex-col items-start rounded-xl border p-2.5 text-left transition cursor-pointer",
                           isSelected
                             ? "border-emerald-600 bg-emerald-50/80 ring-1 ring-emerald-600/30"
                             : "border-black/10 bg-white hover:border-black/25"
@@ -283,7 +283,7 @@ export function LetterCanvasHeader({
                         type="button"
                         onClick={() => setPageSpacing(p.id as PageSpacing)}
                         className={cn(
-                          "flex-1 rounded-xl border py-1.5 text-center text-xs font-bold transition",
+                          "flex-1 rounded-xl border py-1.5 text-center text-xs font-bold transition cursor-pointer",
                           isSelected
                             ? "border-emerald-600 bg-emerald-600 text-white"
                             : "border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/25"
@@ -303,7 +303,7 @@ export function LetterCanvasHeader({
         <button
           type="button"
           onClick={() => setIsFullscreen(!isFullscreen)}
-          className="builder-icon-button shrink-0"
+          className="builder-icon-button shrink-0 cursor-pointer"
           title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
         >
           {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}

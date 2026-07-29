@@ -52,7 +52,7 @@ export function LetterCanvasToolbar({
           type="button"
           onClick={() => setIsHandTool(false)}
           className={cn(
-            "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
+            "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             !isHandTool && !isSpacePressed
               ? "bg-white text-[var(--brand-ink)] shadow-xs"
               : "text-[var(--brand-muted)] hover:text-black"
@@ -65,7 +65,7 @@ export function LetterCanvasToolbar({
           type="button"
           onClick={() => setIsHandTool(true)}
           className={cn(
-            "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
+            "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             isHandTool || isSpacePressed
               ? "bg-white text-[var(--brand-ink)] shadow-xs"
               : "text-[var(--brand-muted)] hover:text-black"
@@ -82,7 +82,7 @@ export function LetterCanvasToolbar({
       <button
         type="button"
         onClick={() => setZoom((z) => Math.max(30, z - 10))}
-        className="builder-icon-button"
+        className="builder-icon-button cursor-pointer"
         title="Zoom Out"
       >
         <ZoomOut className="size-3.5" />
@@ -96,7 +96,7 @@ export function LetterCanvasToolbar({
             setShowPresetsMenu(!showPresetsMenu);
             setShowThemeMenu(false);
           }}
-          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10"
+          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10 cursor-pointer"
           title="Choose Zoom Scale"
         >
           <span>{zoom}%</span>
@@ -114,7 +114,7 @@ export function LetterCanvasToolbar({
                   setShowPresetsMenu(false);
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition",
+                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition cursor-pointer",
                   zoom === p
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
                     : "text-[var(--brand-ink)] hover:bg-black/5"
@@ -132,7 +132,7 @@ export function LetterCanvasToolbar({
       <button
         type="button"
         onClick={() => setZoom((z) => Math.min(200, z + 10))}
-        className="builder-icon-button"
+        className="builder-icon-button cursor-pointer"
         title="Zoom In"
       >
         <ZoomIn className="size-3.5" />
@@ -145,7 +145,7 @@ export function LetterCanvasToolbar({
           setZoom(72);
           setPan({ x: 0, y: 0 });
         }}
-        className="builder-icon-button"
+        className="builder-icon-button cursor-pointer"
         title="Reset Pan & Zoom"
       >
         <RotateCcw className="size-3.5" />
@@ -158,7 +158,7 @@ export function LetterCanvasToolbar({
         type="button"
         onClick={handleUndo}
         disabled={historyLength === 0}
-        className="builder-icon-button disabled:opacity-30"
+        className="builder-icon-button disabled:opacity-30 cursor-pointer"
         title="Undo (Ctrl + Z)"
       >
         <Undo2 className="size-3.5" />
@@ -169,7 +169,7 @@ export function LetterCanvasToolbar({
         type="button"
         onClick={handleRedo}
         disabled={futureLength === 0}
-        className="builder-icon-button disabled:opacity-30"
+        className="builder-icon-button disabled:opacity-30 cursor-pointer"
         title="Redo (Ctrl + Y)"
       >
         <Redo2 className="size-3.5" />
@@ -185,7 +185,7 @@ export function LetterCanvasToolbar({
             setShowThemeMenu(!showThemeMenu);
             setShowPresetsMenu(false);
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Canvas Background Pattern"
         >
           <Grid className="size-3.5 text-emerald-600" />
@@ -205,7 +205,7 @@ export function LetterCanvasToolbar({
                   setShowThemeMenu(false);
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition capitalize",
+                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition capitalize cursor-pointer",
                   canvasTheme === t
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
                     : "text-[var(--brand-ink)] hover:bg-black/5"

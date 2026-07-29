@@ -87,7 +87,7 @@ export function LetterFormattingToolbar({
             setInlineText(enhanced);
             update(selectedField, enhanced);
           }}
-          className="flex h-8 items-center gap-1 rounded-xl border border-emerald-500/30 bg-emerald-50 px-2 text-[11px] font-bold text-emerald-800 transition hover:bg-emerald-100"
+          className="flex h-8 items-center gap-1 rounded-xl border border-emerald-500/30 bg-emerald-50 px-2 text-[11px] font-bold text-emerald-800 transition hover:bg-emerald-100 cursor-pointer"
           title="AI Smart Refine Text"
         >
           <Sparkles className="size-3 text-emerald-600" />
@@ -103,7 +103,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.classList.toggle("font-bold");
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Bold text formatting"
         >
           <Bold className="size-3.5" />
@@ -116,7 +116,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.classList.toggle("italic");
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Italic text formatting"
         >
           <Italic className="size-3.5" />
@@ -129,7 +129,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.classList.toggle("underline");
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Underline text formatting"
         >
           <Underline className="size-3.5" />
@@ -144,7 +144,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.style.textAlign = "left";
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Align Left"
         >
           <AlignLeft className="size-3.5" />
@@ -157,7 +157,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.style.textAlign = "center";
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Align Center"
         >
           <AlignCenter className="size-3.5" />
@@ -170,7 +170,7 @@ export function LetterFormattingToolbar({
               selectedDomRef.current.style.textAlign = "right";
             }
           }}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Align Right"
         >
           <AlignRight className="size-3.5" />
@@ -181,7 +181,7 @@ export function LetterFormattingToolbar({
         <button
           type="button"
           onClick={() => setShowColorPicker(!showColorPicker)}
-          className="builder-icon-button flex items-center gap-1"
+          className="builder-icon-button flex items-center gap-1 cursor-pointer"
           title="Text / Accent Color"
         >
           <Palette className="size-3.5 text-emerald-600" />
@@ -208,7 +208,7 @@ export function LetterFormattingToolbar({
                     }
                     setShowColorPicker(false);
                   }}
-                  className="size-6 rounded-full border border-black/20 shadow-xs transition hover:scale-110"
+                  className="size-6 rounded-full border border-black/20 shadow-xs transition hover:scale-110 cursor-pointer"
                   style={{ backgroundColor: swatch.value }}
                   title={swatch.name}
                 />

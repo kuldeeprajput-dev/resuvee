@@ -422,7 +422,7 @@ export function LetterStudio() {
         <Button
           type="button"
           onClick={() => window.print()}
-          className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white shadow-sm hover:bg-black/80"
+          className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 font-bold text-white shadow-sm hover:bg-black/80 cursor-pointer"
         >
           <Download className="size-4" />
           Export PDF
