@@ -52,13 +52,14 @@ export function CoverLetterPreview({
       isHandTool
         ? "cursor-inherit"
         : "cursor-pointer rounded-xs transition hover:outline-dashed hover:outline-1 hover:outline-emerald-500",
-      selectedField === field && !isHandTool && "ring-1 ring-emerald-500 rounded-xs"
+      selectedField === field && !isHandTool && "ring-1 ring-emerald-500 rounded-xs",
+      !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
     );
 
   return (
     <article
       className={cn(
-        "resume-print-area relative w-[595px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
+        "resume-print-area resume-preview-sheet relative w-[595px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
         spacingClass,
         fontClass
       )}
@@ -74,14 +75,14 @@ export function CoverLetterPreview({
           onClick={(e) => onSelectField?.(e, "fullName")}
           className={cn("text-[29px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
         >
-          {data.fullName || "Your Name"}
+          {data.fullName}
         </h1>
         <p
           onClick={(e) => onSelectField?.(e, "headline")}
           className={cn("mt-2 text-[9px] font-bold uppercase tracking-[0.16em]", getFieldClass("headline"))}
           style={{ color: accent }}
         >
-          {data.headline || "Professional title"}
+          {data.headline}
         </p>
       </header>
 
@@ -92,26 +93,26 @@ export function CoverLetterPreview({
               onClick={(e) => onSelectField?.(e, "recipient")}
               className={cn("font-bold text-[#1e2320]", getFieldClass("recipient"))}
             >
-              {data.recipient || "Hiring team"}
+              {data.recipient}
             </p>
             <p
               onClick={(e) => onSelectField?.(e, "company")}
               className={getFieldClass("company")}
             >
-              {data.company || "Company name"}
+              {data.company}
             </p>
             <p
               onClick={(e) => onSelectField?.(e, "role")}
               className={getFieldClass("role")}
             >
-              {data.role || "Job title"}
+              {data.role}
             </p>
           </div>
           <p
             onClick={(e) => onSelectField?.(e, "date")}
             className={getFieldClass("date")}
           >
-            {data.date || "Date"}
+            {data.date}
           </p>
         </div>
 
@@ -120,7 +121,7 @@ export function CoverLetterPreview({
             onClick={(e) => onSelectField?.(e, "greeting")}
             className={cn("font-bold", getFieldClass("greeting"))}
           >
-            {data.greeting || "Dear hiring team,"}
+            {data.greeting}
           </p>
         </div>
 
@@ -128,23 +129,21 @@ export function CoverLetterPreview({
           onClick={(e) => onSelectField?.(e, "opening")}
           className={cn("whitespace-pre-line", getFieldClass("opening"))}
         >
-          {data.opening ||
-            "Explain why you are applying for this role and what makes this team compelling to you."}
+          {data.opening}
         </p>
 
         <p
           onClick={(e) => onSelectField?.(e, "evidence")}
           className={cn("whitespace-pre-line", getFieldClass("evidence"))}
         >
-          {data.evidence ||
-            "Highlight your most relevant work, practical experience, or specific outcomes that match the role requirements."}
+          {data.evidence}
         </p>
 
         <p
           onClick={(e) => onSelectField?.(e, "closing")}
           className={cn("whitespace-pre-line", getFieldClass("closing"))}
         >
-          {data.closing || "Close with a warm, confident next step."}
+          {data.closing}
         </p>
 
         <div className="pt-4">
@@ -152,21 +151,22 @@ export function CoverLetterPreview({
             onClick={(e) => onSelectField?.(e, "signoff")}
             className={cn("font-semibold", getFieldClass("signoff"))}
           >
-            {data.signoff || "Sincerely,"}
+            {data.signoff}
           </p>
           <p
             onClick={(e) => onSelectField?.(e, "fullName")}
             className={cn("mt-2 font-bold", getFieldClass("fullName"))}
           >
-            {data.fullName || "Your Name"}
+            {data.fullName}
           </p>
         </div>
       </section>
 
-      <footer className="absolute inset-x-14 bottom-10 flex items-center justify-between border-t border-black/10 pt-4 text-[9px] text-[var(--brand-muted)]">
-        <span>{contact || "Contact info will display here"}</span>
-        <span className="uppercase tracking-[0.15em]">ResuLyra · Letter Studio</span>
-      </footer>
+      {contact && (
+        <footer className="absolute inset-x-14 bottom-10 flex items-center justify-between border-t border-black/10 pt-4 text-[9px] text-[var(--brand-muted)]">
+          <span>{contact}</span>
+        </footer>
+      )}
     </article>
   );
 }
