@@ -71,10 +71,7 @@ const COLOR_SWATCHES: ColorSwatch[] = [
   { name: "Forest", value: "#28785b" },
   { name: "Charcoal", value: "#1e2320" },
   { name: "Navy", value: "#1e3a8a" },
-  { name: "Deep Navy", value: "#172554" },
-  { name: "Burgundy", value: "#881337" },
-  { name: "Teal", value: "#0d9488" },
-  { name: "Copper", value: "#c2410c" },
+  { name: "Deep Blue", value: "#203b57" },
   { name: "Plum", value: "#581c87" },
 ];
 

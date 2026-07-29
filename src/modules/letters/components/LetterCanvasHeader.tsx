@@ -160,7 +160,7 @@ export function LetterCanvasHeader({
                 </button>
               </div>
 
-              {/* Accent Color Section with Responsive Flex Wrap */}
+              {/* Accent Color Section */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold text-[var(--brand-ink)]">Accent Color</label>
@@ -174,9 +174,15 @@ export function LetterCanvasHeader({
                     />
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2">
+                  {/* Custom Color Wheel Swatch on Left Side */}
                   <label
-                    className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500"
+                    className={cn(
+                      "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                      !colorSwatches.some(
+                        (c) => c.value.toLowerCase() === activeAccent.toLowerCase()
+                      ) && "ring-2 ring-emerald-600 ring-offset-1"
+                    )}
                     title="Pick Custom Color"
                   >
                     <input
@@ -187,15 +193,20 @@ export function LetterCanvasHeader({
                     />
                     <Pipette className="size-3 text-white drop-shadow-md" />
                   </label>
+
+                  {/* Custom Hex Code Text Input */}
                   <input
                     type="text"
                     value={activeAccent}
                     onChange={(e) => setCustomAccent(e.target.value)}
-                    className="w-20 rounded-lg border border-black/15 bg-black/5 px-2 py-1 font-mono text-xs font-bold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white"
-                    placeholder="#203b57"
+                    placeholder="#28785b"
+                    className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
                   />
-                  <span className="h-6 w-px bg-black/10 mx-0.5 shrink-0" />
-                  <div className="flex flex-wrap items-center gap-1.5 max-w-full">
+
+                  <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
+
+                  {/* Preset Swatches Side-by-Side */}
+                  <div className="flex items-center gap-1.5">
                     {colorSwatches.map((color) => {
                       const isSelected = activeAccent.toLowerCase() === color.value.toLowerCase();
                       return (
@@ -203,11 +214,14 @@ export function LetterCanvasHeader({
                           key={color.name}
                           type="button"
                           onClick={() => setCustomAccent(color.value)}
-                          className="relative flex size-6 shrink-0 items-center justify-center rounded-full border border-black/15 shadow-xs transition hover:scale-110"
+                          className={cn(
+                            "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center shrink-0",
+                            isSelected && "ring-2 ring-emerald-600 ring-offset-1"
+                          )}
                           style={{ backgroundColor: color.value }}
                           title={color.name}
                         >
-                          {isSelected && <Check className="size-3 text-white drop-shadow-xs" />}
+                          {isSelected && <Check className="size-3 text-white" />}
                         </button>
                       );
                     })}
