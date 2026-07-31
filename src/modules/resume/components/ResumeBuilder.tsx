@@ -294,33 +294,37 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             onClick={() => setShowTailor(true)}
             className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold sm:inline-flex"
           >
-            <ScanSearch className="size-4" />
+            <ScanSearch className="size-4 text-[var(--brand-ink)]" />
             Role match
           </Button>
+
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={startFresh}
-            className="hidden h-10 rounded-xl px-3 text-xs font-bold text-[var(--brand-muted)] hover:text-[var(--brand-ink)] md:inline-flex"
+            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] md:inline-flex"
           >
-            <FilePlus2 className="size-4" />
+            <FilePlus2 className="size-4 text-[var(--brand-muted)]" />
             Start fresh
           </Button>
+
           <Button
             type="button"
             variant="outline"
             onClick={() => setShowMobilePreview(true)}
-            className="h-10 rounded-xl border-black/10 bg-white px-3 font-bold lg:hidden"
+            className="h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold lg:hidden"
           >
             <Eye className="size-4" />
             <span className="hidden sm:inline">Preview</span>
           </Button>
+
           <Button
             type="button"
+            variant="outline"
             onClick={exportResume}
-            className="h-10 rounded-xl bg-[var(--brand-ink)] px-3.5 font-bold text-white hover:bg-[#293630]"
+            className="h-10 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)]"
           >
-            <Download className="size-4" />
+            <Download className="size-4 text-emerald-600" />
             <span className="hidden sm:inline">Export PDF</span>
             <span className="sm:hidden">Export</span>
           </Button>
