@@ -50,20 +50,22 @@ export function CoverLetterPreview({
   const getFieldClass = (field: keyof CoverLetterData) =>
     cn(
       isHandTool
-        ? "cursor-inherit"
+        ? "cursor-inherit hover:outline-none"
         : cn(
             "cursor-pointer rounded-xs transition",
             selectedField !== field && "hover:outline-dashed hover:outline-1 hover:outline-emerald-500"
           ),
+      "break-words [overflow-wrap:anywhere]",
       !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
     );
 
   return (
     <article
       className={cn(
-        "resume-print-area resume-preview-sheet relative w-[595px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)]",
+        "resume-print-area resume-preview-sheet relative flex flex-col justify-between w-[595px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
         spacingClass,
-        fontClass
+        fontClass,
+        isHandTool && "hand-mode"
       )}
     >
       {theme === "signal" && (
@@ -89,9 +91,9 @@ export function CoverLetterPreview({
         </p>
       </header>
 
-      <section className="relative mt-6 space-y-4 text-xs leading-relaxed text-[#2d342f]">
-        <div className="flex items-baseline justify-between text-[11px] font-semibold text-[var(--brand-muted)]">
-          <div>
+      <section className="relative mt-6 flex-1 space-y-4 text-xs leading-relaxed text-[#2d342f]">
+        <div className="flex items-baseline justify-between text-[11px] font-semibold text-[var(--brand-muted)] gap-4">
+          <div className="min-w-0 flex-1">
             <p
               data-field="recipient"
               onClick={(e) => onSelectField?.(e, "recipient")}
@@ -117,7 +119,7 @@ export function CoverLetterPreview({
           <p
             data-field="date"
             onClick={(e) => onSelectField?.(e, "date")}
-            className={getFieldClass("date")}
+            className={cn("shrink-0", getFieldClass("date"))}
           >
             {data.date}
           </p>
@@ -136,7 +138,7 @@ export function CoverLetterPreview({
         <p
           data-field="opening"
           onClick={(e) => onSelectField?.(e, "opening")}
-          className={cn("whitespace-pre-line", getFieldClass("opening"))}
+          className={cn("whitespace-pre-wrap", getFieldClass("opening"))}
         >
           {data.opening}
         </p>
@@ -144,7 +146,7 @@ export function CoverLetterPreview({
         <p
           data-field="evidence"
           onClick={(e) => onSelectField?.(e, "evidence")}
-          className={cn("whitespace-pre-line", getFieldClass("evidence"))}
+          className={cn("whitespace-pre-wrap", getFieldClass("evidence"))}
         >
           {data.evidence}
         </p>
@@ -152,7 +154,7 @@ export function CoverLetterPreview({
         <p
           data-field="closing"
           onClick={(e) => onSelectField?.(e, "closing")}
-          className={cn("whitespace-pre-line", getFieldClass("closing"))}
+          className={cn("whitespace-pre-wrap", getFieldClass("closing"))}
         >
           {data.closing}
         </p>
@@ -175,9 +177,55 @@ export function CoverLetterPreview({
         </div>
       </section>
 
-      {contact && (
-        <footer className="absolute inset-x-14 bottom-10 flex items-center justify-between border-t border-black/10 pt-4 text-[9px] text-[var(--brand-muted)]">
-          <span>{contact}</span>
+      {(data.email || data.phone || data.location || data.website) && (
+        <footer className="relative mt-8 border-t border-black/10 pt-4 text-[9px] text-[var(--brand-muted)] flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {data.email && (
+              <span
+                data-field="email"
+                onClick={(e) => onSelectField?.(e, "email")}
+                className={getFieldClass("email")}
+              >
+                {data.email}
+              </span>
+            )}
+            {data.email && (data.phone || data.location || data.website) && (
+              <span className="text-black/30">·</span>
+            )}
+            {data.phone && (
+              <span
+                data-field="phone"
+                onClick={(e) => onSelectField?.(e, "phone")}
+                className={getFieldClass("phone")}
+              >
+                {data.phone}
+              </span>
+            )}
+            {data.phone && (data.location || data.website) && (
+              <span className="text-black/30">·</span>
+            )}
+            {data.location && (
+              <span
+                data-field="location"
+                onClick={(e) => onSelectField?.(e, "location")}
+                className={getFieldClass("location")}
+              >
+                {data.location}
+              </span>
+            )}
+            {data.location && data.website && (
+              <span className="text-black/30">·</span>
+            )}
+            {data.website && (
+              <span
+                data-field="website"
+                onClick={(e) => onSelectField?.(e, "website")}
+                className={getFieldClass("website")}
+              >
+                {data.website}
+              </span>
+            )}
+          </div>
         </footer>
       )}
     </article>

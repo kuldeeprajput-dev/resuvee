@@ -580,14 +580,16 @@ export function CoverLetterStudio() {
             <Brand />
           </div>
           <span className="hidden h-6 w-px bg-black/10 lg:block" />
-          <div>
-            <p className="flex items-center gap-2 text-sm font-bold">
-              <FileText className="size-4 text-[var(--brand-muted)]" />
-              {data.company ? `${data.company} — Letter` : "Untitled letter"}
-            </p>
-            <p className="mt-0.5 flex items-center gap-1.5 text-[10px] font-semibold text-[var(--brand-muted)]">
-              <Cloud className="size-3" />
-              {saveLabel}
+          <div className="min-w-0 max-w-[180px] sm:max-w-[300px] md:max-w-[420px]">
+            <p className="flex items-center gap-2 text-sm font-bold truncate">
+              <FileText className="size-4 shrink-0 text-[var(--brand-muted)]" />
+              <span className="truncate">
+                {data.fullName
+                  ? `${data.fullName}'s Cover Letter`
+                  : data.company
+                    ? `${data.company} — Cover Letter`
+                    : "Cover Letter"}
+              </span>
             </p>
           </div>
         </div>

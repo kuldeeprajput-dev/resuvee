@@ -602,6 +602,15 @@
   gap: 2.25rem !important;
 }
 
+/* Resume Print & Preview Sheet Text Wrapping */
+.resume-preview-sheet,
+.resume-print-area,
+.resume-preview-sheet *,
+.resume-print-area * {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Letter & Builder Sheet Element Hover Style */
 .resume-preview-sheet:not(.hand-mode) h1:hover,
 .resume-preview-sheet:not(.hand-mode) h2:hover,
