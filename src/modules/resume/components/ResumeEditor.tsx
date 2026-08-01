@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Columns3, ImagePlus, LayoutPanelTop, UserRound, X } from "lucide-react";
+import { Columns3, ImagePlus, LayoutPanelTop, Sparkles, UserRound, X } from "lucide-react";
 import { useRef, useState } from "react";
 import type {
   BuilderSection,
@@ -20,6 +20,7 @@ import {
   getEmptyProject,
   getEmptySkillGroup,
 } from "../utils/resume-data";
+import { getTemplateStarterData } from "../utils/resume-presets";
 import { cn } from "@/shared/lib/utils";
 import {
   AddItemButton,
@@ -152,6 +153,20 @@ function PersonalDetailsEditor({ data, onChange, template, stepLabel }: ResumeEd
       eyebrow={stepLabel}
       title="Let’s start with the essentials"
       description="This information sits at the top of your resume. Use the name and contact details employers should use."
+      action={
+        <button
+          type="button"
+          onClick={() => {
+            const starter = getTemplateStarterData(template.id);
+            onChange(starter);
+          }}
+          className="flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-[#047857] shadow-2xs transition hover:bg-emerald-100/80 cursor-pointer"
+          title="Auto-fill with sample dummy data tailored to this template"
+        >
+          <Sparkles className="size-3.5 text-emerald-600" />
+          <span>Fill Dummy Data</span>
+        </button>
+      }
     >
       <div className="mb-6 grid gap-2 grid-cols-1 min-[500px]:grid-cols-3">
         <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">

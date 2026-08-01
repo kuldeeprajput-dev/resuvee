@@ -52,21 +52,23 @@ interface EditorSectionProps {
   title: string;
   description: string;
   children: React.ReactNode;
+  action?: React.ReactNode;
 }
 
-export function EditorSection({ eyebrow, title, description, children }: EditorSectionProps) {
+export function EditorSection({ eyebrow, title, description, children, action }: EditorSectionProps) {
   return (
     <div className="mx-auto w-full max-w-2xl px-3.5 pb-8 pt-4 sm:px-7 sm:pb-12 sm:pt-7">
-      <div className="mb-4 sm:mb-7">
-        <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-          {eyebrow}
-        </p>
-        <h2 className="text-xl font-bold tracking-[-0.035em] text-[var(--brand-ink)] sm:text-2xl">
-          {title}
-        </h2>
-        <p className="mt-1.5 max-w-xl text-xs leading-5 text-[var(--brand-muted)] sm:mt-2 sm:text-sm sm:leading-6">
-          {description}
-        </p>
+      <div className="mb-4 sm:mb-7 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#315f45]">
+            {eyebrow}
+          </p>
+          <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--brand-ink)] sm:text-2xl">
+            {title}
+          </h2>
+          <p className="mt-1.5 text-xs text-[var(--brand-muted)] sm:text-sm">{description}</p>
+        </div>
+        {action && <div className="shrink-0 pt-1">{action}</div>}
       </div>
       {children}
     </div>

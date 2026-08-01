@@ -13,11 +13,13 @@ import {
   FileText,
   LayoutTemplate,
   ScanSearch,
+  Sparkles,
   SpellCheck2,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { builderSections, calculateResumeStrength, resumeTemplates } from "../utils/resume-data";
+import { getTemplateStarterData } from "../utils/resume-presets";
 import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
@@ -454,13 +456,13 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                     data-section-id={section.id}
                     onClick={() => setActiveSection(section.id)}
                     className={cn(
-                      "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150",
+                      "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150 cursor-pointer",
                       activeSection === section.id
-                        ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
+                        ? "bg-emerald-600 text-white shadow-xs scale-[1.01]"
                         : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]"
                     )}
                   >
-                    <span className="text-[10px] opacity-80">{index + 1}</span>
+                    <span className={cn("text-[10px]", activeSection === section.id ? "opacity-90 font-extrabold" : "opacity-70")}>{index + 1}</span>
                     {section.shortLabel}
                   </button>
                 ))}
@@ -483,7 +485,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                   onClick={() => goToRelativeSection(-1)}
                   disabled={activeIndex === 0}
                   aria-label="Previous section"
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:border-emerald-500/50 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
                 >
                   <ChevronLeft className="size-3.5" />
                 </button>
@@ -500,10 +502,10 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                         onClick={() => setActiveSection(sec.id)}
                         title={sec.label}
                         className={cn(
-                          "transition-all duration-150",
+                          "transition-all duration-150 cursor-pointer",
                           isActive
-                            ? "size-2 rounded-full bg-[var(--brand-ink)] ring-1 ring-black/20"
-                            : "size-2 rounded-full border border-black/30 bg-black/10 hover:bg-black/40"
+                            ? "size-2 rounded-full bg-emerald-600 ring-2 ring-emerald-500/30"
+                            : "size-2 rounded-full border border-black/20 bg-black/10 hover:bg-black/40"
                         )}
                       />
                     );
@@ -517,7 +519,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                   onClick={() => goToRelativeSection(1)}
                   disabled={activeIndex === visibleSections.length - 1}
                   aria-label="Next section"
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:bg-black/5 hover:text-black disabled:opacity-25 disabled:pointer-events-none"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/70 shadow-xs transition hover:border-emerald-500/50 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-25 disabled:pointer-events-none cursor-pointer"
                 >
                   <ChevronRight className="size-3.5" />
                 </button>
@@ -725,27 +727,28 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       )}
       {/* Start Fresh Confirmation Modal */}
       {showStartFreshModal && (
-        <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-[20px] bg-[var(--brand-paper)] p-6 shadow-2xl">
-            {/* Icon */}
-            <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-[#c65b38]/10">
-              <AlertTriangle className="size-6 text-[#c65b38]" />
+        <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-5 shadow-2xl backdrop-blur-md animate-in zoom-in-95">
+            <div className="flex items-start gap-4">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 border border-red-200/60">
+                <AlertTriangle className="size-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-base font-extrabold tracking-tight text-[var(--brand-ink)]">Start fresh?</h2>
+                <p className="mt-1 text-xs text-[var(--brand-muted)] leading-relaxed">
+                  This will clear your current resume and start a new blank draft.
+                  <strong className="text-[var(--brand-ink)] font-bold"> This action cannot be undone.</strong>
+                </p>
+              </div>
             </div>
 
-            {/* Heading */}
-            <h2 className="text-lg font-bold tracking-[-0.03em]">Start fresh?</h2>
-            <p className="mt-1.5 text-sm text-[var(--brand-muted)] leading-relaxed">
-              This will clear your current resume and start a new blank draft.
-              <strong className="text-[var(--brand-ink)]"> This action cannot be undone.</strong>
-            </p>
-
             {/* Actions */}
-            <div className="mt-6 flex items-center justify-end gap-2.5">
+            <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-black/10">
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => setShowStartFreshModal(false)}
-                className="h-10 rounded-xl px-4 text-sm font-bold text-[var(--brand-muted)] hover:text-[var(--brand-ink)]"
+                className="h-9 rounded-xl border-black/10 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -755,10 +758,10 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                   clearResume();
                   setShowStartFreshModal(false);
                 }}
-                className="h-10 rounded-xl bg-[#c65b38] px-4 text-sm font-bold text-white hover:bg-[#a84d2e]"
+                className="h-9 rounded-xl bg-red-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-red-700 cursor-pointer"
               >
-                <FilePlus2 className="size-4" />
-                Yes, start fresh
+                <FilePlus2 className="size-3.5" />
+                <span>Yes, start fresh</span>
               </Button>
             </div>
           </div>
