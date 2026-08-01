@@ -200,7 +200,7 @@ export default function Home() {
           <div className="mx-auto grid w-full max-w-7xl divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               [String(resumeTemplates.length), "curated templates"],
-              ["4", "connected career tools"],
+              ["3", "connected tools"],
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
               <div key={label} className="flex items-baseline gap-3 py-7 sm:justify-center sm:py-8">

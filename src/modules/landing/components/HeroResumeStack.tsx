@@ -83,7 +83,7 @@ export function HeroResumeStack() {
         ))}
       </div>
 
-      <div className="relative z-[60] mt-4 grid gap-3 px-0 sm:mt-[-46px] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
+      <div className="relative z-10 mt-4 grid gap-3 px-0 sm:mt-[-46px] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
         <div className="rounded-2xl border border-black/10 bg-white/94 p-3 shadow-[0_16px_42px_rgba(22,32,28,0.14)] backdrop-blur-md">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)]">
