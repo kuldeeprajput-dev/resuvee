@@ -351,7 +351,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-black/10">
               <div
-                className="h-full rounded-full bg-[var(--brand-lime)] transition-all duration-500"
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500"
                 style={{ width: `${strength}%` }}
               />
             </div>
@@ -362,7 +362,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             </p>
           </div>
 
-          <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4" aria-label="Resume sections">
+          <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-4" aria-label="Resume sections">
             {visibleSections.map((section, index) => {
               const isActive = activeSection === section.id;
               const isComplete = index < activeIndex;
@@ -372,23 +372,23 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                   type="button"
                   onClick={() => setActiveSection(section.id)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition",
+                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-150 cursor-pointer",
                     isActive
-                      ? "bg-[var(--brand-ink)] text-white shadow-sm"
-                      : "text-[var(--brand-muted)] hover:bg-white/70 hover:text-[var(--brand-ink)]"
+                      ? "bg-white text-[var(--brand-ink)] border border-black/15 shadow-xs font-bold"
+                      : "text-[var(--brand-muted)] hover:bg-white/60 hover:text-[var(--brand-ink)]"
                   )}
                 >
                   <span
                     className={cn(
-                      "flex size-6 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold",
+                      "flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition-all",
                       isActive
-                        ? "border-white/20 bg-white/10 text-[var(--brand-lime)]"
+                        ? "bg-emerald-600 text-white shadow-xs"
                         : isComplete
-                          ? "border-[#9ebd56] bg-[var(--brand-lime)] text-[var(--brand-ink)]"
-                          : "border-black/15"
+                          ? "bg-emerald-100 text-emerald-700 border border-emerald-300/80"
+                          : "border border-black/20 text-[var(--brand-muted)] bg-white/50"
                     )}
                   >
-                    {isComplete ? <Check className="size-3" /> : index + 1}
+                    {isComplete ? <Check className="size-3 stroke-[2.5]" /> : index + 1}
                   </span>
                   <span className="text-xs font-bold">{section.label}</span>
                 </button>
@@ -397,14 +397,15 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           </nav>
 
           <div className="flex h-[64px] shrink-0 items-center border-t border-black/10 bg-white/80 px-3 backdrop-blur">
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={() => setShowTemplates(true)}
-              className="flex h-10 w-full items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/20"
+              className="h-10 w-full rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
             >
-              <LayoutTemplate className="size-4 text-black/70" />
+              <LayoutTemplate className="size-4 text-emerald-600" />
               <span>Templates</span>
-            </button>
+            </Button>
           </div>
         </aside>
 
@@ -535,12 +536,12 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             <div className="flex h-[64px] shrink-0 items-center justify-between border-t border-black/10 bg-white/80 px-3.5 backdrop-blur sm:px-7">
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => goToRelativeSection(-1)}
                 disabled={activeIndex === 0}
-                className="h-10 rounded-xl px-3 text-xs font-bold sm:text-sm"
+                className="h-10 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 disabled:opacity-30 cursor-pointer"
               >
-                <ChevronLeft className="size-4" />
+                <ChevronLeft className="size-4 text-[var(--brand-muted)]" />
                 Back
               </Button>
               <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
@@ -548,6 +549,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               </span>
               <Button
                 type="button"
+                variant="outline"
                 onClick={() => {
                   if (activeIndex === visibleSections.length - 1) {
                     setShowMobilePreview(true);
@@ -555,13 +557,13 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                     goToRelativeSection(1);
                   }
                 }}
-                className="h-10 rounded-xl bg-[var(--brand-ink)] px-4 text-xs font-bold text-white hover:bg-[#293630] sm:text-sm"
+                className="h-10 rounded-xl border-black/10 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
               >
-                {activeIndex === visibleSections.length - 1 ? "Preview" : "Continue"}
+                <span>{activeIndex === visibleSections.length - 1 ? "Preview" : "Continue"}</span>
                 {activeIndex === visibleSections.length - 1 ? (
-                  <Eye className="size-4" />
+                  <Eye className="size-4 text-emerald-600" />
                 ) : (
-                  <ChevronRight className="size-4" />
+                  <ChevronRight className="size-4 text-emerald-600" />
                 )}
               </Button>
             </div>

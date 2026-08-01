@@ -171,7 +171,7 @@ function PersonalDetailsEditor({ data, onChange, template, stepLabel }: ResumeEd
           </span>
         </div>
         <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
-          <span className="flex size-4 items-center justify-center rounded-full bg-[var(--brand-lime)] text-[8px] font-black">
+          <span className="flex size-4 items-center justify-center rounded-full border border-black/15 bg-black/5 text-[8px] font-extrabold text-[var(--brand-ink)]">
             {template.sections.length}
           </span>
           <span className="text-[10px] font-bold">Editable sections</span>
