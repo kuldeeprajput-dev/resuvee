@@ -114,6 +114,8 @@ export function CoverLetterFormattingToolbar({
     }
   };
 
+  const isAiRefineDisabled = !["opening", "evidence", "closing"].includes(selectedField);
+
   return (
     <div
       ref={toolbarRef}
@@ -129,14 +131,14 @@ export function CoverLetterFormattingToolbar({
         <button
           type="button"
           onClick={handleAiRefine}
-          disabled={isRefining}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
-          title="AI Smart Refine Text"
+          disabled={isRefining || isAiRefineDisabled}
+          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+          title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
         >
           {isRefining ? (
             <Loader2 className="size-3.5 text-[#059669] animate-spin" />
           ) : (
-            <Sparkles className="size-3.5 text-[#059669]" />
+            <Sparkles className={cn("size-3.5", isAiRefineDisabled ? "text-gray-400" : "text-[#059669]")} />
           )}
         </button>
 
@@ -180,8 +182,9 @@ export function CoverLetterFormattingToolbar({
                 <button
                   type="button"
                   onClick={handleAiRefine}
-                  disabled={isRefining}
-                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-50"
+                  disabled={isRefining || isAiRefineDisabled}
+                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+                  title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
                 >
                   {isRefining ? (
                     <Loader2 className="size-3 animate-spin" />
