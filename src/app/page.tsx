@@ -104,8 +104,7 @@ const productTools = [
     category: "Explore",
     icon: BriefcaseBusiness,
     title: "Template Gallery",
-    description:
-      "Explore curated white-page resume templates designed for every experience level.",
+    description: "Explore curated white-page resume templates designed for every experience level.",
     features: ["White-page templates", "Live previews"],
     href: "/#templates",
     action: "View templates",
@@ -116,20 +115,22 @@ const productTools = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen overflow-hidden bg-[var(--brand-canvas)] text-[var(--brand-ink)]">
+    <div className="min-h-screen overflow-x-clip bg-[var(--brand-canvas)] text-[var(--brand-ink)]">
       <SiteHeader />
 
       <main>
         <section className="relative border-b border-black/[0.08]">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-[720px] w-full max-w-[1440px] items-center gap-14 px-5 py-16 sm:px-8 md:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-24">
+          <div className="relative mx-auto grid min-h-0 w-full max-w-7xl items-center gap-10 px-5 pb-12 pt-10 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-12 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-14">
             <div className="relative z-10 max-w-[650px]">
-              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] shadow-sm">
+              <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)] shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
-                {resumeTemplates.length} original, white-page resume templates
+                <span className="truncate">
+                  {resumeTemplates.length} original, white-page resume templates
+                </span>
               </div>
 
-              <h1 className="text-balance text-[clamp(3.5rem,7.1vw,7.1rem)] font-bold leading-[0.88] tracking-[-0.075em]">
+              <h1 className="max-w-[11ch] text-balance text-[clamp(2.85rem,13vw,7.1rem)] font-bold leading-[0.9] tracking-[-0.07em] sm:max-w-none sm:text-[clamp(3.5rem,7.1vw,7.1rem)] sm:leading-[0.88] sm:tracking-[-0.075em]">
                 Your story,
                 <span className="relative ml-[0.08em] inline-block">
                   clearly told.
@@ -149,15 +150,15 @@ export default function Home() {
                 </span>
               </h1>
 
-              <p className="mt-8 max-w-[580px] text-lg leading-8 text-[var(--brand-muted)] sm:text-xl">
+              <p className="mt-6 max-w-[580px] text-base leading-7 text-[var(--brand-muted)] sm:mt-8 sm:text-xl sm:leading-8">
                 Start with the format employers know, a focused fresher layout, or a role-specific
                 design. Then write, check, customize, and export from one focused workspace.
               </p>
 
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
                 <Button
                   asChild
-                  className="h-13 rounded-full bg-[var(--brand-ink)] px-6 text-sm font-bold text-white shadow-[0_8px_24px_rgba(22,32,28,0.18)] hover:bg-[#27332f]"
+                  className="h-12 w-full rounded-full bg-[var(--brand-ink)] px-5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(22,32,28,0.18)] hover:bg-[#27332f] sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/builder">
                     Build my resume
@@ -167,7 +168,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="h-13 rounded-full border-black/15 bg-white/65 px-6 text-sm font-bold hover:bg-white"
+                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/analyzer">
                     <FileSearch className="size-4" />
@@ -176,11 +177,11 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div className="mt-9 space-y-2.5">
+              <div className="mt-8 space-y-2.5 sm:mt-9">
                 {productBenefits.map((benefit) => (
                   <div
                     key={benefit}
-                    className="flex items-center gap-2.5 text-sm font-medium text-[var(--brand-muted)]"
+                    className="flex items-start gap-2.5 text-sm font-medium leading-6 text-[var(--brand-muted)]"
                   >
                     <span className="flex size-5 items-center justify-center rounded-full bg-[var(--brand-lime)]">
                       <Check className="size-3 text-[var(--brand-ink)]" />
@@ -196,7 +197,7 @@ export default function Home() {
         </section>
 
         <section className="bg-[var(--brand-ink)] text-white">
-          <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
+          <div className="mx-auto grid w-full max-w-7xl divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               [String(resumeTemplates.length), "curated templates"],
               ["4", "connected career tools"],
@@ -214,7 +215,7 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-[1440px] px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
+          className="mx-auto w-full max-w-7xl px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
         >
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -242,7 +243,7 @@ export default function Home() {
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
           <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
 
-          <div className="relative mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+          <div className="relative mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 md:py-20 lg:px-12">
             <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:gap-12">
               <div className="flex flex-col xl:py-3">
                 <div>
@@ -377,7 +378,7 @@ export default function Home() {
         </section>
 
         <section id="how-it-works" className="border-y border-black/[0.08] bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+          <div className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 md:py-20 lg:px-12">
             <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div className="max-w-3xl">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
@@ -433,7 +434,7 @@ export default function Home() {
         </section>
 
         <section className="bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-8 md:py-6 lg:px-12">
+          <div className="mx-auto w-full max-w-7xl px-5 py-5 sm:px-8 md:py-6 lg:px-12">
             <div className="relative overflow-hidden rounded-[28px] bg-[var(--brand-orange)] px-6 py-10 sm:px-9 sm:py-12 lg:px-12">
               <div className="absolute -right-16 -top-28 size-64 rounded-full border-[42px] border-white/15" />
               <div className="absolute -bottom-24 right-[30%] size-48 rounded-full bg-[var(--brand-lime)]/30 blur-2xl" />
@@ -459,7 +460,7 @@ export default function Home() {
                 </div>
                 <Button
                   asChild
-                  className="h-12 w-fit shrink-0 rounded-full bg-[var(--brand-ink)] px-6 font-bold text-white shadow-lg hover:-translate-y-0.5 hover:bg-[#27332f]"
+                  className="h-12 w-full shrink-0 rounded-full bg-[var(--brand-ink)] px-6 font-bold text-white shadow-lg hover:-translate-y-0.5 hover:bg-[#27332f] sm:w-fit"
                 >
                   <Link href="/builder">
                     Start building

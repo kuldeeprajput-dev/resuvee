@@ -38,8 +38,8 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         blendWithPage ? "bg-[var(--brand-canvas)]" : "bg-[#e9e7df]"
       )}
     >
-      <div className="mx-auto grid w-full max-w-[1440px] gap-9 px-5 py-8 sm:px-8 md:grid-cols-[0.85fr_1.15fr] md:gap-14 lg:px-12">
-        <div className="max-w-md">
+      <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-10 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:gap-14 md:py-12 lg:px-12">
+        <div className="min-w-0 max-w-md">
           <Brand />
           <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
             Build a clearer career story, understand how it performs, and move every application
@@ -63,15 +63,15 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         </div>
 
         <nav
-          className="grid grid-cols-2 gap-7 sm:grid-cols-3 sm:gap-8"
+          className="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-3 sm:gap-8"
           aria-label="Footer navigation"
         >
           {footerGroups.map((group) => (
             <div key={group.title}>
-              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.16em] text-black/40">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-black/40">
                 {group.title}
               </p>
-              <div className="flex flex-col gap-3 text-sm">
+              <div className="flex flex-col gap-2.5 text-sm">
                 {group.links.map((link) => (
                   <Link
                     key={`${group.title}-${link.href}`}
@@ -87,7 +87,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         </nav>
       </div>
       <div className="border-t border-black/[0.07]">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-5 py-4 text-[11px] text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-5 py-4 text-[11px] leading-5 text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
           <p>© 2026 Resulyra. Built for better applications.</p>
           <div className="flex flex-wrap gap-x-5 gap-y-1">
             <p>Original, copyright-safe template designs.</p>
