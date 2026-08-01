@@ -23,7 +23,7 @@ const footerGroups = [
   {
     title: "Organize",
     links: [
-      { href: "/job-tracker", label: "Application board" },
+      { href: "/builder", label: "Local workspace" },
       { href: "/#how-it-works", label: "How it works" },
       { href: "/#toolkit", label: "Product toolkit" },
     ],

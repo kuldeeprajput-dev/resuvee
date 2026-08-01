@@ -7,7 +7,6 @@ const navigation = [
   { href: "/builder", label: "Build" },
   { href: "/analyzer", label: "Analyze" },
   { href: "/cover-letter", label: "Letters" },
-  { href: "/job-tracker", label: "Tracker" },
   { href: "/examples", label: "Examples" },
 ];
 
