@@ -9,7 +9,7 @@ const footerGroups = [
     links: [
       { href: "/builder", label: "Resume builder" },
       { href: "/cover-letter", label: "Letter studio" },
-      { href: "/examples", label: "Resume examples" },
+      { href: "/#templates", label: "Resume templates" },
     ],
   },
   {

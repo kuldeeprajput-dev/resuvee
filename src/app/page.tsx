@@ -103,12 +103,12 @@ const productTools = [
     number: "04",
     category: "Explore",
     icon: BriefcaseBusiness,
-    title: "Resume Examples",
+    title: "Template Gallery",
     description:
-      "Explore curated resume templates and professionally structured examples.",
+      "Explore curated white-page resume templates designed for every experience level.",
     features: ["White-page templates", "Live previews"],
-    href: "/examples",
-    action: "View examples",
+    href: "/#templates",
+    action: "View templates",
     accent: "bg-[#d8d1f5]",
     wash: "from-[#efecfb] to-[#fffefa]",
   },
@@ -289,8 +289,8 @@ export default function Home() {
                   variant="outline"
                   className="mt-5 h-11 w-fit rounded-full border-black/15 bg-white px-5 font-bold shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
                 >
-                  <Link href="/examples">
-                    Explore resume examples
+                  <Link href="/builder">
+                    Start building now
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
