@@ -5,7 +5,10 @@ import {
   AlignCenter,
   AlignLeft,
   AlignRight,
+  ArrowDown,
+  ArrowUp,
   Bold,
+  CaseSensitive,
   CaseUpper,
   Check,
   ChevronDown,
@@ -16,6 +19,7 @@ import {
   Hand,
   Italic,
   LayoutTemplate,
+  Loader2,
   Maximize2,
   Minimize2,
   Minus,
@@ -26,9 +30,12 @@ import {
   Redo2,
   RemoveFormatting,
   RotateCcw,
+  Sparkles,
   Trash2,
   Undo2,
   X,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import type { BuilderSection, ResumeData, ResumeTemplate } from "../types/resume";
 import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
@@ -120,6 +127,7 @@ export function InteractiveCanvas({
   const containerRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const selectedDomRef = useRef<HTMLElement | null>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   // Pan & Drag States
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -146,14 +154,43 @@ export function InteractiveCanvas({
   const [toolbarPos, setToolbarPos] = useState<{ top: number; left: number } | null>(null);
   const [inlineText, setInlineText] = useState("");
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [isRefining, setIsRefining] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const clearSelection = useCallback(() => {
     setSelectedElement(null);
     setHighlightRect(null);
     setToolbarPos(null);
     setShowColorPicker(false);
+    setIsExpanded(false);
     selectedDomRef.current = null;
   }, []);
+
+  const handleAiRefine = async () => {
+    if (!inlineText || !inlineText.trim() || isRefining) return;
+    setIsRefining(true);
+
+    try {
+      const res = await fetch("/api/refine-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: inlineText,
+          fieldName: selectedElement?.field || selectedElement?.title || "resume section",
+        }),
+      });
+
+      if (!res.ok) throw new Error("Refinement failed");
+      const dataRes = await res.json();
+      if (dataRes.refinedText) {
+        handleRealtimeTextChange(dataRes.refinedText);
+      }
+    } catch (err) {
+      console.error("AI Refine Error:", err);
+    } finally {
+      setIsRefining(false);
+    }
+  };
 
   const resetPanAndZoom = useCallback(() => {
     setPan({ x: 0, y: 0 });
@@ -164,33 +201,57 @@ export function InteractiveCanvas({
   const updateSelectionBounds = useCallback(() => {
     if (!selectedDomRef.current || !containerRef.current) return;
     const containerRect = containerRef.current.getBoundingClientRect();
-    const elemRect = selectedDomRef.current.getBoundingClientRect();
+    const targetRect = selectedDomRef.current.getBoundingClientRect();
 
-    const box = {
-      top: elemRect.top - containerRect.top - 2,
-      left: elemRect.left - containerRect.left - 2,
-      width: Math.max(40, elemRect.width + 4),
-      height: Math.max(16, elemRect.height + 4),
-    };
+    const top = targetRect.top - containerRect.top;
+    const left = targetRect.left - containerRect.left;
 
-    const top = Math.max(65, box.top - 48);
-    const left = Math.max(20, Math.min(containerRect.width - 420, box.left + box.width / 2 - 210));
+    setHighlightRect({
+      top: top - 4,
+      left: left - 4,
+      width: targetRect.width + 8,
+      height: targetRect.height + 8,
+    });
 
-    setHighlightRect(box);
-    setToolbarPos({ top, left });
+    const toolbarWidth = toolbarRef.current?.offsetWidth || 540;
+    let computedLeft = left + targetRect.width / 2 - toolbarWidth / 2;
+    computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, computedLeft));
+
+    let computedTop = top - 64;
+    if (computedTop < 65) {
+      computedTop = top + targetRect.height + 14;
+    }
+
+    setToolbarPos({
+      top: computedTop,
+      left: computedLeft,
+    });
   }, []);
 
-  // ResizeObserver to track dynamic line wrapping & font size changes automatically
+  // ResizeObserver + Scroll + Window Resize listeners to track position locked onto element
   useEffect(() => {
     if (!selectedElement || !selectedDomRef.current) return;
+
+    updateSelectionBounds();
+
     const observer = new ResizeObserver(() => {
       updateSelectionBounds();
     });
     observer.observe(selectedDomRef.current);
+
+    const handleScroll = () => {
+      updateSelectionBounds();
+    };
+
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", updateSelectionBounds);
+
     return () => {
       observer.disconnect();
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", updateSelectionBounds);
     };
-  }, [selectedElement, updateSelectionBounds]);
+  }, [selectedElement, inlineText, data, zoom, pan, updateSelectionBounds]);
 
   // Keyboard listeners
   useEffect(() => {
@@ -793,14 +854,13 @@ export function InteractiveCanvas({
             </button>
           )}
           <div className="flex shrink-0 items-center gap-2">
-            <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
-            <p className="whitespace-nowrap text-xs font-bold tracking-tight">Studio Canvas</p>
+            <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse shadow-xs" />
+            <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">Studio Canvas</p>
+            <span className="text-black/25 text-xs font-semibold mx-0.5">·</span>
+            <span className="shrink-0 max-w-[140px] truncate text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#059669] border-b-2 border-[#059669] pb-0.5 transition-all">
+              {template.name}
+            </span>
           </div>
-
-          {/* Editorial Template Badge */}
-          <span className="shrink-0 max-w-[110px] truncate rounded-full bg-[var(--brand-lime)] px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em] text-[var(--brand-ink)]">
-            {template.name}
-          </span>
         </div>
 
         <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
@@ -1080,7 +1140,7 @@ export function InteractiveCanvas({
         {/* Visual Granular Selection Bounding Box Overlay */}
         {highlightRect && (
           <div
-            className="no-print absolute z-30 pointer-events-none rounded-md ring-2 ring-emerald-500 bg-emerald-500/10 shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all duration-100 ease-out"
+            className="no-print pointer-events-none absolute z-30 rounded-2xl border-2 border-[#059669] bg-emerald-500/10 transition-all duration-150 ease-out"
             style={{
               top: `${highlightRect.top}px`,
               left: `${highlightRect.left}px`,
@@ -1088,8 +1148,8 @@ export function InteractiveCanvas({
               height: `${highlightRect.height}px`,
             }}
           >
-            <span className="absolute -bottom-2.5 right-1 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[7.5px] font-extrabold uppercase tracking-widest text-white shadow-xs">
-              Selected
+            <span className="absolute -bottom-3 right-2 rounded-full bg-[#059669] px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-wider text-white shadow-xs">
+              SELECTED
             </span>
           </div>
         )}
@@ -1097,145 +1157,235 @@ export function InteractiveCanvas({
         {/* Contextual Floating Formatting Bar (Appears directly above clicked element on PDF) */}
         {selectedElement && toolbarPos && (
           <div
-            className="no-print absolute z-50 flex items-center gap-1 rounded-2xl border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 animate-in fade-in zoom-in-95"
+            ref={toolbarRef}
+            onClick={(e) => e.stopPropagation()}
+            className="no-print absolute z-50 flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
             style={{
               top: `${toolbarPos.top}px`,
               left: `${toolbarPos.left}px`,
             }}
           >
-            {/* Real-Time Inline Input */}
-            <div className="flex items-center gap-1 rounded-xl bg-black/5 px-2 py-1">
-              <Edit3 className="size-3.5 text-emerald-700" />
+            {/* AI Icon & Inline Text Input Pill Container */}
+            <div className="relative flex items-center gap-1.5 rounded-full bg-black/5 px-2 py-1 shrink-0">
+              <button
+                type="button"
+                onClick={handleAiRefine}
+                disabled={isRefining}
+                className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
+                title="AI Smart Refine Text"
+              >
+                {isRefining ? (
+                  <Loader2 className="size-3.5 text-[#059669] animate-spin" />
+                ) : (
+                  <Sparkles className="size-3.5 text-[#059669]" />
+                )}
+              </button>
+
               <input
                 type="text"
                 value={inlineText}
                 onChange={(e) => handleRealtimeTextChange(e.target.value)}
-                className="w-40 rounded-md bg-white px-2 py-0.5 text-xs font-bold text-[var(--brand-ink)] focus:outline-none focus:ring-1 focus:ring-emerald-600"
-                placeholder="Type in real-time..."
+                className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
+                placeholder="Edit inline..."
               />
+
+              <button
+                type="button"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className={cn(
+                  "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
+                  isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-[var(--brand-muted)]"
+                )}
+                title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
+              >
+                {isExpanded ? <Minimize2 className="size-3" /> : <Maximize2 className="size-3" />}
+              </button>
+
+              {/* Expandable Floating Paragraph Editor Card */}
+              {isExpanded && (
+                <div className="absolute top-12 left-0 z-[100] flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+                  <div className="flex items-center justify-between border-b border-black/10 pb-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
+                        {selectedElement.title || selectedElement.field || "Section"}
+                      </span>
+                      <span className="text-[10px] font-semibold text-[var(--brand-muted)]">
+                        {inlineText.length} chars
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={handleAiRefine}
+                        disabled={isRefining}
+                        className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-50"
+                      >
+                        {isRefining ? (
+                          <Loader2 className="size-3 animate-spin" />
+                        ) : (
+                          <Sparkles className="size-3" />
+                        )}
+                        <span>AI Refine</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsExpanded(false)}
+                        className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-[var(--brand-muted)] transition cursor-pointer"
+                      >
+                        <X className="size-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <textarea
+                    rows={5}
+                    value={inlineText}
+                    onChange={(e) => handleRealtimeTextChange(e.target.value)}
+                    className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
+                    placeholder="Type or edit full section text..."
+                    autoFocus
+                  />
+                </div>
+              )}
             </div>
 
-            <span className="h-5 w-px bg-black/10 mx-0.5" />
+            <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
 
-            {/* Localized Font Size Adjusters */}
-            <div className="flex items-center gap-0.5 rounded-xl bg-black/5 p-0.5">
+            {/* A- / A+ Font Size Control Pill */}
+            <div className="flex items-center rounded-xl bg-black/5 p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => changeFontSize(-1)}
-                className="flex size-6 items-center justify-center rounded-md text-[11px] font-extrabold text-[var(--brand-ink)] hover:bg-white"
-                title="Decrease Font Size"
+                className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+                title="Decrease font size"
               >
                 A-
               </button>
               <button
                 type="button"
                 onClick={() => changeFontSize(1)}
-                className="flex size-6 items-center justify-center rounded-md text-[11px] font-extrabold text-[var(--brand-ink)] hover:bg-white"
-                title="Increase Font Size"
+                className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+                title="Increase font size"
               >
                 A+
               </button>
             </div>
 
-            {/* Localized Bold & Italic Toggles */}
-            <button
-              type="button"
-              onClick={toggleBold}
-              className="builder-icon-button"
-              title="Toggle Bold"
-            >
-              <Bold className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={toggleItalic}
-              className="builder-icon-button"
-              title="Toggle Italic"
-            >
-              <Italic className="size-3.5" />
-            </button>
+            {/* Bold, Italic, Case Transform, Clear Formatting */}
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                onClick={toggleBold}
+                className="builder-icon-button cursor-pointer"
+                title="Bold text formatting"
+              >
+                <Bold className="size-3.5" />
+              </button>
 
-            {/* Case Transformer */}
-            <button
-              type="button"
-              onClick={toggleCase}
-              className="builder-icon-button"
-              title="Cycle Text Case (UPPER / Title / lower)"
-            >
-              <CaseUpper className="size-3.5" />
-            </button>
+              <button
+                type="button"
+                onClick={toggleItalic}
+                className="builder-icon-button cursor-pointer"
+                title="Italic text formatting"
+              >
+                <Italic className="size-3.5" />
+              </button>
 
-            {/* Clear Formatting (Tx Icon) */}
-            <button
-              type="button"
-              onClick={clearFormatting}
-              className="builder-icon-button"
-              title="Clear Formatting (Reset font size, weight, style & color to template defaults)"
-            >
-              <RemoveFormatting className="size-3.5 text-[var(--brand-ink)]" />
-            </button>
+              <button
+                type="button"
+                onClick={toggleCase}
+                className="builder-icon-button cursor-pointer"
+                title="Toggle UPPERCASE / Normal Case (AB)"
+              >
+                <CaseSensitive className="size-4" />
+              </button>
 
-            <span className="h-5 w-px bg-black/10 mx-0.5" />
+              <button
+                type="button"
+                onClick={clearFormatting}
+                className="builder-icon-button cursor-pointer"
+                title="Clear text formatting (Tx)"
+              >
+                <RemoveFormatting className="size-4" />
+              </button>
+            </div>
 
-            {/* Alignment Controls */}
-            <button
-              type="button"
-              onClick={() => setTextAlign("left")}
-              className="builder-icon-button"
-              title="Align Left"
-            >
-              <AlignLeft className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setTextAlign("center")}
-              className="builder-icon-button"
-              title="Align Center"
-            >
-              <AlignCenter className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setTextAlign("right")}
-              className="builder-icon-button"
-              title="Align Right"
-            >
-              <AlignRight className="size-3.5" />
-            </button>
+            <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
 
-            <span className="h-5 w-px bg-black/10 mx-0.5" />
+            {/* Text Alignment */}
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setTextAlign("left")}
+                className="builder-icon-button cursor-pointer"
+                title="Align Left"
+              >
+                <AlignLeft className="size-3.5" />
+              </button>
 
-            {/* Color Swatch Picker */}
-            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setTextAlign("center")}
+                className="builder-icon-button cursor-pointer"
+                title="Align Center"
+              >
+                <AlignCenter className="size-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTextAlign("right")}
+                className="builder-icon-button cursor-pointer"
+                title="Align Right"
+              >
+                <AlignRight className="size-3.5" />
+              </button>
+            </div>
+
+            <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
+
+            {/* Color Swatch & Trash Picker */}
+            <div className="relative flex items-center gap-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setShowColorPicker(!showColorPicker)}
-                className="builder-icon-button"
-                title="Accent / Text Color"
+                className="builder-icon-button cursor-pointer"
+                title="Text / Accent Color"
               >
-                <Palette className="size-3.5 text-emerald-600" />
+                <Palette className="size-3.5 text-[#059669]" />
               </button>
 
+              {selectedElement.id && (
+                <button
+                  type="button"
+                  onClick={deleteSelected}
+                  className="builder-icon-button text-red-600 hover:bg-red-50 cursor-pointer"
+                  title="Delete item"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              )}
+
               {showColorPicker && (
-                <div className="absolute top-10 left-0 z-50 flex items-center gap-2 rounded-2xl border border-black/15 bg-white p-2.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 min-w-[240px]">
+                <div className="absolute top-12 right-0 z-[100] flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
                   {/* Custom Color Wheel Swatch */}
                   <label
-                    className="relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500"
-                    title="Pick Any Custom Color"
+                    className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
+                    title="Pick Custom Color"
                   >
                     <input
                       type="color"
                       value={
-                        (resumeStyle?.accent || template.accent || "#28785b").startsWith("#")
-                          ? resumeStyle?.accent || template.accent || "#28785b"
-                          : "#28785b"
+                        (resumeStyle?.accent || template.accent || "#059669").startsWith("#")
+                          ? resumeStyle?.accent || template.accent || "#059669"
+                          : "#059669"
                       }
                       onChange={(e) => {
                         const val = e.target.value;
                         if (selectedDomRef.current) {
                           selectedDomRef.current.style.color = val;
                         }
-                        onUpdateStyle?.({ ...resumeStyle, accent: val } as ResumeStyle);
                       }}
                       className="absolute inset-0 size-full cursor-pointer opacity-0"
                     />
@@ -1251,110 +1401,93 @@ export function InteractiveCanvas({
                       if (selectedDomRef.current && val.startsWith("#") && val.length >= 4) {
                         selectedDomRef.current.style.color = val;
                       }
-                      onUpdateStyle?.({ ...resumeStyle, accent: val } as ResumeStyle);
                     }}
-                    placeholder={template.accent || "#202020"}
-                    className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] focus:outline-none focus:bg-white"
+                    placeholder="#059669"
+                    className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
                   />
 
-                  <span className="h-4 w-px bg-black/15 mx-0.5" />
+                  <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
 
                   {/* Preset Swatches */}
-                  {COLOR_SWATCHES.map((color) => (
-                    <button
-                      key={color.name}
-                      type="button"
-                      onClick={() => {
-                        if (selectedDomRef.current) {
-                          selectedDomRef.current.style.color = color.value;
-                        }
-                        onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle);
-                        setShowColorPicker(false);
-                      }}
-                      className="size-5 rounded-full border border-black/10 transition hover:scale-110 shrink-0"
-                      style={{ backgroundColor: color.value }}
-                      title={color.name}
-                    />
-                  ))}
+                  <div className="flex items-center gap-1.5">
+                    {COLOR_SWATCHES.map((color) => (
+                      <button
+                        key={color.name}
+                        type="button"
+                        onClick={() => {
+                          if (selectedDomRef.current) {
+                            selectedDomRef.current.style.color = color.value;
+                          }
+                          setShowColorPicker(false);
+                        }}
+                        className="size-6 rounded-full border border-black/20 shadow-xs transition hover:scale-110 cursor-pointer"
+                        style={{ backgroundColor: color.value }}
+                        title={color.name}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
-            <span className="h-5 w-px bg-black/10 mx-0.5" />
+            <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
 
-            {/* Duplicate Item */}
-            {selectedElement.id && (
-              <button
-                type="button"
-                onClick={duplicateSelected}
-                className="builder-icon-button"
-                title="Duplicate Item"
-              >
-                <Copy className="size-3.5" />
-              </button>
-            )}
-
-            {/* Delete Item */}
-            {selectedElement.id && (
-              <button
-                type="button"
-                onClick={deleteSelected}
-                className="builder-icon-button text-red-600 hover:bg-red-50"
-                title="Delete Item"
-              >
-                <Trash2 className="size-3.5" />
-              </button>
-            )}
-
-            {/* Close Toolbar */}
-            <button type="button" onClick={clearSelection} className="builder-icon-button">
+            {/* Close Formatting Bar Button */}
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="builder-icon-button cursor-pointer shrink-0"
+              title="Close formatting bar"
+            >
               <X className="size-3.5" />
             </button>
           </div>
         )}
 
         {/* Rendered Document Sheet Container */}
-        <div
-          className="canvas-bg resume-preview-stage absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{
-            transform: `translate3d(${pan.x}px, ${pan.y}px, 0)`,
-            transition: isDragging ? "none" : "transform 0.15s ease-out",
-          }}
-        >
+        <div className="absolute inset-0 flex items-center justify-center p-8 overflow-auto">
           <div
-            ref={sheetRef}
-            onClick={handleSheetClick}
-            className="resume-preview-sheet pointer-events-auto relative transition-transform duration-100 ease-out shadow-[0_28px_85px_rgba(0,0,0,0.22)]"
             style={{
-              transform: `scale(${zoom / 100})`,
+              transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
               transformOrigin: "center center",
+              transition: isDragging ? "none" : "transform 0.15s ease-out",
             }}
+            className="no-print-transform flex items-center justify-center shadow-2xl"
           >
-            {/* Resume Sheet Preview */}
-            <ResumePreview
-              data={data}
-              template={previewTemplate}
-              showPhoto={showPhoto}
-              pagePadding={resumeStyle?.pagePadding || "normal"}
-              sectionSpacing={resumeStyle?.sectionSpacing || "normal"}
-              fontSizeScale={resumeStyle?.fontSizeScale || 1.0}
-              lineHeight={resumeStyle?.lineHeight || "normal"}
-              className={resumeFontClass(font)}
-            />
+            <div
+              ref={sheetRef}
+              onClick={handleSheetClick}
+              className={cn(
+                "resume-preview-sheet pointer-events-auto relative shadow-[0_28px_85px_rgba(0,0,0,0.22)]",
+                activeHand && "hand-mode"
+              )}
+            >
+              {/* Resume Sheet Preview */}
+              <ResumePreview
+                data={data}
+                template={previewTemplate}
+                showPhoto={showPhoto}
+                pagePadding={resumeStyle?.pagePadding || "normal"}
+                sectionSpacing={resumeStyle?.sectionSpacing || "normal"}
+                fontSizeScale={resumeStyle?.fontSizeScale || 1.0}
+                lineHeight={resumeStyle?.lineHeight || "normal"}
+                className={resumeFontClass(font)}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Floating Bottom-Center Glassmorphic Zoom Toolbar */}
-      <div className="no-print absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-2xl border border-white/40 bg-white/85 p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] backdrop-blur-md">
+      <div className="no-print absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200">
         {/* Select vs Hand/Pan Tool Switcher */}
         <div className="flex items-center rounded-xl bg-black/5 p-0.5">
           <button
             type="button"
             onClick={() => setIsHandTool(false)}
             className={cn(
-              "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
-              !isHandTool && !isSpacePressed
+              "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
+              !activeHand
                 ? "bg-white text-[var(--brand-ink)] shadow-xs"
                 : "text-[var(--brand-muted)] hover:text-black"
             )}
@@ -1366,9 +1499,9 @@ export function InteractiveCanvas({
             type="button"
             onClick={() => setIsHandTool(true)}
             className={cn(
-              "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition",
-              isHandTool || isSpacePressed
-                ? "bg-[var(--brand-ink)] text-white shadow-xs"
+              "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
+              activeHand
+                ? "bg-white text-[var(--brand-ink)] shadow-xs"
                 : "text-[var(--brand-muted)] hover:text-black"
             )}
             title="Pan / Hand Tool (Drag Canvas)"
@@ -1377,16 +1510,16 @@ export function InteractiveCanvas({
           </button>
         </div>
 
-        <span className="h-5 w-px bg-black/10 mx-1" />
+        <span className="h-4 w-px bg-black/10 mx-0.5" />
 
         {/* Zoom Out Button */}
         <button
           type="button"
-          onClick={() => onZoomChange(zoom - 10)}
-          className="builder-icon-button"
+          onClick={() => onZoomChange(Math.max(30, zoom - 10))}
+          className="builder-icon-button cursor-pointer"
           title="Zoom Out (Ctrl + -)"
         >
-          <Minus className="size-3.5" />
+          <ZoomOut className="size-3.5" />
         </button>
 
         {/* Zoom Level & Presets Dropdown */}
@@ -1397,21 +1530,22 @@ export function InteractiveCanvas({
               setShowPresetsMenu(!showPresetsMenu);
               setShowThemeMenu(false);
             }}
-            className="flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5"
+            className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10 cursor-pointer"
+            title="Choose Zoom Scale"
           >
             <span>{Math.round(zoom)}%</span>
-            <ChevronDown className="size-3 text-[var(--brand-muted)]" />
+            <span className="text-[10px] text-[var(--brand-muted)]">▼</span>
           </button>
 
           {showPresetsMenu && (
-            <div className="absolute bottom-11 left-1/2 z-50 min-w-[120px] -translate-x-1/2 rounded-2xl border border-black/10 bg-white p-1.5 shadow-xl backdrop-blur">
+            <div className="absolute bottom-11 left-1/2 z-50 min-w-[120px] -translate-x-1/2 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
               <button
                 type="button"
                 onClick={() => {
                   fitToWidth();
                   setShowPresetsMenu(false);
                 }}
-                className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[11px] font-bold text-[var(--brand-ink)] hover:bg-black/5"
+                className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 cursor-pointer"
               >
                 <span>Fit Width</span>
               </button>
@@ -1421,7 +1555,7 @@ export function InteractiveCanvas({
                   fitToPage();
                   setShowPresetsMenu(false);
                 }}
-                className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[11px] font-bold text-[var(--brand-ink)] hover:bg-black/5"
+                className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 cursor-pointer"
               >
                 <span>Fit Page</span>
               </button>
@@ -1435,12 +1569,14 @@ export function InteractiveCanvas({
                     setShowPresetsMenu(false);
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-lg px-2.5 py-1 text-[11px] font-medium transition hover:bg-black/5",
-                    Math.round(zoom) === preset.value && "font-bold text-emerald-700 bg-emerald-50"
+                    "flex w-full items-center justify-between rounded-xl px-2.5 py-1 text-xs font-bold transition cursor-pointer",
+                    Math.round(zoom) === preset.value
+                      ? "bg-emerald-50 text-emerald-900 font-extrabold"
+                      : "text-[var(--brand-ink)] hover:bg-black/5"
                   )}
                 >
                   <span>{preset.label}</span>
-                  {Math.round(zoom) === preset.value && <Check className="size-3" />}
+                  {Math.round(zoom) === preset.value && <Check className="size-3 text-emerald-600" />}
                 </button>
               ))}
             </div>
@@ -1450,31 +1586,31 @@ export function InteractiveCanvas({
         {/* Zoom In Button */}
         <button
           type="button"
-          onClick={() => onZoomChange(zoom + 10)}
-          className="builder-icon-button"
+          onClick={() => onZoomChange(Math.min(200, zoom + 10))}
+          className="builder-icon-button cursor-pointer"
           title="Zoom In (Ctrl + +)"
         >
-          <Plus className="size-3.5" />
+          <ZoomIn className="size-3.5" />
         </button>
-
-        <span className="h-5 w-px bg-black/10 mx-1" />
 
         {/* Reset Pan & Zoom Button */}
         <button
           type="button"
           onClick={resetPanAndZoom}
-          className="builder-icon-button"
+          className="builder-icon-button cursor-pointer"
           title="Reset Pan & Zoom (Ctrl + 0)"
         >
           <RotateCcw className="size-3.5" />
         </button>
+
+        <span className="h-4 w-px bg-black/10 mx-0.5" />
 
         {/* Undo Button */}
         <button
           type="button"
           onClick={handleUndo}
           disabled={!canUndo}
-          className="builder-icon-button disabled:opacity-30"
+          className="builder-icon-button disabled:opacity-30 cursor-pointer"
           title="Undo (Ctrl + Z)"
           aria-label="Undo"
         >
@@ -1486,12 +1622,14 @@ export function InteractiveCanvas({
           type="button"
           onClick={handleRedo}
           disabled={!canRedo}
-          className="builder-icon-button disabled:opacity-30"
+          className="builder-icon-button disabled:opacity-30 cursor-pointer"
           title="Redo (Ctrl + Y)"
           aria-label="Redo"
         >
           <Redo2 className="size-3.5" />
         </button>
+
+        <span className="h-4 w-px bg-black/10 mx-0.5" />
 
         {/* Canvas Background Theme Selector */}
         <div className="relative">
@@ -1501,14 +1639,14 @@ export function InteractiveCanvas({
               setShowThemeMenu(!showThemeMenu);
               setShowPresetsMenu(false);
             }}
-            className="builder-icon-button"
+            className="builder-icon-button cursor-pointer"
             title="Canvas Theme"
           >
             <Grid className="size-3.5 text-[var(--brand-ink)]" />
           </button>
 
           {showThemeMenu && (
-            <div className="absolute bottom-11 right-0 z-50 min-w-[130px] rounded-2xl border border-black/10 bg-white p-1.5 shadow-xl">
+            <div className="absolute bottom-11 right-0 z-50 min-w-[130px] rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
               {[
                 { id: "dots", label: "Studio Dots" },
                 { id: "grid", label: "CAD Grid" },
@@ -1523,12 +1661,14 @@ export function InteractiveCanvas({
                     setShowThemeMenu(false);
                   }}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[11px] font-medium hover:bg-black/5",
-                    canvasTheme === theme.id && "font-bold text-emerald-700 bg-emerald-50"
+                    "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition cursor-pointer",
+                    canvasTheme === theme.id
+                      ? "bg-emerald-50 text-emerald-900 font-extrabold"
+                      : "text-[var(--brand-ink)] hover:bg-black/5"
                   )}
                 >
                   <span>{theme.label}</span>
-                  {canvasTheme === theme.id && <Check className="size-3" />}
+                  {canvasTheme === theme.id && <Check className="size-3 text-emerald-600" />}
                 </button>
               ))}
             </div>

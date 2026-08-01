@@ -601,3 +601,18 @@
 .resume-padding-spacious .gap-7 {
   gap: 2.25rem !important;
 }
+
+/* Letter & Builder Sheet Element Hover Style */
+.resume-preview-sheet:not(.hand-mode) h1:hover,
+.resume-preview-sheet:not(.hand-mode) h2:hover,
+.resume-preview-sheet:not(.hand-mode) h3:hover,
+.resume-preview-sheet:not(.hand-mode) h4:hover,
+.resume-preview-sheet:not(.hand-mode) p:hover,
+.resume-preview-sheet:not(.hand-mode) li:hover,
+.resume-preview-sheet:not(.hand-mode) span:hover,
+.resume-preview-sheet:not(.hand-mode) a:hover {
+  outline: 1px dashed #059669 !important;
+  outline-offset: 1px !important;
+  border-radius: 2px !important;
+  cursor: pointer !important;
+}
