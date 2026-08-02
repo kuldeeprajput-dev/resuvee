@@ -12,6 +12,7 @@ import {
   FilePlus2,
   FileText,
   LayoutTemplate,
+  RotateCcw,
   ScanSearch,
   Sparkles,
   SpellCheck2,
@@ -364,7 +365,10 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             </p>
           </div>
 
-          <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-4" aria-label="Resume sections">
+          <nav
+            className="flex-1 space-y-1.5 overflow-y-auto px-3 py-4"
+            aria-label="Resume sections"
+          >
             {visibleSections.map((section, index) => {
               const isActive = activeSection === section.id;
               const isComplete = index < activeIndex;
@@ -458,11 +462,18 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                     className={cn(
                       "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150 cursor-pointer",
                       activeSection === section.id
-                        ? "bg-emerald-600 text-white shadow-xs scale-[1.01]"
+                        ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
                         : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]"
                     )}
                   >
-                    <span className={cn("text-[10px]", activeSection === section.id ? "opacity-90 font-extrabold" : "opacity-70")}>{index + 1}</span>
+                    <span
+                      className={cn(
+                        "text-[10px]",
+                        activeSection === section.id ? "opacity-90 font-extrabold" : "opacity-70"
+                      )}
+                    >
+                      {index + 1}
+                    </span>
                     {section.shortLabel}
                   </button>
                 ))}
@@ -504,7 +515,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                         className={cn(
                           "transition-all duration-150 cursor-pointer",
                           isActive
-                            ? "size-2 rounded-full bg-emerald-600 ring-2 ring-emerald-500/30"
+                            ? "size-2 rounded-full bg-[var(--brand-ink)] ring-2 ring-black/20"
                             : "size-2 rounded-full border border-black/20 bg-black/10 hover:bg-black/40"
                         )}
                       />
@@ -586,28 +597,6 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               isResizing && "bg-emerald-500 shadow-sm"
             )}
           />
-
-          {isLeftCollapsed && (
-            <button
-              type="button"
-              onClick={() => setSplitPercent(42)}
-              className="absolute left-2.5 z-40 flex size-7 items-center justify-center rounded-full border border-black/15 bg-white text-black/70 shadow-lg transition-all hover:scale-110 hover:text-black"
-              title="Expand Left Panels"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          )}
-
-          {isRightCollapsed && (
-            <button
-              type="button"
-              onClick={() => setSplitPercent(42)}
-              className="absolute right-2.5 z-40 flex size-7 items-center justify-center rounded-full border border-black/15 bg-white text-black/70 shadow-lg transition-all hover:scale-110 hover:text-black"
-              title="Expand Studio Canvas"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-          )}
         </div>
 
         {/* Resizable Studio Canvas Panel */}
@@ -727,42 +716,39 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       )}
       {/* Start Fresh Confirmation Modal */}
       {showStartFreshModal && (
-        <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-5 shadow-2xl backdrop-blur-md animate-in zoom-in-95">
-            <div className="flex items-start gap-4">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 border border-red-200/60">
-                <AlertTriangle className="size-5" />
+        <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-6 shadow-2xl animate-in zoom-in-95">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                <RotateCcw className="size-5 text-emerald-700" />
               </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-base font-extrabold tracking-tight text-[var(--brand-ink)]">Start fresh?</h2>
-                <p className="mt-1 text-xs text-[var(--brand-muted)] leading-relaxed">
-                  This will clear your current resume and start a new blank draft.
-                  <strong className="text-[var(--brand-ink)] font-bold"> This action cannot be undone.</strong>
-                </p>
+              <div>
+                <h3 className="text-base font-bold text-[var(--brand-ink)]">Start fresh?</h3>
+                <p className="text-xs text-[var(--brand-muted)]">Clear all text and start blank</p>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-black/10">
-              <Button
+            <p className="text-xs leading-relaxed text-[var(--brand-muted)] mb-6">
+              All current resume sections and details will be cleared to a completely blank template.
+              Are you sure you want to start fresh?
+            </p>
+            <div className="flex items-center justify-end gap-2.5">
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => setShowStartFreshModal(false)}
-                className="h-9 rounded-xl border-black/10 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
+                className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer"
               >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
                 onClick={() => {
                   clearResume();
                   setShowStartFreshModal(false);
                 }}
-                className="h-9 rounded-xl bg-red-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-red-700 cursor-pointer"
+                className="h-9 rounded-xl bg-emerald-700 px-4 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition cursor-pointer"
               >
-                <FilePlus2 className="size-3.5" />
-                <span>Yes, start fresh</span>
-              </Button>
+                Start fresh
+              </button>
             </div>
           </div>
         </div>
