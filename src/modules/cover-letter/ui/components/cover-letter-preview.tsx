@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../types/cover-letter";
+import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../../types/cover-letter";
 
 interface CoverLetterPreviewProps {
   data: CoverLetterData;
@@ -42,10 +42,6 @@ export function CoverLetterPreview({
       : pageSpacing === "spacious"
       ? "px-16 py-14 min-h-[890px]"
       : "px-14 py-12 min-h-[842px]";
-
-  const contact = [data.email, data.phone, data.location, data.website]
-    .filter(Boolean)
-    .join("  ·  ");
 
   const getFieldClass = (field: keyof CoverLetterData) =>
     cn(

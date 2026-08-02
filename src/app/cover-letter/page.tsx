@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CoverLetterStudio } from "@/modules/cover-letter";
+import { CoverLetterView } from "@/modules/cover-letter";
 
 export const metadata: Metadata = {
   title: "Cover Letter Studio — ResuLyra",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CoverLetterPage() {
-  return <CoverLetterStudio />;
+  return <CoverLetterView />;
 }

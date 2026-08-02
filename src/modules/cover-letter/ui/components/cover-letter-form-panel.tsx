@@ -4,7 +4,7 @@ import React from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterData, CoverLetterTheme, ThemeOption } from "../types/cover-letter";
+import type { CoverLetterData, CoverLetterTheme, ThemeOption } from "../../types/cover-letter";
 
 interface CoverLetterFormPanelProps {
   data: CoverLetterData;
