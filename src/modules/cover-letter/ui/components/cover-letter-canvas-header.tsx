@@ -316,11 +316,11 @@ export function CoverLetterCanvasHeader({
           )}
         </div>
 
-        {/* Fullscreen Toggle */}
+        {/* Fullscreen Toggle (Desktop Only) */}
         <button
           type="button"
           onClick={() => setIsFullscreen(!isFullscreen)}
-          className="builder-icon-button shrink-0 cursor-pointer"
+          className="builder-icon-button shrink-0 cursor-pointer hidden lg:flex"
           title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
         >
           {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
