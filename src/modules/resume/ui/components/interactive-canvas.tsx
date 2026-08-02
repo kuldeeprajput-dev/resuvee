@@ -390,7 +390,7 @@ export function InteractiveCanvas({
 
   // Direct Granular Element Click Handler + Left Editor Step Sync
   const handleSheetClick = (e: React.MouseEvent) => {
-    if (activeHand || isDragging) return;
+    if (activeHand || isDragging || (typeof window !== "undefined" && window.innerWidth < 1024)) return;
 
     const target = e.target as HTMLElement;
     const container = containerRef.current;
@@ -1176,7 +1176,7 @@ export function InteractiveCanvas({
           <button
             type="button"
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="builder-icon-button shrink-0"
+            className="builder-icon-button shrink-0 hidden lg:flex"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
           >
             {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
@@ -1201,7 +1201,7 @@ export function InteractiveCanvas({
         {/* Visual Granular Selection Bounding Box Overlay */}
         {highlightRect && (
           <div
-            className="no-print pointer-events-none absolute z-30 rounded-2xl border-2 border-[#059669] bg-emerald-500/10 transition-all duration-150 ease-out"
+            className="no-print pointer-events-none absolute z-30 hidden lg:block rounded-2xl border-2 border-[#059669] bg-emerald-500/10 transition-all duration-150 ease-out"
             style={{
               top: `${highlightRect.top}px`,
               left: `${highlightRect.left}px`,
@@ -1220,7 +1220,7 @@ export function InteractiveCanvas({
           <div
             ref={toolbarRef}
             onClick={(e) => e.stopPropagation()}
-            className="no-print absolute z-50 flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
+            className="no-print absolute z-50 hidden lg:flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
             style={{
               top: `${toolbarPos.top}px`,
               left: `${toolbarPos.left}px`,
