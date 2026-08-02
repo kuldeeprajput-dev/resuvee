@@ -172,7 +172,7 @@ export function LandingTemplateShowcase() {
 
   return (
     <>
-      <div className="mb-8 flex gap-2 overflow-x-auto pb-1">
+      <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-none [scrollbar-width:none] sm:mx-0 sm:mb-8 sm:px-0 [&::-webkit-scrollbar]:hidden">
         {filters.map((item) => (
           <button
             key={item.id}
@@ -201,7 +201,7 @@ export function LandingTemplateShowcase() {
       <div
         ref={carouselRef}
         onScroll={handleScroll}
-        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
+        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[88%] gap-4 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] sm:gap-5 lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
@@ -211,14 +211,14 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}&starter=template`
             }
-            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
+            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-3.5 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
           >
-            <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-8 sm:p-10">
-              <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm">
+            <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-5 sm:p-8 md:p-10">
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1">
                 {String(index + 1).padStart(2, "0")}
               </span>
               {template.popular && (
-                <span className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-[var(--brand-lime)] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em]">
+                <span className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-[var(--brand-lime)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] sm:right-4 sm:top-4 sm:px-2.5 sm:py-1">
                   <Sparkles className="size-2.5" />
                   Popular
                 </span>
@@ -226,23 +226,23 @@ export function LandingTemplateShowcase() {
               <TemplateThumbnail
                 template={template}
                 showLabel
-                className="mx-auto max-w-[235px] bg-white transition-transform duration-500 group-hover:scale-[1.025] group-hover:-rotate-1"
+                className="mx-auto max-w-[210px] bg-white transition-transform duration-500 group-hover:scale-[1.025] group-hover:-rotate-1 sm:max-w-[235px]"
               />
             </div>
 
-            <div className="px-1 pb-1 pt-5">
-              <div className="flex items-start justify-between gap-4">
+            <div className="px-1 pb-1 pt-4 sm:pt-5">
+              <div className="flex items-start justify-between gap-3 sm:gap-4">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-xl font-bold tracking-[-0.025em]">{template.name}</h3>
+                    <h3 className="text-lg font-bold tracking-[-0.025em] sm:text-xl">{template.name}</h3>
                     <span
                       className="size-2.5 rounded-full"
                       style={{ backgroundColor: template.accent }}
                     />
                   </div>
-                  <p className="mt-1 text-sm text-[var(--brand-muted)]">{template.suitableFor}</p>
+                  <p className="mt-1 text-xs text-[var(--brand-muted)] sm:text-sm">{template.suitableFor}</p>
                 </div>
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)]">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)] sm:size-9">
                   <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:rotate-0" />
                 </span>
               </div>
@@ -264,7 +264,7 @@ export function LandingTemplateShowcase() {
         ))}
       </div>
 
-      <div className="mt-2 flex items-center gap-4">
+      <div className="mt-2 hidden items-center gap-4 sm:flex">
         <button
           type="button"
           onClick={() => goToPage(activePage - 1)}

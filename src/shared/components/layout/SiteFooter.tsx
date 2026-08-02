@@ -48,10 +48,10 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <Link
               href="/builder"
-              className="group inline-flex h-10 items-center gap-2 rounded-full bg-[var(--brand-ink)] px-4 text-xs font-bold text-white shadow-sm transition-all duration-200 hover:scale-105 hover:bg-[#1a2521]"
+              className="group inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-3 py-1 text-[11px] font-bold text-white shadow-xs transition-all duration-200 hover:scale-105 hover:bg-[#1a2521] sm:h-10 sm:gap-2 sm:px-4 sm:text-xs"
             >
               Build a resume
-              <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              <ArrowRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5 sm:size-3.5" />
             </Link>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/60 px-3 py-1 text-[11px] font-bold text-[#455c42] shadow-2xs backdrop-blur-xs">
               <span className="relative flex size-2">

@@ -50,7 +50,7 @@ const resumeSheets = [
 export function HeroResumeStack() {
   return (
     <div className="group relative mx-auto min-w-0 w-full max-w-[740px] cursor-default">
-      <div className="relative h-[330px] sm:h-[440px] lg:h-[520px]">
+      <div className="relative hidden h-[330px] sm:block sm:h-[440px] lg:h-[520px]">
         <div
           className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-[var(--brand-lime)]/20 blur-[90px]"
           aria-hidden="true"
@@ -83,8 +83,8 @@ export function HeroResumeStack() {
         ))}
       </div>
 
-      {/* Left-Aligned 2x2 Hero Feature Grid */}
-      <div className="relative z-10 mt-6 grid gap-2.5 sm:mt-[-28px] sm:grid-cols-2 sm:px-2">
+      {/* Left-Aligned Hero Feature List */}
+      <div className="relative z-10 mt-6 grid grid-cols-1 gap-2.5 sm:mt-[-28px] sm:grid-cols-2 sm:px-2">
         <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)] text-xs font-black text-[var(--brand-ink)] shadow-xs">
             90%
