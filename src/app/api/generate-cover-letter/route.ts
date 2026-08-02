@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { createClient } from "@/shared/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -26,6 +27,18 @@ function getGroqClient(): OpenAI {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: "Authentication required. Please sign in to generate cover letters with AI." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { role, company, headline, keyPoints, tone } = body as {
       role?: string;

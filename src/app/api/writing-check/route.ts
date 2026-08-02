@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { analyzeLocalWritingFallback, analyzeResumeWriting } from "@/modules/analyzer";
 import type { WritingTarget } from "@/modules/resume";
+import { createClient } from "@/shared/lib/supabase/server";
 
 const MAX_TARGETS = 60;
 const MAX_TARGET_LENGTH = 1600;
@@ -49,6 +50,15 @@ function validateTargets(value: unknown): WritingTarget[] {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return errorResponse("Authentication required. Please sign in to use AI writing check.", 401);
+    }
+
     const body = (await request.json()) as { targets?: unknown };
     const targets = validateTargets(body.targets);
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { createClient } from "@/shared/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -26,6 +27,18 @@ function getGroqClient(): OpenAI {
 
 export async function POST(req: Request) {
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Authentication required. Please sign in to use AI refine." },
+        { status: 401 }
+      );
+    }
+
     const { text, fieldName } = await req.json();
 
     if (!text || typeof text !== "string" || !text.trim()) {
