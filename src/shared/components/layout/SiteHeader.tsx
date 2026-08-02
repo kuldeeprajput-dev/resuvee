@@ -67,7 +67,8 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
     <header className="sticky top-3 z-[100] w-full pointer-events-none px-3 transition-all duration-300">
       <div
         className={cn(
-          "pointer-events-auto mx-auto flex h-[52px] w-full max-w-5xl items-center justify-between gap-2 rounded-[18px] border border-black/[0.08] bg-white/90 px-3 shadow-[0_10px_35px_rgba(0,0,0,0.09)] backdrop-blur-xl transition-all duration-300 sm:h-[54px]",
+          "pointer-events-auto mx-auto flex h-[52px] w-full max-w-5xl items-center justify-between gap-2 rounded-[18px] border border-black/[0.08] px-3 shadow-[0_10px_35px_rgba(0,0,0,0.09)] backdrop-blur-xl transition-all duration-300 sm:h-[54px]",
+          blendWithPage ? "bg-white/95" : "bg-white/90",
           !isVisible && "-translate-y-16 opacity-0 pointer-events-none"
         )}
       >

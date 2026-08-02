@@ -2,64 +2,8 @@ import OpenAI from "openai";
 import { createHash } from "crypto";
 import type { ResumeAnalysis } from "../index";
 
-const SYSTEM_PROMPT = `You are an enterprise-grade ATS scoring engine. You output ONLY valid JSON. No text, no explanation, no markdown — just a single JSON object.
-
-SCORING PROTOCOL:
-Start at base score 50. Evaluate the resume against these criteria:
-
-ADDITIONS (only award with clear evidence):
-- Quantified achievements: ≥3 metrics with real numbers (%, $, users, latency) = +20. Two metrics = +12. One = +5. Zero = +0.
-- Tech stack depth: Technologies listed AND demonstrated in projects/jobs = +15. Listed but not demonstrated = +4. Absent = +0.
-- Real projects: Projects with measurable outcomes AND links = +10. Outcomes only = +6. Links only = +3. Neither = +0.
-- Language quality: No filler phrases ("responsible for", "helped with", "worked on", "involved in") = +8. Some filler = +2. Mostly filler = +0.
-- Structure: All sections present (Contact, Experience, Skills, Education, Projects), consistent formatting = +5. Partial = +2. Poor = +0.
-- Credibility: GitHub/portfolio links, verifiable companies, publications = +7. Partial = +3. None = +0.
-
-DEDUCTIONS (automatic):
-- Zero quantified achievements = -25
-- ≥3 filler phrases detected = -15
-- Tech stack missing or irrelevant to role = -15
-- Missing critical keywords for role = -12
-- Poor structure = -10
-- Unexplained employment gap >6 months = -8 each (max -16)
-- Keywords stuffed in skills only, not used in context = -5
-- No verifiable links = -5
-
-HARD CAPS (applied after calculation, cannot be overridden):
-- No quantified achievements at all → score capped at 52
-- Only 1-2 achievements → capped at 62
-- Filler language dominant → capped at 58
-- No relevant tech stack → capped at 55
-- Missing most role keywords → capped at 60
-- Fresher with no projects and no internships → capped at 45
-- Score ≥80 requires: ≥3 achievements + relevant tech + no filler. Otherwise clamp to 79.
-- Score ≥90 requires: all above + verifiable links + senior-level impact. Otherwise clamp to 89.
-
-BEHAVIOR:
-- Judge ONLY what is written. Never assume skills not listed.
-- "Developed a feature" = filler. "Built payment gateway handling 10K transactions/day" = evidence.
-- A skills list alone does not prove depth. Look for usage in job descriptions and projects.
-- Be brutally honest in weaknesses and advice. Do not soften language.
-
-OUTPUT FORMAT (strict JSON, no other text):
-{
-  "role": "specific inferred role",
-  "level": "Fresher | Junior | Mid-level | Senior",
-  "score": <integer 0-100 after all caps applied>,
-  "scoreBreakdown": {
-    "baseScore": 50,
-    "earned": <total points added>,
-    "deducted": <total points removed>,
-    "capsApplied": ["list each cap that was triggered, or empty array"]
-  },
-  "techStack": ["only technologies evidenced in resume"],
-  "strengths": ["max 3 strengths with cited evidence from the resume"],
-  "weaknesses": ["max 4 weaknesses, be specific and blunt"],
-  "missingKeywords": ["keywords expected for this role but absent"],
-  "suggestions": ["max 4 actionable improvements specific to THIS resume"],
-  "advice": "2-3 sentences of brutally honest career advice."
-}
-`;
+const SYSTEM_PROMPT =
+  'You are a precise resume ATS reviewer. Return only valid JSON, no markdown. Use only evidence in the resume; never invent skills, metrics, dates, employers, or achievements. Score 0-100 as resume health, not a hiring guarantee: start at 50, reward quantified impact, relevant skills used in context, complete sections, clarity and parseability; deduct missing evidence, parser risk and missing role terms. Be concise. Return at most 3 strengths, 4 weaknesses, 6 missing keywords, 4 suggestions, 12 technologies, 4 parser issues and 3 caps. Use this exact shape: {"role":"","level":"","score":0,"summary":"","scoreBreakdown":{"baseScore":50,"earned":0,"deducted":0,"capsApplied":[]},"techStack":[],"skillsFound":[],"skillsMissing":[],"strengths":[],"weaknesses":[],"missingKeywords":[],"suggestions":[],"advice":"","atsCompatibility":{"formattingScore":0,"parseabilityScore":0,"keywordMatchScore":0,"issues":[]}}';
 
 // Simple in-memory cache to store analysis results by text hash
 const analysisCache = new Map<string, ResumeAnalysis>();
@@ -101,13 +45,12 @@ export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis>
   let responseText = "";
 
   try {
-    // Trim resume to stay within 8K TPM limit
-    // Budget: ~1500 (system) + resume + 4096 (max_tokens) < 8000
-    // So resume must be < ~2400 tokens (~1800 chars)
+    // Keep both the header and closing skills or education sections while staying compact.
+    const normalizedResume = resumeText.replace(/\s+/g, " ").trim();
     const trimmedResume =
-      resumeText.length > 1800
-        ? resumeText.substring(0, 1800) + "\n[Resume trimmed for processing]"
-        : resumeText;
+      normalizedResume.length > 4800
+        ? normalizedResume.slice(0, 3200) + "\n[Middle omitted]\n" + normalizedResume.slice(-1600)
+        : normalizedResume;
 
     const completion = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
@@ -123,7 +66,7 @@ export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis>
       ],
       temperature: 0.1,
       top_p: 0.9,
-      max_tokens: 4096,
+      max_tokens: 1600,
     });
 
     responseText = completion.choices[0]?.message?.content || "";
@@ -183,23 +126,53 @@ export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis>
     const rawAnalysis = JSON.parse(jsonString) as any;
 
     // Map the AI output to the ResumeAnalysis type
-    const analysis: ResumeAnalysis = {
-      role: rawAnalysis.role || "Unknown Role",
-      level: rawAnalysis.level || "Unknown",
-      score: rawAnalysis.scoreBreakdown?.finalScore ?? rawAnalysis.score ?? 50,
-      techStack: Array.isArray(rawAnalysis.techStack) ? rawAnalysis.techStack : [],
-      strengths: Array.isArray(rawAnalysis.strengths) ? rawAnalysis.strengths : [],
-      weaknesses: Array.isArray(rawAnalysis.weaknesses) ? rawAnalysis.weaknesses : [],
-      missingKeywords: Array.isArray(rawAnalysis.missingKeywords)
-        ? rawAnalysis.missingKeywords
-        : Array.isArray(rawAnalysis.keywordAnalysis?.missingKeywords)
-          ? rawAnalysis.keywordAnalysis.missingKeywords
-          : [],
-      suggestions: Array.isArray(rawAnalysis.suggestions) ? rawAnalysis.suggestions : [],
-      advice: rawAnalysis.advice || "No advice provided.",
+    const toScore = (value: unknown, fallback = 50) => {
+      const score = Number(value);
+      return Number.isFinite(score) ? Math.min(100, Math.max(0, Math.round(score))) : fallback;
     };
 
-    analysis.score = Math.min(100, Math.max(0, analysis.score));
+    const toList = (value: unknown, limit: number) =>
+      Array.isArray(value)
+        ? value
+            .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+            .slice(0, limit)
+        : [];
+
+    const analysis: ResumeAnalysis = {
+      role: typeof rawAnalysis.role === "string" ? rawAnalysis.role : "Unknown Role",
+      level: typeof rawAnalysis.level === "string" ? rawAnalysis.level : "Unknown",
+      summary: typeof rawAnalysis.summary === "string" ? rawAnalysis.summary : undefined,
+      score: toScore(rawAnalysis.scoreBreakdown?.finalScore ?? rawAnalysis.score),
+      techStack: toList(rawAnalysis.techStack, 12),
+      skillsFound: toList(rawAnalysis.skillsFound, 12),
+      skillsMissing: toList(rawAnalysis.skillsMissing, 12),
+      strengths: toList(rawAnalysis.strengths, 3),
+      weaknesses: toList(rawAnalysis.weaknesses, 4),
+      missingKeywords: toList(
+        rawAnalysis.missingKeywords ?? rawAnalysis.keywordAnalysis?.missingKeywords,
+        6
+      ),
+      suggestions: toList(rawAnalysis.suggestions, 4),
+      advice: typeof rawAnalysis.advice === "string" ? rawAnalysis.advice : "No advice provided.",
+      scoreBreakdown: {
+        baseScore: toScore(rawAnalysis.scoreBreakdown?.baseScore, 50),
+        earned: toScore(rawAnalysis.scoreBreakdown?.earned, 0),
+        deducted: toScore(rawAnalysis.scoreBreakdown?.deducted, 0),
+        capsApplied: toList(rawAnalysis.scoreBreakdown?.capsApplied, 3),
+      },
+      atsCompatibility: {
+        formattingScore: toScore(
+          rawAnalysis.atsCompatibility?.formattingScore ?? rawAnalysis.score
+        ),
+        parseabilityScore: toScore(
+          rawAnalysis.atsCompatibility?.parseabilityScore ?? rawAnalysis.score
+        ),
+        keywordMatchScore: toScore(
+          rawAnalysis.atsCompatibility?.keywordMatchScore ?? rawAnalysis.score
+        ),
+        issues: toList(rawAnalysis.atsCompatibility?.issues, 4),
+      },
+    };
 
     // Save to cache
     analysisCache.set(hash, analysis);

@@ -19,6 +19,12 @@ export interface ResumeAnalysis {
   level: string;
   score: number;
   summary?: string;
+  scoreBreakdown?: {
+    baseScore: number;
+    earned: number;
+    deducted: number;
+    capsApplied: string[];
+  };
   advice?: string;
   strengths: string[];
   weaknesses: string[];
