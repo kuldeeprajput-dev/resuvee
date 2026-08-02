@@ -52,8 +52,8 @@ export function CoverLetterPreview({
       isHandTool
         ? "cursor-inherit hover:outline-none"
         : cn(
-            "cursor-pointer rounded-xs transition",
-            selectedField !== field && "hover:outline-dashed hover:outline-1 hover:outline-emerald-500"
+            "lg:cursor-pointer cursor-default rounded-xs transition",
+            selectedField !== field && "lg:hover:outline-dashed lg:hover:outline-1 lg:hover:outline-emerald-500"
           ),
       "break-words [overflow-wrap:anywhere]",
       !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
