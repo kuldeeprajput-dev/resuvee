@@ -336,19 +336,19 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
-      <header className="no-print flex h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] pr-4 sm:pr-5">
-        <div className="flex h-full items-center">
+      <header className="no-print flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[var(--brand-paper)] px-3 sm:px-5">
+        <div className="flex h-full items-center min-w-0">
           {/* Logo Section matched to Left Sidebar width (w-[220px]) */}
           <div
             className={cn(
-              "flex h-full items-center px-4 transition-all duration-150 sm:px-5",
+              "flex h-full items-center px-1 sm:px-5",
               !hideLeftSidebar ? "lg:w-[220px] lg:shrink-0 lg:justify-center" : "w-auto"
             )}
           >
             <Link
               href="/"
               aria-label="Back to home"
-              className="flex size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden"
+              className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
             >
               <ArrowLeft className="size-4" />
             </Link>
@@ -358,11 +358,11 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           </div>
 
           {/* Document Title */}
-          <div className="min-w-0 pl-0 sm:pl-1">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="min-w-0 pl-1.5 sm:pl-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
               <FileText className="hidden size-4 shrink-0 text-[var(--brand-muted)] sm:block" />
               <p
-                className="max-w-[150px] truncate text-sm font-bold sm:max-w-[220px] md:max-w-[300px] lg:max-w-[380px]"
+                className="hidden max-w-[100px] truncate text-xs font-bold sm:block sm:max-w-[220px] sm:text-sm md:max-w-[300px] lg:max-w-[380px]"
                 title={
                   data.basics.fullName ? `${data.basics.fullName} — Resume` : "Untitled resume"
                 }
@@ -373,12 +373,12 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           <Button
             type="button"
             variant="outline"
             onClick={() => setShowWritingCheck(true)}
-            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold lg:inline-flex"
+            className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold lg:inline-flex"
           >
             <SpellCheck2 className="size-4 text-emerald-600" />
             Check with AI
@@ -388,7 +388,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             type="button"
             variant="outline"
             onClick={() => setShowTailor(true)}
-            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold sm:inline-flex"
+            className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold sm:inline-flex"
           >
             <ScanSearch className="size-4 text-[var(--brand-ink)]" />
             Role match
@@ -399,27 +399,24 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             variant="outline"
             onClick={handleSaveToCloud}
             disabled={isSaving}
-            className="h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition cursor-pointer"
+            className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition cursor-pointer"
             title="Save resume to your account"
           >
             {isSaving ? (
-              <Loader2 className="size-4 animate-spin text-emerald-600" />
+              <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
             ) : saveStatus === "saved" ? (
-              <Check className="size-4 text-emerald-600" />
+              <Check className="size-3.5 sm:size-4 text-emerald-600" />
             ) : (
-              <Cloud className="size-4 text-emerald-600" />
+              <Cloud className="size-3.5 sm:size-4 text-emerald-600" />
             )}
-            <span className="hidden sm:inline">
-              {isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}
-            </span>
-            <span className="sm:hidden">Save</span>
+            <span>{isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}</span>
           </Button>
 
           <Button
             type="button"
             variant="outline"
             onClick={startFresh}
-            className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] md:inline-flex"
+            className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold text-[var(--brand-ink)] md:inline-flex"
           >
             <FilePlus2 className="size-4 text-[var(--brand-muted)]" />
             Start fresh
@@ -429,9 +426,9 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             type="button"
             variant="outline"
             onClick={() => setShowMobilePreview(true)}
-            className="h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold lg:hidden"
+            className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold lg:hidden"
           >
-            <Eye className="size-4" />
+            <Eye className="size-3.5 sm:size-4 text-emerald-600" />
             <span className="hidden sm:inline">Preview</span>
           </Button>
 
@@ -439,9 +436,9 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             type="button"
             variant="outline"
             onClick={exportResume}
-            className="h-10 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)]"
+            className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)]"
           >
-            <Download className="size-4 text-emerald-600" />
+            <Download className="size-3.5 sm:size-4 text-emerald-600" />
             <span className="hidden sm:inline">Export PDF</span>
             <span className="sm:hidden">Export</span>
           </Button>
@@ -451,7 +448,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       <div
         ref={containerRef}
         className={cn(
-          "relative flex h-[calc(100dvh-4rem)] w-full overflow-hidden",
+          "relative flex h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] w-full max-w-full overflow-hidden",
           isResizing && "select-none"
         )}
       >
@@ -533,12 +530,12 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         {!isLeftCollapsed && (
           <section
             className={cn(
-              "no-print flex min-h-0 flex-col border-r border-black/10 bg-[#f7f6f1]",
+              "no-print flex min-h-0 w-full max-w-full flex-col border-r border-black/10 bg-[#f7f6f1] lg:w-auto",
               isResizing ? "transition-none" : "transition-[width] duration-150 ease-out",
-              isRightCollapsed ? "flex-1" : "shrink-0"
+              isRightCollapsed ? "flex-1" : "lg:shrink-0"
             )}
             style={
-              isRightCollapsed
+              isRightCollapsed || containerWidth < 1024
                 ? undefined
                 : {
                     width: hideLeftSidebar
@@ -660,15 +657,15 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               />
             </div>
 
-            <div className="flex h-[64px] shrink-0 items-center justify-between border-t border-black/10 bg-white/80 px-3.5 backdrop-blur sm:px-7">
+            <div className="flex h-14 shrink-0 items-center justify-between border-t border-black/10 bg-white/80 px-3 backdrop-blur sm:h-[64px] sm:px-7">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => goToRelativeSection(-1)}
                 disabled={activeIndex === 0}
-                className="h-10 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 disabled:opacity-30 cursor-pointer"
+                className="h-9 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 disabled:opacity-30 cursor-pointer sm:h-10 sm:px-3.5"
               >
-                <ChevronLeft className="size-4 text-[var(--brand-muted)]" />
+                <ChevronLeft className="size-3.5 text-[var(--brand-muted)] sm:size-4" />
                 Back
               </Button>
               <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
@@ -684,13 +681,13 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                     goToRelativeSection(1);
                   }
                 }}
-                className="h-10 rounded-xl border-black/10 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
+                className="h-9 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer sm:h-10 sm:px-4"
               >
                 <span>{activeIndex === visibleSections.length - 1 ? "Preview" : "Continue"}</span>
                 {activeIndex === visibleSections.length - 1 ? (
-                  <Eye className="size-4 text-emerald-600" />
+                  <Eye className="size-3.5 text-emerald-600 sm:size-4" />
                 ) : (
-                  <ChevronRight className="size-4 text-emerald-600" />
+                  <ChevronRight className="size-3.5 text-emerald-600 sm:size-4" />
                 )}
               </Button>
             </div>

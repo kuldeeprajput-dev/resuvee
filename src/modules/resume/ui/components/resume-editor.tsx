@@ -168,28 +168,28 @@ function PersonalDetailsEditor({ data, onChange, template, stepLabel }: ResumeEd
         </button>
       }
     >
-      <div className="mb-6 grid gap-2 grid-cols-1 min-[500px]:grid-cols-3">
-        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
+      <div className="mb-4 grid grid-cols-3 gap-1.5 sm:mb-6 sm:gap-2">
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
           {template.layout === "sidebar" ? (
-            <Columns3 className="size-4 text-[#4d7141]" />
+            <Columns3 className="size-3.5 shrink-0 text-[#4d7141]" />
           ) : (
-            <LayoutPanelTop className="size-4 text-[#4d7141]" />
+            <LayoutPanelTop className="size-3.5 shrink-0 text-[#4d7141]" />
           )}
-          <span className="text-[10px] font-bold">
-            {template.layout === "sidebar" ? "Sidebar layout" : "Single column"}
+          <span className="truncate text-[9.5px] font-bold sm:text-[10px]">
+            {template.layout === "sidebar" ? "Sidebar" : "Single col"}
           </span>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
-          <UserRound className="size-4 text-[#4d7141]" />
-          <span className="text-[10px] font-bold">
-            {template.supportsPhoto ? "Photo supported" : "Photo-free"}
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
+          <UserRound className="size-3.5 shrink-0 text-[#4d7141]" />
+          <span className="truncate text-[9.5px] font-bold sm:text-[10px]">
+            {template.supportsPhoto ? "Photo layout" : "Photo-free"}
           </span>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-black/[0.08] bg-white/70 px-3 py-2.5">
-          <span className="flex size-4 items-center justify-center rounded-full border border-black/15 bg-black/5 text-[8px] font-extrabold text-[var(--brand-ink)]">
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
+          <span className="flex size-3.5 shrink-0 items-center justify-center rounded-full border border-black/15 bg-black/5 text-[8px] font-extrabold text-[var(--brand-ink)]">
             {template.sections.length}
           </span>
-          <span className="text-[10px] font-bold">Editable sections</span>
+          <span className="truncate text-[9.5px] font-bold sm:text-[10px]">Editable sections</span>
         </div>
       </div>
 

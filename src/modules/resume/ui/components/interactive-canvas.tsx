@@ -873,9 +873,11 @@ export function InteractiveCanvas({
               <X className="size-4" />
             </button>
           )}
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="hidden lg:flex shrink-0 items-center gap-2">
             <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse shadow-xs" />
-            <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">Studio Canvas</p>
+            <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">
+              Studio Canvas
+            </p>
             <span className="text-black/25 text-xs font-semibold mx-0.5">·</span>
             <span className="shrink-0 max-w-[140px] truncate text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#059669] border-b-2 border-[#059669] pb-0.5 transition-all">
               {template.name}
@@ -910,12 +912,35 @@ export function InteractiveCanvas({
             </button>
           )}
 
-          {/* Export PDF Button - Only visible in Fullscreen / Zoom mode */}
-          {isFullscreen && (
+          {/* Template Selector Button */}
+          <button
+            type="button"
+            onClick={onShowTemplates}
+            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer"
+          >
+            <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
+            <span className="whitespace-nowrap">Templates</span>
+          </button>
+
+          {/* Export PDF Button on Mobile Preview (In place of Design button) */}
+          {isMobilePreview && (
             <button
               type="button"
               onClick={() => window.print()}
-              className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in"
+              className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer lg:hidden"
+              title="Export PDF Document"
+            >
+              <Download className="size-3.5 text-emerald-600" />
+              <span className="whitespace-nowrap">Export</span>
+            </button>
+          )}
+
+          {/* Export PDF Button - Visible in Fullscreen mode on Desktop */}
+          {isFullscreen && !isMobilePreview && (
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="hidden lg:flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer"
               title="Export PDF Document"
             >
               <Download className="size-3.5 text-emerald-600" />
@@ -923,18 +948,8 @@ export function InteractiveCanvas({
             </button>
           )}
 
-          {/* Template Selector Button */}
-          <button
-            type="button"
-            onClick={onShowTemplates}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3"
-          >
-            <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
-            <span className="whitespace-nowrap">Templates</span>
-          </button>
-
-          {/* Design Controls Button in Canvas Bar */}
-          <div className="relative">
+          {/* Design Controls Button in Canvas Bar (Desktop Only) */}
+          <div className="relative hidden lg:block">
             <button
               type="button"
               onClick={() => {
@@ -943,7 +958,7 @@ export function InteractiveCanvas({
                 setShowThemeMenu(false);
               }}
               className={cn(
-                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3",
+                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer",
                 showDesignMenu &&
                   "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50 text-emerald-800"
               )}
@@ -1240,7 +1255,9 @@ export function InteractiveCanvas({
                 onClick={() => setIsExpanded(!isExpanded)}
                 className={cn(
                   "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
-                  isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-[var(--brand-muted)]"
+                  isExpanded
+                    ? "bg-[#059669] text-white"
+                    : "hover:bg-black/10 text-[var(--brand-muted)]"
                 )}
                 title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
               >
@@ -1525,7 +1542,7 @@ export function InteractiveCanvas({
       </div>
 
       {/* Floating Bottom-Center Glassmorphic Zoom Toolbar */}
-      <div className="no-print absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200">
+      <div className="no-print absolute bottom-6 left-1/2 z-40 hidden -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200 lg:flex">
         {/* Select vs Hand/Pan Tool Switcher */}
         <div className="flex items-center rounded-xl bg-black/5 p-0.5">
           <button
@@ -1622,7 +1639,9 @@ export function InteractiveCanvas({
                   )}
                 >
                   <span>{preset.label}</span>
-                  {Math.round(zoom) === preset.value && <Check className="size-3 text-emerald-600" />}
+                  {Math.round(zoom) === preset.value && (
+                    <Check className="size-3 text-emerald-600" />
+                  )}
                 </button>
               ))}
             </div>
