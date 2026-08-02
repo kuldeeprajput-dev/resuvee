@@ -95,6 +95,48 @@ function validateIssues(rawIssues: unknown, targets: WritingTarget[]): WritingIs
   });
 }
 
+export function analyzeLocalWritingFallback(targets: WritingTarget[]): WritingCheckResponse {
+  const issues: WritingIssue[] = [];
+  let issueId = 1;
+
+  const COMMON_RULES: [RegExp, string, WritingIssueType, string][] = [
+    [/\bteh\b/i, "the", "spelling", "Fixes a common spelling typo."],
+    [/\brecieve\b/i, "receive", "spelling", "Fixes a spelling mistake."],
+    [/\bmanagment\b/i, "management", "spelling", "Fixes a spelling mistake."],
+    [/\bseperate\b/i, "separate", "spelling", "Fixes a spelling mistake."],
+    [/\bresponsable\b/i, "responsible", "spelling", "Fixes a spelling mistake."],
+    [/\bdevlopment\b/i, "development", "spelling", "Fixes a spelling mistake."],
+    [/\bresponsible for\b/i, "spearheaded", "clarity", "Replaces passive duty phrasing with an impactful action verb."],
+    [/\bworked on\b/i, "developed and delivered", "clarity", "Replaces weak phrasing with a strong, result-oriented action verb."],
+    [/\bhelped with\b/i, "collaborated to execute", "clarity", "Strengthens bullet point impact with active executive phrasing."],
+    [/\bhandled\b/i, "orchestrated", "clarity", "Uses a concise, proactive action verb."],
+    [/\bi\b/g, "", "grammar", "Resumes should avoid first-person pronouns."],
+  ];
+
+  targets.forEach((target) => {
+    COMMON_RULES.forEach(([pattern, replacement, type, explanation]) => {
+      const match = target.text.match(pattern);
+      if (match && match[0]) {
+        const original = match[0];
+        // Ensure no duplicate issues for same target and text
+        if (!issues.some((i) => i.targetId === target.id && i.original === original)) {
+          issues.push({
+            id: `${target.id}-fallback-${issueId++}`,
+            targetId: target.id,
+            label: target.label,
+            type,
+            original,
+            replacement,
+            explanation,
+          });
+        }
+      }
+    });
+  });
+
+  return { issues: issues.slice(0, 15) };
+}
+
 export async function analyzeResumeWriting(
   targets: WritingTarget[]
 ): Promise<WritingCheckResponse> {

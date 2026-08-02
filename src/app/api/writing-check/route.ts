@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeResumeWriting } from "@/modules/analyzer";
+import { analyzeLocalWritingFallback, analyzeResumeWriting } from "@/modules/analyzer";
 import type { WritingTarget } from "@/modules/resume";
 
 const MAX_TARGETS = 60;
@@ -49,15 +49,23 @@ function validateTargets(value: unknown): WritingTarget[] {
 }
 
 export async function POST(request: NextRequest) {
-  if (!process.env.GROQ_API_KEY) {
-    return errorResponse("AI writing check is not configured. Add GROQ_API_KEY to use it.", 503);
-  }
-
   try {
     const body = (await request.json()) as { targets?: unknown };
     const targets = validateTargets(body.targets);
-    const data = await analyzeResumeWriting(targets);
-    return NextResponse.json({ success: true, data });
+
+    if (!process.env.GROQ_API_KEY) {
+      const data = analyzeLocalWritingFallback(targets);
+      return NextResponse.json({ success: true, data });
+    }
+
+    try {
+      const data = await analyzeResumeWriting(targets);
+      return NextResponse.json({ success: true, data });
+    } catch (aiError) {
+      console.warn("AI writing check fallback engaged:", aiError);
+      const data = analyzeLocalWritingFallback(targets);
+      return NextResponse.json({ success: true, data });
+    }
   } catch (error) {
     console.error("Writing check error:", error);
     const message =
