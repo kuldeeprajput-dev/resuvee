@@ -43,6 +43,10 @@ export function CoverLetterPreview({
       ? "px-16 py-14 min-h-[890px]"
       : "px-14 py-12 min-h-[842px]";
 
+  const contact = [data.email, data.phone, data.location, data.website]
+    .filter(Boolean)
+    .join("  ·  ");
+
   const getFieldClass = (field: keyof CoverLetterData) =>
     cn(
       isHandTool

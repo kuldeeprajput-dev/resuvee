@@ -969,3 +969,20 @@ export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData)
 export function getTemplateStarterData(templateId: ResumeTemplateId) {
   return cloneResumeData(templateStarterData[templateId]);
 }
+
+import { Award, Briefcase, FileText, GraduationCap, User, Wrench, FolderGit2 } from "lucide-react";
+import type { BuilderSection } from "../types/resume";
+
+export const sectionMetadata: Record<
+  BuilderSection,
+  { title: string; icon: React.ComponentType<{ className?: string }> }
+> = {
+  basics: { title: "Personal", icon: User },
+  summary: { title: "Summary", icon: FileText },
+  experience: { title: "Experience", icon: Briefcase },
+  education: { title: "Education", icon: GraduationCap },
+  skills: { title: "Skills", icon: Wrench },
+  projects: { title: "Projects", icon: FolderGit2 },
+  certifications: { title: "Certifications", icon: Award },
+};
+

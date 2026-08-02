@@ -37,10 +37,10 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import type { BuilderSection, ResumeData, ResumeTemplate } from "../types/resume";
-import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
-import { ResumePreview } from "./ResumePreview";
-import { resumeFontClass, type ResumeStyle } from "./CustomizePanel";
+import type { BuilderSection, ResumeData, ResumeTemplate } from "../../types/resume";
+import { useResumeBuilderStore } from "../../store/use-resume-builder-store";
+import { ResumePreview } from "./resume-preview";
+import { resumeFontClass, type ResumeStyle } from "./customize-panel";
 import { cn } from "@/shared/lib/utils";
 
 export type CanvasTheme = "dots" | "grid" | "studio" | "clean";

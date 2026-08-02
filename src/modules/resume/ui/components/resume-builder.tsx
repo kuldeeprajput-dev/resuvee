@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  AlertTriangle,
   ArrowLeft,
   Check,
   ChevronLeft,
@@ -14,23 +13,21 @@ import {
   LayoutTemplate,
   RotateCcw,
   ScanSearch,
-  Sparkles,
   SpellCheck2,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { builderSections, calculateResumeStrength, resumeTemplates } from "../utils/resume-data";
-import { getTemplateStarterData } from "../utils/resume-presets";
-import { useResumeBuilderStore } from "../store/useResumeBuilderStore";
+import { builderSections, calculateResumeStrength, resumeTemplates } from "../../utils/resume-data";
+import { useResumeBuilderStore } from "../../store/use-resume-builder-store";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { ResumeEditor } from "./ResumeEditor";
-import { InteractiveCanvas } from "./InteractiveCanvas";
-import { TemplateThumbnail } from "./TemplateThumbnail";
-import { TailorPanel } from "./TailorPanel";
-import { WritingCheckPanel } from "./WritingCheckPanel";
-import { CustomizePanel } from "./CustomizePanel";
+import { ResumeEditor } from "./resume-editor";
+import { InteractiveCanvas } from "./interactive-canvas";
+import { TemplateThumbnail } from "./template-thumbnail";
+import { TailorPanel } from "./tailor-panel";
+import { WritingCheckPanel } from "./writing-check-panel";
+import { CustomizePanel } from "./customize-panel";
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
@@ -85,6 +82,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     }
     return true;
   });
+
   // Resizable Editor & Studio Canvas Split State
   const [showStartFreshModal, setShowStartFreshModal] = useState<boolean>(false);
   const [splitPercent, setSplitPercent] = useState<number>(42);
@@ -264,7 +262,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             </div>
           </div>
 
-          {/* Document Title (reduced left padding by another 8px) */}
+          {/* Document Title */}
           <div className="min-w-0 pl-0 sm:pl-1">
             <div className="flex items-center gap-2 min-w-0">
               <FileText className="hidden size-4 shrink-0 text-[var(--brand-muted)] sm:block" />
@@ -488,7 +486,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               />
             </div>
 
-            {/* Carousel Navigation Control Bar - Only visible when overflowing AND left sidebar is hidden */}
+            {/* Carousel Navigation Control Bar */}
             {hideLeftSidebar && (showLeftFade || showRightFade) && (
               <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in">
                 <button
@@ -714,6 +712,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           </div>
         </div>
       )}
+
       {/* Start Fresh Confirmation Modal */}
       {showStartFreshModal && (
         <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">

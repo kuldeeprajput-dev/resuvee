@@ -52,6 +52,7 @@ export function CoverLetterFormattingToolbar({
   showColorPicker,
   setShowColorPicker,
   activeAccent,
+  setCustomAccent,
   colorSwatches,
   clearSelection,
   onMoveUp,
@@ -377,6 +378,7 @@ export function CoverLetterFormattingToolbar({
 
         {showColorPicker && (
           <div className="absolute top-12 right-0 z-[100] flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+            {/* Color Wheel Picker */}
             <label
               className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
               title="Pick Custom Color"
@@ -394,6 +396,7 @@ export function CoverLetterFormattingToolbar({
               <Pipette className="size-3 text-white drop-shadow-md" />
             </label>
 
+            {/* Hex Input */}
             <input
               type="text"
               value={activeAccent}
@@ -408,6 +411,7 @@ export function CoverLetterFormattingToolbar({
 
             <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
 
+            {/* Swatches Side-by-Side */}
             <div className="flex items-center gap-1.5">
               {colorSwatches.map((swatch) => (
                 <button

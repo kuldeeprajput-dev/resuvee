@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ArrowRight, Check, SearchCheck, Sparkles, Target, X } from "lucide-react";
-import type { ResumeData } from "../types/resume";
+import type { ResumeData } from "../../types/resume";
 import { analyzeJobMatch } from "@/modules/analyzer";
 import { Button } from "@/shared/components/ui/button";
 

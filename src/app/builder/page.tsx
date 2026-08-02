@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ResumeBuilder } from "@/modules/resume";
+import { BuilderView } from "@/modules/resume";
 
 export const metadata: Metadata = {
   title: "Resume Builder",
@@ -14,5 +14,5 @@ export default async function BuilderPage({
 }) {
   const { template, starter } = await searchParams;
 
-  return <ResumeBuilder initialTemplate={template} initialStarter={starter} />;
+  return <BuilderView initialTemplate={template} initialStarter={starter} />;
 }

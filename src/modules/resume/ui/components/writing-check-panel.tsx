@@ -18,10 +18,10 @@ import {
   applyWritingIssue,
   applyWritingIssues,
   getResumeWritingTargets,
-} from "../utils/resume-writing";
+} from "../../utils/resume-writing";
 import { cn } from "@/shared/lib/utils";
-import type { ResumeData } from "../types/resume";
-import type { WritingCheckResponse, WritingIssue } from "../types/writing";
+import type { ResumeData } from "../../types/resume";
+import type { WritingCheckResponse, WritingIssue } from "../../types/writing";
 
 interface WritingCheckPanelProps {
   data: ResumeData;

@@ -12,15 +12,15 @@ import type {
   ResumeProject,
   ResumeSkillGroup,
   ResumeTemplate,
-} from "../types/resume";
+} from "../../types/resume";
 import {
   getEmptyEducation,
   getEmptyExperience,
   getEmptyCertification,
   getEmptyProject,
   getEmptySkillGroup,
-} from "../utils/resume-data";
-import { getTemplateStarterData } from "../utils/resume-presets";
+} from "../../utils/resume-data";
+import { getTemplateStarterData } from "../../utils/resume-presets";
 import { cn } from "@/shared/lib/utils";
 import {
   AddItemButton,
@@ -30,7 +30,7 @@ import {
   ItemCard,
   TextAreaField,
   WritingTip,
-} from "./EditorFields";
+} from "./editor-fields";
 
 interface ResumeEditorProps {
   activeSection: BuilderSection;

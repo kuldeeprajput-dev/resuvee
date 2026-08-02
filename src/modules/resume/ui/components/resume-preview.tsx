@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Globe2, Mail, MapPin, Phone } from "lucide-react";
-import type { ResumeData, ResumeTemplate } from "../types/resume";
+import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
 
 interface ResumePreviewProps {

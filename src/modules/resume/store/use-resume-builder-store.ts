@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { defaultResumeStyle, type ResumeStyle } from "../components/CustomizePanel";
+import { defaultResumeStyle, type ResumeStyle } from "../ui/components/customize-panel";
 import { createBlankResumeData, resumeTemplates } from "../utils/resume-data";
 import { getTemplateStarterData } from "../utils/resume-presets";
 import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";

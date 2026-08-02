@@ -1,11 +1,9 @@
 "use client";
 
 import React from "react";
-import { MousePointer, Hand, Undo2, Redo2 } from "lucide-react";
+import { MousePointer, Hand, ZoomOut, ZoomIn, RotateCcw, Undo2, Redo2, Grid, Check } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CanvasTheme } from "../../types/cover-letter";
-import { ZoomControls } from "./zoom-controls";
-import { CanvasThemeSelector } from "./canvas-theme-selector";
 
 interface CoverLetterCanvasToolbarProps {
   isHandTool: boolean;
@@ -25,6 +23,8 @@ interface CoverLetterCanvasToolbarProps {
   showPresetsMenu: boolean;
   setShowPresetsMenu: (value: boolean) => void;
 }
+
+const ZOOM_PRESETS = [50, 72, 85, 100, 125, 150];
 
 export function CoverLetterCanvasToolbar({
   isHandTool,
@@ -78,14 +78,78 @@ export function CoverLetterCanvasToolbar({
 
       <span className="h-4 w-px bg-black/10 mx-0.5" />
 
-      <ZoomControls
-        zoom={zoom}
-        setZoom={setZoom}
-        setPan={setPan}
-        showPresetsMenu={showPresetsMenu}
-        setShowPresetsMenu={setShowPresetsMenu}
-        setShowThemeMenu={setShowThemeMenu}
-      />
+      {/* Zoom Out Button */}
+      <button
+        type="button"
+        onClick={() => setZoom((z) => Math.max(30, z - 10))}
+        className="builder-icon-button cursor-pointer"
+        title="Zoom Out"
+      >
+        <ZoomOut className="size-3.5" />
+      </button>
+
+      {/* Interactive Zoom Level Dropdown */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => {
+            setShowPresetsMenu(!showPresetsMenu);
+            setShowThemeMenu(false);
+          }}
+          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10 cursor-pointer"
+          title="Choose Zoom Scale"
+        >
+          <span>{zoom}%</span>
+          <span className="text-[10px] text-[var(--brand-muted)]">▼</span>
+        </button>
+
+        {showPresetsMenu && (
+          <div className="absolute bottom-11 left-1/2 z-50 -translate-x-1/2 w-28 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+            {ZOOM_PRESETS.map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => {
+                  setZoom(p);
+                  setShowPresetsMenu(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition cursor-pointer",
+                  zoom === p
+                    ? "bg-emerald-50 text-emerald-900 font-extrabold"
+                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                )}
+              >
+                {p}%
+                {zoom === p && <Check className="size-3 text-emerald-600" />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Zoom In Button */}
+      <button
+        type="button"
+        onClick={() => setZoom((z) => Math.min(200, z + 10))}
+        className="builder-icon-button cursor-pointer"
+        title="Zoom In"
+      >
+        <ZoomIn className="size-3.5" />
+      </button>
+
+      {/* Reset Zoom & Pan Button */}
+      <button
+        type="button"
+        onClick={() => {
+          setZoom(72);
+          setPan({ x: 0, y: 0 });
+        }}
+        className="builder-icon-button cursor-pointer"
+        title="Reset Pan & Zoom"
+      >
+        <RotateCcw className="size-3.5" />
+      </button>
 
       <span className="h-4 w-px bg-black/10 mx-0.5" />
 
@@ -108,18 +172,52 @@ export function CoverLetterCanvasToolbar({
         className="builder-icon-button disabled:opacity-30 cursor-pointer"
         title="Redo (Ctrl + Y)"
       >
-        <Redo2 className="size-3.5 text-white" />
+        <Redo2 className="size-3.5" />
       </button>
 
       <span className="h-4 w-px bg-black/10 mx-0.5" />
 
-      <CanvasThemeSelector
-        canvasTheme={canvasTheme}
-        setCanvasTheme={setCanvasTheme}
-        showThemeMenu={showThemeMenu}
-        setShowThemeMenu={setShowThemeMenu}
-        setShowPresetsMenu={setShowPresetsMenu}
-      />
+      {/* Canvas Background Theme Dropdown */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => {
+            setShowThemeMenu(!showThemeMenu);
+            setShowPresetsMenu(false);
+          }}
+          className="builder-icon-button cursor-pointer"
+          title="Canvas Background Pattern"
+        >
+          <Grid className="size-3.5" />
+        </button>
+
+        {showThemeMenu && (
+          <div className="absolute bottom-11 right-0 z-50 w-40 rounded-2xl border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+            <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+              Canvas Theme
+            </p>
+            {(["dots", "grid", "studio", "clean"] as CanvasTheme[]).map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => {
+                  setCanvasTheme(t);
+                  setShowThemeMenu(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition capitalize cursor-pointer",
+                  canvasTheme === t
+                    ? "bg-emerald-50 text-emerald-900 font-extrabold"
+                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                )}
+              >
+                {t}
+                {canvasTheme === t && <Check className="size-3.5 text-emerald-600" />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
