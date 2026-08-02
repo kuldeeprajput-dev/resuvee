@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, ImageOff, Sparkles } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TemplateThumbnail, resumeTemplates } from "@/modules/resume";
 import { cn } from "@/shared/lib/utils";
 
@@ -34,8 +34,12 @@ const filters: {
 export function LandingTemplateShowcase() {
   const [filter, setFilter] = useState<TemplateFilter>("all");
   const [activePage, setActivePage] = useState(0);
-  const [pageCount, setPageCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const visibleTemplates = useMemo(() => {
     if (filter === "popular") {
       return resumeTemplates.filter((item) => item.popular);
@@ -49,48 +53,121 @@ export function LandingTemplateShowcase() {
     return resumeTemplates;
   }, [filter]);
 
+  // Update items per page based on responsive breakpoints
   useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) {
+        setItemsPerPage(3);
+      } else if (width >= 640) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+    return () => window.removeEventListener("resize", updateItemsPerPage);
+  }, []);
+
+  const pageCount = useMemo(() => {
+    return Math.max(1, Math.ceil(visibleTemplates.length / itemsPerPage));
+  }, [visibleTemplates.length, itemsPerPage]);
+
+  const goToPage = useCallback(
+    (pageIndex: number) => {
+      const carousel = carouselRef.current;
+      if (!carousel || carousel.children.length === 0) return;
+
+      const validPage = Math.max(0, Math.min(pageIndex, pageCount - 1));
+
+      // Lock scroll tracking during programmatic scroll
+      isProgrammaticScrollRef.current = true;
+      setActivePage(validPage);
+
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
+      if (validPage === pageCount - 1) {
+        // Last page: scroll smoothly to max right position
+        carousel.scrollTo({
+          left: carousel.scrollWidth - carousel.clientWidth,
+          behavior: "smooth",
+        });
+      } else {
+        const targetItemIndex = validPage * itemsPerPage;
+        const targetElement = carousel.children[targetItemIndex] as HTMLElement;
+
+        if (targetElement) {
+          carousel.scrollTo({
+            left: targetElement.offsetLeft - carousel.offsetLeft,
+            behavior: "smooth",
+          });
+        }
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        isProgrammaticScrollRef.current = false;
+      }, 450);
+    },
+    [pageCount, itemsPerPage]
+  );
+
+  const handleScroll = useCallback(() => {
+    if (isProgrammaticScrollRef.current) return;
     const carousel = carouselRef.current;
-    if (!carousel) return;
+    if (!carousel || carousel.children.length === 0) return;
 
-    const updatePages = () => {
-      const count = Math.max(1, Math.ceil(carousel.scrollWidth / carousel.clientWidth));
-      setPageCount(count);
-      setActivePage((current) => Math.min(current, count - 1));
-    };
-    const updateActivePage = () => {
-      const page = Math.round(carousel.scrollLeft / carousel.clientWidth);
-      setActivePage(Math.min(page, pageCount - 1));
-    };
-    const observer = new ResizeObserver(updatePages);
+    requestAnimationFrame(() => {
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      if (maxScroll <= 0) {
+        setActivePage(0);
+        return;
+      }
 
-    updatePages();
-    carousel.addEventListener("scroll", updateActivePage, {
-      passive: true,
+      // If scrolled near max right edge, active page is the last page
+      if (carousel.scrollLeft >= maxScroll - 15) {
+        setActivePage(pageCount - 1);
+        return;
+      }
+
+      const carouselLeft = carousel.getBoundingClientRect().left;
+      let closestItemIndex = 0;
+      let minDistance = Infinity;
+
+      for (let i = 0; i < carousel.children.length; i++) {
+        const item = carousel.children[i] as HTMLElement;
+        const itemLeft = item.getBoundingClientRect().left - carouselLeft;
+        const distance = Math.abs(itemLeft);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestItemIndex = i;
+        }
+      }
+
+      const calculatedPage = Math.min(
+        Math.floor(closestItemIndex / itemsPerPage),
+        pageCount - 1
+      );
+
+      setActivePage((current) => (current !== calculatedPage ? calculatedPage : current));
     });
-    observer.observe(carousel);
-
-    return () => {
-      carousel.removeEventListener("scroll", updateActivePage);
-      observer.disconnect();
-    };
-  }, [pageCount, visibleTemplates]);
-
-  const goToPage = (page: number) => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    const nextPage = Math.max(0, Math.min(page, pageCount - 1));
-    carousel.scrollTo({
-      left: nextPage * carousel.clientWidth,
-      behavior: "smooth",
-    });
-    setActivePage(nextPage);
-  };
+  }, [itemsPerPage, pageCount]);
 
   const selectFilter = (nextFilter: TemplateFilter) => {
+    isProgrammaticScrollRef.current = true;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
     setFilter(nextFilter);
     setActivePage(0);
-    carouselRef.current?.scrollTo({ left: 0 });
+
+    if (carouselRef.current) {
+      carouselRef.current.scrollLeft = 0;
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 150);
   };
 
   return (
@@ -102,7 +179,7 @@ export function LandingTemplateShowcase() {
             type="button"
             onClick={() => selectFilter(item.id)}
             className={cn(
-              "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition",
+              "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition-all duration-200",
               filter === item.id
                 ? "bg-[var(--brand-ink)] text-white"
                 : "border border-black/10 bg-white/75 text-[var(--brand-muted)] hover:bg-white"
@@ -123,6 +200,7 @@ export function LandingTemplateShowcase() {
 
       <div
         ref={carouselRef}
+        onScroll={handleScroll}
         className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[86%] gap-5 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
@@ -133,7 +211,7 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}&starter=template`
             }
-            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5"
+            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
           >
             <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-8 sm:p-10">
               <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm">
@@ -192,7 +270,7 @@ export function LandingTemplateShowcase() {
           onClick={() => goToPage(activePage - 1)}
           disabled={activePage === 0}
           aria-label="Previous templates"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ArrowLeft className="size-4" />
         </button>
@@ -208,7 +286,7 @@ export function LandingTemplateShowcase() {
                 aria-label={`Show template page ${index + 1}`}
                 aria-current={activePage === index ? "page" : undefined}
                 className={cn(
-                  "size-2.5 rounded-full border-2 border-[var(--brand-canvas)] ring-1 ring-black/20 transition",
+                  "size-2.5 rounded-full border-2 border-[var(--brand-canvas)] ring-1 ring-black/20 transition-all duration-200",
                   activePage === index
                     ? "scale-125 bg-[var(--brand-ink)]"
                     : "bg-[#c6cbc4] hover:bg-[var(--brand-lime)]"
@@ -223,7 +301,7 @@ export function LandingTemplateShowcase() {
           onClick={() => goToPage(activePage + 1)}
           disabled={activePage === pageCount - 1}
           aria-label="Next templates"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ArrowRight className="size-4" />
         </button>
