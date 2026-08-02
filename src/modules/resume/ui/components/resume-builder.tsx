@@ -285,8 +285,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             onClick={() => setShowWritingCheck(true)}
             className="hidden h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold lg:inline-flex"
           >
-            <SpellCheck2 className="size-4" />
-            Writing
+            <SpellCheck2 className="size-4 text-emerald-600" />
+            Check with AI
           </Button>
 
           <Button
