@@ -121,7 +121,7 @@ export default function Home() {
       <main>
         <section className="relative border-b border-black/[0.08]">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-0 w-full max-w-7xl items-center gap-10 px-5 pb-12 pt-10 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-12 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-14">
+          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-10 px-5 pb-12 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)] shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
@@ -197,7 +197,7 @@ export default function Home() {
         </section>
 
         <section className="bg-[var(--brand-ink)] text-white">
-          <div className="mx-auto grid w-full max-w-7xl divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
+          <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               [String(resumeTemplates.length), "curated templates"],
               ["3", "connected tools"],
@@ -215,7 +215,7 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-7xl px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
+          className="mx-auto w-full max-w-[1440px] px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
         >
           <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -243,7 +243,7 @@ export default function Home() {
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
           <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
 
-          <div className="relative mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+          <div className="relative mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
             <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:gap-12">
               <div className="flex flex-col xl:py-3">
                 <div>
@@ -378,7 +378,7 @@ export default function Home() {
         </section>
 
         <section id="how-it-works" className="border-y border-black/[0.08] bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 md:py-20 lg:px-12">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
             <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div className="max-w-3xl">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
@@ -434,7 +434,7 @@ export default function Home() {
         </section>
 
         <section className="bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-7xl px-5 py-5 sm:px-8 md:py-6 lg:px-12">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-8 md:py-6 lg:px-12">
             <div className="relative overflow-hidden rounded-[28px] bg-[var(--brand-orange)] px-6 py-10 sm:px-9 sm:py-12 lg:px-12">
               <div className="absolute -right-16 -top-28 size-64 rounded-full border-[42px] border-white/15" />
               <div className="absolute -bottom-24 right-[30%] size-48 rounded-full bg-[var(--brand-lime)]/30 blur-2xl" />

@@ -5,11 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, FileCheck2, Menu } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { UserNav } from "@/modules/auth";
 
 const navigation = [
   { href: "/builder", label: "Build" },
   { href: "/analyzer", label: "Analyze" },
   { href: "/cover-letter", label: "Letters" },
+  { href: "/saved", label: "Saved" },
 ];
 
 const mobileNavigation = [...navigation, { href: "/analyzer", label: "Check resume" }];
@@ -64,12 +66,12 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
   }, [prevScrollPos]);
 
   return (
-    <header className="sticky top-3 z-[100] w-full pointer-events-none px-3 transition-all duration-300">
+    <header className="sticky top-4 z-[100] w-full pointer-events-none px-4 transition-all duration-300">
       <div
         className={cn(
-          "pointer-events-auto mx-auto flex h-[52px] w-full max-w-5xl items-center justify-between gap-2 rounded-[18px] border border-black/[0.08] px-3 shadow-[0_10px_35px_rgba(0,0,0,0.09)] backdrop-blur-xl transition-all duration-300 sm:h-[54px]",
+          "pointer-events-auto mx-auto flex h-[58px] w-full max-w-5xl items-center justify-between gap-3 rounded-[22px] border border-black/[0.08] px-4 shadow-[0_12px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-300 sm:h-[64px] sm:px-5",
           blendWithPage ? "bg-white/95" : "bg-white/90",
-          !isVisible && "-translate-y-16 opacity-0 pointer-events-none"
+          !isVisible && "-translate-y-20 opacity-0 pointer-events-none"
         )}
       >
         <div className="flex shrink-0 items-center">
@@ -77,31 +79,33 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
         </div>
 
         <nav
-          className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 md:flex"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-2 md:flex"
           aria-label="Main navigation"
         >
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-[13px] font-semibold leading-none text-[var(--brand-muted)] transition-colors hover:bg-black/5 hover:text-[var(--brand-ink)]"
+              className="inline-flex items-center justify-center rounded-full px-4 py-2 text-[14px] font-semibold leading-none text-[var(--brand-muted)] transition-colors hover:bg-black/5 hover:text-[var(--brand-ink)]"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2.5">
+          <UserNav />
+
           <Link
             href="/analyzer"
-            className="hidden h-9 items-center justify-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold text-[var(--brand-ink)] transition-colors hover:bg-black/5 lg:inline-flex"
+            className="hidden h-10 items-center justify-center gap-1.5 rounded-full px-4 text-[13px] font-semibold text-[var(--brand-ink)] transition-colors hover:bg-black/5 lg:inline-flex"
           >
             <FileCheck2 className="size-4 text-[var(--brand-muted)]" />
             <span>Check resume</span>
           </Link>
           <Link
             href="/builder"
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-3 text-[12px] font-semibold text-white shadow-xs transition hover:bg-[#27332f] sm:px-4 sm:text-[13px]"
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-4 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#27332f] sm:px-5"
           >
             <span className="sm:inline">Start building</span>
             <span className="sm:hidden">Start</span>
