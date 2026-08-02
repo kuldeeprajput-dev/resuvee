@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useAuthStore } from "@/modules/auth";
 import {
   AlignCenter,
   AlignLeft,
@@ -172,7 +173,15 @@ export function InteractiveCanvas({
     selectedDomRef.current = null;
   }, []);
 
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
+
   const handleAiRefine = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to refine text with AI.");
+      return;
+    }
+
     if (!inlineText || !inlineText.trim() || isRefining) return;
     setIsRefining(true);
 
@@ -185,6 +194,11 @@ export function InteractiveCanvas({
           fieldName: selectedElement?.field || selectedElement?.title || "resume section",
         }),
       });
+
+      if (res.status === 401) {
+        openAuthModal("sign_in", "Please sign in to refine text with AI.");
+        return;
+      }
 
       if (!res.ok) throw new Error("Refinement failed");
       const dataRes = await res.json();

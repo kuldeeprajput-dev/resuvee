@@ -21,6 +21,7 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { useAuthStore } from "@/modules/auth";
 import type { CoverLetterData, ColorSwatch } from "../../types/cover-letter";
 
 interface CoverLetterFormattingToolbarProps {
@@ -90,7 +91,15 @@ export function CoverLetterFormattingToolbar({
     update(selectedField, "");
   };
 
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
+
   const handleAiRefine = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to refine text with AI.");
+      return;
+    }
+
     if (!inlineText || !inlineText.trim() || isRefining) return;
     setIsRefining(true);
 
@@ -100,6 +109,11 @@ export function CoverLetterFormattingToolbar({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inlineText, fieldName: selectedField }),
       });
+
+      if (res.status === 401) {
+        openAuthModal("sign_in", "Please sign in to refine text with AI.");
+        return;
+      }
 
       if (!res.ok) throw new Error("Refinement failed");
       const data = await res.json();
