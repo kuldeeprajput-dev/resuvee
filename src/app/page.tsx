@@ -88,7 +88,7 @@ export default function Home() {
       <main>
         <section className="relative border-b border-black/[0.08]">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-10 px-5 pb-6 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
+          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-4 px-5 pb-6 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)] shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
