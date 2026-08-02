@@ -774,6 +774,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           data={data}
           onChange={updateData}
           onClose={() => setShowWritingCheck(false)}
+          onSelectSection={(section) => setActiveSection(section)}
         />
       )}
     </div>

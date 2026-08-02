@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Check, Palette, Pipette, RotateCcw, Type, UserRound, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
@@ -87,16 +88,57 @@ export function CustomizePanel({
   onClose,
 }: CustomizePanelProps) {
   const activeAccent = style.accent || templateAccent;
+  const [panelWidth, setPanelWidth] = useState(440);
+  const [isResizing, setIsResizing] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      const newWidth = window.innerWidth - e.clientX;
+      const minW = Math.min(440, window.innerWidth);
+      const maxW = Math.min(850, window.innerWidth - 80);
+      const clampedWidth = Math.min(Math.max(newWidth, minW), maxW);
+      setPanelWidth(clampedWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing]);
 
   return (
-    <div className="no-print fixed inset-0 z-[110] flex justify-end bg-black/35 backdrop-blur-sm">
+    <div className="no-print fixed inset-0 z-[110] flex justify-end bg-black/15">
       <button
         type="button"
         onClick={onClose}
         aria-label="Close customization"
         className="absolute inset-0 cursor-default"
       />
-      <aside className="relative flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-[#f7f6f1] shadow-2xl">
+      <aside
+        style={{ width: `${panelWidth}px` }}
+        className="relative flex h-full w-full min-w-[320px] sm:min-w-[440px] max-w-[95vw] flex-col overflow-hidden bg-[#f7f6f1] shadow-2xl"
+      >
+        <div
+          onMouseDown={handleMouseDown}
+          className="group absolute left-0 top-0 bottom-0 z-50 flex w-3 cursor-col-resize items-center justify-center transition-colors hover:bg-emerald-500/20"
+          title="Drag left/right to adjust panel width"
+        >
+          <div className="h-12 w-1 rounded-full bg-black/20 group-hover:bg-emerald-600 transition-colors" />
+        </div>
         <header className="flex items-start justify-between border-b border-black/10 bg-white px-5 py-5 sm:px-7">
           <div className="flex items-start gap-3">
             <span className="flex size-10 items-center justify-center rounded-2xl bg-[var(--brand-ink)] text-[var(--brand-lime)]">

@@ -5,8 +5,7 @@ import type { WritingTarget } from "@/modules/resume";
 const MAX_TARGETS = 60;
 const MAX_TARGET_LENGTH = 1600;
 const MAX_TOTAL_LENGTH = 16000;
-const TARGET_ID_PATTERN =
-  /^(basics\.(headline|summary)|(experience|education|project)\.[a-zA-Z0-9-]+\.(role|degree|details|name|description|highlight\.\d+))$/;
+const TARGET_ID_PATTERN = /^[a-zA-Z0-9-_.]+/;
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";

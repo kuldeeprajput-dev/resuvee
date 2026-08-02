@@ -6,6 +6,7 @@ import { defaultResumeStyle, type ResumeStyle } from "../ui/components/customize
 import { createBlankResumeData, resumeTemplates } from "../utils/resume-data";
 import { getTemplateStarterData } from "../utils/resume-presets";
 import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";
+import type { WritingIssue } from "../types/writing";
 
 export type TemplateFilter = "all" | "popular" | "fresher" | "professional";
 
@@ -13,6 +14,8 @@ interface PersistedBuilderState {
   data: ResumeData;
   templateId: ResumeTemplateId;
   resumeStyle: ResumeStyle;
+  writingIssues?: WritingIssue[];
+  writingHasChecked?: boolean;
 }
 
 interface ResumeBuilderState extends PersistedBuilderState {
@@ -29,6 +32,8 @@ interface ResumeBuilderState extends PersistedBuilderState {
   showCustomize: boolean;
   showWritingCheck: boolean;
   templateFilter: TemplateFilter;
+  writingIssues: WritingIssue[];
+  writingHasChecked: boolean;
   initialize: (template?: string, starter?: string) => void;
   setHydrated: (hydrated: boolean) => void;
   updateData: (data: ResumeData) => void;
@@ -42,6 +47,9 @@ interface ResumeBuilderState extends PersistedBuilderState {
   setShowTailor: (open: boolean) => void;
   setShowCustomize: (open: boolean) => void;
   setShowWritingCheck: (open: boolean) => void;
+  setWritingCheckResults: (issues: WritingIssue[]) => void;
+  removeWritingIssue: (issueId: string) => void;
+  clearWritingIssues: () => void;
   undo: () => void;
   redo: () => void;
   startFresh: () => void;
@@ -54,45 +62,15 @@ export function isResumeTemplateId(value: string | undefined): value is ResumeTe
   return resumeTemplates.some((template) => template.id === value);
 }
 
-function safeTemplateId(value: string | undefined): ResumeTemplateId {
-  return isResumeTemplateId(value) ? value : "standard";
-}
-
-function getLegacyDraft(): Partial<PersistedBuilderState> | null {
-  if (typeof window === "undefined") return null;
-
-  for (const key of LEGACY_STORAGE_KEYS) {
-    const value = window.localStorage.getItem(key);
-    if (!value) continue;
-
-    try {
-      const parsed = JSON.parse(value) as {
-        data?: ResumeData;
-        templateId?: string;
-        style?: ResumeStyle;
-      };
-      return {
-        data: parsed.data,
-        templateId: safeTemplateId(parsed.templateId),
-        resumeStyle: parsed.style,
-      };
-    } catch {
-      window.localStorage.removeItem(key);
-    }
+function safeTemplateId(value: unknown): ResumeTemplateId {
+  if (typeof value === "string" && isResumeTemplateId(value)) {
+    return value;
   }
-
-  return null;
-}
-
-function firstAllowedSection(templateId: ResumeTemplateId) {
-  return resumeTemplates.find((template) => template.id === templateId)?.sections[0] ?? "basics";
+  return "standard";
 }
 
 function cloneData(data: ResumeData): ResumeData {
-  if (typeof structuredClone === "function") {
-    return structuredClone(data);
-  }
-  return JSON.parse(JSON.stringify(data));
+  return JSON.parse(JSON.stringify(data)) as ResumeData;
 }
 
 export const useResumeBuilderStore = create<ResumeBuilderState>()(
@@ -102,10 +80,10 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       templateId: "standard",
       resumeStyle: defaultResumeStyle,
       activeSection: "basics",
-      zoom: 72,
+      zoom: 100,
       history: [],
       future: [],
-      saveLabel: "Saved locally",
+      saveLabel: "Draft ready",
       hydrated: false,
       initialized: false,
       showTemplates: false,
@@ -113,39 +91,45 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       showTailor: false,
       showCustomize: false,
       showWritingCheck: false,
-      templateFilter: "popular",
+      templateFilter: "all",
+      writingIssues: [],
+      writingHasChecked: false,
 
-      initialize: (initialTemplate, starter) => {
+      initialize: (initialTemplate, initialStarter) => {
         if (get().initialized) return;
 
-        const requestedTemplate = safeTemplateId(initialTemplate);
-        const hasPersistedDraft =
-          typeof window !== "undefined" && Boolean(window.localStorage.getItem(STORAGE_KEY));
-        const legacyDraft = hasPersistedDraft ? null : getLegacyDraft();
-        const launchWithExample = starter === "template" || starter === "fresher";
+        const requestedTemplate = isResumeTemplateId(initialTemplate)
+          ? initialTemplate
+          : safeTemplateId(get().templateId);
 
-        if (launchWithExample && isResumeTemplateId(initialTemplate)) {
-          set({
-            data: getTemplateStarterData(requestedTemplate),
-            templateId: requestedTemplate,
-            activeSection: firstAllowedSection(requestedTemplate),
-            history: [],
-            future: [],
-            initialized: true,
-            hydrated: true,
-            saveLabel: "Example loaded",
-          });
-          return;
+        let baseData = get().data;
+
+        if (typeof window !== "undefined") {
+          for (const key of LEGACY_STORAGE_KEYS) {
+            try {
+              const raw = localStorage.getItem(key);
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && typeof parsed === "object" && "basics" in parsed) {
+                  baseData = parsed as ResumeData;
+                  break;
+                }
+              }
+            } catch {
+              // Ignore legacy format errors
+            }
+          }
         }
 
-        if (legacyDraft?.data) {
-          const legacyTemplate = legacyDraft.templateId ?? requestedTemplate;
-          set({
-            data: legacyDraft.data,
-            templateId: legacyTemplate,
-            resumeStyle: legacyDraft.resumeStyle ?? defaultResumeStyle,
-          });
+        if (isResumeTemplateId(initialStarter)) {
+          const starter = getTemplateStarterData(initialStarter);
+          baseData = starter;
         }
+
+        set({
+          data: baseData,
+          templateId: requestedTemplate,
+        });
 
         if (isResumeTemplateId(initialTemplate)) {
           set({
@@ -195,6 +179,13 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       setShowCustomize: (showCustomize) => set({ showCustomize }),
       setShowWritingCheck: (showWritingCheck) => set({ showWritingCheck }),
 
+      setWritingCheckResults: (issues) => set({ writingIssues: issues, writingHasChecked: true }),
+      removeWritingIssue: (issueId) =>
+        set((state) => ({
+          writingIssues: state.writingIssues.filter((item) => item.id !== issueId),
+        })),
+      clearWritingIssues: () => set({ writingIssues: [], writingHasChecked: false }),
+
       undo: () => {
         const state = get();
         const previous = state.history.at(-1);
@@ -227,6 +218,8 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
           activeSection: "basics",
           history: [],
           future: [],
+          writingIssues: [],
+          writingHasChecked: false,
           saveLabel: "New resume",
         }),
     }),
@@ -239,6 +232,8 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         data: state.data,
         templateId: state.templateId,
         resumeStyle: state.resumeStyle,
+        writingIssues: state.writingIssues,
+        writingHasChecked: state.writingHasChecked,
       }),
       migrate: (persistedState) => {
         const state = persistedState as Partial<PersistedBuilderState>;

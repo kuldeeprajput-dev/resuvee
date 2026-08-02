@@ -1,5 +1,16 @@
-import type { ResumeData } from "../types/resume";
+import type { BuilderSection, ResumeData } from "../types/resume";
 import type { WritingIssue, WritingTarget } from "../types/writing";
+
+export function getSectionFromTargetId(targetId: string): BuilderSection {
+  if (targetId.startsWith("basics.headline")) return "basics";
+  if (targetId.startsWith("basics.summary")) return "summary";
+  if (targetId.startsWith("experience")) return "experience";
+  if (targetId.startsWith("education")) return "education";
+  if (targetId.startsWith("project")) return "projects";
+  if (targetId.startsWith("skills")) return "skills";
+  if (targetId.startsWith("certifications")) return "certifications";
+  return "basics";
+}
 
 export function getResumeWritingTargets(data: ResumeData): WritingTarget[] {
   const targets: WritingTarget[] = [
@@ -63,11 +74,34 @@ export function getResumeWritingTargets(data: ResumeData): WritingTarget[] {
     });
   });
 
-  return targets.filter((target) => target.text.trim().length >= 3);
+  data.skillGroups?.forEach((item) => {
+    item.skills.forEach((skill, index) => {
+      targets.push({
+        id: `skills.${item.id}.skill.${index}`,
+        label: `${item.name || "Skills"} item ${index + 1}`,
+        text: skill,
+      });
+    });
+  });
+
+  data.certifications?.forEach((item) => {
+    targets.push({
+      id: `certifications.${item.id}.title`,
+      label: `${item.issuer || "Certification"} title`,
+      text: item.title,
+    });
+    targets.push({
+      id: `certifications.${item.id}.description`,
+      label: `${item.title || "Certification"} description`,
+      text: item.description,
+    });
+  });
+
+  return targets.filter((target) => target.text && target.text.trim().length >= 2);
 }
 
 function replaceIssueText(text: string, issue: WritingIssue) {
-  if (!text.includes(issue.original)) return text;
+  if (!text || !text.includes(issue.original)) return text;
   return text.replace(issue.original, issue.replacement);
 }
 
@@ -141,7 +175,7 @@ export function applyWritingIssue(data: ResumeData, issue: WritingIssue): Resume
     };
   }
 
-  if (section === "project") {
+  if (section === "project" || section === "projects") {
     return {
       ...data,
       projects: data.projects.map((item) => {
@@ -165,6 +199,44 @@ export function applyWritingIssue(data: ResumeData, issue: WritingIssue): Resume
             highlights: item.highlights.map((highlight, itemIndex) =>
               itemIndex === index ? replaceIssueText(highlight, issue) : highlight
             ),
+          };
+        }
+        return item;
+      }),
+    };
+  }
+
+  if (section === "skills") {
+    return {
+      ...data,
+      skillGroups: data.skillGroups.map((group) => {
+        if (group.id !== id) return group;
+        const index = Number(indexValue);
+        return {
+          ...group,
+          skills: group.skills.map((skill, itemIndex) =>
+            itemIndex === index ? replaceIssueText(skill, issue) : skill
+          ),
+        };
+      }),
+    };
+  }
+
+  if (section === "certifications" && data.certifications) {
+    return {
+      ...data,
+      certifications: data.certifications.map((item) => {
+        if (item.id !== id) return item;
+        if (field === "title") {
+          return {
+            ...item,
+            title: replaceIssueText(item.title, issue),
+          };
+        }
+        if (field === "description") {
+          return {
+            ...item,
+            description: replaceIssueText(item.description, issue),
           };
         }
         return item;
