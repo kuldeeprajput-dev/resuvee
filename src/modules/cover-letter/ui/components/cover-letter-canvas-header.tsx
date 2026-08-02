@@ -22,6 +22,8 @@ interface CoverLetterCanvasHeaderProps {
   pageSpacing: PageSpacing;
   setPageSpacing: (spacing: PageSpacing) => void;
   colorSwatches: ColorSwatch[];
+  isMobilePreview?: boolean;
+  onCloseMobilePreview?: () => void;
 }
 
 export function CoverLetterCanvasHeader({
@@ -41,31 +43,30 @@ export function CoverLetterCanvasHeader({
   pageSpacing,
   setPageSpacing,
   colorSwatches,
+  isMobilePreview,
+  onCloseMobilePreview,
 }: CoverLetterCanvasHeaderProps) {
   return (
     <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
-        <div className="flex shrink-0 items-center gap-2">
+        {onCloseMobilePreview && (
+          <button
+            type="button"
+            onClick={onCloseMobilePreview}
+            className="builder-icon-button shrink-0 lg:hidden cursor-pointer"
+            aria-label="Close preview"
+          >
+            <X className="size-4" />
+          </button>
+        )}
+        <div className="hidden lg:flex shrink-0 items-center gap-2">
           <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
           <p className="whitespace-nowrap text-xs font-bold tracking-tight">Letter Studio</p>
         </div>
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 z-10">
-        {/* Export PDF Button in Fullscreen */}
-        {isFullscreen && (
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer"
-            title="Export PDF Document"
-          >
-            <Download className="size-3.5 text-emerald-600" />
-            <span className="whitespace-nowrap">Export PDF</span>
-          </button>
-        )}
-
-        {/* Templates Selector Button */}
+        {/* Templates Selector Button (First on Mobile & Desktop) */}
         <div className="relative">
           <button
             type="button"
@@ -123,8 +124,24 @@ export function CoverLetterCanvasHeader({
           )}
         </div>
 
-        {/* Design Controls Button & Popover (Fixed Layout Swatches Overflow) */}
-        <div className="relative">
+        {/* Export PDF Button - Shown on Mobile & Fullscreen in place of Design button */}
+        {(isFullscreen || isMobilePreview || true) && (
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className={cn(
+              "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer",
+              isFullscreen || isMobilePreview ? "flex" : "lg:hidden flex"
+            )}
+            title="Export PDF Document"
+          >
+            <Download className="size-3.5 text-emerald-600" />
+            <span className="whitespace-nowrap">Export</span>
+          </button>
+        )}
+
+        {/* Design Controls Button & Popover (Desktop Only) */}
+        <div className="relative hidden lg:block">
           <button
             type="button"
             onClick={() => {

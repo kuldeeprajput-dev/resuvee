@@ -134,7 +134,7 @@ export function CoverLetterFormattingToolbar({
     <div
       ref={toolbarRef}
       onClick={(e) => e.stopPropagation()}
-      className="no-print absolute z-50 flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
+      className="no-print absolute z-50 hidden lg:flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
       style={{
         top: `${toolbarPos.top}px`,
         left: `${toolbarPos.left}px`,
