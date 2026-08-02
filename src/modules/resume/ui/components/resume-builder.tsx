@@ -615,6 +615,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               zoom={zoom}
               onZoomChange={setZoom}
               onShowTemplates={() => setShowTemplates(true)}
+              onShowWritingCheck={() => setShowWritingCheck(true)}
+              onShowTailor={() => setShowTailor(true)}
               onCloseMobilePreview={() => setShowMobilePreview(false)}
               isMobilePreview={showMobilePreview}
               onUpdateData={updateData}

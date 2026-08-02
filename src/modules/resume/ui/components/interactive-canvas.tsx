@@ -30,7 +30,9 @@ import {
   Redo2,
   RemoveFormatting,
   RotateCcw,
+  ScanSearch,
   Sparkles,
+  SpellCheck2,
   Trash2,
   Undo2,
   X,
@@ -64,6 +66,8 @@ interface InteractiveCanvasProps {
   zoom: number;
   onZoomChange: (zoom: number) => void;
   onShowTemplates: () => void;
+  onShowWritingCheck?: () => void;
+  onShowTailor?: () => void;
   onCloseMobilePreview?: () => void;
   isMobilePreview?: boolean;
   onUpdateData?: (data: ResumeData) => void;
@@ -104,6 +108,8 @@ export function InteractiveCanvas({
   zoom,
   onZoomChange,
   onShowTemplates,
+  onShowWritingCheck,
+  onShowTailor,
   onCloseMobilePreview,
   isMobilePreview = false,
   onUpdateData,
@@ -864,6 +870,32 @@ export function InteractiveCanvas({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
+          {/* Check with AI Button - Only visible in Fullscreen Studio mode */}
+          {isFullscreen && onShowWritingCheck && (
+            <button
+              type="button"
+              onClick={onShowWritingCheck}
+              className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer animate-in fade-in"
+              title="Scan and improve resume text with AI writing check"
+            >
+              <SpellCheck2 className="size-3.5 text-emerald-600" />
+              <span className="whitespace-nowrap">Check with AI</span>
+            </button>
+          )}
+
+          {/* Role Match Button - Only visible in Fullscreen Studio mode */}
+          {isFullscreen && onShowTailor && (
+            <button
+              type="button"
+              onClick={onShowTailor}
+              className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer animate-in fade-in"
+              title="Compare with job description keywords"
+            >
+              <ScanSearch className="size-3.5 text-emerald-600" />
+              <span className="whitespace-nowrap">Role match</span>
+            </button>
+          )}
+
           {/* Export PDF Button - Only visible in Fullscreen / Zoom mode */}
           {isFullscreen && (
             <button
