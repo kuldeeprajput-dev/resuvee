@@ -21,7 +21,7 @@ const productBenefits = [
 ];
 
 const workspaceBenefits = [
-  "Drafts save in your browser",
+  "Secure cloud & browser sync",
   "Reuse your story across every tool",
   "Export clean files when you are ready",
 ];
@@ -230,7 +230,7 @@ export default function Home() {
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-sm font-bold">Your work stays yours</p>
                     <span className="rounded-full bg-[#e7f3db] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#46613c]">
-                      Local-first
+                      Cloud Sync
                     </span>
                   </div>
                   <div className="mt-4 space-y-2">
@@ -332,7 +332,7 @@ export default function Home() {
                     Make the resume you wish you already had.
                   </h2>
                   <div className="mt-6 flex flex-wrap gap-2.5">
-                    {["Free to start", "No account required", "Clean PDF export"].map((benefit) => (
+                    {["Free to start", "Cloud & Local Sync", "Clean PDF export"].map((benefit) => (
                       <span
                         key={benefit}
                         className="rounded-full border border-white/40 bg-white/30 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#2c1d18] shadow-sm backdrop-blur-md transition-colors hover:bg-white/45"

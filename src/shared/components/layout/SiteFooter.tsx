@@ -58,7 +58,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#5fa446] opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#4f8a3a]" />
               </span>
-              Saved locally
+              Cloud & Local Sync
             </span>
           </div>
         </div>
@@ -93,7 +93,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>Original, copyright-safe template designs</span>
             <span className="hidden text-black/20 sm:inline">•</span>
-            <span>Local-first workspace</span>
+            <span>Cloud & Local Workspace</span>
           </div>
         </div>
       </div>
