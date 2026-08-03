@@ -22,8 +22,8 @@ import {
   applyWritingIssues,
   getResumeWritingTargets,
   getSectionFromTargetId,
-} from "../../utils/resume-writing";
-import { useResumeBuilderStore } from "../../store/use-resume-builder-store";
+} from "../../constants/resume-writing";
+import { useResumeBuilderStore } from "../../hooks/use-resume-builder-store";
 import { cn } from "@/shared/lib/utils";
 import type { BuilderSection, ResumeData } from "../../types/resume";
 import type { WritingCheckResponse, WritingIssue } from "../../types/writing";
