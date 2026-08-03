@@ -135,7 +135,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white sm:h-13 sm:w-auto sm:px-6"
+                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white mt-1.5 sm:mt-0 sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/analyzer">
                     <FileSearch className="size-4" />
