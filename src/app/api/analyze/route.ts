@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeResume, type AnalyzeResponse } from "@/modules/analyzer";
+import { analyzeResume, clearAnalysisCache, type AnalyzeResponse } from "@/modules/analyzer";
 import { extractTextFromDOCX } from "@/shared/lib/extractors/docx";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -9,6 +9,11 @@ export const runtime = "nodejs";
 
 function jsonError(message: string, status: number = 400): NextResponse<AnalyzeResponse> {
   return NextResponse.json({ success: false, error: message }, { status });
+}
+
+export async function DELETE(): Promise<NextResponse<{ success: true }>> {
+  clearAnalysisCache();
+  return NextResponse.json({ success: true }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse<AnalyzeResponse>> {
@@ -58,6 +63,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<AnalyzeRe
       } else {
         return jsonError("No file or text provided", 400);
       }
+    }
+
+    const readableText = text.replace(/\s+/g, " ").trim();
+    if (readableText.length < 80) {
+      return jsonError(
+        "We could not extract enough readable text. Try a text-based PDF or DOCX file.",
+        422
+      );
     }
 
     const analysis = await analyzeResume(text);
