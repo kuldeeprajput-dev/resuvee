@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { BadgeCheck, FileDown, Layers3, MousePointer2, Sparkles, Zap } from "lucide-react";
+import { FileDown, Layers3, MousePointer2, Sparkles, Zap } from "lucide-react";
 
 const resumeSheets = [
   {
@@ -50,7 +50,7 @@ const resumeSheets = [
 export function HeroResumeStack() {
   return (
     <div className="group relative mx-auto min-w-0 w-full max-w-[740px] cursor-default">
-      <div className="relative h-[330px] sm:h-[440px] lg:h-[520px]">
+      <div className="relative hidden h-[330px] sm:block sm:h-[440px] lg:h-[520px]">
         <div
           className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-[var(--brand-lime)]/20 blur-[90px]"
           aria-hidden="true"
@@ -83,55 +83,45 @@ export function HeroResumeStack() {
         ))}
       </div>
 
-      <div className="relative z-10 mt-4 grid gap-3 px-0 sm:mt-[-46px] sm:grid-cols-[0.76fr_1.24fr] sm:px-[4%]">
-        <div className="rounded-2xl border border-black/10 bg-white/94 p-3 shadow-[0_16px_42px_rgba(22,32,28,0.14)] backdrop-blur-md">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)]">
-              <Zap className="size-4.5" />
-            </span>
-            <div className="min-w-0">
-              <p className="truncate text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] sm:text-[10px]">
-                ATS strength
-              </p>
-              <p className="whitespace-nowrap text-lg font-bold tracking-tight">
-                90% <span className="text-xs text-[var(--brand-muted)]">ready</span>
-              </p>
-            </div>
+      {/* Left-Aligned Hero Feature List */}
+      <div className="relative z-10 mt-6 grid grid-cols-1 gap-2.5 sm:mt-[-28px] sm:grid-cols-2 sm:px-2">
+        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-lime)] text-xs font-black text-[var(--brand-ink)] shadow-xs">
+            90%
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-bold text-[var(--brand-ink)]">ATS Ready Structure</p>
+            <p className="truncate text-[10px] font-medium text-[var(--brand-muted)]">Verified format checks</p>
           </div>
-          <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
-            <div className="h-full w-[90%] rounded-full bg-[var(--brand-lime)]" />
-          </div>
-          <p className="mt-2 text-[10px] font-medium text-[var(--brand-muted)]">
-            Strong ATS-ready structure
-          </p>
         </div>
 
-        <div className="rounded-2xl border border-[#aebcab]/60 bg-[#e4ece3]/95 p-3 text-[var(--brand-ink)] shadow-[0_16px_42px_rgba(22,32,28,0.12)]">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-[var(--brand-ink)] text-[var(--brand-lime)]">
-              <BadgeCheck className="size-3.5" />
-            </span>
-            <p className="min-w-0 flex-1 text-sm font-bold">Ready to finish</p>
-            <span className="rounded-full border border-black/10 bg-white/60 px-2 py-1 text-[8px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)]">
-              Built into Resulyra
-            </span>
+        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#e8f3e2] text-[#4f7242]">
+            <Layers3 className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-bold text-[var(--brand-ink)]">6 Original Layouts</p>
+            <p className="truncate text-[10px] font-medium text-[var(--brand-muted)]">Switch designs anytime</p>
           </div>
-          <div className="mt-2 grid grid-cols-3 divide-x divide-black/10 rounded-xl border border-black/[0.07] bg-white/55">
-            <div className="p-2">
-              <Layers3 className="size-3.5 text-[#4f7242]" />
-              <p className="mt-1 text-[11px] font-bold leading-4">6 layouts</p>
-              <p className="text-[9px] text-[var(--brand-muted)]">Original</p>
-            </div>
-            <div className="p-2">
-              <Sparkles className="size-3.5 text-[#c65b38]" />
-              <p className="mt-1 text-[11px] font-bold leading-4">AI polish</p>
-              <p className="text-[9px] text-[var(--brand-muted)]">Writing</p>
-            </div>
-            <div className="p-2">
-              <FileDown className="size-3.5 text-[#376878]" />
-              <p className="mt-1 text-[11px] font-bold leading-4">Clean PDF</p>
-              <p className="text-[9px] text-[var(--brand-muted)]">Ready</p>
-            </div>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#fcece6] text-[#c65b38]">
+            <Sparkles className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-bold text-[var(--brand-ink)]">AI Writing Polish</p>
+            <p className="truncate text-[10px] font-medium text-[var(--brand-muted)]">Grammar & content check</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#e6f1f5] text-[#376878]">
+            <FileDown className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-bold text-[var(--brand-ink)]">Clean PDF Export</p>
+            <p className="truncate text-[10px] font-medium text-[var(--brand-muted)]">Vector quality PDF</p>
           </div>
         </div>
       </div>

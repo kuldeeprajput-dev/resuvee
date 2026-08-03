@@ -1,135 +1,84 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Bold,
-  Italic,
-  Sparkles,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
-  Palette,
-  Trash2,
-  X,
-  Pipette,
+  Bold,
   CaseSensitive,
-  RemoveFormatting,
+  Italic,
   Loader2,
   Maximize2,
   Minimize2,
-  ArrowUp,
-  ArrowDown,
+  Palette,
+  Pipette,
+  RemoveFormatting,
+  Sparkles,
+  Trash2,
+  X,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { useAuthStore } from "@/modules/auth";
-import type { CoverLetterData, ColorSwatch } from "../../types/cover-letter";
+import type { SelectedCanvasElement } from "./interactive-canvas";
+import type { ResumeTemplate } from "../../types/resume";
+import type { ResumeStyle } from "./customize-panel";
 
-interface CoverLetterFormattingToolbarProps {
-  toolbarRef: React.RefObject<HTMLDivElement | null>;
+const COLOR_SWATCHES = [
+  { name: "Forest", value: "#28785b" },
+  { name: "Ink", value: "#243934" },
+  { name: "Ocean", value: "#2f6fa3" },
+  { name: "Navy", value: "#203b57" },
+  { name: "Plum", value: "#6c4c70" },
+];
+
+interface CanvasFormattingBarProps {
+  selectedElement: SelectedCanvasElement;
   toolbarPos: { top: number; left: number };
-  selectedField: keyof CoverLetterData;
+  toolbarRef: React.RefObject<HTMLDivElement | null>;
   inlineText: string;
-  setInlineText: (text: string) => void;
-  update: (field: keyof CoverLetterData, value: string) => void;
-  selectedDomRef: React.RefObject<HTMLElement | null>;
+  isRefining: boolean;
+  isExpanded: boolean;
   showColorPicker: boolean;
-  setShowColorPicker: (value: boolean) => void;
-  activeAccent: string;
-  setCustomAccent: (color: string) => void;
-  colorSwatches: ColorSwatch[];
+  template: ResumeTemplate;
+  resumeStyle?: ResumeStyle;
+  selectedDomRef: React.RefObject<HTMLElement | null>;
+  handleAiRefine: () => void;
+  handleRealtimeTextChange: (newText: string) => void;
+  setIsExpanded: (expanded: boolean) => void;
+  changeFontSize: (delta: number) => void;
+  toggleBold: () => void;
+  toggleItalic: () => void;
+  toggleCase: () => void;
+  clearFormatting: () => void;
+  setTextAlign: (align: "left" | "center" | "right") => void;
+  setShowColorPicker: (show: boolean) => void;
+  deleteSelected: () => void;
   clearSelection: () => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
 }
 
-export function CoverLetterFormattingToolbar({
-  toolbarRef,
+export function CanvasFormattingBar({
+  selectedElement,
   toolbarPos,
-  selectedField,
+  toolbarRef,
   inlineText,
-  setInlineText,
-  update,
-  selectedDomRef,
+  isRefining,
+  isExpanded,
   showColorPicker,
+  template,
+  resumeStyle,
+  selectedDomRef,
+  handleAiRefine,
+  handleRealtimeTextChange,
+  setIsExpanded,
+  changeFontSize,
+  toggleBold,
+  toggleItalic,
+  toggleCase,
+  clearFormatting,
+  setTextAlign,
   setShowColorPicker,
-  activeAccent,
-  setCustomAccent,
-  colorSwatches,
+  deleteSelected,
   clearSelection,
-  onMoveUp,
-  onMoveDown,
-}: CoverLetterFormattingToolbarProps) {
-  const [isRefining, setIsRefining] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleFontSize = (delta: number) => {
-    if (!selectedDomRef.current) return;
-    const currentSize = window.getComputedStyle(selectedDomRef.current).fontSize;
-    const currentPx = parseFloat(currentSize) || 14;
-    const newPx = Math.max(8, Math.min(48, currentPx + delta));
-    selectedDomRef.current.style.fontSize = `${newPx}px`;
-  };
-
-  const handleCaseTransform = () => {
-    if (!selectedDomRef.current) return;
-    const isUpper = selectedDomRef.current.style.textTransform === "uppercase";
-    const nextCase = isUpper ? "none" : "uppercase";
-    selectedDomRef.current.style.textTransform = nextCase;
-  };
-
-  const handleClearFormatting = () => {
-    if (!selectedDomRef.current) return;
-    selectedDomRef.current.classList.remove("font-bold", "italic", "underline");
-    selectedDomRef.current.style.fontSize = "";
-    selectedDomRef.current.style.color = "";
-    selectedDomRef.current.style.textAlign = "";
-    selectedDomRef.current.style.textTransform = "";
-  };
-
-  const handleTrashField = () => {
-    setInlineText("");
-    update(selectedField, "");
-  };
-
-  const user = useAuthStore((state) => state.user);
-  const openAuthModal = useAuthStore((state) => state.openAuthModal);
-
-  const handleAiRefine = async () => {
-    if (!user) {
-      openAuthModal("sign_in", "Please sign in to refine text with AI.");
-      return;
-    }
-
-    if (!inlineText || !inlineText.trim() || isRefining) return;
-    setIsRefining(true);
-
-    try {
-      const res = await fetch("/api/refine-text", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inlineText, fieldName: selectedField }),
-      });
-
-      if (res.status === 401) {
-        openAuthModal("sign_in", "Please sign in to refine text with AI.");
-        return;
-      }
-
-      if (!res.ok) throw new Error("Refinement failed");
-      const data = await res.json();
-      if (data.refinedText) {
-        setInlineText(data.refinedText);
-        update(selectedField, data.refinedText);
-      }
-    } catch (err) {
-      console.error("AI Refine Error:", err);
-    } finally {
-      setIsRefining(false);
-    }
-  };
-
-  const isAiRefineDisabled = !["opening", "evidence", "closing"].includes(selectedField);
-
+}: CanvasFormattingBarProps) {
   return (
     <div
       ref={toolbarRef}
@@ -145,24 +94,21 @@ export function CoverLetterFormattingToolbar({
         <button
           type="button"
           onClick={handleAiRefine}
-          disabled={isRefining || isAiRefineDisabled}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
-          title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
+          disabled={isRefining}
+          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
+          title="AI Smart Refine Text"
         >
           {isRefining ? (
             <Loader2 className="size-3.5 text-[#059669] animate-spin" />
           ) : (
-            <Sparkles className={cn("size-3.5", isAiRefineDisabled ? "text-gray-400" : "text-[#059669]")} />
+            <Sparkles className="size-3.5 text-[#059669]" />
           )}
         </button>
 
         <input
           type="text"
           value={inlineText}
-          onChange={(e) => {
-            setInlineText(e.target.value);
-            update(selectedField, e.target.value);
-          }}
+          onChange={(e) => handleRealtimeTextChange(e.target.value)}
           className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
           placeholder="Edit inline..."
         />
@@ -172,7 +118,9 @@ export function CoverLetterFormattingToolbar({
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
             "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
-            isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-[var(--brand-muted)]"
+            isExpanded
+              ? "bg-[#059669] text-white"
+              : "hover:bg-black/10 text-[var(--brand-muted)]"
           )}
           title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
         >
@@ -185,7 +133,7 @@ export function CoverLetterFormattingToolbar({
             <div className="flex items-center justify-between border-b border-black/10 pb-2">
               <div className="flex items-center gap-1.5">
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
-                  {selectedField}
+                  {selectedElement.title || selectedElement.field || "Section"}
                 </span>
                 <span className="text-[10px] font-semibold text-[var(--brand-muted)]">
                   {inlineText.length} chars
@@ -196,9 +144,8 @@ export function CoverLetterFormattingToolbar({
                 <button
                   type="button"
                   onClick={handleAiRefine}
-                  disabled={isRefining || isAiRefineDisabled}
-                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
-                  title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
+                  disabled={isRefining}
+                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-50"
                 >
                   {isRefining ? (
                     <Loader2 className="size-3 animate-spin" />
@@ -220,10 +167,7 @@ export function CoverLetterFormattingToolbar({
             <textarea
               rows={5}
               value={inlineText}
-              onChange={(e) => {
-                setInlineText(e.target.value);
-                update(selectedField, e.target.value);
-              }}
+              onChange={(e) => handleRealtimeTextChange(e.target.value)}
               className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
               placeholder="Type or edit full section text..."
               autoFocus
@@ -238,7 +182,7 @@ export function CoverLetterFormattingToolbar({
       <div className="flex items-center rounded-xl bg-black/5 p-0.5 shrink-0">
         <button
           type="button"
-          onClick={() => handleFontSize(-1)}
+          onClick={() => changeFontSize(-1)}
           className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Decrease font size"
         >
@@ -246,7 +190,7 @@ export function CoverLetterFormattingToolbar({
         </button>
         <button
           type="button"
-          onClick={() => handleFontSize(1)}
+          onClick={() => changeFontSize(1)}
           className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Increase font size"
         >
@@ -258,11 +202,7 @@ export function CoverLetterFormattingToolbar({
       <div className="flex items-center gap-0.5 shrink-0">
         <button
           type="button"
-          onClick={() => {
-            if (selectedDomRef.current) {
-              selectedDomRef.current.classList.toggle("font-bold");
-            }
-          }}
+          onClick={toggleBold}
           className="builder-icon-button cursor-pointer"
           title="Bold text formatting"
         >
@@ -271,11 +211,7 @@ export function CoverLetterFormattingToolbar({
 
         <button
           type="button"
-          onClick={() => {
-            if (selectedDomRef.current) {
-              selectedDomRef.current.classList.toggle("italic");
-            }
-          }}
+          onClick={toggleItalic}
           className="builder-icon-button cursor-pointer"
           title="Italic text formatting"
         >
@@ -284,7 +220,7 @@ export function CoverLetterFormattingToolbar({
 
         <button
           type="button"
-          onClick={handleCaseTransform}
+          onClick={toggleCase}
           className="builder-icon-button cursor-pointer"
           title="Toggle UPPERCASE / Normal Case (AB)"
         >
@@ -293,7 +229,7 @@ export function CoverLetterFormattingToolbar({
 
         <button
           type="button"
-          onClick={handleClearFormatting}
+          onClick={clearFormatting}
           className="builder-icon-button cursor-pointer"
           title="Clear text formatting (Tx)"
         >
@@ -307,11 +243,7 @@ export function CoverLetterFormattingToolbar({
       <div className="flex items-center gap-0.5 shrink-0">
         <button
           type="button"
-          onClick={() => {
-            if (selectedDomRef.current) {
-              selectedDomRef.current.style.textAlign = "left";
-            }
-          }}
+          onClick={() => setTextAlign("left")}
           className="builder-icon-button cursor-pointer"
           title="Align Left"
         >
@@ -320,11 +252,7 @@ export function CoverLetterFormattingToolbar({
 
         <button
           type="button"
-          onClick={() => {
-            if (selectedDomRef.current) {
-              selectedDomRef.current.style.textAlign = "center";
-            }
-          }}
+          onClick={() => setTextAlign("center")}
           className="builder-icon-button cursor-pointer"
           title="Align Center"
         >
@@ -333,11 +261,7 @@ export function CoverLetterFormattingToolbar({
 
         <button
           type="button"
-          onClick={() => {
-            if (selectedDomRef.current) {
-              selectedDomRef.current.style.textAlign = "right";
-            }
-          }}
+          onClick={() => setTextAlign("right")}
           className="builder-icon-button cursor-pointer"
           title="Align Right"
         >
@@ -347,30 +271,7 @@ export function CoverLetterFormattingToolbar({
 
       <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
 
-      {/* Up / Down Section Re-order Buttons */}
-      <div className="flex items-center gap-0.5 shrink-0">
-        <button
-          type="button"
-          onClick={onMoveUp}
-          className="builder-icon-button cursor-pointer"
-          title="Move section up"
-        >
-          <ArrowUp className="size-3.5 text-[var(--brand-ink)]" />
-        </button>
-
-        <button
-          type="button"
-          onClick={onMoveDown}
-          className="builder-icon-button cursor-pointer"
-          title="Move section down"
-        >
-          <ArrowDown className="size-3.5 text-[var(--brand-ink)]" />
-        </button>
-      </div>
-
-      <span className="h-4 w-px bg-black/10 mx-0.5 shrink-0" />
-
-      {/* Green Paint Palette & Trash Icon Beside It */}
+      {/* Color Swatch & Trash Picker */}
       <div className="relative flex items-center gap-0.5 shrink-0">
         <button
           type="button"
@@ -381,28 +282,35 @@ export function CoverLetterFormattingToolbar({
           <Palette className="size-3.5 text-[#059669]" />
         </button>
 
-        <button
-          type="button"
-          onClick={handleTrashField}
-          className="builder-icon-button text-red-600 hover:bg-red-50 cursor-pointer"
-          title="Clear field text"
-        >
-          <Trash2 className="size-3.5" />
-        </button>
+        {selectedElement.id && (
+          <button
+            type="button"
+            onClick={deleteSelected}
+            className="builder-icon-button text-red-600 hover:bg-red-50 cursor-pointer"
+            title="Delete item"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        )}
 
         {showColorPicker && (
           <div className="absolute top-12 right-0 z-[100] flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
-            {/* Color Wheel Picker */}
+            {/* Custom Color Wheel Swatch */}
             <label
               className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
               title="Pick Custom Color"
             >
               <input
                 type="color"
-                value={activeAccent}
+                value={
+                  (resumeStyle?.accent || template.accent || "#059669").startsWith("#")
+                    ? resumeStyle?.accent || template.accent || "#059669"
+                    : "#059669"
+                }
                 onChange={(e) => {
+                  const val = e.target.value;
                   if (selectedDomRef.current) {
-                    selectedDomRef.current.style.color = e.target.value;
+                    selectedDomRef.current.style.color = val;
                   }
                 }}
                 className="absolute inset-0 size-full cursor-pointer opacity-0"
@@ -410,36 +318,37 @@ export function CoverLetterFormattingToolbar({
               <Pipette className="size-3 text-white drop-shadow-md" />
             </label>
 
-            {/* Hex Input */}
+            {/* Custom Hex Code Input */}
             <input
               type="text"
-              value={activeAccent}
+              value={resumeStyle?.accent || ""}
               onChange={(e) => {
-                if (selectedDomRef.current) {
-                  selectedDomRef.current.style.color = e.target.value;
+                const val = e.target.value;
+                if (selectedDomRef.current && val.startsWith("#") && val.length >= 4) {
+                  selectedDomRef.current.style.color = val;
                 }
               }}
-              placeholder="#243d36"
+              placeholder="#059669"
               className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
             />
 
             <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
 
-            {/* Swatches Side-by-Side */}
+            {/* Preset Swatches */}
             <div className="flex items-center gap-1.5">
-              {colorSwatches.map((swatch) => (
+              {COLOR_SWATCHES.map((color) => (
                 <button
-                  key={swatch.name}
+                  key={color.name}
                   type="button"
                   onClick={() => {
                     if (selectedDomRef.current) {
-                      selectedDomRef.current.style.color = swatch.value;
+                      selectedDomRef.current.style.color = color.value;
                     }
                     setShowColorPicker(false);
                   }}
                   className="size-6 rounded-full border border-black/20 shadow-xs transition hover:scale-110 cursor-pointer"
-                  style={{ backgroundColor: swatch.value }}
-                  title={swatch.name}
+                  style={{ backgroundColor: color.value }}
+                  title={color.name}
                 />
               ))}
             </div>

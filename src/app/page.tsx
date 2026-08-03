@@ -2,13 +2,10 @@ import Link from "next/link";
 import {
   ArrowRight,
   Check,
-  ClipboardCheck,
   BriefcaseBusiness,
   Files,
   FileSearch,
-  LayoutTemplate,
   PenLine,
-  ScanSearch,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -24,39 +21,9 @@ const productBenefits = [
 ];
 
 const workspaceBenefits = [
-  "Drafts save in your browser",
+  "Secure cloud & browser sync",
   "Reuse your story across every tool",
   "Export clean files when you are ready",
-];
-
-const workflow = [
-  {
-    number: "01",
-    label: "Format",
-    icon: LayoutTemplate,
-    title: "Choose your direction",
-    description: "Pick from curated formats made for different careers and experience levels.",
-    outcome: "A structure matched to your goals",
-    accent: "bg-[var(--brand-lime)]",
-  },
-  {
-    number: "02",
-    label: "Content",
-    icon: PenLine,
-    title: "Shape your story",
-    description: "Add your experience, education, projects and skills with a guided editor.",
-    outcome: "Every section stays in sync",
-    accent: "bg-[var(--brand-blue)]",
-  },
-  {
-    number: "03",
-    label: "Quality",
-    icon: ClipboardCheck,
-    title: "Review and apply",
-    description: "Export a polished resume, then run it through the ATS analyzer before applying.",
-    outcome: "An ATS-ready file you can send",
-    accent: "bg-[#ffd8ca]",
-  },
 ];
 
 const productTools = [
@@ -121,7 +88,7 @@ export default function Home() {
       <main>
         <section className="relative border-b border-black/[0.08]">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-10 px-5 pb-12 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
+          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-4 px-5 pb-6 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
             <div className="relative z-10 max-w-[650px]">
               <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)] shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
@@ -168,7 +135,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white sm:h-13 sm:w-auto sm:px-6"
+                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white mt-1.5 sm:mt-0 sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/analyzer">
                     <FileSearch className="size-4" />
@@ -177,7 +144,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div className="mt-8 space-y-2.5 sm:mt-9">
+              <div className="mt-8 hidden space-y-2.5 sm:mt-9 sm:block">
                 {productBenefits.map((benefit) => (
                   <div
                     key={benefit}
@@ -196,7 +163,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-[var(--brand-ink)] text-white">
+        <section className="hidden sm:block bg-[var(--brand-ink)] text-white">
           <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               [String(resumeTemplates.length), "curated templates"],
@@ -215,9 +182,9 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-[1440px] px-5 pb-16 pt-20 sm:px-8 md:pb-20 md:pt-24 lg:px-12"
+          className="mx-auto w-full max-w-[1440px] px-5 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-16 md:pb-10 md:pt-24 lg:px-12"
         >
-          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="mb-6 flex flex-col gap-6 sm:mb-10 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
                 Live template library
@@ -238,14 +205,14 @@ export default function Home() {
 
         <section
           id="toolkit"
-          className="relative overflow-hidden border-y border-black/[0.08] bg-[#e9e7df]"
+          className="relative overflow-hidden bg-[var(--brand-canvas)]"
         >
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
           <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
 
-          <div className="relative mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
-            <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:gap-12">
-              <div className="flex flex-col xl:py-3">
+          <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-12 pt-4 sm:px-8 sm:pb-16 sm:pt-6 md:pb-16 md:pt-8 lg:px-12">
+            <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-stretch xl:gap-12">
+              <div className="flex flex-col justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
                     The Resulyra toolkit
@@ -259,18 +226,18 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="mt-9 rounded-[24px] border border-black/10 bg-white/55 p-5 shadow-[0_18px_50px_rgba(22,32,28,0.06)] backdrop-blur-sm sm:p-6 xl:mt-auto">
+                <div className="mt-8 rounded-[24px] border border-black/10 bg-white/55 p-5 shadow-[0_18px_50px_rgba(22,32,28,0.06)] backdrop-blur-sm sm:p-6">
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-sm font-bold">Your work stays yours</p>
                     <span className="rounded-full bg-[#e7f3db] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#46613c]">
-                      Local-first
+                      Cloud Sync
                     </span>
                   </div>
-                  <div className="mt-5 space-y-2">
+                  <div className="mt-4 space-y-2">
                     {workspaceBenefits.map((benefit) => (
                       <div
                         key={benefit}
-                        className="flex items-center gap-3 rounded-xl border border-black/[0.07] bg-white/70 px-3 py-3"
+                        className="flex items-center gap-3 rounded-xl border border-black/[0.07] bg-white/70 px-3 py-2.5"
                       >
                         <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--brand-lime)]">
                           <Check className="size-3" strokeWidth={2.5} />
@@ -279,192 +246,110 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
-                  <p className="mt-4 text-xs leading-5 text-[var(--brand-muted)]">
+                  <p className="mt-3 text-xs leading-5 text-[var(--brand-muted)]">
                     No scattered documents or repeated setup while you move from writing to
                     applying.
                   </p>
                 </div>
-
-                <Button
-                  asChild
-                  variant="outline"
-                  className="mt-5 h-11 w-fit rounded-full border-black/15 bg-white px-5 font-bold shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
-                >
-                  <Link href="/builder">
-                    Start building now
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 sm:gap-4">
                 {productTools.map((tool) => (
                   <Link
                     key={tool.href}
                     href={tool.href}
-                    className="group relative flex min-h-[290px] flex-col overflow-hidden rounded-[26px] border border-black/10 bg-[var(--brand-paper)] p-6 shadow-[0_18px_55px_rgba(22,32,28,0.04)] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_70px_rgba(22,32,28,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d] sm:p-7"
+                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-[var(--brand-paper)] p-3 shadow-[0_18px_55px_rgba(22,32,28,0.04)] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_70px_rgba(22,32,28,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d] sm:rounded-[26px] sm:p-6"
                   >
                     <div
                       className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tool.wash} opacity-0 transition duration-300 group-hover:opacity-100`}
                     />
                     <div className="relative flex items-start justify-between">
                       <span
-                        className={`flex size-12 items-center justify-center rounded-2xl ${tool.accent} shadow-sm transition duration-300 group-hover:scale-105 group-hover:-rotate-3`}
+                        className={`flex size-8 items-center justify-center rounded-lg sm:size-11 sm:rounded-2xl ${tool.accent} shadow-sm transition duration-300 group-hover:scale-105 group-hover:-rotate-3`}
                       >
-                        <tool.icon className="size-5" strokeWidth={1.9} />
+                        <tool.icon className="size-4 sm:size-5" strokeWidth={1.9} />
                       </span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] font-bold tracking-[0.14em] text-black/35">
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="font-mono text-[9px] font-bold tracking-[0.14em] text-black/35 sm:text-[10px]">
                           {tool.number}
                         </span>
-                        <ArrowRight className="size-4 -rotate-45 text-black/25 transition duration-300 group-hover:rotate-0 group-hover:text-black/70" />
+                        <ArrowRight className="size-3.5 -rotate-45 text-black/25 transition duration-300 group-hover:rotate-0 group-hover:text-black/70 sm:size-4" />
                       </div>
                     </div>
 
-                    <div className="relative mt-8">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#6a725f]">
+                    <div className="relative mt-2 sm:mt-5">
+                      <p className="text-[8.5px] font-bold uppercase tracking-[0.14em] text-[#6a725f] sm:text-[10px] sm:tracking-[0.16em]">
                         {tool.category}
                       </p>
-                      <h3 className="mt-2 text-[22px] font-bold tracking-[-0.035em]">
+                      <h3 className="mt-0.5 text-sm font-bold tracking-[-0.03em] sm:mt-1.5 sm:text-xl sm:tracking-[-0.035em]">
                         {tool.title}
                       </h3>
-                      <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
+                      <p className="mt-1 hidden text-xs leading-5 text-[var(--brand-muted)] sm:mt-2 sm:block sm:text-sm sm:leading-6">
                         {tool.description}
                       </p>
                     </div>
 
-                    <div className="relative mt-5 flex flex-wrap gap-2">
+                    <div className="relative mt-3 hidden flex-wrap gap-1.5 sm:flex sm:mt-4">
                       {tool.features.map((feature) => (
                         <span
                           key={feature}
-                          className="rounded-full border border-black/[0.07] bg-white/70 px-2.5 py-1 text-[10px] font-bold text-[#59615a]"
+                          className="rounded-full border border-black/[0.07] bg-white/70 px-2.5 py-0.5 text-[10px] font-bold text-[#59615a]"
                         >
                           {feature}
                         </span>
                       ))}
                     </div>
 
-                    <div className="relative mt-auto flex items-center gap-2 pt-6 text-xs font-bold text-[#3f6438]">
+                    <div className="relative mt-auto flex items-center gap-1 pt-2 text-[10.5px] font-bold text-[#3f6438] sm:gap-2 sm:pt-4 sm:text-xs">
                       <span>{tool.action}</span>
-                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                      <ArrowRight className="size-3 transition-transform group-hover:translate-x-1 sm:size-3.5" />
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <div className="mt-5 flex flex-col gap-5 rounded-[24px] border border-[#bed0b4] bg-[#e5efdf] p-5 shadow-[0_15px_45px_rgba(22,32,28,0.05)] sm:flex-row sm:items-center sm:justify-between sm:px-6">
-              <div className="flex items-center gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--brand-ink)] text-[var(--brand-lime)]">
-                  <ScanSearch className="size-5" />
-                </span>
-                <div>
-                  <p className="text-sm font-bold">Applying to a specific role?</p>
-                  <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
-                    Compare the job description with your resume and find the gaps before you send
-                    it.
-                  </p>
-                </div>
-              </div>
-              <Link
-                href="/builder"
-                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--brand-ink)] px-5 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#25332d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d]"
-              >
-                Open Role Match
-                <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
+
           </div>
         </section>
 
-        <section id="how-it-works" className="border-y border-black/[0.08] bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:py-20 lg:px-12">
-            <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-                  One clear workflow
-                </p>
-                <h2 className="mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
-                  From blank page to ready to send.
-                </h2>
-              </div>
-              <p className="max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
-                Three focused steps, one continuous draft. Move forward without copying details
-                between disconnected tools.
-              </p>
-            </div>
 
-            <div className="grid gap-3 md:grid-cols-3">
-              {workflow.map((item) => (
-                <article
-                  key={item.number}
-                  className="group flex min-h-[270px] flex-col rounded-[24px] border border-black/10 bg-[var(--brand-paper)] p-6 shadow-[0_14px_45px_rgba(22,32,28,0.035)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(22,32,28,0.09)] sm:p-7"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono text-[11px] font-bold tracking-[0.14em] text-black/35">
-                        {item.number}
-                      </span>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#697166]">
-                        {item.label}
-                      </span>
-                    </div>
-                    <span
-                      className={`flex size-11 items-center justify-center rounded-2xl ${item.accent} transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105`}
-                    >
-                      <item.icon className="size-5" strokeWidth={1.9} />
-                    </span>
-                  </div>
-                  <div className="mt-9">
-                    <h3 className="text-xl font-bold tracking-[-0.025em]">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-[var(--brand-muted)]">
-                      {item.description}
-                    </p>
-                  </div>
-                  <div className="mt-auto flex items-center gap-2 border-t border-black/[0.07] pt-5 text-xs font-bold text-[#4f664b]">
-                    <span className="flex size-5 items-center justify-center rounded-full bg-[#e7f3db]">
-                      <Check className="size-3" strokeWidth={2.5} />
-                    </span>
-                    {item.outcome}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        <section className="bg-[#e9e7df]">
-          <div className="mx-auto w-full max-w-[1440px] px-5 py-5 sm:px-8 md:py-6 lg:px-12">
-            <div className="relative overflow-hidden rounded-[28px] bg-[var(--brand-orange)] px-6 py-10 sm:px-9 sm:py-12 lg:px-12">
-              <div className="absolute -right-16 -top-28 size-64 rounded-full border-[42px] border-white/15" />
-              <div className="absolute -bottom-24 right-[30%] size-48 rounded-full bg-[var(--brand-lime)]/30 blur-2xl" />
-              <div className="relative z-10 flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-                <div className="max-w-4xl">
-                  <p className="mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em]">
-                    <Sparkles className="size-4" />
-                    Your next application starts here
-                  </p>
-                  <h2 className="text-4xl font-bold leading-[0.98] tracking-[-0.055em] sm:text-5xl lg:text-[58px]">
+        <section className="bg-[var(--brand-canvas)] pb-6 pt-2 sm:pb-16 sm:pt-6">
+          <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+            <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-[var(--brand-orange)] p-6 shadow-[0_24px_70px_-15px_rgba(217,93,48,0.3)] sm:rounded-[32px] sm:p-12 lg:p-14">
+              <div className="pointer-events-none absolute -right-16 -top-28 size-72 rounded-full border-[42px] border-white/20" />
+              <div className="pointer-events-none absolute -bottom-24 right-[30%] size-56 rounded-full bg-[var(--brand-lime)]/35 blur-3xl" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-200/35 via-transparent to-transparent opacity-80" />
+
+              <div className="relative z-10 flex flex-col gap-5 sm:gap-8 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-3xl">
+                  <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-black/80 backdrop-blur-md sm:mb-4 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.16em]">
+                    <Sparkles className="size-3 text-[#3a2016] sm:size-3.5" />
+                    <span>Your next application starts here</span>
+                  </div>
+                  <h2 className="text-2xl font-bold leading-[1.05] tracking-[-0.04em] text-[#1c1917] sm:text-5xl lg:text-[56px]">
                     Make the resume you wish you already had.
                   </h2>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {["Free to start", "No account required", "Clean PDF export"].map((benefit) => (
+                  <div className="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-2.5">
+                    {["Free to start", "Cloud & Local Sync", "Clean PDF export"].map((benefit) => (
                       <span
                         key={benefit}
-                        className="rounded-full border border-black/10 bg-white/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em]"
+                        className="rounded-full border border-white/40 bg-white/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-[#2c1d18] shadow-sm backdrop-blur-md transition-colors hover:bg-white/45 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]"
                       >
                         {benefit}
                       </span>
                     ))}
                   </div>
                 </div>
+
                 <Button
                   asChild
-                  className="h-12 w-full shrink-0 rounded-full bg-[var(--brand-ink)] px-6 font-bold text-white shadow-lg hover:-translate-y-0.5 hover:bg-[#27332f] sm:w-fit"
+                  className="group h-11 w-full shrink-0 rounded-full bg-[var(--brand-ink)] px-6 text-xs font-bold text-white shadow-xl transition-all duration-300 hover:scale-[1.03] hover:bg-[#18231f] sm:h-13 sm:w-fit sm:px-7 sm:text-sm"
                 >
                   <Link href="/builder">
                     Start building
-                    <ArrowRight className="size-4" />
+                    <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1 sm:size-4" />
                   </Link>
                 </Button>
               </div>

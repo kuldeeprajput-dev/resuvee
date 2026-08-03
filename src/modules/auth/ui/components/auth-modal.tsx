@@ -228,7 +228,7 @@ export function AuthModal() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="John Doe"
-                  className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                  className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export function AuthModal() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
               />
             </div>
           </div>
@@ -263,7 +263,7 @@ export function AuthModal() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
               />
             </div>
           </div>
@@ -271,7 +271,7 @@ export function AuthModal() {
           <button
             type="submit"
             disabled={loading}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 text-xs font-bold text-white shadow-md transition hover:bg-emerald-800 disabled:opacity-50 cursor-pointer mt-2"
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-(--brand-ink) text-xs font-bold text-white shadow-md transition hover:bg-[#27332f] disabled:opacity-50 cursor-pointer mt-2"
           >
             {loading ? (
               <>

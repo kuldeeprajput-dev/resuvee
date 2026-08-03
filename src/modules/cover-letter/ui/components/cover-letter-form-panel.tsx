@@ -29,15 +29,28 @@ export function CoverLetterFormPanel({
   splitPercent,
   isResizing,
 }: CoverLetterFormPanelProps) {
+  const [containerWidth, setContainerWidth] = React.useState<number>(1400);
+
+  React.useEffect(() => {
+    const updateWidth = () => {
+      if (typeof window !== "undefined") {
+        setContainerWidth(window.innerWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
   return (
     <section
-      style={{ width: `${splitPercent}%` }}
+      style={containerWidth < 1024 ? undefined : { width: `${splitPercent}%` }}
       className={cn(
-        "no-print h-full overflow-y-auto border-r border-black/10 bg-[#f8f7f2] scrollbar-thin shrink-0 min-w-[440px]",
+        "no-print h-full min-h-0 w-full max-w-full overflow-y-auto border-r border-black/10 bg-[#f8f7f2] scrollbar-thin lg:w-auto lg:shrink-0 lg:min-w-[440px]",
         isResizing ? "transition-none" : "transition-[width] duration-150 ease-out"
       )}
     >
-      <div className="mx-auto max-w-2xl p-5 sm:p-8 pb-20">
+      <div className="mx-auto max-w-2xl px-4 py-5 sm:p-8 pb-20">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-[#bd593a]">
             Letter studio

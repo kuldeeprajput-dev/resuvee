@@ -1,13 +1,13 @@
 // Types
 export * from "./types";
 
-// Store
-export * from "./store/use-resume-builder-store";
+// Hooks
+export * from "./hooks/use-resume-builder-store";
 
-// Utils
-export * from "./utils/resume-data";
-export * from "./utils/resume-presets";
-export * from "./utils/resume-writing";
+// Constants
+export * from "./constants/resume-data";
+export * from "./constants/resume-presets";
+export * from "./constants/resume-writing";
 
 // UI Components
 export * from "./ui/components/customize-panel";

@@ -57,18 +57,20 @@ interface EditorSectionProps {
 
 export function EditorSection({ eyebrow, title, description, children, action }: EditorSectionProps) {
   return (
-    <div className="mx-auto w-full max-w-2xl px-3.5 pb-8 pt-4 sm:px-7 sm:pb-12 sm:pt-7">
-      <div className="mb-4 sm:mb-7 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#315f45]">
+    <div className="mx-auto w-full max-w-2xl px-3 pb-6 pt-3 sm:px-7 sm:pb-12 sm:pt-7">
+      <div className="mb-4 flex flex-col gap-2.5 sm:mb-7 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#315f45] sm:text-[11px] sm:tracking-[0.18em]">
             {eyebrow}
           </p>
-          <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--brand-ink)] sm:text-2xl">
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-[var(--brand-ink)] sm:mt-1 sm:text-2xl">
             {title}
           </h2>
-          <p className="mt-1.5 text-xs text-[var(--brand-muted)] sm:text-sm">{description}</p>
+          <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)] sm:mt-1.5 sm:text-sm sm:leading-6">
+            {description}
+          </p>
         </div>
-        {action && <div className="shrink-0 pt-1">{action}</div>}
+        {action && <div className="shrink-0 self-start sm:pt-1">{action}</div>}
       </div>
       {children}
     </div>

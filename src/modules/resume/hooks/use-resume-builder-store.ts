@@ -3,8 +3,9 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { defaultResumeStyle, type ResumeStyle } from "../ui/components/customize-panel";
-import { createBlankResumeData, resumeTemplates } from "../utils/resume-data";
-import { getTemplateStarterData } from "../utils/resume-presets";
+import { resumeTemplates } from "../constants/resume-data";
+import { createBlankResumeData } from "../constants/resume-seed-data";
+import { getTemplateStarterData } from "../constants/resume-presets";
 import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";
 import type { WritingIssue } from "../types/writing";
 
