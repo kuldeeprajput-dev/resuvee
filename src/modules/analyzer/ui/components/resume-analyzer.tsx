@@ -6,7 +6,6 @@ import { LoadingState } from "./loading-state";
 import { ErrorState } from "./error-state";
 import { AnalyzerHeroCopy } from "./analyzer-hero-copy";
 import { AnalyzerUploadCard } from "./analyzer-upload-card";
-import { AnalyzerCompleteHeader } from "./analyzer-complete-header";
 import { extractTextFromPDF } from "@/shared/lib/extractors/client-pdf";
 import type { ResumeAnalysis } from "../../types";
 
@@ -105,6 +104,7 @@ export function ResumeAnalyzer() {
   }, [handleUpload]);
 
   const handleReset = useCallback(() => {
+    void fetch("/api/analyze", { method: "DELETE", cache: "no-store" }).catch(() => undefined);
     setState("idle");
     setSelectedFile(null);
     setAnalysis(null);
@@ -117,9 +117,8 @@ export function ResumeAnalyzer() {
 
   if (state === "success" && analysis) {
     return (
-      <section className="w-full space-y-5">
-        <AnalyzerCompleteHeader fileName={selectedFile?.name} onReset={handleReset} />
-        <ATSDashboard analysis={analysis} />
+      <section className="w-full">
+        <ATSDashboard analysis={analysis} fileName={selectedFile?.name} onReset={handleReset} />
       </section>
     );
   }

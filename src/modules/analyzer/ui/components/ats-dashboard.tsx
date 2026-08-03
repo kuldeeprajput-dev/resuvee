@@ -6,114 +6,199 @@ import {
   ArrowUpRight,
   Check,
   ChevronRight,
+  FileCheck2,
   Gauge,
   Layers3,
+  PenLine,
+  RotateCcw,
   Sparkles,
   Target,
   XCircle,
 } from "lucide-react";
 import { CircularProgress } from "@/shared/components/ui/circular-progress";
-import type { ResumeAnalysis } from "../../types";
+import type { AnalysisCategoryScore, ResumeAnalysis } from "../../types";
 
 interface ATSDashboardProps {
   analysis: ResumeAnalysis;
+  fileName?: string;
+  onReset: () => void;
 }
 
-const toneFor = (score: number) =>
-  score >= 80
-    ? {
-        label: "Strong",
-        ring: "text-[#167b70]",
-        bg: "bg-[#dff1e9]",
-        text: "text-[#0d655b]",
-        fill: "bg-[#167b70]",
-      }
-    : score >= 60
-      ? {
-          label: "On track",
-          ring: "text-[#aa7d2e]",
-          bg: "bg-[#f7edcf]",
-          text: "text-[#76551f]",
-          fill: "bg-[#c39a4c]",
-        }
-      : {
-          label: "Needs work",
-          ring: "text-[#b14d4d]",
-          bg: "bg-[#fae4df]",
-          text: "text-[#8a3030]",
-          fill: "bg-[#c45b5b]",
-        };
-
-const list = (items: string[] | undefined, fallback: string, limit = 5) => {
-  const values = items?.filter(Boolean).slice(0, limit) ?? [];
-  return values.length ? values : [fallback];
+type ScoreTone = {
+  label: string;
+  text: string;
+  soft: string;
+  bar: string;
+  ring: string;
 };
 
-const safeScore = (value: unknown, fallback = 0) => {
-  const score = typeof value === "number" ? value : Number(value);
-  return Number.isFinite(score) ? Math.min(100, Math.max(0, Math.round(score))) : fallback;
-};
+function scoreValue(value: unknown, fallback = 0) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.min(100, Math.max(0, Math.round(number))) : fallback;
+}
 
-function Metric({ label, value, detail }: { label: string; value: number; detail: string }) {
-  const normalizedValue = safeScore(value);
-  const tone = toneFor(normalizedValue);
+function scoreTone(score: number): ScoreTone {
+  if (score >= 90) {
+    return {
+      label: "Excellent",
+      text: "text-[#0b6d61]",
+      soft: "bg-[#dff2e9]",
+      bar: "bg-[#128274]",
+      ring: "text-[#128274]",
+    };
+  }
+  if (score >= 75) {
+    return {
+      label: "Strong",
+      text: "text-[#346348]",
+      soft: "bg-[#e9f1e5]",
+      bar: "bg-[#5e8a67]",
+      ring: "text-[#5e8a67]",
+    };
+  }
+  if (score >= 60) {
+    return {
+      label: "Developing",
+      text: "text-[#875f16]",
+      soft: "bg-[#faedc8]",
+      bar: "bg-[#c28a2c]",
+      ring: "text-[#c28a2c]",
+    };
+  }
+  return {
+    label: "Needs work",
+    text: "text-[#9b403e]",
+    soft: "bg-[#fae3df]",
+    bar: "bg-[#c85f5b]",
+    ring: "text-[#c85f5b]",
+  };
+}
+
+function stringList(value: unknown, limit: number, fallback: string[] = []) {
+  const values = Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    : [];
+  return (values.length ? values : fallback).slice(0, limit);
+}
+
+function categoryId(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function CategoryRow({ category }: { category: AnalysisCategoryScore }) {
+  const score = scoreValue(category.score);
+  const tone = scoreTone(score);
   return (
-    <div className="rounded-2xl border border-black/[0.08] bg-white/75 p-3">
-      <div className="flex items-center justify-between gap-2">
-        <p className="truncate text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]">
-          {label}
-        </p>
-        <span className={`text-sm font-bold ${tone.text}`}>{normalizedValue}%</span>
+    <a
+      href={`#${categoryId(category.name)}`}
+      className="group block rounded-xl border border-[#c6d8cd] bg-white/60 p-2.5 transition hover:border-[#9fbead] hover:bg-white sm:rounded-2xl sm:p-3"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[11px] font-semibold text-[#28483d] sm:text-xs">{category.name}</span>
+        <span className="text-xs font-bold text-[#173229] sm:text-sm">{score}</span>
       </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
-        <div
-          className={`h-full rounded-full ${tone.fill}`}
-          style={{ width: `${normalizedValue}%` }}
-        />
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#ccd9d1]">
+        <div className="h-full rounded-full bg-[#75aa82]" style={{ width: `${score}%` }} />
       </div>
-      <p className="mt-2 truncate text-[10px] text-[var(--brand-muted)]">{detail}</p>
-    </div>
+      <div className="mt-2 flex items-center justify-between gap-2 text-[9px] font-semibold uppercase tracking-[0.11em] text-[#60766b] sm:text-[10px]">
+        <span>{tone.label}</span>
+        <ChevronRight className="size-3.5 transition group-hover:translate-x-0.5" />
+      </div>
+    </a>
   );
 }
 
-function Insight({
+function CategoryCard({ category }: { category: AnalysisCategoryScore }) {
+  const score = scoreValue(category.score);
+  const tone = scoreTone(score);
+  const descriptions: Record<string, string> = {
+    "Content & impact": "Evidence, quantified outcomes, action-led bullets, and experience depth.",
+    "Section structure": "Contact details and standard sections an ATS can classify reliably.",
+    "ATS essentials":
+      "Readable text, dates, headings, links, and recruiter-ready document signals.",
+    "Writing quality": "Brevity, bullet length, action language, filler, and repetition.",
+  };
+
+  return (
+    <article
+      id={categoryId(category.name)}
+      className="scroll-mt-24 rounded-[18px] border border-black/[0.08] bg-white p-3.5 sm:rounded-[22px] sm:p-5"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-[var(--brand-muted)]">
+            {category.name}
+          </p>
+          <p className="mt-1.5 text-[11px] leading-4 text-[var(--brand-muted)] sm:mt-2 sm:text-xs sm:leading-5">
+            {descriptions[category.name] ?? "Resume quality signals detected in this document."}
+          </p>
+        </div>
+        <span
+          className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold sm:size-11 sm:rounded-2xl sm:text-sm ${tone.soft} ${tone.text}`}
+        >
+          {score}
+        </span>
+      </div>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/[0.065] sm:mt-4 sm:h-2">
+        <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${score}%` }} />
+      </div>
+      <p className={`mt-2 text-[11px] font-bold ${tone.text}`}>{tone.label}</p>
+    </article>
+  );
+}
+
+function FindingList({
   title,
+  subtitle,
   items,
-  positive = false,
+  positive,
 }: {
   title: string;
+  subtitle: string;
   items: string[];
   positive?: boolean;
 }) {
-  const values = list(
-    items,
-    positive ? "No strengths detected yet." : "No priority gaps detected."
-  );
+  const values = stringList(items, positive ? 4 : 5, [
+    positive ? "No confirmed strength was returned." : "No critical issue was detected.",
+  ]);
+
   return (
-    <section className="rounded-3xl border border-black/[0.08] bg-white/80 p-5 shadow-[0_12px_35px_rgba(22,32,28,0.04)] sm:p-6">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
+    <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[24px] sm:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
           <span
-            className={`flex size-8 items-center justify-center rounded-xl ${positive ? "bg-[#dff1e9] text-[#0d655b]" : "bg-[#fae4df] text-[#8a3030]"}`}
+            className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${
+              positive ? "bg-[#dff2e9] text-[#0b6d61]" : "bg-[#fae3df] text-[#9b403e]"
+            }`}
           >
             {positive ? <Check className="size-4" /> : <XCircle className="size-4" />}
           </span>
-          <h3 className="text-sm font-bold text-[var(--brand-ink)]">{title}</h3>
+          <div>
+            <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+              {title}
+            </h3>
+            <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
+          </div>
         </div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]">
-          {values.length} items
+        <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] sm:text-[10px]">
+          {values.length} checks
         </span>
       </div>
-      <ul className="mt-5 space-y-3">
+      <ul className="mt-4 divide-y divide-black/[0.07] sm:mt-5">
         {values.map((item, index) => (
           <li
             key={`${title}-${index}`}
-            className="flex items-start gap-3 border-t border-black/[0.07] pt-3 text-sm leading-6 text-[var(--brand-muted)]"
+            className="flex items-start gap-3 py-3 first:pt-0 last:pb-0"
           >
             <span
-              className={`mt-2 size-1.5 shrink-0 rounded-full ${positive ? "bg-[#167b70]" : "bg-[#c45b5b]"}`}
+              className={`mt-2 size-1.5 shrink-0 rounded-full ${positive ? "bg-[#128274]" : "bg-[#c85f5b]"}`}
             />
-            {item}
+            <p className="text-xs leading-5 text-[var(--brand-muted)] sm:text-sm sm:leading-6">
+              {item}
+            </p>
           </li>
         ))}
       </ul>
@@ -121,264 +206,370 @@ function Insight({
   );
 }
 
-function Keywords({
+function TagPanel({
   title,
+  subtitle,
   items,
-  missing = false,
+  warning,
 }: {
   title: string;
+  subtitle: string;
   items: string[];
-  missing?: boolean;
+  warning?: boolean;
 }) {
-  const values = items.filter(Boolean).slice(0, 18);
+  const values = stringList(items, 12);
   return (
-    <section className="rounded-3xl border border-black/[0.08] bg-white/80 p-5 shadow-[0_12px_35px_rgba(22,32,28,0.04)] sm:p-6">
-      <div className="flex items-center gap-2.5">
+    <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[24px] sm:p-6">
+      <div className="flex items-start gap-3">
         <span
-          className={`flex size-8 items-center justify-center rounded-xl ${missing ? "bg-[#f7edcf] text-[#76551f]" : "bg-[#dff1e9] text-[#0d655b]"}`}
+          className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${
+            warning ? "bg-[#faedc8] text-[#875f16]" : "bg-[#dff2e9] text-[#0b6d61]"
+          }`}
         >
-          {missing ? <Target className="size-4" /> : <Layers3 className="size-4" />}
+          {warning ? <Target className="size-4" /> : <Layers3 className="size-4" />}
         </span>
         <div>
-          <h3 className="text-sm font-bold text-[var(--brand-ink)]">{title}</h3>
-          <p className="text-[11px] text-[var(--brand-muted)]">
-            {values.length ? "Detected from the report" : "Nothing returned"}
-          </p>
+          <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+            {title}
+          </h3>
+          <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
         </div>
       </div>
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2">
         {values.length ? (
           values.map((item, index) => (
             <span
               key={`${item}-${index}`}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${missing ? "border-[#e4ce93] bg-[#fff9e9] text-[#76551f]" : "border-[#b9d9cb] bg-[#f0f9f4] text-[#0d655b]"}`}
+              className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold sm:px-3 sm:py-1.5 sm:text-xs ${
+                warning
+                  ? "border-[#e5cb88] bg-[#fff9e8] text-[#7b581c]"
+                  : "border-[#b9d9cb] bg-[#f0f9f4] text-[#0b655a]"
+              }`}
             >
               {item}
             </span>
           ))
         ) : (
-          <span className="text-sm text-[var(--brand-muted)]">No keywords to show.</span>
+          <p className="text-sm text-[var(--brand-muted)]">Nothing was confidently detected.</p>
         )}
       </div>
     </section>
   );
 }
 
-export function ATSDashboard({ analysis }: ATSDashboardProps) {
-  const score = safeScore(analysis.score);
-  const tone = toneFor(score);
+export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps) {
+  const score = scoreValue(analysis.score);
+  const tone = scoreTone(score);
   const parser = analysis.atsCompatibility;
-  const found = analysis.skillsFound?.length ? analysis.skillsFound : analysis.techStack;
-  const missing = analysis.skillsMissing?.length
-    ? analysis.skillsMissing
-    : analysis.missingKeywords;
-  const metrics = [
-    {
-      label: "Formatting",
-      value: safeScore(parser?.formattingScore, score),
-      detail: "Layout and file hygiene",
-    },
-    {
-      label: "Parseability",
-      value: safeScore(parser?.parseabilityScore, score),
-      detail: "Readable by ATS",
-    },
-    {
-      label: "Keywords",
-      value: safeScore(parser?.keywordMatchScore, Math.max(0, score - 4)),
-      detail: "Role language coverage",
-    },
-    {
-      label: "Evidence",
-      value: safeScore(((analysis.strengths?.length ?? 0) / 3) * 100),
-      detail: "Impact and structure",
-    },
-  ];
-  const notes = [...(analysis.scoreBreakdown?.capsApplied ?? []), ...(parser?.issues ?? [])]
-    .filter(Boolean)
-    .slice(0, 8);
+  const categories: AnalysisCategoryScore[] = analysis.categoryScores?.length
+    ? analysis.categoryScores
+    : [
+        {
+          name: "Content & impact",
+          score,
+          weight: 65,
+          status: score >= 90 ? "excellent" : score >= 75 ? "good" : "needs-work",
+          feedback: [],
+        },
+        {
+          name: "Section structure",
+          score: scoreValue(parser?.formattingScore, score),
+          weight: 10,
+          status: "good",
+          feedback: [],
+        },
+        {
+          name: "ATS essentials",
+          score: scoreValue(parser?.parseabilityScore, score),
+          weight: 10,
+          status: "good",
+          feedback: [],
+        },
+        {
+          name: "Writing quality",
+          score,
+          weight: 7.5,
+          status: "good",
+          feedback: [],
+        },
+      ];
+  const skills = stringList(
+    analysis.skillsFound?.length ? analysis.skillsFound : analysis.techStack,
+    12
+  );
+  const missing = stringList(
+    analysis.skillsMissing?.length ? analysis.skillsMissing : analysis.missingKeywords,
+    10
+  );
+  const issues = stringList(analysis.weaknesses, 5);
+  const parserIssues = stringList(parser?.issues, 5);
+  const focusCount = new Set([...issues, ...parserIssues]).size;
+  const suggestions = stringList(analysis.suggestions, 4, [
+    "Strengthen the highest-priority finding with a specific action and measurable result.",
+  ]);
 
   return (
-    <div className="w-full space-y-4">
-      <section className="rounded-3xl border border-black/[0.08] bg-white/85 p-5 shadow-[0_18px_55px_rgba(22,32,28,0.07)] sm:p-7">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex min-w-0 items-start gap-4">
-            <span
-              className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${tone.bg} ${tone.text}`}
-            >
-              <Gauge className="size-6" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#557264]">
-                Resume health report
-              </p>
-              <h2 className="mt-1 truncate text-2xl font-bold tracking-[-0.04em] text-[var(--brand-ink)] sm:text-3xl">
-                {analysis.role || "Resume review"}
-              </h2>
-              <p className="mt-1 text-sm text-[var(--brand-muted)]">
-                {analysis.level || "General applicant"} - {tone.label} foundation
-              </p>
+    <section className="w-full overflow-hidden rounded-[20px] border border-black/[0.09] bg-[#f6f4ed] shadow-[0_24px_80px_rgba(21,30,26,0.10)] sm:rounded-[30px]">
+      <header className="flex flex-col gap-3 border-b border-black/[0.08] bg-white px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#e5f2eb] text-[#0b6d61] sm:size-11 sm:rounded-2xl">
+            <FileCheck2 className="size-4 sm:size-5" />
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-base font-bold tracking-[-0.03em] text-[var(--brand-ink)] sm:text-lg">
+                Resume review complete
+              </h1>
+              <span
+                className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${tone.soft} ${tone.text}`}
+              >
+                {tone.label}
+              </span>
             </div>
-          </div>
-          <div className="flex items-center gap-4 rounded-2xl border border-black/[0.08] bg-[var(--brand-canvas)]/70 px-4 py-3">
-            <CircularProgress
-              value={score}
-              size={82}
-              strokeWidth={8}
-              progressColor={tone.ring}
-              label={tone.label}
-            />
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)]">
-                Overall score
-              </p>
-              <p className="mt-1 text-2xl font-bold text-[var(--brand-ink)]">
-                {score}
-                <span className="text-sm text-[var(--brand-muted)]">/100</span>
-              </p>
-              <p className={`text-xs font-semibold ${tone.text}`}>
-                {score >= 75 ? "Ready to refine" : "Fix the next items first"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {metrics.map((metric) => (
-            <Metric key={metric.label} {...metric} />
-          ))}
-        </div>
-        <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div className="rounded-2xl border border-[#bed8ca] bg-[#f0f8f3] px-4 py-3">
-            <p className="text-xs font-bold text-[#0d655b]">What to do next</p>
-            <p className="mt-1 text-sm leading-6 text-[#285348]">
-              {analysis.summary ||
-                analysis.advice ||
-                "Use the prioritized fixes below, then run the report again."}
+            <p className="mt-0.5 max-w-[72vw] truncate text-[11px] text-[var(--brand-muted)] sm:max-w-[60vw] sm:text-xs">
+              {fileName || "Uploaded resume"} · Calibrated quality report
             </p>
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:flex">
+          <button
+            type="button"
+            onClick={onReset}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-black/[0.1] bg-white px-3 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-[#f4f4ef] cursor-pointer sm:h-10 sm:gap-2 sm:px-4 sm:text-xs"
+          >
+            <RotateCcw className="size-4" /> Analyze another
+          </button>
           <Link
             href="/builder"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[var(--brand-ink)] px-5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#27332f]"
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-3.5 text-[11px] font-bold text-white shadow-xs transition hover:bg-[#27332f] cursor-pointer sm:h-10 sm:gap-2 sm:px-5 sm:text-xs"
           >
-            Build improved resume <ArrowUpRight className="size-4" />
+            <PenLine className="size-4 text-white" /> Improve resume
           </Link>
         </div>
-      </section>
+      </header>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(300px,0.9fr)]">
-        <Insight title="Strengths" items={analysis.strengths} positive />
-        <section className="rounded-3xl border border-black/[0.08] bg-[#f8f4e8]/85 p-5 shadow-[0_12px_35px_rgba(22,32,28,0.04)] sm:p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <span className="flex size-8 items-center justify-center rounded-xl bg-[#f7edcf] text-[#76551f]">
+      <div className="grid lg:grid-cols-[275px_minmax(0,1fr)]">
+        <aside className="border-b border-[#c5d6cb] bg-[#e2ece5] p-4 text-[var(--brand-ink)] sm:p-6 lg:min-h-[760px] lg:border-r lg:border-b-0">
+          <div className="flex items-center gap-5 lg:block">
+            <CircularProgress
+              value={score}
+              size={124}
+              strokeWidth={10}
+              progressColor="text-[#5c9a72]"
+              label={tone.label}
+              className="-m-2 shrink-0 scale-[0.84] [&_span]:text-[var(--brand-ink)] [&_span:last-child]:text-[#60766b] sm:m-0 sm:scale-100"
+            />
+            <div className="min-w-0 lg:mt-5">
+              <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#60766b] sm:text-[10px]">
+                Resume quality score
+              </p>
+              <p className="mt-1 text-3xl font-bold tracking-[-0.06em] sm:text-4xl">
+                {score}
+                <span className="text-base font-semibold text-[#718279] sm:text-lg">/100</span>
+              </p>
+              <p className="mt-1.5 text-[11px] leading-4 text-[#546b60] sm:mt-2 sm:text-xs sm:leading-5">
+                Based on document evidence and recruiter-facing quality—not hiring odds.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-[#c2d3c8] bg-white/55 p-3 sm:mt-6 sm:rounded-2xl sm:p-3.5">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[11px] font-semibold text-[#385448] sm:text-xs">
+                Focus areas
+              </span>
+              <span className="flex size-7 items-center justify-center rounded-full bg-[#f5c46b] text-xs font-bold text-[#2f2614]">
+                {focusCount}
+              </span>
+            </div>
+            <p className="mt-1.5 text-[10px] leading-4 text-[#60766b] sm:mt-2 sm:text-[11px] sm:leading-5">
+              Fix the highest-impact items first, then run a fresh scan.
+            </p>
+          </div>
+
+          <nav
+            className="mt-4 grid gap-1.5 sm:mt-6 sm:grid-cols-2 sm:gap-2 lg:grid-cols-1"
+            aria-label="Report categories"
+          >
+            {categories.map((category) => (
+              <CategoryRow key={category.name} category={category} />
+            ))}
+          </nav>
+
+          <div className="mt-4 border-t border-[#c2d3c8] pt-4 text-[10px] leading-4 text-[#60766b] sm:mt-6 sm:pt-5 sm:text-[11px] sm:leading-5">
+            Role-language coverage is inferred because no job description was supplied. It is not a
+            job-match score.
+          </div>
+        </aside>
+
+        <main className="min-w-0 p-3 sm:p-6 lg:p-8">
+          <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[26px] sm:p-7">
+            <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#557264]">
+                  <Gauge className="size-4" /> Detected direction
+                </div>
+                <h2 className="mt-2 break-words text-xl font-bold tracking-[-0.045em] text-[var(--brand-ink)] sm:text-3xl">
+                  {analysis.role || "General applicant"}
+                </h2>
+                <p className="mt-1 text-xs font-semibold text-[var(--brand-muted)] sm:text-sm">
+                  {analysis.level || "Level not confidently detected"}
+                </p>
+                <p className="mt-3 max-w-3xl text-xs leading-5 text-[var(--brand-muted)] sm:mt-5 sm:text-sm sm:leading-6">
+                  {analysis.summary ||
+                    "This review measures document structure, measurable evidence, writing quality, and inferred role language."}
+                </p>
+              </div>
+              <div className="grid shrink-0 grid-cols-2 gap-2 sm:grid-cols-3 xl:w-[360px]">
+                <div className="rounded-xl bg-[#eef6f1] p-3 sm:rounded-2xl sm:p-3.5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#557264]">
+                    ATS read
+                  </p>
+                  <p className="mt-1 text-lg font-bold text-[#0b6d61] sm:text-xl">
+                    {scoreValue(parser?.parseabilityScore, score)}%
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[#fbf4df] p-3 sm:rounded-2xl sm:p-3.5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#76551f]">
+                    Role terms
+                  </p>
+                  <p className="mt-1 text-lg font-bold text-[#875f16] sm:text-xl">
+                    {scoreValue(parser?.keywordMatchScore, score)}%
+                  </p>
+                </div>
+                <div className="col-span-2 rounded-xl bg-[#f1f2ed] p-3 sm:col-span-1 sm:rounded-2xl sm:p-3.5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)]">
+                    Skills
+                  </p>
+                  <p className="mt-1 text-lg font-bold text-[var(--brand-ink)] sm:text-xl">
+                    {skills.length}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-5">
+            <div className="mb-3 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#557264]">
+                  Score breakdown
+                </p>
+                <h2 className="mt-1 text-lg font-bold tracking-[-0.035em] text-[var(--brand-ink)] sm:text-xl">
+                  Why this score
+                </h2>
+              </div>
+              <p className="hidden text-xs text-[var(--brand-muted)] sm:block">
+                Deterministic checks · repeatable results
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {categories.map((category) => (
+                <CategoryCard key={category.name} category={category} />
+              ))}
+            </div>
+          </section>
+
+          <div className="mt-4 grid gap-3 sm:mt-5 sm:gap-4 xl:grid-cols-2">
+            <FindingList
+              title="What is working"
+              subtitle="Evidence worth keeping"
+              items={analysis.strengths}
+              positive
+            />
+            <FindingList
+              title="Fix these first"
+              subtitle="Concrete issues lowering the score"
+              items={analysis.weaknesses}
+            />
+          </div>
+
+          <section className="mt-4 rounded-[20px] border border-black/[0.08] bg-[#eef5f0] p-4 sm:mt-5 sm:rounded-[26px] sm:p-6">
+            <div className="flex items-start gap-3">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#d5e9dc] text-[#176453] sm:size-9 sm:rounded-xl">
                 <Sparkles className="size-4" />
               </span>
               <div>
-                <h3 className="text-sm font-bold text-[var(--brand-ink)]">Role snapshot</h3>
-                <p className="text-[11px] text-[var(--brand-muted)]">Detected profile and tools</p>
+                <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+                  Priority edit plan
+                </h3>
+                <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">
+                  Apply these in order, then analyze the revised file.
+                </p>
               </div>
             </div>
-            <Gauge className="size-4 text-[#aa7d2e]" />
-          </div>
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-black/[0.07] bg-white/75 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-[var(--brand-muted)]">
-                Level
-              </p>
-              <p className="mt-1 text-sm font-bold text-[var(--brand-ink)]">
-                {analysis.level || "Not clear"}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-black/[0.07] bg-white/75 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-[var(--brand-muted)]">
-                Tools
-              </p>
-              <p className="mt-1 text-sm font-bold text-[var(--brand-ink)]">{found.length}</p>
-            </div>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {found.slice(0, 12).map((skill, index) => (
-              <span
-                key={`${skill}-${index}`}
-                className="rounded-full bg-white px-2.5 py-1.5 text-xs font-semibold text-[#315b46] ring-1 ring-[#b9d9cb]"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </section>
-      </div>
+            <ol className="mt-4 grid gap-2.5 sm:mt-5 sm:gap-3 lg:grid-cols-2">
+              {suggestions.map((item, index) => (
+                <li
+                  key={`${item}-${index}`}
+                  className="flex items-start gap-2.5 rounded-xl border border-[#c8dacf] bg-white/80 p-3 sm:gap-3 sm:rounded-2xl sm:p-4"
+                >
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#d5e9dc] text-[11px] font-bold text-[#155e52] sm:size-7 sm:text-xs">
+                    {index + 1}
+                  </span>
+                  <p className="text-xs leading-5 text-[var(--brand-muted)] sm:text-sm sm:leading-6">
+                    {item}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <Insight title="Priority gaps" items={analysis.weaknesses} />
-        <section className="rounded-3xl border border-black/[0.08] bg-white/80 p-5 shadow-[0_12px_35px_rgba(22,32,28,0.04)] sm:p-6">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-xl bg-[#e8eff8] text-[#3c6287]">
-              <Sparkles className="size-4" />
-            </span>
-            <div>
-              <h3 className="text-sm font-bold text-[var(--brand-ink)]">Edit plan</h3>
-              <p className="text-[11px] text-[var(--brand-muted)]">
-                Start with the highest-impact changes
-              </p>
-            </div>
+          <div className="mt-4 grid gap-3 sm:mt-5 sm:gap-4 xl:grid-cols-2">
+            <TagPanel
+              title="Skills detected"
+              subtitle="Present in the uploaded resume"
+              items={skills}
+            />
+            <TagPanel
+              title="Terms to consider"
+              subtitle="Only add these when they are true"
+              items={missing}
+              warning
+            />
           </div>
-          <ol className="mt-5 space-y-3">
-            {list(
-              analysis.suggestions,
-              "Add measurable outcomes to the strongest experience bullets."
-            ).map((item, index) => (
-              <li
-                key={`${item}-${index}`}
-                className="flex items-start gap-3 border-t border-black/[0.07] pt-3"
-              >
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--brand-ink)] text-[10px] font-bold text-white">
-                  {index + 1}
+
+          {(parserIssues.length > 0 || analysis.scoreBreakdown?.capsApplied?.length) && (
+            <details className="group mt-4 rounded-[18px] border border-black/[0.08] bg-white p-3.5 sm:mt-5 sm:rounded-[22px] sm:p-5">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+                <span className="flex items-center gap-2 text-xs font-bold text-[var(--brand-ink)] sm:text-sm">
+                  <AlertCircle className="size-4 text-[#c28a2c]" /> Parser notes and score limits
                 </span>
-                <span className="text-sm leading-6 text-[var(--brand-muted)]">{item}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
-      </div>
+                <ChevronRight className="size-4 transition group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {stringList(
+                  [...(analysis.scoreBreakdown?.capsApplied ?? []), ...parserIssues],
+                  8
+                ).map((item, index) => (
+                  <p
+                    key={`${item}-${index}`}
+                    className="rounded-xl bg-[#f6f4ed] px-3 py-2.5 text-xs leading-5 text-[var(--brand-muted)]"
+                  >
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </details>
+          )}
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <Keywords title="Keywords to add" items={missing} missing />
-        <Keywords title="Skills detected" items={found} />
-      </div>
-
-      {notes.length > 0 && (
-        <details className="rounded-3xl border border-black/[0.08] bg-white/75 p-4">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-bold text-[var(--brand-ink)] [&::-webkit-details-marker]:hidden">
-            <span className="flex items-center gap-2">
-              <AlertCircle className="size-4 text-[#aa7d2e]" /> Score notes and parser checks
-            </span>
-            <ChevronRight className="size-4" />
-          </summary>
-          <div className="mt-4 grid gap-2 text-sm text-[var(--brand-muted)] sm:grid-cols-2">
-            {notes.map((note, index) => (
-              <p key={`${note}-${index}`} className="rounded-xl bg-[var(--brand-canvas)] px-3 py-2">
-                {note}
+          <div className="mt-4 flex flex-col gap-3 rounded-[20px] border border-[#bdd2c4] bg-[#dfebe3] p-4 text-[var(--brand-ink)] sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:rounded-[24px] sm:p-6">
+            <div>
+              <p className="text-sm font-bold">Turn the report into a stronger resume</p>
+              <p className="mt-1 max-w-2xl text-[11px] leading-4 text-[#536a5f] sm:text-xs sm:leading-5">
+                {analysis.advice ||
+                  "Apply the priority fixes without adding claims you cannot support."}
               </p>
-            ))}
+            </div>
+            <Link
+              href="/builder"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-[#b5cabe] bg-white px-4 text-xs font-bold text-[var(--brand-ink)] transition hover:-translate-y-0.5 hover:bg-[#f7fbf8] sm:h-11 sm:px-5 sm:text-sm"
+            >
+              Open builder <ArrowUpRight className="size-4" />
+            </Link>
           </div>
-        </details>
-      )}
-
-      <section className="rounded-3xl border border-[#bed8ca] bg-[#eaf5ef] p-5 sm:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-ink)] text-[var(--brand-lime)]">
-            <Sparkles className="size-4" />
-          </span>
-          <div>
-            <p className="text-sm font-bold text-[var(--brand-ink)]">Career guidance</p>
-            <p className="mt-1 max-w-3xl text-sm leading-6 text-[#285348]">
-              {analysis.advice ||
-                "Keep the role title, evidence, and keywords aligned to the work you want next."}
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+        </main>
+      </div>
+    </section>
   );
 }

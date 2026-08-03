@@ -26,7 +26,7 @@ export function AnalyzerCompleteHeader({ fileName, onReset }: AnalyzerCompleteHe
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
         <Button
           asChild
-          className="h-10 justify-center gap-2 bg-[var(--brand-ink)] px-4 text-white hover:bg-[#293630]"
+          className="h-10 justify-center gap-2 bg-[var(--brand-ink)] px-4 text-white hover:bg-[#293630] cursor-pointer"
         >
           <Link href="/builder">
             <PenLine className="size-4" />
@@ -36,7 +36,7 @@ export function AnalyzerCompleteHeader({ fileName, onReset }: AnalyzerCompleteHe
         <Button
           onClick={onReset}
           variant="outline"
-          className="h-10 justify-center gap-2 border-black/10 bg-white/75 text-[var(--premium-ink)] hover:bg-white"
+          className="h-10 justify-center gap-2 border-black/10 bg-white/75 text-[var(--premium-ink)] hover:bg-white cursor-pointer"
         >
           <RotateCcw className="size-4" />
           Analyze another
