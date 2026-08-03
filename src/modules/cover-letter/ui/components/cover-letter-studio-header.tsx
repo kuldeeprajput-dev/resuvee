@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, Cloud, Download, Eye, FileText, Sparkles, RotateCcw, Loader2, Check } from "lucide-react";
+import { ArrowLeft, Cloud, Download, Eye, FileText, Sparkles, RotateCcw, Loader2, Check, Upload } from "lucide-react";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 
 interface CoverLetterStudioHeaderProps {
@@ -14,6 +14,8 @@ interface CoverLetterStudioHeaderProps {
   setShowStartFreshModal: (v: boolean) => void;
   handleExportPdf: () => void;
   setShowMobilePreview: (v: boolean) => void;
+  onUploadLetter?: (file: File) => void;
+  isImportingLetter?: boolean;
 }
 
 export function CoverLetterStudioHeader({
@@ -25,7 +27,10 @@ export function CoverLetterStudioHeader({
   setShowStartFreshModal,
   handleExportPdf,
   setShowMobilePreview,
+  onUploadLetter,
+  isImportingLetter,
 }: CoverLetterStudioHeaderProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   return (
     <header className="no-print flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
       <div className="flex h-full items-center min-w-0 gap-1.5 sm:gap-3">
@@ -60,6 +65,35 @@ export function CoverLetterStudioHeader({
 
       {/* Top Header Action Buttons */}
       <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept=".pdf,.docx,.txt"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file && onUploadLetter) {
+              onUploadLetter(file);
+              e.target.value = "";
+            }
+          }}
+          className="hidden"
+        />
+
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isImportingLetter}
+          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+          title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
+        >
+          {isImportingLetter ? (
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
+          ) : (
+            <Upload className="size-3.5 sm:size-4 text-emerald-600" />
+          )}
+          <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+          <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
+        </button>
         <button
           type="button"
           onClick={handleSaveToCloud}

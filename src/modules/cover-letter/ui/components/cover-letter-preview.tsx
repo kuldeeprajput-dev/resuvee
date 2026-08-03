@@ -38,10 +38,10 @@ export function CoverLetterPreview({
 
   const spacingClass =
     pageSpacing === "compact"
-      ? "px-10 py-9 min-h-[780px]"
+      ? "px-9 py-7"
       : pageSpacing === "spacious"
-      ? "px-16 py-14 min-h-[890px]"
-      : "px-14 py-12 min-h-[842px]";
+      ? "px-14 py-12"
+      : "px-11 py-9";
 
   const contact = [data.email, data.phone, data.location, data.website]
     .filter(Boolean)
@@ -62,7 +62,7 @@ export function CoverLetterPreview({
   return (
     <article
       className={cn(
-        "resume-print-area resume-preview-sheet relative flex flex-col justify-between w-[595px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
+        "resume-print-area resume-preview-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
         spacingClass,
         fontClass,
         isHandTool && "hand-mode"
@@ -74,24 +74,24 @@ export function CoverLetterPreview({
       {theme === "linen" && (
         <div className="absolute -right-20 -top-24 size-64 rounded-full bg-[#e7f1e8]" />
       )}
-      <header className="relative border-b pb-6" style={{ borderColor: accent }}>
+      <header className="relative border-b pb-4" style={{ borderColor: accent }}>
         <h1
           data-field="fullName"
           onClick={(e) => onSelectField?.(e, "fullName")}
-          className={cn("text-[29px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
+          className={cn("text-[26px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
         >
           {data.fullName}
         </h1>
         <p
           data-field="headline"
           onClick={(e) => onSelectField?.(e, "headline")}
-          className={cn("mt-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]", getFieldClass("headline"))}
+          className={cn("mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]", getFieldClass("headline"))}
         >
           {data.headline}
         </p>
       </header>
 
-      <section className="relative mt-6 flex-1 space-y-4 text-xs leading-relaxed text-[#2d342f]">
+      <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f] overflow-hidden">
         <div className="flex items-baseline justify-between text-[11px] font-semibold text-[var(--brand-muted)] gap-4">
           <div className="min-w-0 flex-1">
             <p

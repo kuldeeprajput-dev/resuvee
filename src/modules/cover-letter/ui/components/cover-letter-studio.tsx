@@ -51,6 +51,7 @@ export function CoverLetterStudio() {
     aiSuccessMessage,
     isSaving,
     saveStatus,
+    isImportingLetter,
     selectedField,
     highlightRect,
     toolbarPos,
@@ -72,6 +73,7 @@ export function CoverLetterStudio() {
     handleMouseUpCanvas,
     handleConfirmStartFresh,
     handleSaveToCloud,
+    handleUploadLetter,
     handleGenerateAiCoverLetter,
     handleExportPdf,
   } = state;
@@ -92,7 +94,9 @@ export function CoverLetterStudio() {
         documentTitle={documentTitle}
         isSaving={isSaving}
         saveStatus={saveStatus}
+        isImportingLetter={isImportingLetter}
         handleSaveToCloud={handleSaveToCloud}
+        onUploadLetter={handleUploadLetter}
         setShowAiDrawer={setShowAiDrawer}
         setShowStartFreshModal={setShowStartFreshModal}
         handleExportPdf={handleExportPdf}
