@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { ATSDashboard } from "./ats-dashboard";
 import { LoadingState } from "./loading-state";
 import { ErrorState } from "./error-state";
-import { AnalyzerHeroCopy } from "./analyzer-hero-copy";
+import { AnalyzerHeroHeader, AnalyzerHeroFeatures } from "./analyzer-hero-copy";
 import { AnalyzerUploadCard } from "./analyzer-upload-card";
 import { extractTextFromPDF } from "@/shared/lib/extractors/client-pdf";
 import type { ResumeAnalysis } from "../../types";
@@ -135,8 +135,14 @@ export function ResumeAnalyzer() {
 
   return (
     <section className="mx-auto w-full max-w-[1160px]">
-      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,1.1fr)] lg:items-stretch lg:gap-16">
-        <AnalyzerHeroCopy />
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,1.1fr)] lg:items-stretch lg:gap-16">
+        <div className="flex flex-col justify-between">
+          <AnalyzerHeroHeader />
+          <div className="hidden lg:block">
+            <AnalyzerHeroFeatures />
+          </div>
+        </div>
+
         <AnalyzerUploadCard
           selectedFile={selectedFile}
           state={state}
@@ -147,6 +153,10 @@ export function ResumeAnalyzer() {
           onUpload={handleUpload}
           setIsDragging={setIsDragging}
         />
+
+        <div className="block lg:hidden">
+          <AnalyzerHeroFeatures />
+        </div>
       </div>
     </section>
   );
