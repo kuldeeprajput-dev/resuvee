@@ -11,6 +11,7 @@ import { CoverLetterStudioHeader } from "./cover-letter-studio-header";
 import { CoverLetterStartFreshModal } from "./cover-letter-start-fresh-modal";
 import { CoverLetterAiDrawer } from "./cover-letter-ai-drawer";
 import { useCoverLetterState } from "../../hooks/use-cover-letter-state";
+import { exportCoverLetterDocx } from "../../utils/export-docx";
 import { COLOR_SWATCHES, themeStyles, themes, getStarterCopy } from "../../constants";
 
 export function CoverLetterStudio() {
@@ -81,6 +82,10 @@ export function CoverLetterStudio() {
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const activeAccent = customAccent || activeTheme.accent;
 
+  const handleExportDocx = async () => {
+    await exportCoverLetterDocx(data, activeAccent);
+  };
+
   const documentTitle = data.fullName
     ? `${data.fullName}'s Cover Letter`
     : data.company
@@ -100,6 +105,7 @@ export function CoverLetterStudio() {
         setShowAiDrawer={setShowAiDrawer}
         setShowStartFreshModal={setShowStartFreshModal}
         handleExportPdf={handleExportPdf}
+        handleExportDocx={handleExportDocx}
         setShowMobilePreview={setShowMobilePreview}
       />
 

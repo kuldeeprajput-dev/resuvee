@@ -22,9 +22,11 @@ export async function extractTextFromCoverLetterFile(file: File): Promise<string
  * Collapses spaced out text like "S E N I O R  P R O D U C T" -> "SENIOR PRODUCT"
  */
 function collapseSpacedLetters(text: string): string {
-  return text.replace(/\b(?:[A-Z]\s+){2,}[A-Z]\b/g, (match) =>
-    match.replace(/\s+/g, "")
-  );
+  return text.replace(/\b([A-Z])(?:\s+([A-Z]))+\b/g, (match) => {
+    // If the match contains double spaces or multispaces separating words (e.g., "S E N I O R  P R O D U C T")
+    const words = match.split(/\s{2,}/);
+    return words.map((w) => w.replace(/\s+/g, "")).join(" ");
+  });
 }
 
 /**
