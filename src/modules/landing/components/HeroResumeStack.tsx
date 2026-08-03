@@ -49,7 +49,7 @@ const resumeSheets = [
 
 export function HeroResumeStack() {
   return (
-    <div className="group relative mx-auto min-w-0 w-full max-w-[680px] cursor-default">
+    <div className="group relative mx-auto min-w-0 w-full max-w-[740px] cursor-default">
       <div className="relative h-[330px] sm:h-[440px] lg:h-[520px]">
         <div
           className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-[var(--brand-lime)]/20 blur-[90px]"

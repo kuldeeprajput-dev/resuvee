@@ -5,6 +5,9 @@ import { Cloud, Download, FileText, Sparkles, RotateCcw, X, Loader2, Bot, Check,
 import { Button } from "@/shared/components/ui/button";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { cn } from "@/shared/lib/utils";
+import { useAuthStore } from "@/modules/auth";
+import { getAuthHeaders } from "@/shared/lib/api-headers";
+import { useNotification } from "@/shared/lib/use-notification";
 import type { ResumeData } from "@/modules/resume/types/resume";
 import type {
   CoverLetterData,
@@ -92,6 +95,10 @@ function getStarterCopy(data: CoverLetterData) {
 }
 
 export function CoverLetterStudio() {
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
+  const showToast = useNotification((state) => state.showToast);
+
   const [data, setData] = useState<CoverLetterData>(emptyLetter);
   const [theme, setTheme] = useState<CoverLetterTheme>("linen");
   const [customAccent, setCustomAccent] = useState<string | null>(null);
@@ -217,40 +224,58 @@ export function CoverLetterStudio() {
   }, [isFullscreen, showStartFreshModal, showAiDrawer]);
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as {
-          data?: CoverLetterData;
-          theme?: CoverLetterTheme;
-          customAccent?: string;
-        };
-        if (parsed.data) setData(parsed.data);
-        if (parsed.theme) setTheme(parsed.theme);
-        if (parsed.customAccent) setCustomAccent(parsed.customAccent);
-      } else {
-        const resumeDraft = window.localStorage.getItem(RESUME_KEY);
-        if (resumeDraft) {
-          const parsed = JSON.parse(resumeDraft) as { data?: ResumeData };
+    async function loadInitialData() {
+      try {
+        const activeId = typeof window !== "undefined" ? window.localStorage.getItem("active-cover-letter-id") : null;
+
+        // If explicitly set to new, load empty letter
+        if (activeId === "new") {
+          setData(emptyLetter);
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: emptyLetter }));
+          hasLoaded.current = true;
+          return;
+        }
+
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
           if (parsed.data) {
-            setData((current) => ({
-              ...current,
-              fullName: parsed.data?.basics.fullName ?? "",
-              headline: parsed.data?.basics.headline ?? "",
-              email: parsed.data?.basics.email ?? "",
-              phone: parsed.data?.basics.phone ?? "",
-              location: parsed.data?.basics.location ?? "",
-              website: parsed.data?.basics.website ?? "",
-            }));
+            setData(parsed.data);
+            if (parsed.theme) setTheme(parsed.theme);
+            if (parsed.customAccent) setCustomAccent(parsed.customAccent);
+          } else if (parsed.fullName !== undefined || parsed.paragraphs !== undefined || parsed.role !== undefined) {
+            setData(parsed);
+          }
+        } else if (activeId && activeId !== "undefined" && activeId !== "null") {
+          // If a specific ID is selected, fetch that target letter from cloud
+          if (user) {
+            try {
+              const authHeaders = await getAuthHeaders();
+              const res = await fetch("/api/cover-letters", { headers: authHeaders });
+              const json = await res.json();
+              if (json.success && Array.isArray(json.data)) {
+                const target = json.data.find((item: any) => item.id === activeId);
+                if (target && target.data) {
+                  setData(target.data);
+                  window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: target.data }));
+                  hasLoaded.current = true;
+                  return;
+                }
+              }
+            } catch (cloudErr) {
+              console.error("Cloud fetch target letter error:", cloudErr);
+            }
           }
         }
+      } catch {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } finally {
+        hasLoaded.current = true;
       }
-    } catch {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } finally {
-      hasLoaded.current = true;
     }
-  }, []);
+
+    loadInitialData();
+  }, [user]);
 
   useEffect(() => {
     if (!hasLoaded.current) return;
@@ -503,25 +528,85 @@ export function CoverLetterStudio() {
     setData(emptyLetter);
     setCustomAccent("");
     setTheme(themes[0].id);
-    clearSelection();
-
-    if (containerRef.current) {
-      const styledEls = containerRef.current.querySelectorAll("[data-field]");
-      styledEls.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.style.color = "";
-        htmlEl.style.fontSize = "";
-        htmlEl.style.textAlign = "";
-        htmlEl.style.textTransform = "";
-        htmlEl.classList.remove("font-bold", "italic", "underline");
-      });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("active-cover-letter-id", "new");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: emptyLetter }));
     }
 
     setShowStartFreshModal(false);
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+
+  const handleSaveToCloud = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to save your cover letter to your account.");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const storedId = typeof window !== "undefined" ? localStorage.getItem("active-cover-letter-id") : null;
+      const activeId = storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new" ? storedId : undefined;
+
+      const authHeaders = await getAuthHeaders();
+      const res = await fetch("/api/cover-letters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders },
+        body: JSON.stringify({
+          id: activeId,
+          title: data.fullName ? `${data.fullName}'s Cover Letter` : data.company ? `${data.company} — Cover Letter` : "Cover Letter",
+          company: data.company,
+          role: data.role,
+          data,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Could not save cover letter.");
+      }
+
+      const letterId = json.data?.id || `local-${Date.now()}`;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("active-cover-letter-id", letterId);
+        try {
+          const localListRaw = localStorage.getItem("local-saved-cover-letters");
+          const localList: any[] = localListRaw ? JSON.parse(localListRaw) : [];
+          const newItem = {
+            id: letterId,
+            title: data.fullName ? `${data.fullName}'s Cover Letter` : data.company ? `${data.company} — Cover Letter` : "Cover Letter",
+            company: data.company || "",
+            role: data.role || "",
+            data,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          const updatedList = [newItem, ...localList.filter((item) => item.id !== letterId)];
+          localStorage.setItem("local-saved-cover-letters", JSON.stringify(updatedList));
+        } catch (e) {
+          console.error("Local backup error:", e);
+        }
+      }
+
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } catch (err: any) {
+      console.error("Save cover letter error:", err);
+      showToast("Save Error", err.message || "Failed to save cover letter.", "error");
+      setSaveStatus("error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Groq AI Generation Handler
   const handleGenerateAiCoverLetter = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to generate cover letters with AI.");
+      return;
+    }
+
     setIsGeneratingAi(true);
     setAiSuccessMessage(false);
     try {
@@ -596,6 +681,26 @@ export function CoverLetterStudio() {
 
         {/* Top Header Action Buttons */}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleSaveToCloud}
+            disabled={isSaving}
+            className="h-9 rounded-xl border border-black/15 bg-white px-3 sm:px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Save cover letter to your account"
+          >
+            {isSaving ? (
+              <Loader2 className="size-3.5 animate-spin text-emerald-600" />
+            ) : saveStatus === "saved" ? (
+              <Check className="size-3.5 text-emerald-600" />
+            ) : (
+              <Cloud className="size-3.5 text-emerald-600" />
+            )}
+            <span className="hidden sm:inline">
+              {isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}
+            </span>
+            <span className="sm:hidden">Save</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setShowAiDrawer(true)}

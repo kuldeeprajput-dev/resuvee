@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuthStore } from "@/modules/auth";
 import { Button } from "@/shared/components/ui/button";
 import {
   applyWritingIssue,
@@ -56,6 +57,8 @@ export function WritingCheckPanel({
   onClose,
   onSelectSection,
 }: WritingCheckPanelProps) {
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const issues = useResumeBuilderStore((state) => state.writingIssues);
   const hasChecked = useResumeBuilderStore((state) => state.writingHasChecked);
   const setWritingCheckResults = useResumeBuilderStore((state) => state.setWritingCheckResults);
@@ -98,6 +101,11 @@ export function WritingCheckPanel({
   }, [isResizing]);
 
   const runCheck = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to run AI writing check on your resume.");
+      return;
+    }
+
     const targets = getResumeWritingTargets(data);
     if (!targets.length) {
       setError("Add some resume content before running the writing check.");

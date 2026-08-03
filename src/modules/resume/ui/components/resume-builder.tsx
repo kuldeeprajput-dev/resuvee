@@ -6,11 +6,13 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Cloud,
   Download,
   Eye,
   FilePlus2,
   FileText,
   LayoutTemplate,
+  Loader2,
   RotateCcw,
   ScanSearch,
   SpellCheck2,
@@ -22,12 +24,15 @@ import { useResumeBuilderStore } from "../../store/use-resume-builder-store";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { useAuthStore } from "@/modules/auth";
+import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { ResumeEditor } from "./resume-editor";
 import { InteractiveCanvas } from "./interactive-canvas";
 import { TemplateThumbnail } from "./template-thumbnail";
 import { TailorPanel } from "./tailor-panel";
 import { WritingCheckPanel } from "./writing-check-panel";
 import { CustomizePanel } from "./customize-panel";
+import { useNotification } from "@/shared/lib/use-notification";
 
 interface ResumeBuilderProps {
   initialTemplate?: string;
@@ -35,6 +40,7 @@ interface ResumeBuilderProps {
 }
 
 export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilderProps) {
+  const showToast = useNotification((state) => state.showToast);
   const {
     data,
     templateId,
@@ -61,6 +67,95 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     setZoom,
     startFresh: clearResume,
   } = useResumeBuilderStore();
+
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+
+  useEffect(() => {
+    async function loadCloudResume() {
+      if (!user) return;
+      try {
+        const storedId = typeof window !== "undefined" ? localStorage.getItem("active-resume-id") : null;
+        if (storedId === "new") return;
+
+        if (storedId && storedId !== "undefined" && storedId !== "null") {
+          const authHeaders = await getAuthHeaders();
+          const res = await fetch("/api/resumes", { headers: authHeaders });
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            const target = json.data.find((item: any) => item.id === storedId);
+            if (target && target.data) {
+              updateData(target.data);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Cloud fetch initial resume error:", err);
+      }
+    }
+    loadCloudResume();
+  }, [user, updateData]);
+
+  const handleSaveToCloud = async () => {
+    if (!user) {
+      openAuthModal("sign_in", "Please sign in to save your resume to your account.");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const storedId = typeof window !== "undefined" ? localStorage.getItem("active-resume-id") : null;
+      const activeId = storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new" ? storedId : undefined;
+
+      const authHeaders = await getAuthHeaders();
+      const res = await fetch("/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders },
+        body: JSON.stringify({
+          id: activeId,
+          title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
+          targetRole: data.basics.headline || "",
+          data,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Could not save resume.");
+      }
+
+      const resumeId = json.data?.id || `local-${Date.now()}`;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("active-resume-id", resumeId);
+        try {
+          const localListRaw = localStorage.getItem("local-saved-resumes");
+          const localList: any[] = localListRaw ? JSON.parse(localListRaw) : [];
+          const newItem = {
+            id: resumeId,
+            title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
+            target_role: data.basics.headline || "",
+            data,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          const updatedList = [newItem, ...localList.filter((item) => item.id !== resumeId)];
+          localStorage.setItem("local-saved-resumes", JSON.stringify(updatedList));
+        } catch (e) {
+          console.error("Local backup error:", e);
+        }
+      }
+
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } catch (err: any) {
+      console.error("Save error:", err);
+      showToast("Save Error", err.message || "Failed to save resume.", "error");
+      setSaveStatus("error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const template =
     resumeTemplates.find((item) => item.id === templateId) ??
@@ -297,6 +392,27 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           >
             <ScanSearch className="size-4 text-[var(--brand-ink)]" />
             Role match
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleSaveToCloud}
+            disabled={isSaving}
+            className="h-10 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition cursor-pointer"
+            title="Save resume to your account"
+          >
+            {isSaving ? (
+              <Loader2 className="size-4 animate-spin text-emerald-600" />
+            ) : saveStatus === "saved" ? (
+              <Check className="size-4 text-emerald-600" />
+            ) : (
+              <Cloud className="size-4 text-emerald-600" />
+            )}
+            <span className="hidden sm:inline">
+              {isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}
+            </span>
+            <span className="sm:hidden">Save</span>
           </Button>
 
           <Button

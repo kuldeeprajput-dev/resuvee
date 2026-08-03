@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     "Build a professional resume with original templates, then check it for ATS compatibility and actionable improvements.",
 };
 
+import { AuthProvider, AuthModal } from "@/modules/auth";
+import { NotificationProvider } from "@/shared/components/ui/notification-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +26,11 @@ export default function RootLayout({
       className="h-full antialiased"
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col font-sans">
-        {children}
+        <AuthProvider>
+          {children}
+          <AuthModal />
+          <NotificationProvider />
+        </AuthProvider>
       </body>
     </html>
   );

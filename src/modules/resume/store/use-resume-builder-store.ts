@@ -212,7 +212,10 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         });
       },
 
-      startFresh: () =>
+      startFresh: () => {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("active-resume-id", "new");
+        }
         set({
           data: createBlankResumeData(),
           activeSection: "basics",
@@ -221,7 +224,8 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
           writingIssues: [],
           writingHasChecked: false,
           saveLabel: "New resume",
-        }),
+        });
+      },
     }),
     {
       name: STORAGE_KEY,
