@@ -18,6 +18,7 @@ import { ResumeBuilderHeader } from "./resume-builder-header";
 import { TemplatePickerPanel, StartFreshModal } from "./resume-builder-panels";
 import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
+import { exportResumeDocx } from "../../utils/export-docx";
 import { useNotification } from "@/shared/lib/use-notification";
 
 interface ResumeBuilderProps {
@@ -292,7 +293,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         onShowMobilePreview={() => setShowMobilePreview(true)}
         onShowTailor={() => setShowTailor(true)}
         onShowWritingCheck={() => setShowWritingCheck(true)}
-        onExport={() => window.print()}
+        onExportPdf={() => window.print()}
+        onExportDocx={async () => await exportResumeDocx(data, template.accent)}
       />
 
       <div

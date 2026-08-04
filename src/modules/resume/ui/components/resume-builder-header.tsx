@@ -1,13 +1,16 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
   Check,
+  ChevronDown,
   Cloud,
   Download,
   Eye,
   FilePlus2,
+  FileSpreadsheet,
   FileText,
   Loader2,
   ScanSearch,
@@ -27,7 +30,8 @@ interface ResumeBuilderHeaderProps {
   onShowMobilePreview: () => void;
   onShowTailor: () => void;
   onShowWritingCheck: () => void;
-  onExport: () => void;
+  onExportPdf: () => void;
+  onExportDocx: () => void;
   data: ResumeData;
 }
 
@@ -41,8 +45,10 @@ export function ResumeBuilderHeader({
   onShowMobilePreview,
   onShowTailor,
   onShowWritingCheck,
-  onExport,
+  onExportPdf,
+  onExportDocx,
 }: ResumeBuilderHeaderProps) {
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const cn = (...classes: (string | boolean | undefined)[]) =>
     classes.filter(Boolean).join(" ");
 
@@ -142,16 +148,63 @@ export function ResumeBuilderHeader({
           <span className="hidden sm:inline">Preview</span>
         </Button>
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onExport}
-          className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)]"
-        >
-          <Download className="size-3.5 sm:size-4 text-emerald-600" />
-          <span className="hidden sm:inline">Export PDF</span>
-          <span className="sm:hidden">Export</span>
-        </Button>
+        {/* Export Dropdown Button with PDF & DOCX Options */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Export resume options"
+          >
+            <Download className="size-3.5 sm:size-4 text-emerald-600" />
+            <span>Export</span>
+            <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+          </button>
+
+          {showExportMenu && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setShowExportMenu(false)}
+              />
+              <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    onExportPdf();
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <FileText className="size-4" />
+                  </span>
+                  <div className="text-left">
+                    <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
+                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    onExportDocx();
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                    <FileSpreadsheet className="size-4" />
+                  </span>
+                  <div className="text-left">
+                    <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
+                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .doc file</p>
+                  </div>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
