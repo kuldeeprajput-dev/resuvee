@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Download, LayoutTemplate, Palette, Pipette, Check, X, Maximize2, Minimize2 } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Download, LayoutTemplate, Palette, Pipette, Check, X, Maximize2, Minimize2, Upload, Loader2, ChevronDown, FileText, FileSpreadsheet } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CoverLetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../../types/cover-letter";
 
@@ -24,6 +24,10 @@ interface CoverLetterCanvasHeaderProps {
   colorSwatches: ColorSwatch[];
   isMobilePreview?: boolean;
   onCloseMobilePreview?: () => void;
+  onUploadLetter?: (file: File) => void;
+  isImportingLetter?: boolean;
+  handleExportPdf?: () => void;
+  handleExportDocx?: () => void;
 }
 
 export function CoverLetterCanvasHeader({
@@ -45,7 +49,14 @@ export function CoverLetterCanvasHeader({
   colorSwatches,
   isMobilePreview,
   onCloseMobilePreview,
+  onUploadLetter,
+  isImportingLetter,
+  handleExportPdf,
+  handleExportDocx,
 }: CoverLetterCanvasHeaderProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   return (
     <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
@@ -66,13 +77,47 @@ export function CoverLetterCanvasHeader({
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 z-10">
-        {/* Templates Selector Button (First on Mobile & Desktop) */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept=".pdf,.docx,.txt"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file && onUploadLetter) {
+              onUploadLetter(file);
+              e.target.value = "";
+            }
+          }}
+          className="hidden"
+        />
+
+        {/* Upload Letter Button - Shown only in Fullscreen/Zoom mode */}
+        {(isFullscreen || isMobilePreview) && (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isImportingLetter}
+            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+            title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
+          >
+            {isImportingLetter ? (
+              <Loader2 className="size-3.5 animate-spin text-emerald-600" />
+            ) : (
+              <Upload className="size-3.5 text-emerald-600" />
+            )}
+            <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+            <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
+          </button>
+        )}
+
+        {/* Templates Selector Button */}
         <div className="relative">
           <button
             type="button"
             onClick={() => {
               setShowTemplatesMenu(!showTemplatesMenu);
               setShowDesignMenu(false);
+              setShowExportMenu(false);
             }}
             className={cn(
               "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
@@ -124,20 +169,74 @@ export function CoverLetterCanvasHeader({
           )}
         </div>
 
-        {/* Export PDF Button - Shown on Mobile & Fullscreen in place of Design button */}
-        {(isFullscreen || isMobilePreview || true) && (
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className={cn(
-              "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer",
-              isFullscreen || isMobilePreview ? "flex" : "lg:hidden flex"
+        {/* Export Dropdown Button - Shown only in Fullscreen/Zoom mode */}
+        {(isFullscreen || isMobilePreview) && (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setShowExportMenu(!showExportMenu);
+                setShowTemplatesMenu(false);
+                setShowDesignMenu(false);
+              }}
+              className={cn(
+                "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
+                showExportMenu
+                  ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
+                  : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+              )}
+              title="Export cover letter options"
+            >
+              <Download className="size-3.5 text-emerald-600" />
+              <span>Export</span>
+              <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+            </button>
+
+            {showExportMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowExportMenu(false)}
+                />
+                <div className="absolute right-0 top-10 z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportMenu(false);
+                      if (handleExportPdf) handleExportPdf();
+                      else window.print();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                      <FileText className="size-4" />
+                    </span>
+                    <div className="text-left">
+                      <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
+                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportMenu(false);
+                      if (handleExportDocx) handleExportDocx();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                      <FileSpreadsheet className="size-4" />
+                    </span>
+                    <div className="text-left">
+                      <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
+                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .docx file</p>
+                    </div>
+                  </button>
+                </div>
+              </>
             )}
-            title="Export PDF Document"
-          >
-            <Download className="size-3.5 text-emerald-600" />
-            <span className="whitespace-nowrap">Export</span>
-          </button>
+          </div>
         )}
 
         {/* Design Controls Button & Popover (Desktop Only) */}

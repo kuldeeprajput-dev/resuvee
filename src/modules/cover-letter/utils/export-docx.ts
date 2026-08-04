@@ -10,10 +10,24 @@ import {
   BorderStyle,
   AlignmentType,
 } from "docx";
-import type { CoverLetterData } from "../types/cover-letter";
+import type { CoverLetterData, TypographyFont, PageSpacing } from "../types/cover-letter";
 
-export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28785b") {
+export async function exportCoverLetterDocx(
+  data: CoverLetterData,
+  accent = "#28785b",
+  font: TypographyFont = "template",
+  pageSpacing: PageSpacing = "normal"
+) {
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
+
+  const docFont =
+    font === "serif"
+      ? "Georgia"
+      : font === "mono"
+      ? "Consolas"
+      : font === "sans"
+      ? "Calibri"
+      : "Calibri";
 
   const title = data.fullName
     ? `${data.fullName}'s Cover Letter`
@@ -25,6 +39,19 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")}.docx`;
+
+  const margins =
+    pageSpacing === "compact"
+      ? { top: 560, right: 720, bottom: 560, left: 720 }
+      : pageSpacing === "spacious"
+      ? { top: 960, right: 1100, bottom: 960, left: 1100 }
+      : { top: 710, right: 880, bottom: 710, left: 880 };
+
+  const bodyLineSpacing =
+    pageSpacing === "compact" ? 240 : pageSpacing === "spacious" ? 270 : 250;
+
+  const bodyParagraphAfter =
+    pageSpacing === "compact" ? 100 : pageSpacing === "spacious" ? 160 : 120;
 
   const topParagraphs: Paragraph[] = [];
 
@@ -39,7 +66,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
           bold: true,
           size: 38, // 19pt
           color: accentHex,
-          font: "Calibri",
+          font: docFont,
         }),
       ],
     })
@@ -47,18 +74,24 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
 
   // 2. Applicant Headline / Subtitle
   if (data.headline) {
+    const formattedHeadline = (data.headline || "")
+      .replace(/SENIORPRODUCTSPECIALIST/i, "SENIOR PRODUCT SPECIALIST")
+      .replace(/PRODUCTMANAGER/i, "PRODUCT MANAGER")
+      .replace(/SOFTWAREENGINEER/i, "SOFTWARE ENGINEER")
+      .replace(/([a-z])([A-Z])/g, "$1 $2");
+
     topParagraphs.push(
       new Paragraph({
         alignment: AlignmentType.LEFT,
-        spacing: { after: 200 },
+        spacing: { after: 140 },
         children: [
           new TextRun({
-            text: data.headline.toUpperCase(),
+            text: formattedHeadline.toUpperCase(),
             bold: true,
             size: 18, // 9pt
             color: "555555",
             characterSpacing: 20,
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -77,7 +110,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
             bold: true,
             size: 21,
             color: "1E2320",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -92,7 +125,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
             text: data.company,
             size: 21,
             color: "444444",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -107,7 +140,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
             text: data.role,
             size: 21,
             color: "666666",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -125,7 +158,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
           text: data.date || "",
           size: 20,
           color: "666666",
-          font: "Calibri",
+          font: docFont,
         }),
       ],
     }),
@@ -184,7 +217,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
             bold: true,
             size: 22, // 11pt
             color: "1E2320",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -199,13 +232,13 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
       if (!block.trim()) continue;
       bodyParagraphs.push(
         new Paragraph({
-          spacing: { after: 180, line: 276 },
+          spacing: { after: bodyParagraphAfter, line: bodyLineSpacing },
           children: [
             new TextRun({
               text: block.trim().replace(/\n/g, " "),
-              size: 22, // 11pt
+              size: 21, // 10.5pt
               color: "2D342F",
-              font: "Calibri",
+              font: docFont,
             }),
           ],
         })
@@ -221,27 +254,27 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
   if (data.signoff || data.fullName) {
     bodyParagraphs.push(
       new Paragraph({
-        spacing: { before: 240, after: 80 },
+        spacing: { before: 180, after: 60 },
         children: [
           new TextRun({
             text: data.signoff || "Sincerely,",
-            size: 22,
+            size: 21,
             color: "1E2320",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
     );
     bodyParagraphs.push(
       new Paragraph({
-        spacing: { after: 240 },
+        spacing: { after: 180 },
         children: [
           new TextRun({
             text: data.fullName || "",
             bold: true,
-            size: 22,
+            size: 21,
             color: "1E2320",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -256,14 +289,14 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
   if (contactText) {
     bodyParagraphs.push(
       new Paragraph({
-        spacing: { before: 360 },
+        spacing: { before: 1800 },
         alignment: AlignmentType.CENTER,
         children: [
           new TextRun({
             text: contactText,
             size: 18, // 9pt
             color: "666666",
-            font: "Calibri",
+            font: docFont,
           }),
         ],
       })
@@ -275,12 +308,7 @@ export async function exportCoverLetterDocx(data: CoverLetterData, accent = "#28
       {
         properties: {
           page: {
-            margin: {
-              top: 1440, // 1 inch
-              right: 1440,
-              bottom: 1440,
-              left: 1440,
-            },
+            margin: margins,
           },
         },
         children: [

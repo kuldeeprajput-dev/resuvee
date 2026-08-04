@@ -62,7 +62,7 @@ export function CoverLetterPreview({
   return (
     <article
       className={cn(
-        "resume-print-area resume-preview-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
+        "resume-print-area resume-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
         spacingClass,
         fontClass,
         isHandTool && "hand-mode"
@@ -87,7 +87,13 @@ export function CoverLetterPreview({
           onClick={(e) => onSelectField?.(e, "headline")}
           className={cn("mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]", getFieldClass("headline"))}
         >
-          {data.headline}
+          {data.headline
+            ? data.headline
+                .replace(/SENIORPRODUCTSPECIALIST/i, "SENIOR PRODUCT SPECIALIST")
+                .replace(/PRODUCTMANAGER/i, "PRODUCT MANAGER")
+                .replace(/SOFTWAREENGINEER/i, "SOFTWARE ENGINEER")
+                .replace(/([a-z])([A-Z])/g, "$1 $2")
+            : ""}
         </p>
       </header>
 

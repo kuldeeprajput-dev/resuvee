@@ -83,7 +83,7 @@ export function CoverLetterStudio() {
   const activeAccent = customAccent || activeTheme.accent;
 
   const handleExportDocx = async () => {
-    await exportCoverLetterDocx(data, activeAccent);
+    await exportCoverLetterDocx(data, activeAccent, font, pageSpacing);
   };
 
   const documentTitle = data.fullName
@@ -179,6 +179,10 @@ export function CoverLetterStudio() {
               colorSwatches={COLOR_SWATCHES}
               isMobilePreview={showMobilePreview}
               onCloseMobilePreview={() => setShowMobilePreview(false)}
+              onUploadLetter={handleUploadLetter}
+              isImportingLetter={isImportingLetter}
+              handleExportPdf={handleExportPdf}
+              handleExportDocx={handleExportDocx}
             />
 
             {/* Main Interactive Canvas Area */}
