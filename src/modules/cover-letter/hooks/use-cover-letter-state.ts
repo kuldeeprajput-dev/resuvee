@@ -22,6 +22,7 @@ export function useCoverLetterState() {
     setHistory: dataHook.setHistory,
     setFuture: dataHook.setFuture,
     setData: dataHook.setData,
+    containerRef: canvasHook.containerRef,
   });
 
   const aiHook = useCoverLetterAi({

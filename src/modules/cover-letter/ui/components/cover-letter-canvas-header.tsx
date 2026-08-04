@@ -64,10 +64,11 @@ export function CoverLetterCanvasHeader({
           <button
             type="button"
             onClick={onCloseMobilePreview}
-            className="builder-icon-button shrink-0 lg:hidden cursor-pointer"
+            className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 lg:hidden cursor-pointer"
             aria-label="Close preview"
+            title="Close preview"
           >
-            <X className="size-4" />
+            <X className="size-4 text-[var(--brand-ink)]" />
           </button>
         )}
         <div className="hidden lg:flex shrink-0 items-center gap-2">
@@ -91,24 +92,22 @@ export function CoverLetterCanvasHeader({
           className="hidden"
         />
 
-        {/* Upload Letter Button - Shown only in Fullscreen/Zoom mode */}
-        {(isFullscreen || isMobilePreview) && (
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isImportingLetter}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
-            title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
-          >
-            {isImportingLetter ? (
-              <Loader2 className="size-3.5 animate-spin text-emerald-600" />
-            ) : (
-              <Upload className="size-3.5 text-emerald-600" />
-            )}
-            <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
-            <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
-          </button>
-        )}
+        {/* Upload Letter Button - Always visible on Studio Canvas Header */}
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isImportingLetter}
+          className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+          title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
+        >
+          {isImportingLetter ? (
+            <Loader2 className="size-3.5 animate-spin text-emerald-600" />
+          ) : (
+            <Upload className="size-3.5 text-emerald-600" />
+          )}
+          <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+          <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
+        </button>
 
         {/* Templates Selector Button */}
         <div className="relative">

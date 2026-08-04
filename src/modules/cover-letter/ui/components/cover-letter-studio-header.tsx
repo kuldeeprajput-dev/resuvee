@@ -87,7 +87,7 @@ export function CoverLetterStudioHeader({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isImportingLetter}
-          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+          className="hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 items-center gap-1.5 cursor-pointer"
           title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
         >
           {isImportingLetter ? (
@@ -96,7 +96,6 @@ export function CoverLetterStudioHeader({
             <Upload className="size-3.5 sm:size-4 text-emerald-600" />
           )}
           <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
-          <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
         </button>
         <button
           type="button"

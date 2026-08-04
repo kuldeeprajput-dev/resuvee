@@ -72,6 +72,9 @@ export function CoverLetterStudio() {
     handleMouseDown,
     handleMouseMoveCanvas,
     handleMouseUpCanvas,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     handleConfirmStartFresh,
     handleSaveToCloud,
     handleUploadLetter,
@@ -194,8 +197,12 @@ export function CoverLetterStudio() {
               onMouseMove={handleMouseMoveCanvas}
               onMouseUp={handleMouseUpCanvas}
               onMouseLeave={handleMouseUpCanvas}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
               className={cn(
-                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300",
+                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300 touch-none",
                 themeStyles[canvasTheme],
                 isHandTool || isSpacePressed ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
               )}
