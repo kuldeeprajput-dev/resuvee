@@ -63,9 +63,11 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
       if (currentScrollPos < 20) {
         setIsVisible(true);
       } else if (currentScrollPos > prevScrollPos) {
-        setIsVisible(true);
-      } else {
+        // Scrolling down -> hide navbar
         setIsVisible(false);
+      } else {
+        // Scrolling up -> show navbar
+        setIsVisible(true);
       }
 
       setPrevScrollPos(currentScrollPos);
