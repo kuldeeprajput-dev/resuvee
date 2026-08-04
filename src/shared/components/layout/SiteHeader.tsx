@@ -48,6 +48,7 @@ export function Brand() {
 export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean }) {
   const [isVisible, setIsVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [imageError, setImageError] = useState(false);
   const { user, openAuthModal, signOut } = useAuthStore();
 
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
@@ -136,10 +137,12 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
                 {user ? (
                   <div className="flex items-center justify-between gap-3 px-1 py-1">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      {avatarUrl ? (
+                      {avatarUrl && !imageError ? (
                         <img
                           src={avatarUrl}
                           alt={displayName}
+                          referrerPolicy="no-referrer"
+                          onError={() => setImageError(true)}
                           className="size-8 rounded-full object-cover shrink-0"
                         />
                       ) : (
