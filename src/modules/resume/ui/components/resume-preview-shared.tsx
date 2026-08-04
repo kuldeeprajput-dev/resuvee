@@ -384,6 +384,48 @@ export function ProjectsSection({ data, accent, inverted = false, compact = fals
   );
 }
 
+export function CertificationsSection({ data, accent, inverted = false, compact = false }: SectionProps) {
+  if (!data.certifications || !data.certifications.length) return null;
+  return (
+    <section>
+      <SectionTitle accent={accent} inverted={inverted}>
+        Awards & Certifications
+      </SectionTitle>
+      <div className={compact ? "space-y-1.5" : "space-y-2"}>
+        {data.certifications.map((cert) => (
+          <article key={cert.id} className="flex items-baseline justify-between gap-2">
+            <div>
+              <h3
+                className={cn(
+                  "text-[8.5px] font-bold",
+                  inverted ? "text-white" : "text-black/82"
+                )}
+              >
+                {cert.title}
+                {cert.issuer && (
+                  <span className={cn("ml-1 font-normal", inverted ? "text-white/60" : "text-black/60")}>
+                    — {cert.issuer}
+                  </span>
+                )}
+              </h3>
+              {cert.description && cert.description !== cert.issuer && (
+                <p className={cn("text-[7.2px] leading-[1.35]", inverted ? "text-white/50" : "text-black/50")}>
+                  {cert.description}
+                </p>
+              )}
+            </div>
+            {cert.date && (
+              <span className={cn("shrink-0 text-[7px]", inverted ? "text-white/40" : "text-black/40")}>
+                {cert.date}
+              </span>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function Sheet({
   children,
   className,

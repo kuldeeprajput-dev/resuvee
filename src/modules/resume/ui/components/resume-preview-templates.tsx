@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
-import { ProfilePhoto, SectionTitle, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, Sheet } from "./resume-preview-shared";
+import { ProfilePhoto, SectionTitle, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, CertificationsSection, Sheet } from "./resume-preview-shared";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -59,6 +59,8 @@ export function BlueprintTemplate({ data, template, className, showPhoto = true 
         <div className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
           <ExperienceSection data={data} accent={template.accent} compact />
+          <ProjectsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact />
           <EducationSection data={data} accent={template.accent} compact />
         </div>
       </main>
@@ -101,6 +103,9 @@ export function ChronologicalTemplate(props: ResumePreviewProps) {
             <ProjectsSection data={data} accent={template.accent} compact />
           </div>
         )}
+        <div className="border-t border-black/12 pt-5">
+          <CertificationsSection data={data} accent={template.accent} compact />
+        </div>
       </main>
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
@@ -139,6 +144,7 @@ export function CompactTemplate(props: ResumePreviewProps) {
         <aside className="space-y-5 border-l border-black/12 pl-5">
           <SkillsSection data={data} accent={template.accent} compact />
           <EducationSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact />
         </aside>
       </main>
 
@@ -180,6 +186,7 @@ export function HybridTemplate(props: ResumePreviewProps) {
           <ProjectsSection data={data} accent={template.accent} compact />
         </div>
         <ExperienceSection data={data} accent={template.accent} compact />
+        <CertificationsSection data={data} accent={template.accent} compact />
         <div className="border-t border-black/12 pt-4">
           <EducationSection data={data} accent={template.accent} compact />
         </div>
@@ -226,6 +233,7 @@ export function FinanceTemplate(props: ResumePreviewProps) {
           <ProjectsSection data={data} accent={template.accent} compact />
           <div className="space-y-5">
             <SkillsSection data={data} accent={template.accent} compact pills />
+            <CertificationsSection data={data} accent={template.accent} compact />
             <EducationSection data={data} accent={template.accent} compact />
           </div>
         </div>
@@ -259,6 +267,7 @@ export function HealthcareTemplate(props: ResumePreviewProps) {
         <div className="mt-7 space-y-6">
           <SkillsSection data={data} accent={template.accent} compact pills />
           <EducationSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact />
         </div>
         <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
           Care · Quality · Outcomes

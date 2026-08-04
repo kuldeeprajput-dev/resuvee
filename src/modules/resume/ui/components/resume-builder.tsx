@@ -19,6 +19,7 @@ import { TemplatePickerPanel, StartFreshModal } from "./resume-builder-panels";
 import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
 import { exportResumeDocx } from "../../utils/export-docx";
+import { extractTextFromResumeFile, parseExtractedResumeText } from "../../utils/import-resume";
 import { useNotification } from "@/shared/lib/use-notification";
 
 interface ResumeBuilderProps {
@@ -59,6 +60,26 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [isImportingResume, setIsImportingResume] = useState(false);
+
+  const handleUploadResume = async (file: File) => {
+    try {
+      setIsImportingResume(true);
+      const rawText = await extractTextFromResumeFile(file);
+      if (!rawText || !rawText.trim()) {
+        showToast("Could not extract readable text from uploaded file.", "error");
+        return;
+      }
+      const parsedData = parseExtractedResumeText(rawText, data);
+      updateData(parsedData);
+      showToast("Resume uploaded and parsed successfully!", "success");
+    } catch (err) {
+      console.error("Failed to upload resume:", err);
+      showToast("Failed to parse uploaded resume file.", "error");
+    } finally {
+      setIsImportingResume(false);
+    }
+  };
 
   useEffect(() => {
     async function loadCloudResume() {
@@ -295,6 +316,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         onShowWritingCheck={() => setShowWritingCheck(true)}
         onExportPdf={() => window.print()}
         onExportDocx={async () => await exportResumeDocx(data, template.accent)}
+        onUploadResume={handleUploadResume}
+        isImportingResume={isImportingResume}
       />
 
       <div
