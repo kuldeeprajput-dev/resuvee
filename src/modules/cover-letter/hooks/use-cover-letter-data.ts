@@ -118,7 +118,7 @@ export function useCoverLetterData() {
     setHistory((prev) => [...prev, data]);
     setFuture([]);
     setData(emptyLetter);
-    setCustomAccent("");
+    setCustomAccent("#000000");
     setTheme(themes[0].id);
     if (typeof window !== "undefined") {
       localStorage.setItem("active-cover-letter-id", "new");

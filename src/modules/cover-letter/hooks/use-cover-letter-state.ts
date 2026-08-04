@@ -58,6 +58,8 @@ export function useCoverLetterState() {
   // Wrap handleConfirmStartFresh to also close the modal
   const handleConfirmStartFresh = () => {
     dataHook.handleConfirmStartFresh();
+    canvasHook.setFont("template");
+    canvasHook.setPageSpacing("normal");
     canvasHook.setShowStartFreshModal(false);
   };
 
