@@ -196,7 +196,7 @@ export default function Home() {
             <p className="max-w-md text-base leading-7 text-[var(--brand-muted)]">
               Every card is rendered from the same layout and starter content used by the builder,
               so the template you choose is the document you edit. Each design is original to
-              Resulyra.
+              Resuvee.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export default function Home() {
               <div className="flex flex-col justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
-                    The Resulyra toolkit
+                    The Resuvee toolkit
                   </p>
                   <h2 className="mt-4 max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
                     One workspace for the whole job search.

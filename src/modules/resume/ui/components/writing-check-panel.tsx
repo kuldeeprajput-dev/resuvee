@@ -241,7 +241,7 @@ export function WritingCheckPanel({
                   <div>
                     <p className="text-xs font-extrabold text-emerald-950">You stay in control</p>
                     <p className="mt-1 text-[11px] leading-5 text-emerald-900/70">
-                      Each suggestion requires your approval. Resulyra never adds employers,
+                      Each suggestion requires your approval. Resuvee never adds employers,
                       achievements, skills, or numbers that you did not write.
                     </p>
                   </div>

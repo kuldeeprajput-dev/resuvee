@@ -281,7 +281,7 @@ export function AuthModal() {
             ) : (
               <>
                 <span>
-                  {mode === "sign_in" ? "Sign In to ResuLyra" : "Create Free Account"}
+                  {mode === "sign_in" ? "Sign In to Resuvee" : "Create Free Account"}
                 </span>
                 <ArrowRight className="size-4" />
               </>

@@ -57,7 +57,7 @@ function MeridianTemplate(props: ResumePreviewProps) {
         </main>
       </div>
       <p className="absolute bottom-5 right-11 text-[5.5px] font-semibold uppercase tracking-[0.14em] text-black/25">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </p>
     </Sheet>
   );
@@ -107,7 +107,7 @@ function EditorialTemplate(props: ResumePreviewProps) {
 
       <div className="mt-auto pt-2 flex items-center justify-between border-t border-black/15 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
         <span>{data.basics.website}</span>
-        <span>Resulyra · {template.name}</span>
+        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -157,7 +157,7 @@ function SummitTemplate(props: ResumePreviewProps) {
           <SkillsSection data={data} accent={template.accent} inverted compact />
         </div>
         <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resulyra · {template.name}
+          Resuvee · {template.name}
         </p>
       </aside>
     </Sheet>
@@ -194,7 +194,7 @@ function ColumnTemplate(props: ResumePreviewProps) {
         </main>
       </div>
       <p className="absolute bottom-5 left-11 text-[5px] uppercase tracking-[0.18em] text-black/20">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </p>
     </Sheet>
   );
@@ -240,7 +240,7 @@ function HorizonTemplate(props: ResumePreviewProps) {
         </aside>
       </div>
       <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-[#2d70a6]/35">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </p>
     </Sheet>
   );

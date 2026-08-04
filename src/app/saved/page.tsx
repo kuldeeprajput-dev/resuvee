@@ -157,7 +157,7 @@ export default function SavedDocumentsPage() {
   const handleOpenResumeInBuilder = (resume: SavedResumeItem) => {
     if (typeof window !== "undefined" && resume.data) {
       localStorage.setItem("active-resume-id", resume.id);
-      localStorage.setItem("resulyra-builder-v3", JSON.stringify({ state: { data: resume.data }, version: 3 }));
+      localStorage.setItem("resuvee-builder-v3", JSON.stringify({ state: { data: resume.data }, version: 3 }));
       window.location.href = "/builder";
     } else {
       router.push("/builder");
@@ -167,7 +167,7 @@ export default function SavedDocumentsPage() {
   const handleCreateNewResume = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("active-resume-id", "new");
-      localStorage.removeItem("resulyra-builder-v3");
+      localStorage.removeItem("resuvee-builder-v3");
       localStorage.removeItem("resume-builder-data");
       window.location.href = "/builder";
     } else {

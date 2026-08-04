@@ -5,8 +5,8 @@ import type {
   ColorSwatch,
 } from "../types/cover-letter";
 
-export const STORAGE_KEY = "resulyra_cover_letter";
-export const RESUME_KEY = "resulyra_builder_draft";
+export const STORAGE_KEY = "resuvee_cover_letter";
+export const RESUME_KEY = "resuvee_builder_draft";
 
 export const emptyLetter: CoverLetterData = {
   fullName: "",

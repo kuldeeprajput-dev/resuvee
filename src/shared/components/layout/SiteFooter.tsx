@@ -88,8 +88,8 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         </nav>
       </div>
       <div className="border-t border-black/[0.07]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-5 py-4 text-[11px] font-medium text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
-          <p>© 2026 Resulyra. Built for better applications.</p>
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 text-xs text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+          <p>© 2026 Resuvee. Built for better applications.</p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>Original, copyright-safe template designs</span>
             <span className="hidden text-black/20 sm:inline">•</span>

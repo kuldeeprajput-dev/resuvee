@@ -56,8 +56,8 @@ interface ResumeBuilderState extends PersistedBuilderState {
   startFresh: () => void;
 }
 
-const STORAGE_KEY = "resulyra-builder-v3";
-const LEGACY_STORAGE_KEYS = ["resulyra-draft-v1", "resumix-draft-v1"];
+const STORAGE_KEY = "resuvee-builder-v3";
+const LEGACY_STORAGE_KEYS = ["resulyra-builder-v3", "resulyra-draft-v1", "resumix-draft-v1"];
 
 export function isResumeTemplateId(value: string | undefined): value is ResumeTemplateId {
   return resumeTemplates.some((template) => template.id === value);

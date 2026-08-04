@@ -38,7 +38,7 @@ export function BlueprintTemplate({ data, template, className, showPhoto = true 
           <ProjectsSection data={data} accent={template.accent} inverted compact />
         </div>
         <p className="relative mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resulyra · {template.name}
+          Resuvee · {template.name}
         </p>
       </aside>
 
@@ -110,7 +110,7 @@ export function ChronologicalTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>{data.basics.website}</span>
-        <span>Resulyra · {template.name}</span>
+        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -149,7 +149,7 @@ export function CompactTemplate(props: ResumePreviewProps) {
       </main>
 
       <p className="absolute bottom-4 right-9 text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </p>
     </Sheet>
   );
@@ -193,7 +193,7 @@ export function HybridTemplate(props: ResumePreviewProps) {
       </main>
 
       <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </p>
     </Sheet>
   );
@@ -241,7 +241,7 @@ export function FinanceTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-10 right-10 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Performance · Planning · Decisions</span>
-        <span>Resulyra · {template.name}</span>
+        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -294,7 +294,7 @@ export function HealthcareTemplate(props: ResumePreviewProps) {
           </div>
         </div>
         <p className="absolute bottom-5 right-8 text-[5px] uppercase tracking-[0.14em] text-black/22">
-          Resulyra · {template.name}
+          Resuvee · {template.name}
         </p>
       </main>
     </Sheet>
@@ -337,7 +337,7 @@ export function SalesTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-9 right-9 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Revenue · Relationships · Growth</span>
-        <span>Resulyra · {template.name}</span>
+        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );

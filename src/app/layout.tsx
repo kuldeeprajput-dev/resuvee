@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    default: "Resulyra — Build better resumes",
-    template: "%s | Resulyra",
+    default: "Resuvee — Build better resumes",
+    template: "%s | Resuvee",
   },
   description:
     "Build a professional resume with original templates, then check it for ATS compatibility and actionable improvements.",

@@ -26,12 +26,12 @@ export function Brand() {
     <Link
       href="/"
       className="group inline-flex items-center gap-2 rounded-md leading-none focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--brand-lime)]/40 sm:gap-2.5"
-      aria-label="Resulyra home"
+      aria-label="Resuvee home"
     >
       <span className="relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-black/10 bg-white transition-transform duration-300 group-hover:-rotate-2 sm:size-9">
         <Image
           src="/resulyra-mark.png"
-          alt="Resulyra logo"
+          alt="Resuvee logo"
           width={28}
           height={28}
           priority
@@ -39,7 +39,7 @@ export function Brand() {
         />
       </span>
       <span className="flex items-center text-[16px] font-bold leading-none tracking-[-0.035em] text-[var(--brand-ink)] sm:text-[17px]">
-        Resulyra
+        Resuvee
       </span>
     </Link>
   );

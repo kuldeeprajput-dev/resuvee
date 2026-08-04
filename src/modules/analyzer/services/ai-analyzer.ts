@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import type { ResumeAnalysis } from "../index";
 import { auditCategoryScores, auditResumeText, calibratedResumeScore } from "./resume-evidence";
 
-const ANALYSIS_VERSION = "resulyra-calibrated-v1";
+const ANALYSIS_VERSION = "resuvee-calibrated-v1";
 const SYSTEM_PROMPT =
   'You are the semantic reviewer in a resume audit. Deterministic document checks are supplied separately and control the final score; do not override them. Return only valid JSON, no markdown. Use only facts in the resume. Never invent skills, metrics, employers, requirements, experience, or career gaps. There is no job description, so keywordMatchScore means inferred role-language coverage, not job match. Strengths must cite concrete evidence. Weaknesses and suggestions must identify an editable line, section, or missing proof—not recommend learning unrelated skills. If the document has no work-experience section, do not label the candidate Mid-level or Senior. Return at most 3 strengths, 4 weaknesses, 6 missing keywords, 4 suggestions, 12 skills, and 3 parser issues. Exact shape: {"role":"","level":"","summary":"","techStack":[],"skillsFound":[],"skillsMissing":[],"strengths":[],"weaknesses":[],"missingKeywords":[],"suggestions":[],"advice":"","atsCompatibility":{"keywordMatchScore":0,"issues":[]}}';
 

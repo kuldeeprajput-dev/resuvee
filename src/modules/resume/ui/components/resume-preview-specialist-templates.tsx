@@ -170,7 +170,7 @@ export function AnalystTemplate(props: ResumePreviewProps) {
       </div>
 
       <div className="mt-auto pt-2 flex items-center justify-end text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resulyra · {template.name}
+        Resuvee · {template.name}
       </div>
     </Sheet>
   );
@@ -205,7 +205,7 @@ export function FresherTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Education · Projects · Skills</span>
-        <span>Resulyra · {template.name}</span>
+        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -228,7 +228,7 @@ export function FirstStepTemplate(props: ResumePreviewProps) {
           <SkillsSection data={data} accent={template.accent} compact pills />
         </div>
         <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
-          Resulyra · {template.name}
+          Resuvee · {template.name}
         </p>
       </aside>
 
@@ -303,7 +303,7 @@ export function PivotTemplate(props: ResumePreviewProps) {
           <ExperienceSection data={data} accent={template.accent} compact />
         </div>
         <p className="absolute bottom-5 right-8 text-[5px] uppercase tracking-[0.14em] text-black/22">
-          Resulyra · {template.name}
+          Resuvee · {template.name}
         </p>
       </main>
     </Sheet>

@@ -109,7 +109,7 @@ export function TailorPanel({ data, onAddKeywords, onClose }: TailorPanelProps) 
             Paste the job description
           </label>
           <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
-            Resulyra checks role language locally in your browser. Nothing is uploaded.
+            Resuvee checks role language locally in your browser. Nothing is uploaded.
           </p>
           <textarea
             id="job-description"
