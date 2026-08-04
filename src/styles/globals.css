@@ -436,23 +436,32 @@
     overflow: hidden !important;
   }
 
-  .resume-print-area,
   .resume-preview-sheet {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
+    position: static !important;
     margin: 0 !important;
-    padding: 18mm 20mm !important;
+    padding: 0 !important;
+    border: none !important;
     box-shadow: none !important;
     transform: none !important;
+  }
+
+  article.resume-print-area {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 595px !important;
+    height: 842px !important;
+    min-height: 842px !important;
+    max-height: 842px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    zoom: 1.33393 !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
     background: white !important;
     box-sizing: border-box !important;
+    visibility: visible !important;
   }
 
   article.cover-letter-print-sheet {

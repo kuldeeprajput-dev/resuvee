@@ -219,6 +219,15 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         }
         set({
           data: createBlankResumeData(),
+          resumeStyle: {
+            accent: "#000000",
+            font: "template",
+            showPhoto: true,
+            pagePadding: "normal",
+            sectionSpacing: "normal",
+            fontSizeScale: 1.0,
+            lineHeight: "normal",
+          },
           activeSection: "basics",
           history: [],
           future: [],

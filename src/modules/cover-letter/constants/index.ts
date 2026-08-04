@@ -48,6 +48,7 @@ export const themes: ThemeOption[] = [
 ];
 
 export const COLOR_SWATCHES: ColorSwatch[] = [
+  { name: "Black", value: "#000000" },
   { name: "Forest", value: "#28785b" },
   { name: "Charcoal", value: "#1e2320" },
   { name: "Navy", value: "#1e3a8a" },

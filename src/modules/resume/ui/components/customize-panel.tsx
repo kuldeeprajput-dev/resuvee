@@ -24,7 +24,7 @@ interface CustomizePanelProps {
 }
 
 export const defaultResumeStyle: ResumeStyle = {
-  accent: "",
+  accent: "#000000",
   font: "template",
   showPhoto: true,
   pagePadding: "normal",
@@ -34,6 +34,7 @@ export const defaultResumeStyle: ResumeStyle = {
 };
 
 const colors = [
+  { name: "Black", value: "#000000" },
   { name: "Forest", value: "#28785b" },
   { name: "Ink", value: "#243934" },
   { name: "Ocean", value: "#2f6fa3" },

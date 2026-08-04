@@ -8,6 +8,7 @@ import { useAuthStore } from "../../store/use-auth-store";
 export function UserNav() {
   const { user, openAuthModal, signOut } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,10 +46,12 @@ export function UserNav() {
         onClick={() => setIsOpen(!isOpen)}
         className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold text-[var(--brand-ink)] transition-colors hover:bg-black/5 cursor-pointer"
       >
-        {avatarUrl ? (
+        {avatarUrl && !imageError ? (
           <img
             src={avatarUrl}
             alt={displayName}
+            referrerPolicy="no-referrer"
+            onError={() => setImageError(true)}
             className="size-5 rounded-full object-cover shrink-0"
           />
         ) : (

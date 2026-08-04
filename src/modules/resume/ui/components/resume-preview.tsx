@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
-import { ProfilePhoto, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, Sheet } from "./resume-preview-shared";
+import { ProfilePhoto, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, CertificationsSection, Sheet } from "./resume-preview-shared";
 import { BlueprintTemplate, ChronologicalTemplate, CompactTemplate, HybridTemplate, FinanceTemplate, HealthcareTemplate, SalesTemplate } from "./resume-preview-templates";
 import { AnalystTemplate, FresherTemplate, FirstStepTemplate, PivotTemplate } from "./resume-preview-specialist-templates";
 
@@ -48,6 +48,7 @@ function MeridianTemplate(props: ResumePreviewProps) {
         <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
           <SkillsSection data={data} accent={template.accent} compact pills />
           <ProjectsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact />
           <EducationSection data={data} accent={template.accent} compact />
         </aside>
         <main className="space-y-5">
@@ -67,42 +68,44 @@ function EditorialTemplate(props: ResumePreviewProps) {
   return (
     <Sheet
       pagePadding={pagePadding}
-      className={cn("bg-[#fffefb] px-10 py-9 font-serif", className)}
+      className={cn("bg-[#fffefb] px-9 py-7 font-serif flex flex-col justify-between min-h-[842px] h-[842px]", className)}
     >
-      <header className="border-b border-black/55 pb-4 text-center">
-        <h1 className="text-[27px] font-semibold uppercase leading-none tracking-[0.08em] text-black/85">
-          {data.basics.fullName || "Your Name"}
-        </h1>
-        <p
-          className="mt-2 text-[7px] font-bold uppercase tracking-[0.16em]"
-          style={{ color: template.accent }}
-        >
-          {data.basics.headline}
-        </p>
-        <div className="mt-2 flex justify-center font-sans">
-          <ContactList data={data} horizontal hideIcons />
-        </div>
-      </header>
-
-      <main className="pt-4">
-        {data.basics.summary && (
-          <section className="border-b border-black/25 pb-3 text-center">
-            <h2 className="mb-1 text-[8px] font-bold">Professional profile</h2>
-            <p className="mx-auto max-w-[475px] text-[6.8px] leading-[1.5] text-black/58">
-              {data.basics.summary}
-            </p>
-          </section>
-        )}
-        <div className="space-y-4 pt-4 font-sans">
-          <ExperienceSection data={data} accent={template.accent} compact />
-          <EducationSection data={data} accent={template.accent} compact />
-          <div className="grid grid-cols-2 gap-8 border-t border-black/20 pt-4">
-            <ProjectsSection data={data} accent={template.accent} compact />
-            <SkillsSection data={data} accent={template.accent} compact pills />
+      <div>
+        <header className="border-b border-black/55 pb-3 text-center">
+          <h1 className="text-[25px] font-semibold uppercase leading-none tracking-[0.08em] text-black/85">
+            {data.basics.fullName || "Your Name"}
+          </h1>
+          <p
+            className="mt-1.5 text-[7px] font-bold uppercase tracking-[0.16em]"
+            style={{ color: template.accent }}
+          >
+            {data.basics.headline}
+          </p>
+          <div className="mt-1.5 flex justify-center font-sans">
+            <ContactList data={data} horizontal hideIcons />
           </div>
-        </div>
-      </main>
-      <div className="absolute inset-x-10 bottom-5 flex items-center justify-between border-t border-black/15 pt-2 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
+        </header>
+
+        <main className="pt-3">
+          {data.basics.summary && (
+            <section className="border-b border-black/25 pb-2 text-center">
+              <h2 className="mb-0.5 text-[8px] font-bold">Professional profile</h2>
+              <p className="mx-auto max-w-[475px] text-[6.8px] leading-[1.4] text-black/58">
+                {data.basics.summary}
+              </p>
+            </section>
+          )}
+          <div className="space-y-3 pt-3 font-sans">
+            <SkillsSection data={data} accent={template.accent} compact pills />
+            <ExperienceSection data={data} accent={template.accent} compact />
+            <ProjectsSection data={data} accent={template.accent} compact />
+            <CertificationsSection data={data} accent={template.accent} compact />
+            <EducationSection data={data} accent={template.accent} compact />
+          </div>
+        </main>
+      </div>
+
+      <div className="mt-auto pt-2 flex items-center justify-between border-t border-black/15 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
         <span>{data.basics.website}</span>
         <span>Resulyra · {template.name}</span>
       </div>
