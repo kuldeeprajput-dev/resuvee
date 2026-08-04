@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Cloud, Download, Eye, FileText, Sparkles, RotateCcw, Loader2, Check } from "lucide-react";
+import { ArrowLeft, Cloud, Download, Eye, FileText, Sparkles, RotateCcw, Loader2, Check, Upload, ChevronDown, FileSpreadsheet } from "lucide-react";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 
 interface CoverLetterStudioHeaderProps {
@@ -13,7 +13,10 @@ interface CoverLetterStudioHeaderProps {
   setShowAiDrawer: (v: boolean) => void;
   setShowStartFreshModal: (v: boolean) => void;
   handleExportPdf: () => void;
+  handleExportDocx: () => void;
   setShowMobilePreview: (v: boolean) => void;
+  onUploadLetter?: (file: File) => void;
+  isImportingLetter?: boolean;
 }
 
 export function CoverLetterStudioHeader({
@@ -24,8 +27,14 @@ export function CoverLetterStudioHeader({
   setShowAiDrawer,
   setShowStartFreshModal,
   handleExportPdf,
+  handleExportDocx,
   setShowMobilePreview,
+  onUploadLetter,
+  isImportingLetter,
 }: CoverLetterStudioHeaderProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   return (
     <header className="no-print flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
       <div className="flex h-full items-center min-w-0 gap-1.5 sm:gap-3">
@@ -60,6 +69,34 @@ export function CoverLetterStudioHeader({
 
       {/* Top Header Action Buttons */}
       <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept=".pdf,.docx,.txt"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file && onUploadLetter) {
+              onUploadLetter(file);
+              e.target.value = "";
+            }
+          }}
+          className="hidden"
+        />
+
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isImportingLetter}
+          className="hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 items-center gap-1.5 cursor-pointer"
+          title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
+        >
+          {isImportingLetter ? (
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
+          ) : (
+            <Upload className="size-3.5 sm:size-4 text-emerald-600" />
+          )}
+          <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+        </button>
         <button
           type="button"
           onClick={handleSaveToCloud}
@@ -109,17 +146,63 @@ export function CoverLetterStudioHeader({
           <span className="hidden sm:inline">Preview</span>
         </button>
 
-        {/* Export PDF Button */}
-        <button
-          type="button"
-          onClick={handleExportPdf}
-          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
-          title="Export PDF Document"
-        >
-          <Download className="size-3.5 sm:size-4 text-emerald-600" />
-          <span className="hidden sm:inline">Export PDF</span>
-          <span className="sm:hidden">Export</span>
-        </button>
+        {/* Export Dropdown Button with PDF & DOCX Options */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            title="Export cover letter options"
+          >
+            <Download className="size-3.5 sm:size-4 text-emerald-600" />
+            <span>Export</span>
+            <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+          </button>
+
+          {showExportMenu && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setShowExportMenu(false)}
+              />
+              <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    handleExportPdf();
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <FileText className="size-4" />
+                  </span>
+                  <div className="text-left">
+                    <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
+                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    handleExportDocx();
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                    <FileSpreadsheet className="size-4" />
+                  </span>
+                  <div className="text-left">
+                    <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
+                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .doc file</p>
+                  </div>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

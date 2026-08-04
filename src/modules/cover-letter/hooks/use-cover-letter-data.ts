@@ -6,6 +6,7 @@ import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
 import type { CoverLetterData, CoverLetterTheme } from "../types/cover-letter";
 import { STORAGE_KEY, emptyLetter, themes } from "../constants";
+import { extractTextFromCoverLetterFile, parseExtractedLetterText } from "../utils/import-letter";
 
 export function useCoverLetterData() {
   const user = useAuthStore((state) => state.user);
@@ -18,6 +19,7 @@ export function useCoverLetterData() {
   const [saveLabel, setSaveLabel] = useState("Saved locally");
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [isImportingLetter, setIsImportingLetter] = useState(false);
 
   const [history, setHistory] = useState<CoverLetterData[]>([]);
   const [future, setFuture] = useState<CoverLetterData[]>([]);
@@ -189,6 +191,30 @@ export function useCoverLetterData() {
     }
   };
 
+  const handleUploadLetter = async (file: File) => {
+    setIsImportingLetter(true);
+    try {
+      const rawText = await extractTextFromCoverLetterFile(file);
+      if (!rawText || !rawText.trim()) {
+        throw new Error("Could not read text from this file. Please choose a readable PDF, DOCX, or TXT file.");
+      }
+      setHistory((prev) => [...prev, data]);
+      setFuture([]);
+      const updatedData = parseExtractedLetterText(rawText, data);
+      setData(updatedData);
+      showToast(
+        "Cover Letter Uploaded",
+        "Your letter was loaded into the studio. You can now edit all fields and layout.",
+        "success"
+      );
+    } catch (err: any) {
+      console.error("Upload cover letter error:", err);
+      showToast("Upload Error", err.message || "Failed to read cover letter file.", "error");
+    } finally {
+      setIsImportingLetter(false);
+    }
+  };
+
   return {
     data, setData,
     theme, setTheme,
@@ -196,6 +222,7 @@ export function useCoverLetterData() {
     saveLabel,
     isSaving,
     saveStatus,
+    isImportingLetter,
     history, setHistory,
     future, setFuture,
     update,
@@ -203,5 +230,6 @@ export function useCoverLetterData() {
     handleRedo,
     handleConfirmStartFresh,
     handleSaveToCloud,
+    handleUploadLetter,
   };
 }

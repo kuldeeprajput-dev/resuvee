@@ -22,26 +22,35 @@ export function NotificationProvider() {
               className={cn(
                 "pointer-events-auto flex items-start gap-3 rounded-2xl p-4 shadow-xl border backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-5",
                 isError
-                  ? "bg-red-950/95 border-red-800/50 text-white"
+                  ? "bg-red-50/95 border-red-200 text-red-950 shadow-red-950/5"
                   : isSuccess
-                    ? "bg-emerald-950/95 border-emerald-800/50 text-white"
-                    : "bg-[#1f2421]/95 border-black/20 text-white"
+                    ? "bg-[#ecfdf5]/95 border-[#a7f3d0] text-[#064e3b] shadow-emerald-950/5"
+                    : "bg-white/95 border-black/15 text-[var(--brand-ink)] shadow-black/5"
               )}
             >
               <div className="shrink-0 mt-0.5">
                 {isError ? (
-                  <AlertCircle className="size-5 text-red-400" />
+                  <AlertCircle className="size-5 text-red-600" />
                 ) : isSuccess ? (
-                  <CheckCircle2 className="size-5 text-emerald-400" />
+                  <CheckCircle2 className="size-5 text-emerald-600" />
                 ) : (
-                  <Info className="size-5 text-emerald-400" />
+                  <Info className="size-5 text-emerald-600" />
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
                 <h4 className="text-xs font-bold tracking-wide">{toast.title}</h4>
                 {toast.message && (
-                  <p className="text-[11px] text-white/80 mt-0.5 leading-relaxed">
+                  <p
+                    className={cn(
+                      "text-[11px] mt-0.5 leading-relaxed font-medium",
+                      isError
+                        ? "text-red-800"
+                        : isSuccess
+                          ? "text-[#047857]"
+                          : "text-[var(--brand-muted)]"
+                    )}
+                  >
                     {toast.message}
                   </p>
                 )}
@@ -50,7 +59,14 @@ export function NotificationProvider() {
               <button
                 type="button"
                 onClick={() => removeToast(toast.id)}
-                className="shrink-0 size-6 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                className={cn(
+                  "shrink-0 size-6 rounded-lg flex items-center justify-center transition cursor-pointer",
+                  isError
+                    ? "text-red-400 hover:text-red-800 hover:bg-red-100"
+                    : isSuccess
+                      ? "text-emerald-500 hover:text-emerald-800 hover:bg-emerald-100"
+                      : "text-black/40 hover:text-black hover:bg-black/5"
+                )}
               >
                 <X className="size-3.5" />
               </button>

@@ -22,6 +22,7 @@ interface UseSelectionOptions {
   setHistory: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
   setFuture: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
   setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
+  containerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export function useCoverLetterSelection({
@@ -35,6 +36,7 @@ export function useCoverLetterSelection({
   setHistory,
   setFuture,
   setData,
+  containerRef: externalContainerRef,
 }: UseSelectionOptions) {
   const [selectedField, setSelectedField] = useState<keyof CoverLetterData | null>(null);
   const [highlightRect, setHighlightRect] = useState<{
@@ -44,7 +46,8 @@ export function useCoverLetterSelection({
   const [inlineText, setInlineText] = useState("");
   const [showColorPicker, setShowColorPicker] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const localContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = externalContainerRef || localContainerRef;
   const selectedDomRef = useRef<HTMLElement | null>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
 

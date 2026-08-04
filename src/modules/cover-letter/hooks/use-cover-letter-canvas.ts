@@ -111,6 +111,35 @@ export function useCoverLetterCanvas() {
     };
   }, []);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Prevent full-screen browser zoom on trackpad pinch / touch pinch, scaling ONLY the document canvas
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onWheelNative = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        setZoom((prev) => Math.min(Math.max(prev + (e.deltaY > 0 ? -5 : 5), 30), 200));
+      }
+    };
+
+    const onTouchMoveNative = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener("wheel", onWheelNative, { passive: false });
+    el.addEventListener("touchmove", onTouchMoveNative, { passive: false });
+
+    return () => {
+      el.removeEventListener("wheel", onWheelNative);
+      el.removeEventListener("touchmove", onTouchMoveNative);
+    };
+  }, []);
+
   const handleWheel = (e: React.WheelEvent) => {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
@@ -132,6 +161,43 @@ export function useCoverLetterCanvas() {
   };
 
   const handleMouseUpCanvas = () => setIsDragging(false);
+
+  // Mobile Touch Pinch-to-Zoom & Touch Pan
+  const touchStartDistRef = useRef<number | null>(null);
+  const touchStartZoomRef = useRef<number>(72);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      touchStartDistRef.current = dist;
+      touchStartZoomRef.current = zoom;
+    } else if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.touches[0].clientX - pan.x, y: e.touches[0].clientY - pan.y });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && touchStartDistRef.current !== null) {
+      const currentDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const scale = currentDist / touchStartDistRef.current;
+      const newZoom = Math.min(Math.max(Math.round(touchStartZoomRef.current * scale), 30), 200);
+      setZoom(newZoom);
+    } else if (e.touches.length === 1 && isDragging) {
+      setPan({ x: e.touches[0].clientX - dragStart.x, y: e.touches[0].clientY - dragStart.y });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartDistRef.current = null;
+    setIsDragging(false);
+  };
 
   return {
     splitPercent, setSplitPercent,
@@ -155,9 +221,13 @@ export function useCoverLetterCanvas() {
     containerWidth,
     showStartFreshModal, setShowStartFreshModal,
     showAiDrawer, setShowAiDrawer,
+    containerRef,
     handleWheel,
     handleMouseDown,
     handleMouseMoveCanvas,
     handleMouseUpCanvas,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
   };
 }

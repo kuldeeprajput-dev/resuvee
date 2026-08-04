@@ -11,6 +11,7 @@ import { CoverLetterStudioHeader } from "./cover-letter-studio-header";
 import { CoverLetterStartFreshModal } from "./cover-letter-start-fresh-modal";
 import { CoverLetterAiDrawer } from "./cover-letter-ai-drawer";
 import { useCoverLetterState } from "../../hooks/use-cover-letter-state";
+import { exportCoverLetterDocx } from "../../utils/export-docx";
 import { COLOR_SWATCHES, themeStyles, themes, getStarterCopy } from "../../constants";
 
 export function CoverLetterStudio() {
@@ -51,6 +52,7 @@ export function CoverLetterStudio() {
     aiSuccessMessage,
     isSaving,
     saveStatus,
+    isImportingLetter,
     selectedField,
     highlightRect,
     toolbarPos,
@@ -70,14 +72,22 @@ export function CoverLetterStudio() {
     handleMouseDown,
     handleMouseMoveCanvas,
     handleMouseUpCanvas,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     handleConfirmStartFresh,
     handleSaveToCloud,
+    handleUploadLetter,
     handleGenerateAiCoverLetter,
     handleExportPdf,
   } = state;
 
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const activeAccent = customAccent || activeTheme.accent;
+
+  const handleExportDocx = async () => {
+    await exportCoverLetterDocx(data, activeAccent, font, pageSpacing);
+  };
 
   const documentTitle = data.fullName
     ? `${data.fullName}'s Cover Letter`
@@ -92,10 +102,13 @@ export function CoverLetterStudio() {
         documentTitle={documentTitle}
         isSaving={isSaving}
         saveStatus={saveStatus}
+        isImportingLetter={isImportingLetter}
         handleSaveToCloud={handleSaveToCloud}
+        onUploadLetter={handleUploadLetter}
         setShowAiDrawer={setShowAiDrawer}
         setShowStartFreshModal={setShowStartFreshModal}
         handleExportPdf={handleExportPdf}
+        handleExportDocx={handleExportDocx}
         setShowMobilePreview={setShowMobilePreview}
       />
 
@@ -169,6 +182,10 @@ export function CoverLetterStudio() {
               colorSwatches={COLOR_SWATCHES}
               isMobilePreview={showMobilePreview}
               onCloseMobilePreview={() => setShowMobilePreview(false)}
+              onUploadLetter={handleUploadLetter}
+              isImportingLetter={isImportingLetter}
+              handleExportPdf={handleExportPdf}
+              handleExportDocx={handleExportDocx}
             />
 
             {/* Main Interactive Canvas Area */}
@@ -180,8 +197,12 @@ export function CoverLetterStudio() {
               onMouseMove={handleMouseMoveCanvas}
               onMouseUp={handleMouseUpCanvas}
               onMouseLeave={handleMouseUpCanvas}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
               className={cn(
-                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300",
+                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300 touch-none",
                 themeStyles[canvasTheme],
                 isHandTool || isSpacePressed ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
               )}
