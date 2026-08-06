@@ -81,7 +81,7 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
     <header className="sticky top-3 z-[100] w-full pointer-events-none px-3 sm:top-4 sm:px-4 transition-all duration-300">
       <div
         className={cn(
-          "pointer-events-auto mx-auto flex h-[54px] w-full max-w-5xl items-center justify-between gap-2 rounded-[20px] border border-black/[0.08] px-3 shadow-[0_12px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-300 sm:h-[64px] sm:rounded-[22px] sm:px-5",
+          "pointer-events-auto relative mx-auto flex h-[54px] w-full max-w-5xl items-center justify-between gap-2 rounded-[20px] border border-black/[0.08] px-3 shadow-[0_12px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-300 sm:h-[64px] sm:rounded-[22px] sm:px-5",
           blendWithPage ? "bg-white/95" : "bg-white/90",
           !isVisible && "-translate-y-20 opacity-0 pointer-events-none"
         )}
@@ -128,12 +128,12 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
           </Link>
 
           {/* Mobile Hamburger Navigation with Auth inside */}
-          <details className="relative md:hidden">
+          <details className="md:hidden">
             <summary className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full border border-black/10 bg-white text-[var(--brand-ink)] transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--brand-lime)]/50 [&::-webkit-details-marker]:hidden">
               <Menu className="size-4" aria-hidden="true" />
               <span className="sr-only">Open navigation</span>
             </summary>
-            <div className="absolute -right-3 top-[calc(100%+0.6rem)] z-50 w-[calc(100vw-2.5rem)] max-w-[420px] rounded-2xl border border-black/10 bg-white p-3 shadow-[0_18px_55px_rgba(22,32,28,0.2)]">
+            <div className="absolute left-0 right-0 top-[calc(100%+0.6rem)] z-50 w-full rounded-2xl border border-black/10 bg-white p-3 shadow-[0_18px_55px_rgba(22,32,28,0.2)]">
               {/* Mobile Auth Header */}
               <div className="mb-2.5 border-b border-black/[0.08] pb-2.5">
                 {user ? (

@@ -182,18 +182,18 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-[1440px] px-5 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-16 md:pb-10 md:pt-24 lg:px-12"
+          className="mx-auto w-full max-w-[1440px] px-5 pb-4 pt-4 sm:px-8 sm:pb-8 sm:pt-16 md:pb-10 md:pt-24 lg:px-12"
         >
-          <div className="mb-6 flex flex-col gap-6 sm:mb-10 md:flex-row md:items-end md:justify-between">
+          <div className="mb-3 flex flex-col gap-3 sm:mb-10 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38] sm:mb-4">
                 Live template library
               </p>
-              <h2 className="max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
+              <h2 className="max-w-3xl text-3xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
                 Start with a format people already understand.
               </h2>
             </div>
-            <p className="max-w-md text-base leading-7 text-[var(--brand-muted)]">
+            <p className="max-w-md text-sm leading-6 text-[var(--brand-muted)] sm:text-base sm:leading-7">
               Every card is rendered from the same layout and starter content used by the builder,
               so the template you choose is the document you edit. Each design is original to
               Resuvee.
@@ -205,12 +205,12 @@ export default function Home() {
 
         <section
           id="toolkit"
-          className="relative overflow-hidden bg-[var(--brand-canvas)]"
+          className="relative -mt-20 overflow-hidden bg-[var(--brand-canvas)] sm:-mt-0"
         >
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
           <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
 
-          <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-12 pt-4 sm:px-8 sm:pb-16 sm:pt-6 md:pb-16 md:pt-8 lg:px-12">
+          <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-8 pt-5 sm:px-8 sm:pb-16 sm:pt-6 md:pb-16 md:pt-8 lg:px-12">
             <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-stretch xl:gap-12">
               <div className="flex flex-col justify-between">
                 <div>

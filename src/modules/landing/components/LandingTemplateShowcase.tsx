@@ -172,7 +172,7 @@ export function LandingTemplateShowcase() {
 
   return (
     <>
-      <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-none [scrollbar-width:none] sm:mx-0 sm:mb-8 sm:px-0 [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none [scrollbar-width:none] sm:mx-0 sm:mb-8 sm:px-0 [&::-webkit-scrollbar]:hidden">
         {filters.map((item) => (
           <button
             key={item.id}
@@ -201,7 +201,7 @@ export function LandingTemplateShowcase() {
       <div
         ref={carouselRef}
         onScroll={handleScroll}
-        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[88%] gap-4 overflow-x-auto pb-5 scroll-smooth [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] sm:gap-5 lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
+        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[82%] gap-3.5 overflow-x-auto pb-0 scroll-smooth items-start [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] sm:gap-5 sm:pb-5 sm:items-stretch lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
@@ -211,14 +211,14 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}&starter=template`
             }
-            className="group snap-start rounded-[24px] border border-black/[0.08] bg-white/55 p-3.5 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
+            className="group snap-start flex flex-col rounded-[20px] border border-black/[0.08] bg-white/55 p-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
           >
-            <div className="relative overflow-hidden rounded-2xl bg-[#e9ece8] p-5 sm:p-8 md:p-10">
-              <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1">
+            <div className="relative overflow-hidden rounded-xl bg-[#e9ece8] p-3 sm:rounded-2xl sm:p-8 md:p-10">
+              <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
                 {String(index + 1).padStart(2, "0")}
               </span>
               {template.popular && (
-                <span className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-[var(--brand-lime)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] sm:right-4 sm:top-4 sm:px-2.5 sm:py-1">
+                <span className="absolute right-2.5 top-2.5 z-10 flex items-center gap-1 rounded-full bg-[var(--brand-lime)] px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.08em] sm:right-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
                   <Sparkles className="size-2.5" />
                   Popular
                 </span>
@@ -226,36 +226,36 @@ export function LandingTemplateShowcase() {
               <TemplateThumbnail
                 template={template}
                 showLabel
-                className="mx-auto max-w-[210px] bg-white transition-transform duration-500 group-hover:scale-[1.025] group-hover:-rotate-1 sm:max-w-[235px]"
+                className="mx-auto bg-white transition-transform duration-500 group-hover:scale-[1.025] group-hover:-rotate-1"
               />
             </div>
 
-            <div className="px-1 pb-1 pt-4 sm:pt-5">
-              <div className="flex items-start justify-between gap-3 sm:gap-4">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-bold tracking-[-0.025em] sm:text-xl">{template.name}</h3>
+            <div className="flex flex-col px-1 pb-0.5 pt-3 sm:justify-between sm:flex-1 sm:pt-5">
+              <div className="flex items-start justify-between gap-2.5 sm:gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 min-w-0 sm:gap-2 sm:flex-wrap">
+                    <h3 className="truncate text-base font-bold tracking-[-0.025em] sm:text-xl">{template.name}</h3>
                     <span
-                      className="size-2.5 rounded-full"
+                      className="size-2 shrink-0 rounded-full sm:size-2.5"
                       style={{ backgroundColor: template.accent }}
                     />
                   </div>
-                  <p className="mt-1 text-xs text-[var(--brand-muted)] sm:text-sm">{template.suitableFor}</p>
+                  <p className="mt-0.5 truncate text-[11px] leading-4 text-[var(--brand-muted)] sm:line-clamp-none sm:mt-1 sm:text-sm sm:leading-normal">{template.suitableFor}</p>
                 </div>
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)] sm:size-9">
-                  <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:rotate-0" />
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)] sm:size-9">
+                  <ArrowRight className="size-3.5 -rotate-45 transition-transform group-hover:rotate-0 sm:size-4" />
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-black/45">
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#eff1ec] px-2 py-1.5">
-                  <Check className="size-2.5 text-[#4f7946]" />
-                  {template.eyebrow}
+              <div className="mt-2.5 flex flex-nowrap items-center gap-1.5 overflow-hidden text-[8.5px] font-bold uppercase tracking-[0.08em] text-black/45 sm:mt-4 sm:flex-wrap sm:gap-2 sm:text-[9px]">
+                <span className="inline-flex min-w-0 max-w-[120px] shrink items-center gap-1 truncate rounded-full bg-[#eff1ec] px-1.5 py-1 sm:max-w-none sm:shrink-0 sm:px-2 sm:py-1.5">
+                  <Check className="size-2 shrink-0 text-[#4f7946] sm:size-2.5" />
+                  <span className="truncate">{template.eyebrow}</span>
                 </span>
                 {!template.supportsPhoto && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#eff1ec] px-2 py-1.5">
-                    <ImageOff className="size-2.5" />
-                    Photo-free
+                  <span className="inline-flex min-w-0 shrink-0 items-center gap-1 rounded-full bg-[#eff1ec] px-1.5 py-1 sm:px-2 sm:py-1.5">
+                    <ImageOff className="size-2 shrink-0 sm:size-2.5" />
+                    <span>Photo-free</span>
                   </span>
                 )}
               </div>
