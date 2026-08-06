@@ -40,18 +40,22 @@ export async function exportCoverLetterDocx(
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")}.docx`;
 
+  // Margins match canvas padding classes:
+  // compact  → px-9  py-7  (36px H / 28px V) → 544 / 423 twips
+  // normal   → px-11 py-9  (44px H / 36px V) → 665 / 544 twips
+  // spacious → px-14 py-12 (56px H / 48px V) → 847 / 726 twips
   const margins =
     pageSpacing === "compact"
-      ? { top: 560, right: 720, bottom: 560, left: 720 }
+      ? { top: 423, right: 544, bottom: 423, left: 544 }
       : pageSpacing === "spacious"
-      ? { top: 960, right: 1100, bottom: 960, left: 1100 }
-      : { top: 710, right: 880, bottom: 710, left: 880 };
+      ? { top: 726, right: 847, bottom: 726, left: 847 }
+      : { top: 544, right: 665, bottom: 544, left: 665 };
 
   const bodyLineSpacing =
-    pageSpacing === "compact" ? 240 : pageSpacing === "spacious" ? 270 : 250;
+    pageSpacing === "compact" ? 240 : pageSpacing === "spacious" ? 276 : 252;
 
   const bodyParagraphAfter =
-    pageSpacing === "compact" ? 100 : pageSpacing === "spacious" ? 160 : 120;
+    pageSpacing === "compact" ? 80 : pageSpacing === "spacious" ? 180 : 120;
 
   const topParagraphs: Paragraph[] = [];
 

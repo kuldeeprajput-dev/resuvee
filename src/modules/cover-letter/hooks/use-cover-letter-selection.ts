@@ -53,13 +53,30 @@ export function useCoverLetterSelection({
 
   const boundsRafIdRef = useRef<number | null>(null);
 
+  const clearSelection = useCallback(() => {
+    setSelectedField(null);
+    selectedDomRef.current = null;
+    setHighlightRect(null);
+    setToolbarPos(null);
+    setShowColorPicker(false);
+  }, []);
+
   const updateSelectionBounds = useCallback(() => {
-    if (!selectedDomRef.current || !containerRef.current) return;
+    if (!containerRef.current) return;
     if (boundsRafIdRef.current !== null) cancelAnimationFrame(boundsRafIdRef.current);
     boundsRafIdRef.current = requestAnimationFrame(() => {
-      if (!selectedDomRef.current || !containerRef.current) return;
+      if (!containerRef.current) return;
+      if (!selectedDomRef.current || !selectedDomRef.current.isConnected) {
+        clearSelection();
+        return;
+      }
       const targetRect = selectedDomRef.current.getBoundingClientRect();
       const containerRect = containerRef.current.getBoundingClientRect();
+
+      if (targetRect.width === 0 && targetRect.height === 0) {
+        clearSelection();
+        return;
+      }
 
       const top = targetRect.top - containerRect.top;
       const left = targetRect.left - containerRect.left;
@@ -73,13 +90,16 @@ export function useCoverLetterSelection({
 
       setToolbarPos({ top: computedTop, left: computedLeft });
     });
-  }, []);
+  }, [clearSelection, containerRef]);
 
   useEffect(() => {
     if (!selectedField) return;
     const freshEl = containerRef.current?.querySelector(`[data-field="${selectedField}"]`) as HTMLElement | null;
-    if (freshEl) selectedDomRef.current = freshEl;
-    if (!selectedDomRef.current) return;
+    if (!freshEl || !freshEl.isConnected) {
+      clearSelection();
+      return;
+    }
+    selectedDomRef.current = freshEl;
 
     updateSelectionBounds();
     const observer = new ResizeObserver(() => updateSelectionBounds());
@@ -92,15 +112,7 @@ export function useCoverLetterSelection({
       window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", updateSelectionBounds);
     };
-  }, [selectedField, inlineText, data, zoom, pan, updateSelectionBounds]);
-
-  const clearSelection = () => {
-    setSelectedField(null);
-    selectedDomRef.current = null;
-    setHighlightRect(null);
-    setToolbarPos(null);
-    setShowColorPicker(false);
-  };
+  }, [selectedField, inlineText, data, zoom, pan, updateSelectionBounds, clearSelection, containerRef]);
 
   useEffect(() => {
     if (isHandTool || isSpacePressed || showDesignMenu || showTemplatesMenu) clearSelection();

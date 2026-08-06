@@ -156,7 +156,7 @@ export function CoverLetterStudio() {
           <section
             style={isFullscreen || containerWidth < 1024 ? undefined : { width: `${100 - splitPercent}%` }}
             className={cn(
-              "resume-preview-panel relative overflow-hidden select-none transition-all duration-300 h-full shrink-0",
+              "cover-letter-preview-panel relative overflow-hidden select-none transition-all duration-300 h-full shrink-0",
               showMobilePreview
                 ? "fixed inset-0 z-[80] flex flex-col"
                 : "hidden lg:flex lg:flex-col",
@@ -208,7 +208,7 @@ export function CoverLetterStudio() {
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
               className={cn(
-                "canvas-bg resume-preview-stage relative flex-1 overflow-hidden transition-colors duration-300 touch-none",
+                "canvas-bg cover-letter-preview-stage relative flex-1 overflow-hidden transition-colors duration-300 touch-none",
                 themeStyles[canvasTheme],
                 isHandTool || isSpacePressed ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
               )}
@@ -254,12 +254,11 @@ export function CoverLetterStudio() {
               <div className="absolute inset-0 flex items-center justify-center p-8 overflow-auto">
                 <div
                   style={{
-                    transform: `translate3d(${pan.x}px, ${pan.y}px, 0px) scale(${zoom / 100})`,
+                    transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
                     transformOrigin: "center center",
-                    willChange: "transform",
                     transition: isDragging ? "none" : "transform 0.12s cubic-bezier(0, 0, 0.2, 1)",
                   }}
-                  className="no-print-transform flex items-center justify-center shadow-2xl transform-gpu"
+                  className="no-print-transform flex items-center justify-center shadow-2xl"
                 >
                   <CoverLetterPreview
                     data={data}

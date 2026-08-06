@@ -2,7 +2,12 @@
 
 import React from "react";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../../types/cover-letter";
+import type {
+  CoverLetterData,
+  CoverLetterTheme,
+  TypographyFont,
+  PageSpacing,
+} from "../../types/cover-letter";
 
 interface CoverLetterPreviewProps {
   data: CoverLetterData;
@@ -31,26 +36,22 @@ function CoverLetterPreviewBase({
         ? "font-serif"
         : "font-sans"
       : font === "sans"
-      ? "font-sans"
-      : font === "serif"
-      ? "font-serif"
-      : "font-mono";
+        ? "font-sans"
+        : font === "serif"
+          ? "font-serif"
+          : "font-mono";
 
   const spacingClass =
     pageSpacing === "compact"
       ? "px-9 py-7"
       : pageSpacing === "spacious"
-      ? "px-14 py-12"
-      : "px-11 py-9";
+        ? "px-14 py-12"
+        : "px-11 py-9";
 
   const getFieldClass = (field: keyof CoverLetterData) =>
     cn(
-      isHandTool
-        ? "cursor-inherit hover:outline-none"
-        : cn(
-            "lg:cursor-pointer cursor-default rounded-xs transition",
-            selectedField !== field && "lg:hover:outline-dashed lg:hover:outline-1 lg:hover:emerald-500"
-          ),
+      isHandTool ? "cursor-inherit" : "lg:cursor-pointer cursor-default",
+      selectedField === field && "cl-field-active",
       "break-words [overflow-wrap:anywhere]",
       !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
     );
@@ -58,30 +59,36 @@ function CoverLetterPreviewBase({
   return (
     <article
       className={cn(
-        "resume-print-area resume-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
+        "cover-letter-print-area cover-letter-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
         spacingClass,
         fontClass,
         isHandTool && "hand-mode"
       )}
     >
       {theme === "signal" && (
-        <div className="absolute inset-y-0 left-0 w-3" style={{ backgroundColor: accent }} />
+        <div className="absolute inset-y-0 left-0 w-3 [-webkit-print-color-adjust:exact] [print-color-adjust:exact]" style={{ backgroundColor: accent }} />
       )}
       {theme === "linen" && (
-        <div className="absolute -right-20 -top-24 size-64 rounded-full bg-[#e7f1e8]" />
+        <div className="absolute -right-20 -top-24 size-64 rounded-full bg-[#e7f1e8] [-webkit-print-color-adjust:exact] [print-color-adjust:exact]" />
       )}
       <header className="relative border-b pb-4" style={{ borderColor: accent }}>
         <h1
           data-field="fullName"
           onClick={(e) => onSelectField?.(e, "fullName")}
-          className={cn("text-[26px] font-bold leading-none tracking-[-0.045em]", getFieldClass("fullName"))}
+          className={cn(
+            "text-[26px] font-bold leading-none tracking-[-0.045em]",
+            getFieldClass("fullName")
+          )}
         >
           {data.fullName}
         </h1>
         <p
           data-field="headline"
           onClick={(e) => onSelectField?.(e, "headline")}
-          className={cn("mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]", getFieldClass("headline"))}
+          className={cn(
+            "mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]",
+            getFieldClass("headline")
+          )}
         >
           {data.headline
             ? data.headline
@@ -93,7 +100,7 @@ function CoverLetterPreviewBase({
         </p>
       </header>
 
-      <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f] overflow-hidden">
+      <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f]">
         <div className="flex items-center justify-between text-[11px] font-medium text-[var(--brand-muted)]">
           <p
             data-field="date"
@@ -213,9 +220,7 @@ function CoverLetterPreviewBase({
                 {data.location}
               </span>
             )}
-            {data.location && data.website && (
-              <span className="text-black/30">·</span>
-            )}
+            {data.location && data.website && <span className="text-black/30">·</span>}
             {data.website && (
               <span
                 data-field="website"

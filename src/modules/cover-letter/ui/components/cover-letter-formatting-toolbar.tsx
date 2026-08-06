@@ -66,7 +66,9 @@ function CoverLetterFormattingToolbarBase({
     if (!selectedDomRef.current) return;
     const currentSize = window.getComputedStyle(selectedDomRef.current).fontSize;
     const currentPx = parseFloat(currentSize) || 14;
-    const newPx = Math.max(8, Math.min(48, currentPx + delta));
+    const MIN_FONT_SIZE = 9;
+    const MAX_FONT_SIZE = 24;
+    const newPx = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, currentPx + delta));
     selectedDomRef.current.style.fontSize = `${newPx}px`;
   };
 
@@ -89,6 +91,7 @@ function CoverLetterFormattingToolbarBase({
   const handleTrashField = () => {
     setInlineText("");
     update(selectedField, "");
+    clearSelection();
   };
 
   const user = useAuthStore((state) => state.user);
@@ -163,7 +166,7 @@ function CoverLetterFormattingToolbarBase({
             setInlineText(e.target.value);
             update(selectedField, e.target.value);
           }}
-          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
+          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate selection:bg-emerald-500/30 selection:text-emerald-950"
           placeholder="Edit inline..."
         />
 
@@ -224,7 +227,7 @@ function CoverLetterFormattingToolbarBase({
                 setInlineText(e.target.value);
                 update(selectedField, e.target.value);
               }}
-              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
+              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all selection:bg-emerald-500/30 selection:text-emerald-950"
               placeholder="Type or edit full section text..."
               autoFocus
             />

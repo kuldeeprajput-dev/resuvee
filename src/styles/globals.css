@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./cover-letter.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -403,7 +404,9 @@
   }
 
   .resume-print-area,
-  .resume-print-area * {
+  .resume-print-area *,
+  .cover-letter-print-area,
+  .cover-letter-print-area * {
     visibility: visible !important;
   }
 
@@ -462,50 +465,6 @@
     background: white !important;
     box-sizing: border-box !important;
     visibility: visible !important;
-  }
-
-  article.cover-letter-print-sheet {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 595px !important;
-    height: 842px !important;
-    min-height: 842px !important;
-    max-height: 842px !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    zoom: 1.33393 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    background: white !important;
-    box-sizing: border-box !important;
-    visibility: visible !important;
-  }
-
-  /* Sync padding with Compact, Normal, Spacious choices from Design Section */
-  article.cover-letter-print-sheet.px-9 {
-    padding-left: 2.25rem !important;
-    padding-right: 2.25rem !important;
-  }
-  article.cover-letter-print-sheet.py-7 {
-    padding-top: 1.75rem !important;
-    padding-bottom: 1.75rem !important;
-  }
-  article.cover-letter-print-sheet.px-11 {
-    padding-left: 2.75rem !important;
-    padding-right: 2.75rem !important;
-  }
-  article.cover-letter-print-sheet.py-9 {
-    padding-top: 2.25rem !important;
-    padding-bottom: 2.25rem !important;
-  }
-  article.cover-letter-print-sheet.px-14 {
-    padding-left: 3.5rem !important;
-    padding-right: 3.5rem !important;
-  }
-  article.cover-letter-print-sheet.py-12 {
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
   }
 
   .resume-preview-scroll {
