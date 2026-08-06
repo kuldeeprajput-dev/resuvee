@@ -42,7 +42,7 @@ interface CoverLetterFormattingToolbarProps {
   onMoveDown?: () => void;
 }
 
-export function CoverLetterFormattingToolbar({
+function CoverLetterFormattingToolbarBase({
   toolbarRef,
   toolbarPos,
   selectedField,
@@ -461,3 +461,5 @@ export function CoverLetterFormattingToolbar({
     </div>
   );
 }
+
+export const CoverLetterFormattingToolbar = React.memo(CoverLetterFormattingToolbarBase);

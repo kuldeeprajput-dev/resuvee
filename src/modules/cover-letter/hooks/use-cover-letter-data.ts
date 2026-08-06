@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuthStore } from "@/modules/auth";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
@@ -99,27 +99,43 @@ export function useCoverLetterData() {
     }, 400);
   }, [data, theme, customAccent]);
 
-  const update = (field: keyof CoverLetterData, value: string) => {
-    setHistory((prev) => [...prev, data]);
-    setFuture([]);
-    setData((current) => ({ ...current, [field]: value }));
-  };
+  const historyDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSnapshotRef = useRef<CoverLetterData>(data);
 
-  const handleUndo = () => {
+  useEffect(() => {
+    lastSnapshotRef.current = data;
+  }, [data]);
+
+  const update = useCallback((field: keyof CoverLetterData, value: string) => {
+    setData((current) => {
+      const next = { ...current, [field]: value };
+      if (historyDebounceTimer.current) clearTimeout(historyDebounceTimer.current);
+      historyDebounceTimer.current = setTimeout(() => {
+        setHistory((prev) => {
+          if (prev.length >= 30) return [...prev.slice(1), lastSnapshotRef.current];
+          return [...prev, lastSnapshotRef.current];
+        });
+      }, 500);
+      return next;
+    });
+    setFuture([]);
+  }, []);
+
+  const handleUndo = useCallback(() => {
     if (history.length === 0) return;
     const previous = history[history.length - 1];
     setFuture((prev) => [data, ...prev]);
     setData(previous);
     setHistory((prev) => prev.slice(0, prev.length - 1));
-  };
+  }, [history, data]);
 
-  const handleRedo = () => {
+  const handleRedo = useCallback(() => {
     if (future.length === 0) return;
     const next = future[0];
     setHistory((prev) => [...prev, data]);
     setData(next);
     setFuture((prev) => prev.slice(1));
-  };
+  }, [future, data]);
 
   const handleConfirmStartFresh = async () => {
     setHistory((prev) => [...prev, data]);

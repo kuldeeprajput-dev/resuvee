@@ -254,11 +254,12 @@ export function CoverLetterStudio() {
               <div className="absolute inset-0 flex items-center justify-center p-8 overflow-auto">
                 <div
                   style={{
-                    transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
+                    transform: `translate3d(${pan.x}px, ${pan.y}px, 0px) scale(${zoom / 100})`,
                     transformOrigin: "center center",
-                    transition: isDragging ? "none" : "transform 0.15s ease-out",
+                    willChange: "transform",
+                    transition: isDragging ? "none" : "transform 0.12s cubic-bezier(0, 0, 0.2, 1)",
                   }}
-                  className="no-print-transform flex items-center justify-center shadow-2xl"
+                  className="no-print-transform flex items-center justify-center shadow-2xl transform-gpu"
                 >
                   <CoverLetterPreview
                     data={data}

@@ -51,23 +51,28 @@ export function useCoverLetterSelection({
   const selectedDomRef = useRef<HTMLElement | null>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
 
+  const boundsRafIdRef = useRef<number | null>(null);
+
   const updateSelectionBounds = useCallback(() => {
     if (!selectedDomRef.current || !containerRef.current) return;
+    if (boundsRafIdRef.current !== null) cancelAnimationFrame(boundsRafIdRef.current);
+    boundsRafIdRef.current = requestAnimationFrame(() => {
+      if (!selectedDomRef.current || !containerRef.current) return;
+      const targetRect = selectedDomRef.current.getBoundingClientRect();
+      const containerRect = containerRef.current.getBoundingClientRect();
 
-    const targetRect = selectedDomRef.current.getBoundingClientRect();
-    const containerRect = containerRef.current.getBoundingClientRect();
+      const top = targetRect.top - containerRect.top;
+      const left = targetRect.left - containerRect.left;
 
-    const top = targetRect.top - containerRect.top;
-    const left = targetRect.left - containerRect.left;
+      setHighlightRect({ top: top - 4, left: left - 4, width: targetRect.width + 8, height: targetRect.height + 8 });
 
-    setHighlightRect({ top: top - 4, left: left - 4, width: targetRect.width + 8, height: targetRect.height + 8 });
+      const toolbarWidth = toolbarRef.current?.offsetWidth || 540;
+      let computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, left + targetRect.width / 2 - toolbarWidth / 2));
+      let computedTop = top - 64;
+      if (computedTop < 65) computedTop = top + targetRect.height + 14;
 
-    const toolbarWidth = toolbarRef.current?.offsetWidth || 540;
-    let computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, left + targetRect.width / 2 - toolbarWidth / 2));
-    let computedTop = top - 64;
-    if (computedTop < 65) computedTop = top + targetRect.height + 14;
-
-    setToolbarPos({ top: computedTop, left: computedLeft });
+      setToolbarPos({ top: computedTop, left: computedLeft });
+    });
   }, []);
 
   useEffect(() => {

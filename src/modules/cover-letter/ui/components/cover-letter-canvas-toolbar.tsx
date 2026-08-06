@@ -26,7 +26,7 @@ interface CoverLetterCanvasToolbarProps {
 
 const ZOOM_PRESETS = [50, 72, 85, 100, 125, 150];
 
-export function CoverLetterCanvasToolbar({
+function CoverLetterCanvasToolbarBase({
   isHandTool,
   setIsHandTool,
   isSpacePressed,
@@ -221,3 +221,5 @@ export function CoverLetterCanvasToolbar({
     </div>
   );
 }
+
+export const CoverLetterCanvasToolbar = React.memo(CoverLetterCanvasToolbarBase);

@@ -149,6 +149,8 @@ export function useCoverLetterCanvas() {
     }
   };
 
+  const rafIdRef = useRef<number | null>(null);
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button === 0 && (isHandTool || isSpacePressed)) {
       setIsDragging(true);
@@ -157,10 +159,19 @@ export function useCoverLetterCanvas() {
   };
 
   const handleMouseMoveCanvas = (e: React.MouseEvent) => {
-    if (isDragging) setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+    if (!isDragging) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+    rafIdRef.current = requestAnimationFrame(() => {
+      setPan({ x: clientX - dragStart.x, y: clientY - dragStart.y });
+    });
   };
 
-  const handleMouseUpCanvas = () => setIsDragging(false);
+  const handleMouseUpCanvas = () => {
+    if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+    setIsDragging(false);
+  };
 
   // Mobile Touch Pinch-to-Zoom & Touch Pan
   const touchStartDistRef = useRef<number | null>(null);
@@ -188,13 +199,20 @@ export function useCoverLetterCanvas() {
       );
       const scale = currentDist / touchStartDistRef.current;
       const newZoom = Math.min(Math.max(Math.round(touchStartZoomRef.current * scale), 30), 200);
-      setZoom(newZoom);
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => setZoom(newZoom));
     } else if (e.touches.length === 1 && isDragging) {
-      setPan({ x: e.touches[0].clientX - dragStart.x, y: e.touches[0].clientY - dragStart.y });
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        setPan({ x: touchX - dragStart.x, y: touchY - dragStart.y });
+      });
     }
   };
 
   const handleTouchEnd = () => {
+    if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
     touchStartDistRef.current = null;
     setIsDragging(false);
   };

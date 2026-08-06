@@ -34,7 +34,7 @@ interface CoverLetterCanvasHeaderProps {
   saveStatus?: string;
 }
 
-export function CoverLetterCanvasHeader({
+function CoverLetterCanvasHeaderBase({
   isFullscreen,
   setIsFullscreen,
   showTemplatesMenu,
@@ -484,3 +484,5 @@ export function CoverLetterCanvasHeader({
     </div>
   );
 }
+
+export const CoverLetterCanvasHeader = React.memo(CoverLetterCanvasHeaderBase);

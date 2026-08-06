@@ -15,7 +15,7 @@ interface CoverLetterPreviewProps {
   isHandTool?: boolean;
 }
 
-export function CoverLetterPreview({
+function CoverLetterPreviewBase({
   data,
   theme,
   accent,
@@ -43,17 +43,13 @@ export function CoverLetterPreview({
       ? "px-14 py-12"
       : "px-11 py-9";
 
-  const contact = [data.email, data.phone, data.location, data.website]
-    .filter(Boolean)
-    .join("  ·  ");
-
   const getFieldClass = (field: keyof CoverLetterData) =>
     cn(
       isHandTool
         ? "cursor-inherit hover:outline-none"
         : cn(
             "lg:cursor-pointer cursor-default rounded-xs transition",
-            selectedField !== field && "lg:hover:outline-dashed lg:hover:outline-1 lg:hover:outline-emerald-500"
+            selectedField !== field && "lg:hover:outline-dashed lg:hover:outline-1 lg:hover:emerald-500"
           ),
       "break-words [overflow-wrap:anywhere]",
       !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
@@ -98,37 +94,35 @@ export function CoverLetterPreview({
       </header>
 
       <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f] overflow-hidden">
-        <div className="flex items-baseline justify-between text-[11px] font-semibold text-[var(--brand-muted)] gap-4">
-          <div className="min-w-0 flex-1">
-            <p
-              data-field="recipient"
-              onClick={(e) => onSelectField?.(e, "recipient")}
-              className={cn("font-bold text-[#1e2320]", getFieldClass("recipient"))}
-            >
-              {data.recipient}
-            </p>
-            <p
-              data-field="company"
-              onClick={(e) => onSelectField?.(e, "company")}
-              className={getFieldClass("company")}
-            >
-              {data.company}
-            </p>
-            <p
-              data-field="role"
-              onClick={(e) => onSelectField?.(e, "role")}
-              className={getFieldClass("role")}
-            >
-              {data.role}
-            </p>
-          </div>
+        <div className="flex items-center justify-between text-[11px] font-medium text-[var(--brand-muted)]">
           <p
             data-field="date"
             onClick={(e) => onSelectField?.(e, "date")}
-            className={cn("shrink-0", getFieldClass("date"))}
+            className={getFieldClass("date")}
           >
             {data.date}
           </p>
+          <div className="flex items-center gap-1.5">
+            {data.company && (
+              <span
+                data-field="company"
+                onClick={(e) => onSelectField?.(e, "company")}
+                className={getFieldClass("company")}
+              >
+                {data.company}
+              </span>
+            )}
+            {data.company && data.role && <span>·</span>}
+            {data.role && (
+              <span
+                data-field="role"
+                onClick={(e) => onSelectField?.(e, "role")}
+                className={getFieldClass("role")}
+              >
+                {data.role}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="pt-2">
@@ -237,3 +231,5 @@ export function CoverLetterPreview({
     </article>
   );
 }
+
+export const CoverLetterPreview = React.memo(CoverLetterPreviewBase);

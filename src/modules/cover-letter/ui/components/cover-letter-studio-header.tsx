@@ -19,7 +19,7 @@ interface CoverLetterStudioHeaderProps {
   isImportingLetter?: boolean;
 }
 
-export function CoverLetterStudioHeader({
+function CoverLetterStudioHeaderBase({
   documentTitle,
   isSaving,
   saveStatus,
@@ -208,3 +208,5 @@ export function CoverLetterStudioHeader({
     </header>
   );
 }
+
+export const CoverLetterStudioHeader = React.memo(CoverLetterStudioHeaderBase);

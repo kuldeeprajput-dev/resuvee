@@ -18,7 +18,7 @@ interface CoverLetterFormPanelProps {
   isResizing: boolean;
 }
 
-export function CoverLetterFormPanel({
+function CoverLetterFormPanelBase({
   data,
   theme,
   themes,
@@ -233,6 +233,8 @@ export function CoverLetterFormPanel({
     </section>
   );
 }
+
+export const CoverLetterFormPanel = React.memo(CoverLetterFormPanelBase);
 
 function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
