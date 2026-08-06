@@ -85,7 +85,7 @@ function CoverLetterCanvasHeaderBase({
         <div className="hidden lg:flex shrink-0 items-center gap-2">
           <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse shadow-xs" />
           <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">
-            Studio Canvas
+            Letter Studio
           </p>
           <span className="text-black/25 text-xs font-semibold mx-0.5">·</span>
           <span className="shrink-0 max-w-[140px] truncate text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#059669] border-b-2 border-[#059669] pb-0.5 transition-all">
@@ -226,7 +226,7 @@ function CoverLetterCanvasHeaderBase({
                 <div className="flex items-center gap-2">
                   <Palette className="size-4 text-emerald-700" />
                   <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">
-                    CANVAS DESIGN
+                    LETTER DESIGN
                   </h3>
                 </div>
                 <button
