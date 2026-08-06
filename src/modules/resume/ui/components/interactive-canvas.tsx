@@ -52,6 +52,13 @@ interface InteractiveCanvasProps {
   canRedo?: boolean;
   onUndo?: () => void;
   onRedo?: () => void;
+  onExportPdf?: () => void;
+  onExportDocx?: () => void;
+  onUploadResume?: (file: File) => void;
+  isImportingResume?: boolean;
+  onSave?: () => void;
+  isSaving?: boolean;
+  saveStatus?: "idle" | "saved" | "error";
 }
 
 const ZOOM_PRESETS = [
@@ -94,6 +101,13 @@ export function InteractiveCanvas({
   canRedo: propCanRedo,
   onUndo,
   onRedo,
+  onExportPdf,
+  onExportDocx,
+  onUploadResume,
+  isImportingResume,
+  onSave,
+  isSaving,
+  saveStatus,
 }: InteractiveCanvasProps) {
   const storeUndo = useResumeBuilderStore((state) => state.undo);
   const storeRedo = useResumeBuilderStore((state) => state.redo);
@@ -376,6 +390,13 @@ export function InteractiveCanvas({
         onCloseDesignMenu={() => setShowDesignMenu(false)}
         onUpdateStyle={onUpdateStyle}
         onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+        onExportPdf={onExportPdf}
+        onExportDocx={onExportDocx}
+        onUploadResume={onUploadResume}
+        isImportingResume={isImportingResume}
+        onSave={onSave}
+        isSaving={isSaving}
+        saveStatus={saveStatus}
       />
 
       {/* Main Interactive Canvas Area */}

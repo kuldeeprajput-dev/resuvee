@@ -122,7 +122,7 @@ export function CustomizePanel({
   }, [isResizing]);
 
   return (
-    <div className="no-print fixed inset-0 z-[110] flex justify-end bg-black/15">
+    <div className="no-print fixed inset-0 z-[300] flex justify-end bg-black/15">
       <button
         type="button"
         onClick={onClose}

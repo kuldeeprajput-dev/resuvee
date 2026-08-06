@@ -461,6 +461,13 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               onUpdateData={updateData}
               onUpdateStyle={setResumeStyle}
               onSelectSection={setActiveSection}
+              onExportPdf={() => window.print()}
+              onExportDocx={async () => await exportResumeDocx(data, template.accent)}
+              onSave={handleSaveToCloud}
+              isSaving={isSaving}
+              saveStatus={saveStatus}
+              onUploadResume={handleUploadResume}
+              isImportingResume={isImportingResume}
             />
           </section>
         )}

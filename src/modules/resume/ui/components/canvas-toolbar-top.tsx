@@ -1,15 +1,22 @@
 "use client";
 
+import { useRef, useState } from "react";
 import {
   Check,
+  ChevronDown,
+  Cloud,
   Download,
+  FileSpreadsheet,
+  FileText,
   LayoutTemplate,
+  Loader2,
   Maximize2,
   Minimize2,
   Palette,
   Pipette,
   ScanSearch,
   SpellCheck2,
+  Upload,
   X,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
@@ -46,6 +53,13 @@ interface CanvasTopBarProps {
   onCloseDesignMenu: () => void;
   onUpdateStyle?: (style: ResumeStyle) => void;
   onToggleFullscreen?: () => void;
+  onExportPdf?: () => void;
+  onExportDocx?: () => void;
+  onUploadResume?: (file: File) => void;
+  isImportingResume?: boolean;
+  onSave?: () => void;
+  isSaving?: boolean;
+  saveStatus?: "idle" | "saved" | "error";
 }
 
 export function CanvasTopBar({
@@ -62,7 +76,17 @@ export function CanvasTopBar({
   onCloseDesignMenu,
   onUpdateStyle,
   onToggleFullscreen,
+  onExportPdf,
+  onExportDocx,
+  onUploadResume,
+  isImportingResume,
+  onSave,
+  isSaving,
+  saveStatus,
 }: CanvasTopBarProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   return (
     <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
@@ -89,14 +113,47 @@ export function CanvasTopBar({
       </div>
 
       <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
+        {isFullscreen && onUploadResume && (
+          <>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file && onUploadResume) {
+                  onUploadResume(file);
+                }
+              }}
+              accept=".pdf,.docx,.doc,.txt"
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isImportingResume}
+              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
+              title="Upload resume from PDF or Word document"
+            >
+              {isImportingResume ? (
+                <Loader2 className="size-3.5 animate-spin text-[#059669]" />
+              ) : (
+                <Upload className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+              )}
+              <span className="whitespace-nowrap">
+                {isImportingResume ? "Uploading..." : "Upload Resume"}
+              </span>
+            </button>
+          </>
+        )}
+
         {isFullscreen && onShowWritingCheck && (
           <button
             type="button"
             onClick={onShowWritingCheck}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer animate-in fade-in"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
             title="Scan and improve resume text with AI writing check"
           >
-            <SpellCheck2 className="size-3.5 text-emerald-600" />
+            <SpellCheck2 className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             <span className="whitespace-nowrap">Check with AI</span>
           </button>
         )}
@@ -105,10 +162,10 @@ export function CanvasTopBar({
           <button
             type="button"
             onClick={onShowTailor}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer animate-in fade-in"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
             title="Compare with job description keywords"
           >
-            <ScanSearch className="size-3.5 text-emerald-600" />
+            <ScanSearch className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             <span className="whitespace-nowrap">Role match</span>
           </button>
         )}
@@ -116,35 +173,11 @@ export function CanvasTopBar({
         <button
           type="button"
           onClick={onShowTemplates}
-          className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer"
+          className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
         >
-          <LayoutTemplate className="size-3.5 text-[var(--brand-muted)]" />
+          <LayoutTemplate className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           <span className="whitespace-nowrap">Templates</span>
         </button>
-
-        {isMobilePreview && (
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer lg:hidden"
-            title="Export PDF Document"
-          >
-            <Download className="size-3.5 text-emerald-600" />
-            <span className="whitespace-nowrap">Export</span>
-          </button>
-        )}
-
-        {isFullscreen && !isMobilePreview && (
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="hidden lg:flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-black/5 shadow-xs sm:px-3 animate-in fade-in cursor-pointer"
-            title="Export PDF Document"
-          >
-            <Download className="size-3.5 text-emerald-600" />
-            <span className="whitespace-nowrap">Export PDF</span>
-          </button>
-        )}
 
         {/* Design Controls Button */}
         <div className="relative hidden lg:block">
@@ -152,12 +185,13 @@ export function CanvasTopBar({
             type="button"
             onClick={onToggleDesignMenu}
             className={cn(
-              "flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-2.5 text-[11px] font-bold transition hover:bg-black/5 shadow-xs sm:px-3 cursor-pointer",
-              showDesignMenu &&
-                "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50 text-emerald-800"
+              "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
+              showDesignMenu
+                ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
+                : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
             )}
           >
-            <Palette className="size-3.5 text-emerald-600" />
+            <Palette className={cn("size-3.5 transition-colors", showDesignMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
             <span className="whitespace-nowrap">Design</span>
           </button>
 
@@ -345,15 +379,110 @@ export function CanvasTopBar({
           )}
         </div>
 
+        {/* Save Button (Only shown in full screen canvas mode or mobile preview) */}
+        {(isFullscreen || isMobilePreview) && onSave && (
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={isSaving}
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in disabled:opacity-50"
+            title="Save changes to cloud"
+          >
+            {isSaving ? (
+              <Loader2 className="size-3.5 animate-spin text-[#059669]" />
+            ) : saveStatus === "saved" ? (
+              <Check className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+            ) : (
+              <Cloud className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+            )}
+            <span className="whitespace-nowrap">
+              {isSaving ? "Saving..." : saveStatus === "saved" ? "Saved" : "Save"}
+            </span>
+          </button>
+        )}
+
+        {/* Export Options Dropdown Menu (Only shown in full screen canvas mode or mobile preview) */}
+        {(isFullscreen || isMobilePreview) && (
+          <div className="relative animate-in fade-in">
+            <button
+              type="button"
+              onClick={() => {
+                setShowExportMenu(!showExportMenu);
+                onCloseDesignMenu();
+              }}
+              className={cn(
+                "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
+                showExportMenu
+                  ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
+                  : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+              )}
+              title="Export resume options"
+            >
+              <Download className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+              <span>Export</span>
+              <ChevronDown className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-[var(--brand-muted)] group-hover:text-[#059669]")} />
+            </button>
+
+            {showExportMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowExportMenu(false)}
+                />
+                <div className="absolute right-0 top-10 z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportMenu(false);
+                      if (onExportPdf) onExportPdf();
+                      else window.print();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                      <FileText className="size-4" />
+                    </span>
+                    <div className="text-left">
+                      <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
+                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportMenu(false);
+                      if (onExportDocx) onExportDocx();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                      <FileSpreadsheet className="size-4" />
+                    </span>
+                    <div className="text-left">
+                      <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
+                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .docx</p>
+                    </div>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Fullscreen Toggle Button */}
         {onToggleFullscreen && (
           <button
             type="button"
             onClick={onToggleFullscreen}
-            className="builder-icon-button shrink-0 hidden lg:flex cursor-pointer"
+            className="group flex size-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white shadow-xs transition hover:bg-black/5 cursor-pointer hidden lg:flex"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
           >
-            {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+            {isFullscreen ? (
+              <Minimize2 className="size-3.5 text-[var(--brand-ink)] transition-colors group-hover:text-black" />
+            ) : (
+              <Maximize2 className="size-3.5 text-[var(--brand-ink)] transition-colors group-hover:text-black" />
+            )}
           </button>
         )}
       </div>

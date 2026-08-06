@@ -167,7 +167,7 @@ export function WritingCheckPanel({
   };
 
   return (
-    <div className="no-print fixed inset-0 z-[110] flex justify-end bg-black/15">
+    <div className="no-print fixed inset-0 z-[300] flex justify-end bg-black/15">
       <button
         type="button"
         onClick={onClose}
@@ -412,7 +412,7 @@ export function WritingCheckPanel({
             <Button
               type="button"
               onClick={acceptAll}
-              className="h-11 w-full rounded-xl bg-[var(--brand-ink)] font-bold text-white transition hover:bg-[#27332f] cursor-pointer"
+              className="h-11 w-full rounded-xl bg-emerald-600 font-bold text-white transition hover:bg-emerald-700 cursor-pointer shadow-md shadow-emerald-600/20"
             >
               <CheckCheck className="size-4" />
               Accept all {issues.length} suggestions
@@ -421,10 +421,10 @@ export function WritingCheckPanel({
             <Button
               type="button"
               onClick={onClose}
-              variant="outline"
-              className="h-11 w-full rounded-xl border-black/10 font-bold text-[var(--brand-ink)] hover:bg-black/5"
+              className="h-11 w-full rounded-xl bg-emerald-600 font-bold text-white transition hover:bg-emerald-700 cursor-pointer shadow-md shadow-emerald-600/20"
             >
               Return to builder
+              <ArrowRight className="size-4" />
             </Button>
           )}
         </footer>

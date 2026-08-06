@@ -140,7 +140,7 @@ export function ResumeBuilderHeader({
           onClick={onShowTailor}
           className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold sm:inline-flex"
         >
-          <ScanSearch className="size-4 text-[var(--brand-ink)]" />
+          <ScanSearch className="size-4 text-emerald-600" />
           Role match
         </Button>
 
@@ -168,7 +168,7 @@ export function ResumeBuilderHeader({
           onClick={onStartFresh}
           className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold text-[var(--brand-ink)] md:inline-flex"
         >
-          <FilePlus2 className="size-4 text-[var(--brand-muted)]" />
+          <FilePlus2 className="size-4 text-emerald-600" />
           Start fresh
         </Button>
 

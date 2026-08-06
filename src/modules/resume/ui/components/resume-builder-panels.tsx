@@ -31,7 +31,7 @@ export function TemplatePickerPanel({
   });
 
   return (
-    <div className="no-print fixed inset-0 z-[200] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+    <div className="no-print fixed inset-0 z-[300] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
       <div className="max-h-[92dvh] w-full max-w-6xl overflow-y-auto rounded-t-[24px] bg-[var(--brand-paper)] p-5 shadow-2xl sm:rounded-[24px] sm:p-7">
         <div className="mb-6 flex items-start justify-between gap-6">
           <div>
