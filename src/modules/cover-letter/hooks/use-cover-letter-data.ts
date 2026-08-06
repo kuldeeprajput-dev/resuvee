@@ -181,6 +181,11 @@ export function useCoverLetterData() {
       }
 
       setSaveStatus("saved");
+      showToast(
+        "Cover Letter Saved",
+        "Your cover letter was saved successfully to your account.",
+        "success"
+      );
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (err: any) {
       console.error("Save cover letter error:", err);

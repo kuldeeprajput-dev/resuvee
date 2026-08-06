@@ -158,6 +158,11 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       }
 
       setSaveStatus("saved");
+      showToast(
+        "Resume Saved",
+        "Your resume was saved successfully to your account.",
+        "success"
+      );
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (err: any) {
       console.error("Save error:", err);

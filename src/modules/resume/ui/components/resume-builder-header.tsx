@@ -71,7 +71,7 @@ export function ResumeBuilderHeader({
           <Link
             href="/"
             aria-label="Back to home"
-            className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
+            className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
           >
             <ArrowLeft className="size-4" />
           </Link>

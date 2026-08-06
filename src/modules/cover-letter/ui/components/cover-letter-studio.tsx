@@ -184,8 +184,12 @@ export function CoverLetterStudio() {
               onCloseMobilePreview={() => setShowMobilePreview(false)}
               onUploadLetter={handleUploadLetter}
               isImportingLetter={isImportingLetter}
+              setShowAiDrawer={setShowAiDrawer}
               handleExportPdf={handleExportPdf}
               handleExportDocx={handleExportDocx}
+              handleSaveToCloud={handleSaveToCloud}
+              isSaving={isSaving}
+              saveStatus={saveStatus}
             />
 
             {/* Main Interactive Canvas Area */}

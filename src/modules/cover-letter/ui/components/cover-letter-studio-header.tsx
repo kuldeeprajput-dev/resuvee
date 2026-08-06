@@ -42,7 +42,7 @@ export function CoverLetterStudioHeader({
         <Link
           href="/"
           aria-label="Back to home"
-          className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
+          className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
         >
           <ArrowLeft className="size-4" />
         </Link>
@@ -87,40 +87,24 @@ export function CoverLetterStudioHeader({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isImportingLetter}
-          className="hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 items-center gap-1.5 cursor-pointer"
+          className="group hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] items-center gap-1.5 cursor-pointer"
           title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
         >
           {isImportingLetter ? (
-            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
           ) : (
-            <Upload className="size-3.5 sm:size-4 text-emerald-600" />
+            <Upload className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           )}
           <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
-        </button>
-        <button
-          type="button"
-          onClick={handleSaveToCloud}
-          disabled={isSaving}
-          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
-          title="Save cover letter to your account"
-        >
-          {isSaving ? (
-            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
-          ) : saveStatus === "saved" ? (
-            <Check className="size-3.5 sm:size-4 text-emerald-600" />
-          ) : (
-            <Cloud className="size-3.5 sm:size-4 text-emerald-600" />
-          )}
-          <span>{isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setShowAiDrawer(true)}
-          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
           title="Open AI Cover Letter Assistant"
         >
-          <Sparkles className="size-3.5 sm:size-4 text-emerald-600 animate-pulse" />
+          <Sparkles className="size-3.5 sm:size-4 text-emerald-600 animate-pulse transition-colors group-hover:text-[#059669]" />
           <span className="hidden sm:inline">Writing with AI</span>
           <span className="sm:hidden">AI Write</span>
         </button>
@@ -128,21 +112,38 @@ export function CoverLetterStudioHeader({
         <button
           type="button"
           onClick={() => setShowStartFreshModal(true)}
-          className="hidden h-9 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 md:flex items-center gap-1.5 cursor-pointer"
+          className="group hidden h-9 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] md:flex items-center gap-1.5 cursor-pointer"
           title="Start fresh with a clean cover letter"
         >
-          <RotateCcw className="size-3.5 text-[var(--brand-muted)]" />
+          <RotateCcw className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           <span>Start fresh</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleSaveToCloud}
+          disabled={isSaving}
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
+          title="Save cover letter to your account"
+        >
+          {isSaving ? (
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
+          ) : saveStatus === "saved" ? (
+            <Check className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          ) : (
+            <Cloud className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          )}
+          <span>{isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}</span>
         </button>
 
         {/* Mobile Preview Button */}
         <button
           type="button"
           onClick={() => setShowMobilePreview(true)}
-          className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer lg:hidden"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer lg:hidden"
           title="Preview cover letter document"
         >
-          <Eye className="size-3.5 sm:size-4 text-emerald-600" />
+          <Eye className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           <span className="hidden sm:inline">Preview</span>
         </button>
 
@@ -151,12 +152,12 @@ export function CoverLetterStudioHeader({
           <button
             type="button"
             onClick={() => setShowExportMenu(!showExportMenu)}
-            className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
             title="Export cover letter options"
           >
-            <Download className="size-3.5 sm:size-4 text-emerald-600" />
+            <Download className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             <span>Export</span>
-            <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+            <ChevronDown className="size-3.5 text-[var(--brand-muted)] transition-colors group-hover:text-[#059669]" />
           </button>
 
           {showExportMenu && (
