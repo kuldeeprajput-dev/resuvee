@@ -9,16 +9,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Cover Letter Desktop Hover Controls */
-@media (min-width: 1024px) {
-  /* Block hover outline on currently selected active field */
-  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active:hover,
-  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active p:hover,
-  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active span:hover {
-    outline: none !important;
-    cursor: default !important;
-  }
-}
+
 
 /* Cover Letter Dedicated Selection Highlight (Theme Green) */
 .cover-letter-preview-panel ::selection,

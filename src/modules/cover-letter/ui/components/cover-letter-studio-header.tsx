@@ -36,7 +36,7 @@ function CoverLetterStudioHeaderBase({
   const [showExportMenu, setShowExportMenu] = useState(false);
 
   return (
-    <header className="no-print flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
+    <header className="no-print sticky top-0 z-[60] flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
       <div className="flex h-full items-center min-w-0 gap-1.5 sm:gap-3">
         {/* Back Button on Mobile */}
         <Link

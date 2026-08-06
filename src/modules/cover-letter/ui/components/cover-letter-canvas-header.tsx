@@ -69,7 +69,7 @@ function CoverLetterCanvasHeaderBase({
   const activeTemplateName = (currentThemeObj?.name || theme).toUpperCase();
 
   return (
-    <div className="no-print absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
+    <div className="no-print absolute inset-x-0 top-0 z-[55] flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
         {onCloseMobilePreview && (
           <button

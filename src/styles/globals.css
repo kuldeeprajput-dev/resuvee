@@ -625,6 +625,7 @@
 
 /* Letter & Builder Sheet Element Hover Style (Desktop Only) */
 @media (min-width: 1024px) {
+  /* Resume builder — tag-based hover */
   .resume-preview-sheet:not(.hand-mode) h1:hover,
   .resume-preview-sheet:not(.hand-mode) h2:hover,
   .resume-preview-sheet:not(.hand-mode) h3:hover,
@@ -637,5 +638,21 @@
     outline-offset: 1px !important;
     border-radius: 2px !important;
     cursor: pointer !important;
+  }
+
+  /* Cover letter — data-field attribute hover */
+  .cover-letter-print-sheet:not(.hand-mode) [data-field]:hover {
+    outline: 1px dashed #059669 !important;
+    outline-offset: 1px !important;
+    border-radius: 2px !important;
+    cursor: pointer !important;
+  }
+
+  /* Block hover outline on currently selected cover letter field */
+  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active:hover,
+  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active p:hover,
+  .cover-letter-print-sheet:not(.hand-mode) [data-field].cl-field-active span:hover {
+    outline: none !important;
+    cursor: default !important;
   }
 }
