@@ -18,6 +18,7 @@ import {
   LogIn,
   Search,
 } from "lucide-react";
+import { idbSet } from "@/modules/cover-letter/services/cover-letter-idb";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
@@ -69,11 +70,11 @@ export default function SavedCoverLettersPage() {
     }
   }, [user, authLoading]);
 
-  const handleOpenInStudio = (letter: SavedCoverLetterItem) => {
+  const handleOpenInStudio = async (letter: SavedCoverLetterItem) => {
     try {
-      if (typeof window !== "undefined" && letter.data) {
-        localStorage.setItem("cover-letter-studio-data", JSON.stringify(letter.data));
-        localStorage.setItem("active-cover-letter-id", letter.id);
+      if (letter.data) {
+        await idbSet("cover-letter-studio-data", { data: letter.data });
+        await idbSet("active-cover-letter-id", letter.id);
       }
       router.push("/cover-letter");
     } catch (err) {

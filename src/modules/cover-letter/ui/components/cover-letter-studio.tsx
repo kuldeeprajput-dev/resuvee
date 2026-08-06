@@ -50,6 +50,8 @@ export function CoverLetterStudio() {
     aiTone, setAiTone,
     isGeneratingAi,
     aiSuccessMessage,
+    aiErrorMessage,
+    cooldownSeconds,
     isSaving,
     saveStatus,
     isImportingLetter,
@@ -321,6 +323,8 @@ export function CoverLetterStudio() {
           setAiTone={setAiTone}
           isGeneratingAi={isGeneratingAi}
           aiSuccessMessage={aiSuccessMessage}
+          aiErrorMessage={aiErrorMessage}
+          cooldownSeconds={cooldownSeconds}
           onClose={() => setShowAiDrawer(false)}
           onGenerate={handleGenerateAiCoverLetter}
         />

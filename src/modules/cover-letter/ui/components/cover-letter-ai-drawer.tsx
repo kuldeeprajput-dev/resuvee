@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Bot, Check, Loader2, Sparkles, X } from "lucide-react";
+import { AlertCircle, Bot, Check, Clock, Loader2, Sparkles, X } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 interface CoverLetterAiDrawerProps {
@@ -17,6 +17,8 @@ interface CoverLetterAiDrawerProps {
   setAiTone: (v: string) => void;
   isGeneratingAi: boolean;
   aiSuccessMessage: boolean;
+  aiErrorMessage?: string | null;
+  cooldownSeconds?: number;
   onClose: () => void;
   onGenerate: () => void;
 }
@@ -34,9 +36,16 @@ export function CoverLetterAiDrawer({
   setAiTone,
   isGeneratingAi,
   aiSuccessMessage,
+  aiErrorMessage,
+  cooldownSeconds = 0,
   onClose,
   onGenerate,
 }: CoverLetterAiDrawerProps) {
+  const isCooldownActive = cooldownSeconds > 0;
+  const mins = Math.floor(cooldownSeconds / 60);
+  const secs = cooldownSeconds % 60;
+  const cooldownText = mins > 0 ? `${mins}m ${secs < 10 ? "0" : ""}${secs}s` : `${secs}s`;
+
   return (
     <div className="no-print fixed inset-0 z-[150] flex justify-end bg-black/30 backdrop-blur-xs animate-in fade-in">
       <div className="relative flex h-full w-full sm:w-[420px] flex-col border-l border-black/10 bg-white p-6 shadow-2xl animate-in slide-in-from-right duration-200">
@@ -66,7 +75,7 @@ export function CoverLetterAiDrawer({
         <div className="flex-1 space-y-4 overflow-y-auto pr-1">
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
-              Target Role
+              Target Role <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -74,12 +83,13 @@ export function CoverLetterAiDrawer({
               onChange={(e) => setAiRole(e.target.value)}
               placeholder="e.g. Senior Frontend Developer"
               className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              required
             />
           </div>
 
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
-              Target Company
+              Target Company <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -87,12 +97,13 @@ export function CoverLetterAiDrawer({
               onChange={(e) => setAiCompany(e.target.value)}
               placeholder="e.g. Google"
               className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              required
             />
           </div>
 
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
-              Your Title / Specialty
+              Your Title / Specialty <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -100,12 +111,13 @@ export function CoverLetterAiDrawer({
               onChange={(e) => setAiHeadline(e.target.value)}
               placeholder="e.g. Full Stack Engineer with 5+ yrs experience"
               className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              required
             />
           </div>
 
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
-              Key Skills & Highlights
+              Key Skills & Highlights <span className="text-red-500">*</span>
             </label>
             <textarea
               rows={3}
@@ -113,6 +125,7 @@ export function CoverLetterAiDrawer({
               onChange={(e) => setAiKeyPoints(e.target.value)}
               placeholder="e.g. React, Next.js, performance optimization, leading cross-functional teams"
               className="w-full rounded-xl border border-black/15 bg-black/5 p-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              required
             />
           </div>
 
@@ -139,6 +152,13 @@ export function CoverLetterAiDrawer({
             </div>
           </div>
 
+          {aiErrorMessage && (
+            <div className="flex items-start gap-2.5 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-red-950 animate-in fade-in">
+              <AlertCircle className="size-4 text-red-600 shrink-0 mt-0.5" />
+              <span className="leading-relaxed">{aiErrorMessage}</span>
+            </div>
+          )}
+
           {aiSuccessMessage && (
             <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-300 p-3 text-xs font-bold text-emerald-900 animate-in fade-in">
               <Check className="size-4 text-emerald-600 shrink-0" />
@@ -151,13 +171,18 @@ export function CoverLetterAiDrawer({
           <button
             type="button"
             onClick={onGenerate}
-            disabled={isGeneratingAi}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 text-xs font-bold text-white shadow-md transition hover:bg-emerald-800 disabled:opacity-50 cursor-pointer"
+            disabled={isGeneratingAi || isCooldownActive}
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 text-xs font-bold text-white shadow-md transition hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isGeneratingAi ? (
               <>
                 <Loader2 className="size-4 animate-spin text-white" />
                 <span>Writing with AI...</span>
+              </>
+            ) : isCooldownActive ? (
+              <>
+                <Clock className="size-4 text-emerald-200 animate-pulse" />
+                <span>Wait {cooldownText}</span>
               </>
             ) : (
               <>

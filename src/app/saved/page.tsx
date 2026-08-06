@@ -23,6 +23,7 @@ import {
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
+import { idbGet, idbSet, idbDel } from "@/modules/cover-letter/services/cover-letter-idb";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
 import { cn } from "@/shared/lib/utils";
@@ -126,8 +127,7 @@ export default function SavedDocumentsPage() {
         });
         apiResumes = Array.from(mergedResumesMap.values());
 
-        const localLettersRaw = localStorage.getItem("local-saved-cover-letters");
-        const localLetters: SavedCoverLetterItem[] = localLettersRaw ? JSON.parse(localLettersRaw) : [];
+        const localLetters: SavedCoverLetterItem[] = (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
         const mergedLettersMap = new Map<string, SavedCoverLetterItem>();
         [...apiLetters, ...localLetters].forEach((item) => {
           if (!mergedLettersMap.has(item.id)) mergedLettersMap.set(item.id, item);
@@ -225,24 +225,20 @@ export default function SavedDocumentsPage() {
   };
 
   // Cover Letter Actions
-  const handleOpenLetterInStudio = (letter: SavedCoverLetterItem) => {
-    if (typeof window !== "undefined" && letter.data) {
-      localStorage.setItem("cover-letter-studio-data", JSON.stringify({ data: letter.data }));
-      localStorage.setItem("active-cover-letter-id", letter.id);
+  const handleOpenLetterInStudio = async (letter: SavedCoverLetterItem) => {
+    if (letter.data) {
+      await idbSet("cover-letter-studio-data", { data: letter.data });
+      await idbSet("active-cover-letter-id", letter.id);
       window.location.href = "/cover-letter";
     } else {
       router.push("/cover-letter");
     }
   };
 
-  const handleCreateNewLetter = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("active-cover-letter-id", "new");
-      localStorage.removeItem("cover-letter-studio-data");
-      window.location.href = "/cover-letter";
-    } else {
-      router.push("/cover-letter");
-    }
+  const handleCreateNewLetter = async () => {
+    await idbSet("active-cover-letter-id", "new");
+    await idbDel("cover-letter-studio-data");
+    window.location.href = "/cover-letter";
   };
 
   const handleDuplicateLetter = async (letter: SavedCoverLetterItem) => {
@@ -278,13 +274,8 @@ export default function SavedDocumentsPage() {
           const authHeaders = await getAuthHeaders();
           await fetch(`/api/cover-letters/${id}`, { method: "DELETE", headers: authHeaders }).catch(() => {});
           setLetters((prev) => prev.filter((l) => l.id !== id));
-          if (typeof window !== "undefined") {
-            const localListRaw = localStorage.getItem("local-saved-cover-letters");
-            if (localListRaw) {
-              const localList: SavedCoverLetterItem[] = JSON.parse(localListRaw);
-              localStorage.setItem("local-saved-cover-letters", JSON.stringify(localList.filter((l) => l.id !== id)));
-            }
-          }
+          const localList: SavedCoverLetterItem[] = (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
+          await idbSet("local-saved-cover-letters", localList.filter((l) => l.id !== id));
           showToast("Cover letter deleted", undefined, "info");
         } finally {
           setDeletingId(null);

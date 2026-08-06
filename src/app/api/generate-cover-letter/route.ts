@@ -25,6 +25,9 @@ function getGroqClient(): OpenAI {
   return openaiInstance;
 }
 
+const userLastGenMap = new Map<string, number>();
+const COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -39,6 +42,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const userId = user.id;
+    const now = Date.now();
+    const lastGen = userLastGenMap.get(userId);
+
+    if (lastGen && now - lastGen < COOLDOWN_MS) {
+      const remainingMs = COOLDOWN_MS - (now - lastGen);
+      const remainingSeconds = Math.ceil(remainingMs / 1000);
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Please wait ${timeStr} before generating another cover letter with AI.`,
+          remainingSeconds,
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { role, company, headline, keyPoints, tone } = body as {
       role?: string;
@@ -48,11 +72,21 @@ export async function POST(request: NextRequest) {
       tone?: string;
     };
 
-    const targetRole = role?.trim() || "Product Specialist";
-    const targetCompany = company?.trim() || "the hiring team";
-    const userHeadline = headline?.trim() || "Professional";
-    const extraInfo = keyPoints?.trim() || "building high-performing products, collaborative leadership, and driving user growth";
+    const targetRole = role?.trim();
+    const targetCompany = company?.trim();
+    const userHeadline = headline?.trim();
+    const extraInfo = keyPoints?.trim();
     const writingTone = tone?.trim() || "Professional";
+
+    if (!targetRole || !targetCompany || !userHeadline || !extraInfo) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "All fields (Target Role, Target Company, Title/Specialty, and Key Skills) are required to generate an AI cover letter.",
+        },
+        { status: 400 }
+      );
+    }
 
     const apiKey = process.env.GROQ_API_KEY;
 
@@ -104,6 +138,8 @@ Write an exceptional, impact-driven cover letter. Avoid generic buzzwords; empha
 
     const content = response.choices[0]?.message?.content || "";
     const parsed = JSON.parse(content);
+
+    userLastGenMap.set(userId, Date.now());
 
     return NextResponse.json({
       success: true,
