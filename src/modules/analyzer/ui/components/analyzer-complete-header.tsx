@@ -13,11 +13,11 @@ export function AnalyzerCompleteHeader({ fileName, onReset }: AnalyzerCompleteHe
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-black/10 bg-white/90 p-4 shadow-[0_16px_50px_rgba(23,26,23,0.10)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
-        <div className="flex size-11 items-center justify-center rounded-lg bg-[#f6ecd0] text-[var(--premium-panel)]">
+        <div className="flex size-11 items-center justify-center rounded-lg bg-[#f6ecd0] text-(--premium-panel)">
           <BadgeCheck className="size-5" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-[var(--premium-ink)]">Analysis complete</h1>
+          <h1 className="text-xl font-semibold text-(--premium-ink)">Analysis complete</h1>
           <p className="max-w-full truncate text-sm text-muted-foreground">
             {fileName || "Your resume"}
           </p>
@@ -26,7 +26,7 @@ export function AnalyzerCompleteHeader({ fileName, onReset }: AnalyzerCompleteHe
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
         <Button
           asChild
-          className="h-10 justify-center gap-2 bg-[var(--brand-ink)] px-4 text-white hover:bg-[#293630] cursor-pointer"
+          className="h-10 justify-center gap-2 bg-(--brand-ink) px-4 text-white hover:bg-[#293630] cursor-pointer"
         >
           <Link href="/builder">
             <PenLine className="size-4" />
@@ -36,7 +36,7 @@ export function AnalyzerCompleteHeader({ fileName, onReset }: AnalyzerCompleteHe
         <Button
           onClick={onReset}
           variant="outline"
-          className="h-10 justify-center gap-2 border-black/10 bg-white/75 text-[var(--premium-ink)] hover:bg-white cursor-pointer"
+          className="h-10 justify-center gap-2 border-black/10 bg-white/75 text-(--premium-ink) hover:bg-white cursor-pointer"
         >
           <RotateCcw className="size-4" />
           Analyze another

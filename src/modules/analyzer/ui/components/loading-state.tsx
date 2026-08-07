@@ -46,19 +46,19 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
               <Sparkles className="size-4" />
               {phase === "extracting" ? "Reading resume" : "Creating report"}
             </div>
-            <h2 className="mt-4 text-2xl font-bold tracking-[-0.035em] text-[var(--brand-ink)] sm:text-3xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-[-0.035em] text-(--brand-ink) sm:text-3xl">
               {phase === "extracting" ? "Extracting your resume" : "Reviewing your resume"}
             </h2>
-            <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--brand-muted)]">
+            <p className="mt-2 max-w-lg text-sm leading-6 text-(--brand-muted)">
               We are checking structure, keywords, strengths, and the edits that will have the most
               impact.
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-2xl font-bold tracking-[-0.04em] text-[var(--brand-ink)]">
+            <p className="text-2xl font-bold tracking-[-0.04em] text-(--brand-ink)">
               {Math.round(progress)}%
             </p>
-            <p className="mt-1 flex items-center justify-end gap-1.5 text-xs text-[var(--brand-muted)]">
+            <p className="mt-1 flex items-center justify-end gap-1.5 text-xs text-(--brand-muted)">
               <Clock3 className="size-3.5" />
               {formatTime(elapsedTime)}
             </p>
@@ -78,17 +78,14 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
             const isActive = index === currentStep;
 
             return (
-              <div
-                key={step.text}
-                className="flex items-center gap-3 border-b border-black/8 py-3"
-              >
+              <div key={step.text} className="flex items-center gap-3 border-b border-black/8 py-3">
                 <span
                   className={[
                     "flex size-8 shrink-0 items-center justify-center rounded-full",
                     isDone
                       ? "bg-[#dce9d1] text-[#35533f]"
                       : isActive
-                        ? "bg-[var(--brand-ink)] text-white"
+                        ? "bg-(--brand-ink) text-white"
                         : "bg-[#f0f1ed] text-black/35",
                   ].join(" ")}
                 >
@@ -97,9 +94,7 @@ export function LoadingState({ phase = "analyzing" }: LoadingStateProps) {
                 <span
                   className={[
                     "text-sm",
-                    isActive || isDone
-                      ? "font-bold text-[var(--brand-ink)]"
-                      : "text-[var(--brand-muted)]",
+                    isActive || isDone ? "font-bold text-(--brand-ink)" : "text-(--brand-muted)",
                   ].join(" ")}
                 >
                   {step.text}

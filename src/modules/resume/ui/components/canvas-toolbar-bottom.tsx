@@ -79,8 +79,8 @@ export function CanvasBottomToolbar({
           className={cn(
             "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             !activeHand
-              ? "bg-white text-[var(--brand-ink)] shadow-xs"
-              : "text-[var(--brand-muted)] hover:text-black"
+              ? "bg-white text-(--brand-ink) shadow-xs"
+              : "text-(--brand-muted) hover:text-black"
           )}
           title="Select Mode (Click text on PDF to highlight & edit)"
         >
@@ -92,8 +92,8 @@ export function CanvasBottomToolbar({
           className={cn(
             "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             activeHand
-              ? "bg-white text-[var(--brand-ink)] shadow-xs"
-              : "text-[var(--brand-muted)] hover:text-black"
+              ? "bg-white text-(--brand-ink) shadow-xs"
+              : "text-(--brand-muted) hover:text-black"
           )}
           title="Pan / Hand Tool (Drag Canvas)"
         >
@@ -118,26 +118,32 @@ export function CanvasBottomToolbar({
         <button
           type="button"
           onClick={onTogglePresetsMenu}
-          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10 cursor-pointer"
+          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/10 cursor-pointer"
           title="Choose Zoom Scale"
         >
           <span>{Math.round(zoom)}%</span>
-          <span className="text-[10px] text-[var(--brand-muted)]">▼</span>
+          <span className="text-[10px] text-(--brand-muted)">▼</span>
         </button>
 
         {showPresetsMenu && (
           <div className="absolute bottom-11 left-1/2 z-50 min-w-[120px] -translate-x-1/2 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
             <button
               type="button"
-              onClick={() => { onFitToWidth(); onTogglePresetsMenu(); }}
-              className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 cursor-pointer"
+              onClick={() => {
+                onFitToWidth();
+                onTogglePresetsMenu();
+              }}
+              className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-(--brand-ink) hover:bg-black/5 cursor-pointer"
             >
               <span>Fit Width</span>
             </button>
             <button
               type="button"
-              onClick={() => { onFitToPage(); onTogglePresetsMenu(); }}
-              className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 cursor-pointer"
+              onClick={() => {
+                onFitToPage();
+                onTogglePresetsMenu();
+              }}
+              className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-(--brand-ink) hover:bg-black/5 cursor-pointer"
             >
               <span>Fit Page</span>
             </button>
@@ -146,18 +152,19 @@ export function CanvasBottomToolbar({
               <button
                 key={preset.value}
                 type="button"
-                onClick={() => { onZoomChange(preset.value); onTogglePresetsMenu(); }}
+                onClick={() => {
+                  onZoomChange(preset.value);
+                  onTogglePresetsMenu();
+                }}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-2.5 py-1 text-xs font-bold transition cursor-pointer",
                   Math.round(zoom) === preset.value
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
-                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                    : "text-(--brand-ink) hover:bg-black/5"
                 )}
               >
                 <span>{preset.label}</span>
-                {Math.round(zoom) === preset.value && (
-                  <Check className="size-3 text-emerald-600" />
-                )}
+                {Math.round(zoom) === preset.value && <Check className="size-3 text-emerald-600" />}
               </button>
             ))}
           </div>
@@ -220,7 +227,7 @@ export function CanvasBottomToolbar({
           className="builder-icon-button cursor-pointer"
           title="Canvas Theme"
         >
-          <Grid className="size-3.5 text-[var(--brand-ink)]" />
+          <Grid className="size-3.5 text-(--brand-ink)" />
         </button>
 
         {showThemeMenu && (
@@ -234,12 +241,15 @@ export function CanvasBottomToolbar({
               <button
                 key={theme.id}
                 type="button"
-                onClick={() => { onCanvasThemeChange(theme.id as CanvasTheme); onToggleThemeMenu(); }}
+                onClick={() => {
+                  onCanvasThemeChange(theme.id as CanvasTheme);
+                  onToggleThemeMenu();
+                }}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition cursor-pointer",
                   canvasTheme === theme.id
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
-                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                    : "text-(--brand-ink) hover:bg-black/5"
                 )}
               >
                 <span>{theme.label}</span>

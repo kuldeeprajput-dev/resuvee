@@ -37,11 +37,8 @@ export function validateResumeFile(file: File): ResumeFileValidationResult {
   }
 
   const name = file.name.toLowerCase();
-  const hasValidExtension = ALLOWED_RESUME_EXTENSIONS.some((ext) =>
-    name.endsWith(ext)
-  );
-  const hasValidType =
-    !file.type || file.type === "" || ALLOWED_RESUME_TYPES.includes(file.type);
+  const hasValidExtension = ALLOWED_RESUME_EXTENSIONS.some((ext) => name.endsWith(ext));
+  const hasValidType = !file.type || file.type === "" || ALLOWED_RESUME_TYPES.includes(file.type);
 
   if (!hasValidExtension && !hasValidType) {
     return {
@@ -113,7 +110,8 @@ const LOCATION_REGEX =
   /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),\s*([A-Z]{2}|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*)\b|Remote|Hybrid/;
 
 // Lines that look like contact info and should not be used as name/headline
-const CONTACT_LINE_REGEX = /@|linkedin|github|twitter|portfolio|http|www\.|phone:|email:|tel:|mobile:|\.com|\.io|\.me|\.net\b/i;
+const CONTACT_LINE_REGEX =
+  /@|linkedin|github|twitter|portfolio|http|www\.|phone:|email:|tel:|mobile:|\.com|\.io|\.me|\.net\b/i;
 
 // ─────────────────────────────────────────────
 // Parse Stats (for rich success messages)
@@ -147,9 +145,7 @@ export function parseExtractedResumeText(
     return { data: currentData, stats: emptyStats };
   }
 
-  const cleanedRaw = collapseSpacedLetters(
-    rawText.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
-  );
+  const cleanedRaw = collapseSpacedLetters(rawText.replace(/\r\n/g, "\n").replace(/\r/g, "\n"));
 
   const lines = cleanedRaw
     .split("\n")
@@ -259,9 +255,7 @@ export function parseExtractedResumeText(
       for (let i = 0; i < sec.lines.length; i++) {
         const line = sec.lines[i];
         const isExplicitBullet = BULLET_START_REGEX.test(line);
-        const startsWithActionVerb = ACTION_VERB_REGEX.test(
-          line.replace(BULLET_START_REGEX, "")
-        );
+        const startsWithActionVerb = ACTION_VERB_REGEX.test(line.replace(BULLET_START_REGEX, ""));
         const dateMatch = line.match(DATE_RANGE_REGEX);
 
         if (isExplicitBullet || (currentExp && startsWithActionVerb)) {
@@ -356,16 +350,11 @@ export function parseExtractedResumeText(
 
       for (const line of sec.lines) {
         const isExplicitBullet = BULLET_START_REGEX.test(line);
-        const startsWithAction = ACTION_VERB_REGEX.test(
-          line.replace(BULLET_START_REGEX, "")
-        );
+        const startsWithAction = ACTION_VERB_REGEX.test(line.replace(BULLET_START_REGEX, ""));
         const isLongSentence = line.split(/\s+/).length > 6;
         const dateMatch = line.match(DATE_RANGE_REGEX);
 
-        if (
-          isExplicitBullet ||
-          (currentProj && (startsWithAction || isLongSentence))
-        ) {
+        if (isExplicitBullet || (currentProj && (startsWithAction || isLongSentence))) {
           const text = line.replace(BULLET_START_REGEX, "").trim();
           if (currentProj) {
             currentProj.highlights.push(text);
@@ -398,8 +387,7 @@ export function parseExtractedResumeText(
 
           const parts = name.split(/[:·•|\-]/);
           name = parts[0]?.trim() || name;
-          const desc =
-            parts.length > 1 ? parts.slice(1).join(" · ").trim() : "";
+          const desc = parts.length > 1 ? parts.slice(1).join(" · ").trim() : "";
 
           currentProj = {
             id: `imported-proj-${Date.now()}-${Math.random()}`,
@@ -579,9 +567,7 @@ export function parseExtractedResumeText(
           .filter(Boolean)
       );
       if (skills.length > 0) {
-        const existing = newData.skillGroups.find(
-          (g) => g.name.toLowerCase() === "languages"
-        );
+        const existing = newData.skillGroups.find((g) => g.name.toLowerCase() === "languages");
         if (existing) {
           existing.skills = [...new Set([...existing.skills, ...skills])];
         } else {

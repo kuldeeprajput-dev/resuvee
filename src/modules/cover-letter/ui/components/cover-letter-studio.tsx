@@ -18,36 +18,62 @@ export function CoverLetterStudio() {
   const state = useCoverLetterState();
 
   const {
-    data, setData,
-    theme, setTheme,
-    customAccent, setCustomAccent,
-    splitPercent, setSplitPercent,
-    isResizing, setIsResizing,
+    data,
+    setData,
+    theme,
+    setTheme,
+    customAccent,
+    setCustomAccent,
+    splitPercent,
+    setSplitPercent,
+    isResizing,
+    setIsResizing,
     splitContainerRef,
-    isLeftCollapsed, isRightCollapsed,
-    history, future,
-    font, setFont,
-    pageSpacing, setPageSpacing,
-    zoom, setZoom,
-    pan, setPan,
+    isLeftCollapsed,
+    isRightCollapsed,
+    history,
+    future,
+    font,
+    setFont,
+    pageSpacing,
+    setPageSpacing,
+    zoom,
+    setZoom,
+    pan,
+    setPan,
     isDragging,
-    isHandTool, setIsHandTool,
+    isHandTool,
+    setIsHandTool,
     isSpacePressed,
-    canvasTheme, setCanvasTheme,
-    isFullscreen, setIsFullscreen,
-    showThemeMenu, setShowThemeMenu,
-    showPresetsMenu, setShowPresetsMenu,
-    showDesignMenu, setShowDesignMenu,
-    showTemplatesMenu, setShowTemplatesMenu,
-    showMobilePreview, setShowMobilePreview,
+    canvasTheme,
+    setCanvasTheme,
+    isFullscreen,
+    setIsFullscreen,
+    showThemeMenu,
+    setShowThemeMenu,
+    showPresetsMenu,
+    setShowPresetsMenu,
+    showDesignMenu,
+    setShowDesignMenu,
+    showTemplatesMenu,
+    setShowTemplatesMenu,
+    showMobilePreview,
+    setShowMobilePreview,
     containerWidth,
-    showStartFreshModal, setShowStartFreshModal,
-    showAiDrawer, setShowAiDrawer,
-    aiRole, setAiRole,
-    aiCompany, setAiCompany,
-    aiHeadline, setAiHeadline,
-    aiKeyPoints, setAiKeyPoints,
-    aiTone, setAiTone,
+    showStartFreshModal,
+    setShowStartFreshModal,
+    showAiDrawer,
+    setShowAiDrawer,
+    aiRole,
+    setAiRole,
+    aiCompany,
+    setAiCompany,
+    aiHeadline,
+    setAiHeadline,
+    aiKeyPoints,
+    setAiKeyPoints,
+    aiTone,
+    setAiTone,
     isGeneratingAi,
     aiSuccessMessage,
     aiErrorMessage,
@@ -58,8 +84,10 @@ export function CoverLetterStudio() {
     selectedField,
     highlightRect,
     toolbarPos,
-    inlineText, setInlineText,
-    showColorPicker, setShowColorPicker,
+    inlineText,
+    setInlineText,
+    showColorPicker,
+    setShowColorPicker,
     containerRef,
     selectedDomRef,
     toolbarRef,
@@ -98,7 +126,7 @@ export function CoverLetterStudio() {
       : "Cover Letter";
 
   return (
-    <div className="min-h-screen bg-[#f8f7f2] text-[var(--brand-ink)]">
+    <div className="min-h-screen bg-[#f8f7f2] text-(--brand-ink)">
       {/* Pinned Top Navigation Header */}
       <CoverLetterStudioHeader
         documentTitle={documentTitle}
@@ -154,13 +182,15 @@ export function CoverLetterStudio() {
         {/* Right Section Interactive Studio Canvas */}
         {!isRightCollapsed && (
           <section
-            style={isFullscreen || containerWidth < 1024 ? undefined : { width: `${100 - splitPercent}%` }}
+            style={
+              isFullscreen || containerWidth < 1024
+                ? undefined
+                : { width: `${100 - splitPercent}%` }
+            }
             className={cn(
               "cover-letter-preview-panel relative overflow-hidden select-none transition-all duration-300 h-full shrink-0",
-              showMobilePreview
-                ? "fixed inset-0 z-[80] flex flex-col"
-                : "hidden lg:flex lg:flex-col",
-              isFullscreen ? "fixed inset-0 z-[120] w-full h-full bg-[#1e2320]" : "",
+              showMobilePreview ? "fixed inset-0 z-80 flex flex-col" : "hidden lg:flex lg:flex-col",
+              isFullscreen ? "fixed inset-0 z-120 w-full h-full bg-[#1e2320]" : "",
               isResizing ? "transition-none" : "transition-[width] duration-150 ease-out"
             )}
           >
@@ -210,7 +240,11 @@ export function CoverLetterStudio() {
               className={cn(
                 "canvas-bg cover-letter-preview-stage relative flex-1 overflow-hidden transition-colors duration-300 touch-none",
                 themeStyles[canvasTheme],
-                isHandTool || isSpacePressed ? (isDragging ? "cursor-grabbing" : "cursor-grab") : "cursor-default"
+                isHandTool || isSpacePressed
+                  ? isDragging
+                    ? "cursor-grabbing"
+                    : "cursor-grab"
+                  : "cursor-default"
               )}
             >
               {/* Visual Selection Bounding Box Overlay */}
@@ -297,7 +331,7 @@ export function CoverLetterStudio() {
         )}
 
         {/* Global drag overlay safeguard during mouse resize */}
-        {isResizing && <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />}
+        {isResizing && <div className="fixed inset-0 z-9999 cursor-col-resize select-none" />}
       </main>
 
       {/* Start Fresh Confirmation Modal */}

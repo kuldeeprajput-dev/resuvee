@@ -1,7 +1,18 @@
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
-import { ProfilePhoto, SectionTitle, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, CertificationsSection, Sheet } from "./resume-preview-shared";
+import {
+  ProfilePhoto,
+  SectionTitle,
+  ContactList,
+  SummarySection,
+  ExperienceSection,
+  EducationSection,
+  SkillsSection,
+  ProjectsSection,
+  CertificationsSection,
+  Sheet,
+} from "./resume-preview-shared";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -14,14 +25,19 @@ interface ResumePreviewProps {
   lineHeight?: "tight" | "normal" | "relaxed";
 }
 
-export function BlueprintTemplate({ data, template, className, showPhoto = true }: ResumePreviewProps) {
+export function BlueprintTemplate({
+  data,
+  template,
+  className,
+  showPhoto = true,
+}: ResumePreviewProps) {
   return (
     <Sheet className={cn("grid grid-cols-[172px_1fr] bg-[#fbfcfd]", className)}>
       <aside
         className="relative flex flex-col px-5 py-8 text-white"
         style={{ backgroundColor: template.accent }}
       >
-        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:18px_18px]" />
+        <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] bg-size-[18px_18px]" />
         <ProfilePhoto
           data={data}
           hidden={!showPhoto}
@@ -350,4 +366,3 @@ function AnalystRuleTitle({ children }: { children: React.ReactNode }) {
     </h2>
   );
 }
-

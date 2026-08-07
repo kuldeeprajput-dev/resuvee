@@ -121,8 +121,7 @@ export function WritingCheckPanel({
         body: JSON.stringify({ targets }),
       });
       const payload = (await response.json()) as
-        | { success: true; data: WritingCheckResponse }
-        | { success: false; error: string };
+        { success: true; data: WritingCheckResponse } | { success: false; error: string };
 
       if (!response.ok || !payload.success) {
         throw new Error(payload.success ? "Writing check failed." : payload.error);
@@ -167,7 +166,7 @@ export function WritingCheckPanel({
   };
 
   return (
-    <div className="no-print fixed inset-0 z-[300] flex justify-end bg-black/15">
+    <div className="no-print fixed inset-0 z-300 flex justify-end bg-black/15">
       <button
         type="button"
         onClick={onClose}
@@ -176,7 +175,7 @@ export function WritingCheckPanel({
       />
       <aside
         style={{ width: `${panelWidth}px` }}
-        className="relative flex h-full w-full min-w-[320px] sm:min-w-[540px] max-w-[95vw] flex-col overflow-hidden bg-[var(--brand-canvas)] shadow-2xl"
+        className="relative flex h-full w-full min-w-[320px] sm:min-w-[540px] max-w-[95vw] flex-col overflow-hidden bg-(--brand-canvas) shadow-2xl"
       >
         <div
           onMouseDown={handleMouseDown}
@@ -195,7 +194,7 @@ export function WritingCheckPanel({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-emerald-700">
                 AI writing check
               </p>
-              <h2 className="text-xl font-bold tracking-[-0.035em] text-[var(--brand-ink)]">
+              <h2 className="text-xl font-bold tracking-[-0.035em] text-(--brand-ink)">
                 Catch mistakes before sending
               </h2>
             </div>
@@ -213,15 +212,15 @@ export function WritingCheckPanel({
         <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-7">
           {!hasChecked && !loading && (
             <div className="space-y-4">
-              <div className="relative overflow-hidden rounded-3xl border border-emerald-500/25 bg-gradient-to-br from-emerald-50/90 via-white to-emerald-50/50 p-6 text-[var(--brand-ink)] shadow-xs">
+              <div className="relative overflow-hidden rounded-3xl border border-emerald-500/25 bg-linear-to-br from-emerald-50/90 via-white to-emerald-50/50 p-6 text-(--brand-ink) shadow-xs">
                 <div className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-emerald-400/15 blur-2xl" />
                 <span className="flex size-11 items-center justify-center rounded-2xl border border-emerald-500/20 bg-white text-emerald-600 shadow-2xs">
                   <SpellCheck2 className="size-5.5" />
                 </span>
-                <h3 className="mt-4 text-2xl font-extrabold tracking-[-0.04em] text-[var(--brand-ink)]">
+                <h3 className="mt-4 text-2xl font-extrabold tracking-[-0.04em] text-(--brand-ink)">
                   Review every important sentence.
                 </h3>
-                <p className="mt-2.5 text-sm leading-6 text-[var(--brand-muted)]">
+                <p className="mt-2.5 text-sm leading-6 text-(--brand-muted)">
                   Check spelling, grammar, and clarity while preserving your facts, voice, metrics,
                   and experience.
                 </p>
@@ -249,8 +248,8 @@ export function WritingCheckPanel({
               </div>
 
               <div className="flex items-start gap-3 rounded-2xl border border-black/10 bg-white p-4">
-                <LockKeyhole className="mt-0.5 size-4 shrink-0 text-[var(--brand-muted)]" />
-                <p className="text-[11px] leading-5 text-[var(--brand-muted)]">
+                <LockKeyhole className="mt-0.5 size-4 shrink-0 text-(--brand-muted)" />
+                <p className="text-[11px] leading-5 text-(--brand-muted)">
                   Resume writing fields are sent to the configured AI provider for this check.
                   Contact fields such as your name, email, phone, location, and links are excluded.
                 </p>
@@ -263,8 +262,10 @@ export function WritingCheckPanel({
               <span className="flex size-14 items-center justify-center rounded-2xl bg-white shadow-sm border border-black/10">
                 <LoaderCircle className="size-6 animate-spin text-emerald-600" />
               </span>
-              <h3 className="mt-5 text-base font-bold text-[var(--brand-ink)]">Reviewing your writing</h3>
-              <p className="mt-2 max-w-xs text-xs leading-5 text-[var(--brand-muted)]">
+              <h3 className="mt-5 text-base font-bold text-(--brand-ink)">
+                Reviewing your writing
+              </h3>
+              <p className="mt-2 max-w-xs text-xs leading-5 text-(--brand-muted)">
                 Looking for spelling, grammar, and clarity improvements without changing your facts.
               </p>
             </div>
@@ -274,10 +275,10 @@ export function WritingCheckPanel({
             <>
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-bold text-[var(--brand-ink)]">
+                  <p className="text-sm font-bold text-(--brand-ink)">
                     {issues.length ? `${issues.length} suggestions` : "Writing looks clean"}
                   </p>
-                  <p className="mt-1 text-[11px] text-[var(--brand-muted)]">
+                  <p className="mt-1 text-[11px] text-(--brand-muted)">
                     Accept or dismiss every change individually.
                   </p>
                 </div>
@@ -306,13 +307,13 @@ export function WritingCheckPanel({
                           <div className="flex items-center gap-2">
                             <span
                               className={cn(
-                                "rounded-full px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.1em]",
+                                "rounded-full px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-widest",
                                 issueTone[issue.type]
                               )}
                             >
                               {issue.type}
                             </span>
-                            <span className="text-[10px] font-bold text-[var(--brand-muted)]">
+                            <span className="text-[10px] font-bold text-(--brand-muted)">
                               · {issue.label}
                             </span>
                           </div>
@@ -331,7 +332,7 @@ export function WritingCheckPanel({
 
                         <div className="mt-4 grid gap-2">
                           <div className="rounded-xl border border-rose-100 bg-rose-50/60 px-3 py-2.5">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-rose-800">
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-rose-800">
                               Original
                             </p>
                             <p className="mt-1 text-xs leading-5 text-rose-900 line-through decoration-rose-400">
@@ -339,7 +340,7 @@ export function WritingCheckPanel({
                             </p>
                           </div>
                           <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 px-3 py-2.5">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-emerald-800">
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-800">
                               Suggestion
                             </p>
                             <p className="mt-1 text-xs font-bold leading-5 text-emerald-950">
@@ -347,7 +348,7 @@ export function WritingCheckPanel({
                             </p>
                           </div>
                         </div>
-                        <p className="mt-3 text-[11px] leading-5 text-[var(--brand-muted)]">
+                        <p className="mt-3 text-[11px] leading-5 text-(--brand-muted)">
                           {issue.explanation}
                         </p>
                         <div className="mt-4 flex items-center justify-between gap-2 border-t border-black/5 pt-3">
@@ -355,7 +356,7 @@ export function WritingCheckPanel({
                             <Button
                               type="button"
                               onClick={() => acceptIssue(issue)}
-                              className="h-9 rounded-lg bg-[var(--brand-ink)] px-3.5 text-[11px] font-bold text-white transition hover:bg-[#27332f] cursor-pointer"
+                              className="h-9 rounded-lg bg-(--brand-ink) px-3.5 text-[11px] font-bold text-white transition hover:bg-[#27332f] cursor-pointer"
                             >
                               <Check className="size-3.5" />
                               Accept
@@ -364,7 +365,7 @@ export function WritingCheckPanel({
                               type="button"
                               variant="ghost"
                               onClick={() => dismissIssue(issue)}
-                              className="h-9 rounded-lg px-3 text-[11px] font-bold text-[var(--brand-muted)] hover:text-[var(--brand-ink)]"
+                              className="h-9 rounded-lg px-3 text-[11px] font-bold text-(--brand-muted) hover:text-(--brand-ink)"
                             >
                               Dismiss
                             </Button>
@@ -389,7 +390,9 @@ export function WritingCheckPanel({
               ) : (
                 <div className="mt-5 rounded-3xl border border-emerald-500/20 bg-emerald-50/50 px-5 py-10 text-center">
                   <CheckCheck className="mx-auto size-8 text-emerald-600" />
-                  <h3 className="mt-4 text-base font-bold text-emerald-950">No clear mistakes found</h3>
+                  <h3 className="mt-4 text-base font-bold text-emerald-950">
+                    No clear mistakes found
+                  </h3>
                   <p className="mx-auto mt-2 max-w-sm text-xs leading-5 text-emerald-900/70">
                     Give the resume one final human read for names, dates, and role-specific
                     terminology.

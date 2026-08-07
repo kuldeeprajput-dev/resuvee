@@ -1,7 +1,18 @@
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
-import { ProfilePhoto, SectionTitle, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, CertificationsSection, Sheet } from "./resume-preview-shared";
+import {
+  ProfilePhoto,
+  SectionTitle,
+  ContactList,
+  SummarySection,
+  ExperienceSection,
+  EducationSection,
+  SkillsSection,
+  ProjectsSection,
+  CertificationsSection,
+  Sheet,
+} from "./resume-preview-shared";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -28,7 +39,10 @@ export function AnalystTemplate(props: ResumePreviewProps) {
   return (
     <Sheet
       pagePadding={pagePadding}
-      className={cn("bg-white px-8 py-6 font-serif text-[#202020] flex flex-col justify-between min-h-[842px] h-[842px]", className)}
+      className={cn(
+        "bg-white px-8 py-6 font-serif text-[#202020] flex flex-col justify-between min-h-[842px] h-[842px]",
+        className
+      )}
     >
       <div>
         <header className="text-center">
@@ -309,4 +323,3 @@ export function PivotTemplate(props: ResumePreviewProps) {
     </Sheet>
   );
 }
-

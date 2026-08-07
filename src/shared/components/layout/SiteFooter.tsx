@@ -34,21 +34,21 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
   return (
     <footer
       className={cn(
-        "border-t border-black/[0.08]",
-        blendWithPage ? "bg-[var(--brand-canvas)]" : "bg-[#e9e7df]"
+        "border-t border-black/8",
+        blendWithPage ? "bg-(--brand-canvas)" : "bg-[#e9e7df]"
       )}
     >
       <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-10 sm:px-8 md:grid-cols-[0.75fr_1.25fr] md:gap-16 md:py-12 lg:px-12">
         <div className="min-w-0 max-w-md">
           <Brand />
-          <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--brand-muted)]">
+          <p className="mt-4 max-w-sm text-sm leading-6 text-(--brand-muted)">
             Build a clearer career story, understand how it performs, and move every application
             forward with confidence.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <Link
               href="/builder"
-              className="group inline-flex h-7 sm:h-8 items-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-3.5 sm:px-4 text-[12px] sm:text-xs font-bold text-white shadow-xs transition-all duration-200 hover:scale-105 hover:bg-[#1a2521]"
+              className="group inline-flex h-7 sm:h-8 items-center gap-1.5 rounded-full bg-(--brand-ink) px-3.5 sm:px-4 text-[12px] sm:text-xs font-bold text-white shadow-xs transition-all duration-200 hover:scale-105 hover:bg-[#1a2521]"
             >
               Build a resume
               <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -82,7 +82,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
                 {group.links.map((link) => (
                   <Link
                     key={`${group.title}-${link.href}`}
-                    className="w-fit text-[13px] text-[var(--brand-muted)] transition-colors duration-200 hover:text-[var(--brand-ink)] hover:underline hover:underline-offset-4"
+                    className="w-fit text-[13px] text-(--brand-muted) transition-colors duration-200 hover:text-(--brand-ink) hover:underline hover:underline-offset-4"
                     href={link.href}
                   >
                     {link.label}
@@ -94,7 +94,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         </nav>
       </div>
       <div className="border-t border-black/[0.07]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-5 py-6 text-xs text-[var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6 lg:px-12">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-5 py-6 text-xs text-(--brand-muted) sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6 lg:px-12">
           <p>© 2026 Resuvee. Built for better applications.</p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>Original, copyright-safe template designs</span>

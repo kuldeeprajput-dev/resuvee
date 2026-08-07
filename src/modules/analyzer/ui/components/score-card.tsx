@@ -10,9 +10,9 @@ function getScoreTone(score: number) {
     return {
       label: "Excellent",
       card: "border-[#9dcfc5] bg-[#eaf5f1]/90",
-      progress: "text-[var(--premium-teal)]",
+      progress: "text-(--premium-teal)",
       text: "text-[#0f766e]",
-      fill: "bg-[var(--premium-teal)]",
+      fill: "bg-(--premium-teal)",
     };
   }
 
@@ -20,9 +20,9 @@ function getScoreTone(score: number) {
     return {
       label: "Good",
       card: "border-[#d9c38b] bg-[#fbf5e6]/90",
-      progress: "text-[var(--premium-gold)]",
+      progress: "text-(--premium-gold)",
       text: "text-[#6f5520]",
-      fill: "bg-[var(--premium-gold)]",
+      fill: "bg-(--premium-gold)",
     };
   }
 
@@ -44,8 +44,8 @@ export function ScoreCard({ analysis }: ScoreCardProps) {
   const normalizedScore = Math.min(Math.max(analysis.score, 0), 100);
   const scoreBands = [
     { label: "Weak", width: "40%", className: "bg-red-400" },
-    { label: "Good", width: "30%", className: "bg-[var(--premium-gold)]" },
-    { label: "Strong", width: "30%", className: "bg-[var(--premium-teal)]" },
+    { label: "Good", width: "30%", className: "bg-(--premium-gold)" },
+    { label: "Strong", width: "30%", className: "bg-(--premium-teal)" },
   ];
   const scoreSignals = [
     {
@@ -64,7 +64,7 @@ export function ScoreCard({ analysis }: ScoreCardProps) {
       label: "Skills found",
       value: analysis.techStack.length,
       icon: Layers3,
-      className: "bg-white/70 text-[var(--premium-ink)]",
+      className: "bg-white/70 text-(--premium-ink)",
     },
   ];
   const scoreSummary =
@@ -89,18 +89,14 @@ export function ScoreCard({ analysis }: ScoreCardProps) {
           <div className="min-w-0 space-y-3">
             <div>
               <p className="text-xs font-semibold uppercase text-muted-foreground">ATS score</p>
-              <h2 className="mt-1 text-3xl font-semibold text-[var(--premium-ink)]">
+              <h2 className="mt-1 text-3xl font-semibold text-(--premium-ink)">
                 {analysis.score}/100
               </h2>
               <p className={`text-sm font-medium ${scoreTone.text}`}>{scoreTone.label}</p>
             </div>
             <div className="flex h-2 overflow-hidden rounded-full bg-white/80 ring-1 ring-black/10">
               {scoreBands.map((band) => (
-                <div
-                  key={band.label}
-                  className={band.className}
-                  style={{ width: band.width }}
-                />
+                <div key={band.label} className={band.className} style={{ width: band.width }} />
               ))}
             </div>
           </div>
@@ -108,7 +104,7 @@ export function ScoreCard({ analysis }: ScoreCardProps) {
 
         <div className="mt-5 border-t border-black/10 pt-4">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <p className="text-sm font-semibold text-[var(--premium-ink)]">Score signals</p>
+            <p className="text-sm font-semibold text-(--premium-ink)">Score signals</p>
             <span className={`text-xs font-semibold ${scoreTone.text}`}>
               {scoreTone.label} band
             </span>
@@ -138,7 +134,7 @@ export function ScoreCard({ analysis }: ScoreCardProps) {
                 style={{ width: `${normalizedScore}%` }}
               />
             </div>
-            <p className="mt-3 text-sm leading-5 text-[var(--premium-ink)]">{scoreSummary}</p>
+            <p className="mt-3 text-sm leading-5 text-(--premium-ink)">{scoreSummary}</p>
           </div>
         </div>
       </CardContent>

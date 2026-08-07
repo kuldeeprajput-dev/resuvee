@@ -24,12 +24,11 @@ export function AnalyzerHeroHeader() {
         <ScanLine className="size-3.5 sm:size-4" />
         ATS resume analyzer
       </div>
-      <h1 className="mt-2 text-2xl font-bold leading-[1.08] tracking-[-0.04em] text-[var(--brand-ink)] sm:mt-5 sm:text-4xl sm:leading-[1.02] sm:tracking-[-0.055em] lg:text-[58px]">
+      <h1 className="mt-2 text-2xl font-bold leading-[1.08] tracking-[-0.04em] text-(--brand-ink) sm:mt-5 sm:text-4xl sm:leading-[1.02] sm:tracking-[-0.055em] lg:text-[58px]">
         See what your resume says before you send it.
       </h1>
-      <p className="mt-2 max-w-lg text-xs leading-relaxed text-[var(--brand-muted)] sm:mt-5 sm:text-lg sm:leading-7">
-        Get a focused ATS score, identify missing keywords, and leave with a practical edit
-        plan.
+      <p className="mt-2 max-w-lg text-xs leading-relaxed text-(--brand-muted) sm:mt-5 sm:text-lg sm:leading-7">
+        Get a focused ATS score, identify missing keywords, and leave with a practical edit plan.
       </p>
     </div>
   );
@@ -48,14 +47,14 @@ export function AnalyzerHeroFeatures() {
               <Check className="size-2.5 sm:size-3" strokeWidth={2.5} />
             </span>
             <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between">
-              <p className="text-xs font-bold text-[var(--brand-ink)] sm:text-sm">{item.title}</p>
-              <p className="text-[11px] text-[var(--brand-muted)] sm:text-xs">{item.detail}</p>
+              <p className="text-xs font-bold text-(--brand-ink) sm:text-sm">{item.title}</p>
+              <p className="text-[11px] text-(--brand-muted) sm:text-xs">{item.detail}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <p className="mt-3 flex items-center gap-2 text-[11px] text-[var(--brand-muted)] sm:mt-5 sm:text-xs lg:mt-auto lg:pt-5">
+      <p className="mt-3 flex items-center gap-2 text-[11px] text-(--brand-muted) sm:mt-5 sm:text-xs lg:mt-auto lg:pt-5">
         <LockKeyhole className="size-3 sm:size-3.5" />
         Your resume is used only to create this report.
       </p>
@@ -71,4 +70,3 @@ export function AnalyzerHeroCopy() {
     </div>
   );
 }
-

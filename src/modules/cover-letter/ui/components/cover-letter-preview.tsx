@@ -52,21 +52,24 @@ function CoverLetterPreviewBase({
     cn(
       isHandTool ? "cursor-inherit" : "lg:cursor-pointer cursor-default",
       selectedField === field && "cl-field-active",
-      "break-words [overflow-wrap:anywhere]",
-      !data[field] && "inline-block min-h-[1.25rem] min-w-[3rem]"
+      "wrap-break-word wrap-anywhere",
+      !data[field] && "inline-block min-h-5 min-w-12"
     );
 
   return (
     <article
       className={cn(
-        "cover-letter-print-area cover-letter-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] break-words [overflow-wrap:anywhere]",
+        "cover-letter-print-area cover-letter-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] wrap-break-word wrap-anywhere",
         spacingClass,
         fontClass,
         isHandTool && "hand-mode"
       )}
     >
       {theme === "signal" && (
-        <div className="absolute inset-y-0 left-0 w-3 [-webkit-print-color-adjust:exact] [print-color-adjust:exact]" style={{ backgroundColor: accent }} />
+        <div
+          className="absolute inset-y-0 left-0 w-3 [-webkit-print-color-adjust:exact] [print-color-adjust:exact]"
+          style={{ backgroundColor: accent }}
+        />
       )}
       {theme === "linen" && (
         <div className="absolute -right-20 -top-24 size-64 rounded-full bg-[#e7f1e8] [-webkit-print-color-adjust:exact] [print-color-adjust:exact]" />
@@ -86,7 +89,7 @@ function CoverLetterPreviewBase({
           data-field="headline"
           onClick={(e) => onSelectField?.(e, "headline")}
           className={cn(
-            "mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--brand-muted)]",
+            "mt-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-(--brand-muted)",
             getFieldClass("headline")
           )}
         >
@@ -101,7 +104,7 @@ function CoverLetterPreviewBase({
       </header>
 
       <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f]">
-        <div className="flex items-center justify-between text-[11px] font-medium text-[var(--brand-muted)]">
+        <div className="flex items-center justify-between text-[11px] font-medium text-(--brand-muted)">
           <p
             data-field="date"
             onClick={(e) => onSelectField?.(e, "date")}
@@ -185,7 +188,7 @@ function CoverLetterPreviewBase({
       </section>
 
       {(data.email || data.phone || data.location || data.website) && (
-        <footer className="relative mt-8 border-t border-black/10 pt-4 text-[9px] text-[var(--brand-muted)] flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <footer className="relative mt-8 border-t border-black/10 pt-4 text-[9px] text-(--brand-muted) flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             {data.email && (
               <span

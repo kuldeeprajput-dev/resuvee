@@ -6,7 +6,6 @@ import { useCoverLetterCanvas } from "./use-cover-letter-canvas";
 import { useCoverLetterSelection } from "./use-cover-letter-selection";
 import { useCoverLetterAi } from "./use-cover-letter-ai";
 
-
 export function useCoverLetterState() {
   const dataHook = useCoverLetterData();
   const canvasHook = useCoverLetterCanvas();

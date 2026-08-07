@@ -24,10 +24,10 @@ export async function exportCoverLetterDocx(
     font === "serif"
       ? "Georgia"
       : font === "mono"
-      ? "Consolas"
-      : font === "sans"
-      ? "Calibri"
-      : "Calibri";
+        ? "Consolas"
+        : font === "sans"
+          ? "Calibri"
+          : "Calibri";
 
   const title = data.fullName
     ? `${data.fullName}'s Cover Letter`
@@ -48,11 +48,10 @@ export async function exportCoverLetterDocx(
     pageSpacing === "compact"
       ? { top: 423, right: 544, bottom: 423, left: 544 }
       : pageSpacing === "spacious"
-      ? { top: 726, right: 847, bottom: 726, left: 847 }
-      : { top: 544, right: 665, bottom: 544, left: 665 };
+        ? { top: 726, right: 847, bottom: 726, left: 847 }
+        : { top: 544, right: 665, bottom: 544, left: 665 };
 
-  const bodyLineSpacing =
-    pageSpacing === "compact" ? 240 : pageSpacing === "spacious" ? 276 : 252;
+  const bodyLineSpacing = pageSpacing === "compact" ? 240 : pageSpacing === "spacious" ? 276 : 252;
 
   const bodyParagraphAfter =
     pageSpacing === "compact" ? 80 : pageSpacing === "spacious" ? 180 : 120;
@@ -315,11 +314,7 @@ export async function exportCoverLetterDocx(
             margin: margins,
           },
         },
-        children: [
-          ...topParagraphs,
-          metaTable as any,
-          ...bodyParagraphs,
-        ],
+        children: [...topParagraphs, metaTable as any, ...bodyParagraphs],
       },
     ],
   });

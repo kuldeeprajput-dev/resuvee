@@ -37,7 +37,10 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: "Authentication required. Please sign in to generate cover letters with AI." },
+        {
+          success: false,
+          error: "Authentication required. Please sign in to generate cover letters with AI.",
+        },
         { status: 401 }
       );
     }
@@ -82,7 +85,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "All fields (Target Role, Target Company, Title/Specialty, and Key Skills) are required to generate an AI cover letter.",
+          error:
+            "All fields (Target Role, Target Company, Title/Specialty, and Key Skills) are required to generate an AI cover letter.",
         },
         { status: 400 }
       );

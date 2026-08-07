@@ -116,7 +116,10 @@ export default function SavedCoverLettersPage() {
         setDeletingId(id);
         try {
           const authHeaders = await getAuthHeaders();
-          const res = await fetch(`/api/cover-letters/${id}`, { method: "DELETE", headers: authHeaders });
+          const res = await fetch(`/api/cover-letters/${id}`, {
+            method: "DELETE",
+            headers: authHeaders,
+          });
           const json = await res.json();
           if (json.success) {
             setLetters((prev) => prev.filter((l) => l.id !== id));
@@ -139,7 +142,7 @@ export default function SavedCoverLettersPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-[var(--brand-ink)]">
+    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-(--brand-ink)">
       <SiteHeader />
 
       <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
@@ -150,10 +153,10 @@ export default function SavedCoverLettersPage() {
               <Sparkles className="size-3.5 text-emerald-600" />
               <span>Supabase Cloud Sync</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--brand-ink)]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-(--brand-ink)">
               My Saved Cover Letters
             </h1>
-            <p className="text-sm text-[var(--brand-muted)] mt-1">
+            <p className="text-sm text-(--brand-muted) mt-1">
               Manage, edit, and duplicate your stored cover letters in the cloud.
             </p>
           </div>
@@ -175,11 +178,12 @@ export default function SavedCoverLettersPage() {
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 mb-4 border border-emerald-200">
               <LogIn className="size-7" />
             </div>
-            <h2 className="text-xl font-bold text-[var(--brand-ink)] mb-2">
+            <h2 className="text-xl font-bold text-(--brand-ink) mb-2">
               Sign in to view saved cover letters
             </h2>
-            <p className="text-xs text-[var(--brand-muted)] mb-6 max-w-md mx-auto leading-relaxed">
-              Your saved cover letters are stored securely in your account so you can access them anywhere.
+            <p className="text-xs text-(--brand-muted) mb-6 max-w-md mx-auto leading-relaxed">
+              Your saved cover letters are stored securely in your account so you can access them
+              anywhere.
             </p>
             <button
               type="button"
@@ -204,7 +208,7 @@ export default function SavedCoverLettersPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by title, company, or role..."
-                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 transition-colors shadow-2xs"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 transition-colors shadow-2xs"
                 />
               </div>
             )}
@@ -238,13 +242,13 @@ export default function SavedCoverLettersPage() {
             {/* Empty State */}
             {!loading && letters.length === 0 && (
               <div className="my-12 rounded-3xl border border-black/10 bg-white p-8 sm:p-12 text-center shadow-xs max-w-md mx-auto">
-                <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-[var(--brand-muted)] mb-4">
+                <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-(--brand-muted) mb-4">
                   <FileText className="size-7" />
                 </div>
-                <h3 className="text-base font-bold text-[var(--brand-ink)] mb-1">
+                <h3 className="text-base font-bold text-(--brand-ink) mb-1">
                   No saved cover letters yet
                 </h3>
-                <p className="text-xs text-[var(--brand-muted)] mb-6">
+                <p className="text-xs text-(--brand-muted) mb-6">
                   Write cover letters tailored to target companies and save them to your account.
                 </p>
                 <Link
@@ -302,19 +306,19 @@ export default function SavedCoverLettersPage() {
                           </div>
                         </div>
 
-                        <h3 className="text-sm font-bold text-[var(--brand-ink)] group-hover:text-emerald-800 transition line-clamp-1">
+                        <h3 className="text-sm font-bold text-(--brand-ink) group-hover:text-emerald-800 transition line-clamp-1">
                           {letter.title}
                         </h3>
 
                         <div className="space-y-1 mt-2">
                           {letter.company && (
-                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--brand-ink)]">
+                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-(--brand-ink)">
                               <Building2 className="size-3 shrink-0 text-emerald-600" />
                               <span className="truncate">{letter.company}</span>
                             </div>
                           )}
                           {letter.role && (
-                            <div className="flex items-center gap-1.5 text-[11px] font-medium text-[var(--brand-muted)]">
+                            <div className="flex items-center gap-1.5 text-[11px] font-medium text-(--brand-muted)">
                               <Briefcase className="size-3 shrink-0" />
                               <span className="truncate">{letter.role}</span>
                             </div>
@@ -331,7 +335,7 @@ export default function SavedCoverLettersPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenInStudio(letter)}
-                          className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
+                          className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
                         >
                           <span>Open in Studio</span>
                           <ArrowRight className="size-3.5" />

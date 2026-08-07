@@ -13,7 +13,13 @@ interface CoverLetterFormPanelProps {
   update: (field: keyof CoverLetterData, value: string) => void;
   setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
   setTheme: (theme: CoverLetterTheme) => void;
-  getStarterCopy: (data: CoverLetterData) => { greeting: string; opening: string; evidence: string; closing: string; signoff: string };
+  getStarterCopy: (data: CoverLetterData) => {
+    greeting: string;
+    opening: string;
+    evidence: string;
+    closing: string;
+    signoff: string;
+  };
   splitPercent: number;
   isResizing: boolean;
 }
@@ -58,7 +64,7 @@ function CoverLetterFormPanelBase({
           <h1 className="mt-1 text-2xl font-bold tracking-[-0.04em]">
             Write for one specific role
           </h1>
-          <p className="mt-2 text-xs leading-5 text-[var(--brand-muted)]">
+          <p className="mt-2 text-xs leading-5 text-(--brand-muted)">
             Start from your resume details, then make every sentence truthful and personal.
           </p>
         </div>
@@ -222,7 +228,7 @@ function CoverLetterFormPanelBase({
                   style={{ backgroundColor: item.accent }}
                 />
                 <span className="block text-xs font-bold">{item.name}</span>
-                <span className="mt-1 hidden text-[9px] text-[var(--brand-muted)] sm:block">
+                <span className="mt-1 hidden text-[9px] text-(--brand-muted) sm:block">
                   {item.description}
                 </span>
               </button>
@@ -258,7 +264,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)]">
+      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-(--brand-muted)">
         {label}
       </span>
       <input
@@ -284,7 +290,7 @@ function TextArea({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)]">
+      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-(--brand-muted)">
         {label}
       </span>
       <textarea

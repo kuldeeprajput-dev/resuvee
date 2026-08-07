@@ -122,7 +122,7 @@ export function CustomizePanel({
   }, [isResizing]);
 
   return (
-    <div className="no-print fixed inset-0 z-[300] flex justify-end bg-black/15">
+    <div className="no-print fixed inset-0 z-300 flex justify-end bg-black/15">
       <button
         type="button"
         onClick={onClose}
@@ -142,7 +142,7 @@ export function CustomizePanel({
         </div>
         <header className="flex items-start justify-between border-b border-black/10 bg-white px-5 py-5 sm:px-7">
           <div className="flex items-start gap-3">
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-[var(--brand-ink)] text-[var(--brand-lime)]">
+            <span className="flex size-10 items-center justify-center rounded-2xl bg-(--brand-ink) text-(--brand-lime)">
               <Palette className="size-5" />
             </span>
             <div>
@@ -168,14 +168,14 @@ export function CustomizePanel({
               <Palette className="size-4 text-[#4d7141]" />
               <h3 className="text-sm font-bold">Accent color</h3>
             </div>
-            <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)]">
+            <p className="mt-1 text-xs leading-5 text-(--brand-muted)">
               Keep contrast strong for a professional, readable document.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-3">
               {/* Custom Color Wheel Swatch on Left Side */}
               <label
                 className={cn(
-                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full border-4 border-white shadow-sm ring-offset-2 transition hover:scale-105 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full border-4 border-white shadow-sm ring-offset-2 transition hover:scale-105 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
                   !colors.some((c) => c.value.toLowerCase() === activeAccent.toLowerCase()) &&
                     "ring-2 ring-black/65"
                 )}
@@ -192,13 +192,13 @@ export function CustomizePanel({
 
               {/* Custom Hex Color Code Input */}
               <div className="flex items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 shadow-xs">
-                <span className="text-xs font-bold text-[var(--brand-muted)]">Hex</span>
+                <span className="text-xs font-bold text-(--brand-muted)">Hex</span>
                 <input
                   type="text"
                   value={style.accent}
                   onChange={(e) => onChange({ ...style, accent: e.target.value })}
                   placeholder={templateAccent || "#28785b"}
-                  className="w-20 bg-transparent text-xs font-mono font-bold text-[var(--brand-ink)] focus:outline-none"
+                  className="w-20 bg-transparent text-xs font-mono font-bold text-(--brand-ink) focus:outline-none"
                 />
               </div>
 
@@ -247,7 +247,7 @@ export function CustomizePanel({
                 >
                   <span className={cn("block text-2xl leading-none", font.sampleClass)}>Aa</span>
                   <span className="mt-3 block text-xs font-bold">{font.name}</span>
-                  <span className="mt-1 block text-[10px] text-[var(--brand-muted)]">
+                  <span className="mt-1 block text-[10px] text-(--brand-muted)">
                     {font.description}
                   </span>
                 </button>
@@ -270,7 +270,7 @@ export function CustomizePanel({
               >
                 <span>
                   <span className="block text-xs font-bold">Show photo when supported</span>
-                  <span className="mt-1 block text-[10px] text-[var(--brand-muted)]">
+                  <span className="mt-1 block text-[10px] text-(--brand-muted)">
                     Some regions and roles prefer a photo-free resume.
                   </span>
                 </span>
@@ -305,7 +305,7 @@ export function CustomizePanel({
           <Button
             type="button"
             onClick={onClose}
-            className="h-11 flex-1 rounded-xl bg-[var(--brand-ink)] font-bold text-white"
+            className="h-11 flex-1 rounded-xl bg-(--brand-ink) font-bold text-white"
           >
             Apply design
           </Button>

@@ -38,9 +38,8 @@ export function AuthModal() {
     setErrorMessage(null);
     setSuccessMessage(null);
 
-    const currentPath = typeof window !== "undefined"
-      ? `${window.location.pathname}${window.location.search}`
-      : "/";
+    const currentPath =
+      typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/";
     const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(currentPath)}`;
 
     try {
@@ -75,9 +74,8 @@ export function AuthModal() {
   const handleGoogleAuth = async () => {
     setLoading(true);
     setErrorMessage(null);
-    const currentPath = typeof window !== "undefined"
-      ? `${window.location.pathname}${window.location.search}`
-      : "/";
+    const currentPath =
+      typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/";
     const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(currentPath)}`;
 
     try {
@@ -95,17 +93,15 @@ export function AuthModal() {
   };
 
   return (
-    <div className="no-print fixed inset-0 z-[500] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">
+    <div className="no-print fixed inset-0 z-500 flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">
       <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-black/15 bg-white p-6 sm:p-8 shadow-2xl animate-in zoom-in-95">
         {/* Header Bar */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-base font-bold text-[var(--brand-ink)]">
+            <h2 className="text-base font-bold text-(--brand-ink)">
               {mode === "sign_in" ? "Welcome back" : "Create your account"}
             </h2>
-            <p className="text-xs text-[var(--brand-muted)]">
-              Access AI writing checks & role matching
-            </p>
+            <p className="text-xs text-(--brand-muted)">Access AI writing checks & role matching</p>
           </div>
           <button
             type="button"
@@ -135,8 +131,8 @@ export function AuthModal() {
             className={cn(
               "flex-1 rounded-lg py-1.5 text-xs font-bold transition cursor-pointer text-center",
               mode === "sign_in"
-                ? "bg-white text-[var(--brand-ink)] shadow-xs"
-                : "text-[var(--brand-muted)] hover:text-black"
+                ? "bg-white text-(--brand-ink) shadow-xs"
+                : "text-(--brand-muted) hover:text-black"
             )}
           >
             Sign In
@@ -151,8 +147,8 @@ export function AuthModal() {
             className={cn(
               "flex-1 rounded-lg py-1.5 text-xs font-bold transition cursor-pointer text-center",
               mode === "sign_up"
-                ? "bg-white text-[var(--brand-ink)] shadow-xs"
-                : "text-[var(--brand-muted)] hover:text-black"
+                ? "bg-white text-(--brand-ink) shadow-xs"
+                : "text-(--brand-muted) hover:text-black"
             )}
           >
             Sign Up
@@ -180,7 +176,7 @@ export function AuthModal() {
             type="button"
             onClick={handleGoogleAuth}
             disabled={loading}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer shadow-2xs"
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-(--brand-ink) hover:bg-black/5 transition cursor-pointer shadow-2xs"
           >
             <svg className="size-4" viewBox="0 0 24 24">
               <path
@@ -208,7 +204,7 @@ export function AuthModal() {
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-black/10" />
           </div>
-          <span className="relative bg-white px-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+          <span className="relative bg-white px-2 text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
             Or with email
           </span>
         </div>
@@ -217,7 +213,7 @@ export function AuthModal() {
         <form onSubmit={handleEmailAuth} className="space-y-3">
           {mode === "sign_up" && (
             <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
                 Full Name
               </label>
               <div className="relative">
@@ -228,14 +224,14 @@ export function AuthModal() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="John Doe"
-                  className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
+                  className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-(--brand-ink) focus:bg-white transition-colors"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Email Address
             </label>
             <div className="relative">
@@ -246,13 +242,13 @@ export function AuthModal() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
+                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-(--brand-ink) focus:bg-white transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Password
             </label>
             <div className="relative">
@@ -263,7 +259,7 @@ export function AuthModal() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-[var(--brand-ink)] focus:bg-white transition-colors"
+                className="h-11 w-full rounded-xl border border-black/15 bg-black/5 pl-10 pr-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-(--brand-ink) focus:bg-white transition-colors"
               />
             </div>
           </div>
@@ -280,9 +276,7 @@ export function AuthModal() {
               </>
             ) : (
               <>
-                <span>
-                  {mode === "sign_in" ? "Sign In to Resuvee" : "Create Free Account"}
-                </span>
+                <span>{mode === "sign_in" ? "Sign In to Resuvee" : "Create Free Account"}</span>
                 <ArrowRight className="size-4" />
               </>
             )}

@@ -11,7 +11,7 @@ export function NotificationProvider() {
   return (
     <>
       {/* Toast Popups Container */}
-      <div className="fixed bottom-5 right-5 z-[9999] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+      <div className="fixed bottom-5 right-5 z-9999 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0">
         {toasts.map((toast) => {
           const isError = toast.type === "error";
           const isSuccess = toast.type === "success";
@@ -25,7 +25,7 @@ export function NotificationProvider() {
                   ? "bg-red-50/95 border-red-200 text-red-950 shadow-red-950/5"
                   : isSuccess
                     ? "bg-[#ecfdf5]/95 border-[#a7f3d0] text-[#064e3b] shadow-emerald-950/5"
-                    : "bg-white/95 border-black/15 text-[var(--brand-ink)] shadow-black/5"
+                    : "bg-white/95 border-black/15 text-(--brand-ink) shadow-black/5"
               )}
             >
               <div className="shrink-0 mt-0.5">
@@ -48,7 +48,7 @@ export function NotificationProvider() {
                         ? "text-red-800"
                         : isSuccess
                           ? "text-[#047857]"
-                          : "text-[var(--brand-muted)]"
+                          : "text-(--brand-muted)"
                     )}
                   >
                     {toast.message}
@@ -77,7 +77,7 @@ export function NotificationProvider() {
 
       {/* Confirmation Modal Container */}
       {confirmDialog && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in">
           <div className="relative w-full max-w-md rounded-3xl border border-black/15 bg-[#f8f7f2] p-6 shadow-2xl animate-in zoom-in-95 duration-200">
             <div className="flex items-start gap-4">
               <div
@@ -96,10 +96,8 @@ export function NotificationProvider() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-[var(--brand-ink)]">
-                  {confirmDialog.title}
-                </h3>
-                <p className="text-xs text-[var(--brand-muted)] mt-1 leading-relaxed">
+                <h3 className="text-base font-bold text-(--brand-ink)">{confirmDialog.title}</h3>
+                <p className="text-xs text-(--brand-muted) mt-1 leading-relaxed">
                   {confirmDialog.message}
                 </p>
               </div>
@@ -109,7 +107,7 @@ export function NotificationProvider() {
               <button
                 type="button"
                 onClick={closeConfirm}
-                className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer"
+                className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-(--brand-ink) hover:bg-black/5 transition cursor-pointer"
               >
                 {confirmDialog.cancelText || "Cancel"}
               </button>

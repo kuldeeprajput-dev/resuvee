@@ -33,13 +33,13 @@ export function ResumeStepTrack({
       {/* Horizontal Step Pill Track */}
       <div
         className={cn(
-          "relative flex items-center border-b border-black/[0.06] bg-[#f7f6f1] py-1.5 px-3",
+          "relative flex items-center border-b border-black/6 bg-[#f7f6f1] py-1.5 px-3",
           !hideLeftSidebar && "hidden"
         )}
       >
         <div
           className={cn(
-            "pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
+            "pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-8 bg-linear-to-r from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
             showLeftFade ? "opacity-100" : "opacity-0"
           )}
         />
@@ -56,8 +56,8 @@ export function ResumeStepTrack({
               className={cn(
                 "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition-all duration-150 cursor-pointer",
                 activeSection === section.id
-                  ? "bg-[var(--brand-ink)] text-white shadow-xs scale-[1.01]"
-                  : "border border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/20 hover:text-[var(--brand-ink)]"
+                  ? "bg-(--brand-ink) text-white shadow-xs scale-[1.01]"
+                  : "border border-black/10 bg-white text-(--brand-muted) hover:border-black/20 hover:text-(--brand-ink)"
               )}
             >
               <span
@@ -74,7 +74,7 @@ export function ResumeStepTrack({
         </div>
         <div
           className={cn(
-            "pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
+            "pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-8 bg-linear-to-l from-[#f7f6f1] via-[#f7f6f1]/80 to-transparent transition-opacity duration-200",
             showRightFade ? "opacity-100" : "opacity-0"
           )}
         />
@@ -82,7 +82,7 @@ export function ResumeStepTrack({
 
       {/* Carousel Navigation Control Bar */}
       {hideLeftSidebar && (showLeftFade || showRightFade) && (
-        <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in">
+        <div className="flex items-center gap-2.5 border-b border-black/6 bg-[#f7f6f1]/90 px-4 py-1.5 animate-in fade-in">
           <button
             type="button"
             onClick={() => goToRelativeSection(-1)}
@@ -93,7 +93,7 @@ export function ResumeStepTrack({
             <ChevronLeft className="size-3.5" />
           </button>
 
-          <div className="h-[1px] flex-1 bg-black/10" />
+          <div className="h-px flex-1 bg-black/10" />
 
           <div className="flex items-center gap-1.5 px-1">
             {visibleSections.map((sec) => {
@@ -107,7 +107,7 @@ export function ResumeStepTrack({
                   className={cn(
                     "transition-all duration-150 cursor-pointer",
                     isActive
-                      ? "size-2 rounded-full bg-[var(--brand-ink)] ring-2 ring-black/20"
+                      ? "size-2 rounded-full bg-(--brand-ink) ring-2 ring-black/20"
                       : "size-2 rounded-full border border-black/20 bg-black/10 hover:bg-black/40"
                   )}
                 />
@@ -115,7 +115,7 @@ export function ResumeStepTrack({
             })}
           </div>
 
-          <div className="h-[1px] flex-1 bg-black/10" />
+          <div className="h-px flex-1 bg-black/10" />
 
           <button
             type="button"

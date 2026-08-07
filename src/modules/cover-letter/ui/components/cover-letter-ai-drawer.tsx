@@ -47,34 +47,28 @@ export function CoverLetterAiDrawer({
   const cooldownText = mins > 0 ? `${mins}m ${secs < 10 ? "0" : ""}${secs}s` : `${secs}s`;
 
   return (
-    <div className="no-print fixed inset-0 z-[150] flex justify-end bg-black/30 backdrop-blur-xs animate-in fade-in">
-      <div className="relative flex h-full w-full sm:w-[420px] flex-col border-l border-black/10 bg-white p-6 shadow-2xl animate-in slide-in-from-right duration-200">
+    <div className="no-print fixed inset-0 z-150 flex justify-end bg-black/30 backdrop-blur-xs animate-in fade-in">
+      <div className="relative flex h-full w-full sm:w-105 flex-col border-l border-black/10 bg-white p-6 shadow-2xl animate-in slide-in-from-right duration-200">
         <div className="flex items-center justify-between border-b border-black/10 pb-4 mb-5">
           <div className="flex items-center gap-2.5">
             <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
               <Bot className="size-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[var(--brand-ink)]">
-                AI Writing Assistant
-              </h3>
-              <p className="text-[10px] text-[var(--brand-muted)]">
+              <h3 className="text-sm font-bold text-(--brand-ink)">AI Writing Assistant</h3>
+              <p className="text-[10px] text-(--brand-muted)">
                 Generate tailored cover letter paragraphs
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="builder-icon-button cursor-pointer"
-          >
+          <button type="button" onClick={onClose} className="builder-icon-button cursor-pointer">
             <X className="size-4" />
           </button>
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto pr-1">
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Target Role <span className="text-red-500">*</span>
             </label>
             <input
@@ -82,13 +76,13 @@ export function CoverLetterAiDrawer({
               value={aiRole}
               onChange={(e) => setAiRole(e.target.value)}
               placeholder="e.g. Senior Frontend Developer"
-              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 focus:bg-white transition-colors"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Target Company <span className="text-red-500">*</span>
             </label>
             <input
@@ -96,13 +90,13 @@ export function CoverLetterAiDrawer({
               value={aiCompany}
               onChange={(e) => setAiCompany(e.target.value)}
               placeholder="e.g. Google"
-              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 focus:bg-white transition-colors"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Your Title / Specialty <span className="text-red-500">*</span>
             </label>
             <input
@@ -110,13 +104,13 @@ export function CoverLetterAiDrawer({
               value={aiHeadline}
               onChange={(e) => setAiHeadline(e.target.value)}
               placeholder="e.g. Full Stack Engineer with 5+ yrs experience"
-              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              className="h-10 w-full rounded-xl border border-black/15 bg-black/5 px-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 focus:bg-white transition-colors"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Key Skills & Highlights <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -124,13 +118,13 @@ export function CoverLetterAiDrawer({
               value={aiKeyPoints}
               onChange={(e) => setAiKeyPoints(e.target.value)}
               placeholder="e.g. React, Next.js, performance optimization, leading cross-functional teams"
-              className="w-full rounded-xl border border-black/15 bg-black/5 p-3 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              className="w-full rounded-xl border border-black/15 bg-black/5 p-3 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 focus:bg-white transition-colors"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Tone & Style
             </label>
             <div className="grid grid-cols-2 gap-1.5">
@@ -143,7 +137,7 @@ export function CoverLetterAiDrawer({
                     "rounded-xl border py-2 text-center text-xs font-bold transition cursor-pointer",
                     aiTone === t
                       ? "border-emerald-600 bg-emerald-50 text-emerald-900 font-extrabold"
-                      : "border-black/10 bg-white text-[var(--brand-ink)] hover:bg-black/5"
+                      : "border-black/10 bg-white text-(--brand-ink) hover:bg-black/5"
                   )}
                 >
                   {t}

@@ -7,9 +7,7 @@ export async function createClient() {
   const headerStore = await headers();
 
   const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_URL ||
-    "";
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_URL || "";
   const supabaseAnonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -17,9 +15,10 @@ export async function createClient() {
 
   // Check for Bearer token in Authorization header
   const authHeader = headerStore.get("authorization");
-  const token = authHeader && authHeader.startsWith("Bearer ")
-    ? authHeader.replace("Bearer ", "").trim()
-    : null;
+  const token =
+    authHeader && authHeader.startsWith("Bearer ")
+      ? authHeader.replace("Bearer ", "").trim()
+      : null;
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     global: token
@@ -53,9 +52,7 @@ export async function createClient() {
 // Helper to get authenticated user across cookies & bearer tokens
 export async function getAuthUser() {
   const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_URL ||
-    "";
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_URL || "";
   const supabaseAnonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -76,6 +73,8 @@ export async function getAuthUser() {
   }
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   return user;
 }

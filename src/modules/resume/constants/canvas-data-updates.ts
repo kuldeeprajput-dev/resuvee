@@ -162,9 +162,7 @@ export function deleteSelectedItem(
   } else if (selectedElement.section === "certifications" && selectedElement.id) {
     return {
       ...data,
-      certifications: (data.certifications ?? []).filter(
-        (item) => item.id !== selectedElement.id
-      ),
+      certifications: (data.certifications ?? []).filter((item) => item.id !== selectedElement.id),
     };
   }
 

@@ -127,7 +127,8 @@ export default function SavedDocumentsPage() {
         });
         apiResumes = Array.from(mergedResumesMap.values());
 
-        const localLetters: SavedCoverLetterItem[] = (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
+        const localLetters: SavedCoverLetterItem[] =
+          (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
         const mergedLettersMap = new Map<string, SavedCoverLetterItem>();
         [...apiLetters, ...localLetters].forEach((item) => {
           if (!mergedLettersMap.has(item.id)) mergedLettersMap.set(item.id, item);
@@ -157,7 +158,10 @@ export default function SavedDocumentsPage() {
   const handleOpenResumeInBuilder = (resume: SavedResumeItem) => {
     if (typeof window !== "undefined" && resume.data) {
       localStorage.setItem("active-resume-id", resume.id);
-      localStorage.setItem("resuvee-builder-v3", JSON.stringify({ state: { data: resume.data }, version: 3 }));
+      localStorage.setItem(
+        "resuvee-builder-v3",
+        JSON.stringify({ state: { data: resume.data }, version: 3 })
+      );
       window.location.href = "/builder";
     } else {
       router.push("/builder");
@@ -207,13 +211,18 @@ export default function SavedDocumentsPage() {
         setDeletingId(id);
         try {
           const authHeaders = await getAuthHeaders();
-          await fetch(`/api/resumes/${id}`, { method: "DELETE", headers: authHeaders }).catch(() => {});
+          await fetch(`/api/resumes/${id}`, { method: "DELETE", headers: authHeaders }).catch(
+            () => {}
+          );
           setResumes((prev) => prev.filter((r) => r.id !== id));
           if (typeof window !== "undefined") {
             const localListRaw = localStorage.getItem("local-saved-resumes");
             if (localListRaw) {
               const localList: SavedResumeItem[] = JSON.parse(localListRaw);
-              localStorage.setItem("local-saved-resumes", JSON.stringify(localList.filter((r) => r.id !== id)));
+              localStorage.setItem(
+                "local-saved-resumes",
+                JSON.stringify(localList.filter((r) => r.id !== id))
+              );
             }
           }
           showToast("Resume deleted", undefined, "info");
@@ -272,10 +281,16 @@ export default function SavedDocumentsPage() {
         setDeletingId(id);
         try {
           const authHeaders = await getAuthHeaders();
-          await fetch(`/api/cover-letters/${id}`, { method: "DELETE", headers: authHeaders }).catch(() => {});
+          await fetch(`/api/cover-letters/${id}`, { method: "DELETE", headers: authHeaders }).catch(
+            () => {}
+          );
           setLetters((prev) => prev.filter((l) => l.id !== id));
-          const localList: SavedCoverLetterItem[] = (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
-          await idbSet("local-saved-cover-letters", localList.filter((l) => l.id !== id));
+          const localList: SavedCoverLetterItem[] =
+            (await idbGet<SavedCoverLetterItem[]>("local-saved-cover-letters")) || [];
+          await idbSet(
+            "local-saved-cover-letters",
+            localList.filter((l) => l.id !== id)
+          );
           showToast("Cover letter deleted", undefined, "info");
         } finally {
           setDeletingId(null);
@@ -300,17 +315,17 @@ export default function SavedDocumentsPage() {
   const showTableNotice = resumesTableMissing || lettersTableMissing;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-[var(--brand-ink)]">
+    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-(--brand-ink)">
       <SiteHeader />
 
       <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
         {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--brand-ink)]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-(--brand-ink)">
               My Saved Documents
             </h1>
-            <p className="text-sm text-[var(--brand-muted)] mt-1">
+            <p className="text-sm text-(--brand-muted) mt-1">
               Access and manage all your stored resumes and cover letters.
             </p>
           </div>
@@ -328,7 +343,7 @@ export default function SavedDocumentsPage() {
               <button
                 type="button"
                 onClick={handleCreateNewLetter}
-                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-(--brand-ink) hover:bg-black/5 transition cursor-pointer"
               >
                 <Plus className="size-4" />
                 <span>New Letter</span>
@@ -343,10 +358,10 @@ export default function SavedDocumentsPage() {
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 mb-4 border border-emerald-200">
               <LogIn className="size-7" />
             </div>
-            <h2 className="text-xl font-bold text-[var(--brand-ink)] mb-2">
+            <h2 className="text-xl font-bold text-(--brand-ink) mb-2">
               Sign in to view saved documents
             </h2>
-            <p className="text-xs text-[var(--brand-muted)] mb-6 max-w-md mx-auto leading-relaxed">
+            <p className="text-xs text-(--brand-muted) mb-6 max-w-md mx-auto leading-relaxed">
               Your saved resumes and cover letters are stored securely in your account.
             </p>
             <button
@@ -372,8 +387,8 @@ export default function SavedDocumentsPage() {
                   className={cn(
                     "flex-1 sm:flex-initial rounded-xl py-2 px-4 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap",
                     activeTab === "resumes"
-                      ? "bg-white text-[var(--brand-ink)] shadow-xs"
-                      : "text-[var(--brand-muted)] hover:text-black"
+                      ? "bg-white text-(--brand-ink) shadow-xs"
+                      : "text-(--brand-muted) hover:text-black"
                   )}
                 >
                   <FileText className="size-4 shrink-0" />
@@ -386,8 +401,8 @@ export default function SavedDocumentsPage() {
                   className={cn(
                     "flex-1 sm:flex-initial rounded-xl py-2 px-4 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap",
                     activeTab === "letters"
-                      ? "bg-white text-[var(--brand-ink)] shadow-xs"
-                      : "text-[var(--brand-muted)] hover:text-black"
+                      ? "bg-white text-(--brand-ink) shadow-xs"
+                      : "text-(--brand-muted) hover:text-black"
                   )}
                 >
                   <FileText className="size-4 shrink-0" />
@@ -403,7 +418,7 @@ export default function SavedDocumentsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={`Search ${activeTab === "resumes" ? "resumes" : "letters"}...`}
-                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 transition-colors shadow-2xs"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 transition-colors shadow-2xs"
                 />
               </div>
             </div>
@@ -431,14 +446,15 @@ export default function SavedDocumentsPage() {
               <>
                 {filteredResumes.length === 0 ? (
                   <div className="my-10 rounded-3xl border border-black/10 bg-white p-8 sm:p-12 text-center shadow-xs max-w-md mx-auto">
-                    <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-[var(--brand-muted)] mb-4">
+                    <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-(--brand-muted) mb-4">
                       <FileText className="size-7" />
                     </div>
-                    <h3 className="text-base font-bold text-[var(--brand-ink)] mb-1">
+                    <h3 className="text-base font-bold text-(--brand-ink) mb-1">
                       No saved resumes yet
                     </h3>
-                    <p className="text-xs text-[var(--brand-muted)] mb-6">
-                      Build your resume in our interactive editor and save it directly to your account.
+                    <p className="text-xs text-(--brand-muted) mb-6">
+                      Build your resume in our interactive editor and save it directly to your
+                      account.
                     </p>
                     <Link
                       href="/builder"
@@ -492,12 +508,12 @@ export default function SavedDocumentsPage() {
                               </div>
                             </div>
 
-                            <h3 className="text-sm font-bold text-[var(--brand-ink)] group-hover:text-emerald-800 transition line-clamp-1">
+                            <h3 className="text-sm font-bold text-(--brand-ink) group-hover:text-emerald-800 transition line-clamp-1">
                               {resume.title}
                             </h3>
 
                             {resume.target_role && (
-                              <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-[var(--brand-muted)]">
+                              <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-(--brand-muted)">
                                 <Briefcase className="size-3 shrink-0" />
                                 <span className="truncate">{resume.target_role}</span>
                               </div>
@@ -513,7 +529,7 @@ export default function SavedDocumentsPage() {
                             <button
                               type="button"
                               onClick={() => handleOpenResumeInBuilder(resume)}
-                              className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
+                              className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
                             >
                               <span>Open in Builder</span>
                               <ArrowRight className="size-3.5" />
@@ -532,14 +548,15 @@ export default function SavedDocumentsPage() {
               <>
                 {filteredLetters.length === 0 ? (
                   <div className="my-10 rounded-3xl border border-black/10 bg-white p-8 sm:p-12 text-center shadow-xs max-w-md mx-auto">
-                    <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-[var(--brand-muted)] mb-4">
+                    <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-(--brand-muted) mb-4">
                       <FileText className="size-7" />
                     </div>
-                    <h3 className="text-base font-bold text-[var(--brand-ink)] mb-1">
+                    <h3 className="text-base font-bold text-(--brand-ink) mb-1">
                       No saved cover letters yet
                     </h3>
-                    <p className="text-xs text-[var(--brand-muted)] mb-6">
-                      Write cover letters tailored to target companies and save them to your account.
+                    <p className="text-xs text-(--brand-muted) mb-6">
+                      Write cover letters tailored to target companies and save them to your
+                      account.
                     </p>
                     <Link
                       href="/cover-letter"
@@ -593,19 +610,19 @@ export default function SavedDocumentsPage() {
                               </div>
                             </div>
 
-                            <h3 className="text-sm font-bold text-[var(--brand-ink)] group-hover:text-emerald-800 transition line-clamp-1">
+                            <h3 className="text-sm font-bold text-(--brand-ink) group-hover:text-emerald-800 transition line-clamp-1">
                               {letter.title}
                             </h3>
 
                             <div className="space-y-1 mt-2">
                               {letter.company && (
-                                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--brand-ink)]">
+                                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-(--brand-ink)">
                                   <Building2 className="size-3 shrink-0 text-emerald-600" />
                                   <span className="truncate">{letter.company}</span>
                                 </div>
                               )}
                               {letter.role && (
-                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-[var(--brand-muted)]">
+                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-(--brand-muted)">
                                   <Briefcase className="size-3 shrink-0" />
                                   <span className="truncate">{letter.role}</span>
                                 </div>
@@ -622,7 +639,7 @@ export default function SavedDocumentsPage() {
                             <button
                               type="button"
                               onClick={() => handleOpenLetterInStudio(letter)}
-                              className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
+                              className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
                             >
                               <span>Open in Studio</span>
                               <ArrowRight className="size-3.5" />

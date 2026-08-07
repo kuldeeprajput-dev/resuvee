@@ -41,11 +41,11 @@ export function ResumeSidebar({
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-black/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500"
+            className="h-full rounded-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-500"
             style={{ width: `${strength}%` }}
           />
         </div>
-        <p className="mt-2 text-[10px] leading-4 text-[var(--brand-muted)]">
+        <p className="mt-2 text-[10px] leading-4 text-(--brand-muted)">
           {strength >= 80
             ? "Looking strong. Review every detail before exporting."
             : "Complete each section to strengthen your resume."}
@@ -64,8 +64,8 @@ export function ResumeSidebar({
               className={cn(
                 "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-150 cursor-pointer",
                 isActive
-                  ? "bg-white text-[var(--brand-ink)] border border-black/15 shadow-xs font-bold"
-                  : "text-[var(--brand-muted)] hover:bg-white/60 hover:text-[var(--brand-ink)]"
+                  ? "bg-white text-(--brand-ink) border border-black/15 shadow-xs font-bold"
+                  : "text-(--brand-muted) hover:bg-white/60 hover:text-(--brand-ink)"
               )}
             >
               <span
@@ -75,7 +75,7 @@ export function ResumeSidebar({
                     ? "bg-emerald-600 text-white shadow-xs"
                     : isComplete
                       ? "bg-emerald-100 text-emerald-700 border border-emerald-300/80"
-                      : "border border-black/20 text-[var(--brand-muted)] bg-white/50"
+                      : "border border-black/20 text-(--brand-muted) bg-white/50"
                 )}
               >
                 {isComplete ? <Check className="size-3 stroke-[2.5]" /> : index + 1}
@@ -91,7 +91,7 @@ export function ResumeSidebar({
           type="button"
           variant="outline"
           onClick={() => setShowTemplates(true)}
-          className="h-10 w-full rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer"
+          className="h-10 w-full rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:bg-black/5 cursor-pointer"
         >
           <LayoutTemplate className="size-4 text-emerald-600" />
           <span>Templates</span>

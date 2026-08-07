@@ -84,9 +84,7 @@ export async function POST(request: NextRequest) {
 
     const resumeTitle =
       title?.trim() ||
-      (data.basics?.fullName
-        ? `${data.basics.fullName}'s Resume`
-        : "Untitled Resume");
+      (data.basics?.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume");
 
     const payload = {
       user_id: user.id,
@@ -97,9 +95,7 @@ export async function POST(request: NextRequest) {
     };
 
     const cleanId =
-      id && id !== "undefined" && id !== "null" && id.trim().length > 10
-        ? id.trim()
-        : undefined;
+      id && id !== "undefined" && id !== "null" && id.trim().length > 10 ? id.trim() : undefined;
 
     const supabase = await createClient();
 

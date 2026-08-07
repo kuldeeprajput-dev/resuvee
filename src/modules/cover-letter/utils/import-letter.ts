@@ -76,13 +76,14 @@ function joinLineArray(lines: string[]): string {
   return result.replace(/\s+/g, " ").trim();
 }
 
-export function parseExtractedLetterText(rawText: string, currentData: CoverLetterData): CoverLetterData {
+export function parseExtractedLetterText(
+  rawText: string,
+  currentData: CoverLetterData
+): CoverLetterData {
   if (!rawText || !rawText.trim()) return currentData;
 
   // 1. Clean raw text & collapse spaced uppercase characters
-  const cleanedRaw = collapseSpacedLetters(
-    rawText.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
-  );
+  const cleanedRaw = collapseSpacedLetters(rawText.replace(/\r\n/g, "\n").replace(/\r/g, "\n"));
 
   const rawLines = cleanedRaw
     .split("\n")
@@ -103,7 +104,9 @@ export function parseExtractedLetterText(rawText: string, currentData: CoverLett
 
   // 3. Find Signoff line (Sincerely, Best regards...)
   const signoffIndex = rawLines.findIndex((l) =>
-    /^(sincerely|best regards|kind regards|warm regards|regards|thank you|thanks|yours truly)/i.test(l)
+    /^(sincerely|best regards|kind regards|warm regards|regards|thank you|thanks|yours truly)/i.test(
+      l
+    )
   );
   if (signoffIndex !== -1) {
     newData.signoff = rawLines[signoffIndex];
@@ -124,7 +127,8 @@ export function parseExtractedLetterText(rawText: string, currentData: CoverLett
     let remainingHeader = [...headerLines];
 
     // Extract Date from header lines if present (e.g. "August 3, 2026", "08/03/2026")
-    const dateRegex = /(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}|\d{1,2}[\/\.-]\d{1,2}[\/\.-]\d{2,4}/i;
+    const dateRegex =
+      /(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}|\d{1,2}[\/\.-]\d{1,2}[\/\.-]\d{2,4}/i;
     for (let i = 0; i < remainingHeader.length; i++) {
       const match = remainingHeader[i].match(dateRegex);
       if (match) {

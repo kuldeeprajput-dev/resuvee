@@ -92,7 +92,8 @@ export function CanvasTopBar({
 }: CanvasTopBarProps) {
   // Internal file input ref — used when no external ref is provided
   const internalFileInputRef = useRef<HTMLInputElement>(null);
-  const fileInputRef = (uploadFileInputRef ?? internalFileInputRef) as React.RefObject<HTMLInputElement>;
+  const fileInputRef = (uploadFileInputRef ??
+    internalFileInputRef) as React.RefObject<HTMLInputElement>;
 
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -138,7 +139,7 @@ export function CanvasTopBar({
       {/* Drag-and-drop overlay — shown when a file is dragged over the canvas in fullscreen */}
       {showFullscreenControls && isDragOver && (
         <div
-          className="pointer-events-none fixed inset-0 z-[400] flex flex-col items-center justify-center gap-3 bg-emerald-950/60 backdrop-blur-sm"
+          className="pointer-events-none fixed inset-0 z-400 flex flex-col items-center justify-center gap-3 bg-emerald-950/60 backdrop-blur-sm"
           aria-hidden
         >
           <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-emerald-400/80 bg-emerald-900/60 px-10 py-8 shadow-2xl backdrop-blur">
@@ -168,7 +169,7 @@ export function CanvasTopBar({
           )}
           <div className="hidden lg:flex shrink-0 items-center gap-2">
             <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse shadow-xs" />
-            <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">
+            <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-(--brand-ink)">
               Studio Canvas
             </p>
             <span className="text-black/25 text-xs font-semibold mx-0.5">·</span>
@@ -198,7 +199,7 @@ export function CanvasTopBar({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isImportingResume}
-                className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in disabled:opacity-60"
+                className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in disabled:opacity-60"
                 title="Upload resume from PDF or Word document (or drag & drop onto canvas)"
               >
                 {isImportingResume ? (
@@ -218,7 +219,7 @@ export function CanvasTopBar({
             <button
               type="button"
               onClick={onShowWritingCheck}
-              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
+              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
               title="Scan and improve resume text with AI writing check"
             >
               <SpellCheck2 className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
@@ -231,7 +232,7 @@ export function CanvasTopBar({
             <button
               type="button"
               onClick={onShowTailor}
-              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
+              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in"
               title="Compare with job description keywords"
             >
               <ScanSearch className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
@@ -243,7 +244,7 @@ export function CanvasTopBar({
           <button
             type="button"
             onClick={onShowTemplates}
-            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
           >
             <LayoutTemplate className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             <span className="whitespace-nowrap">Templates</span>
@@ -258,10 +259,15 @@ export function CanvasTopBar({
                 "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
                 showDesignMenu
                   ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
-                  : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+                  : "border-black/15 bg-white text-(--brand-ink) hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
               )}
             >
-              <Palette className={cn("size-3.5 transition-colors", showDesignMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+              <Palette
+                className={cn(
+                  "size-3.5 transition-colors",
+                  showDesignMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]"
+                )}
+              />
               <span className="whitespace-nowrap">Design</span>
             </button>
 
@@ -270,7 +276,7 @@ export function CanvasTopBar({
                 <div className="flex items-center justify-between pb-2.5 border-b border-black/10 mb-3">
                   <div className="flex items-center gap-2">
                     <Palette className="size-4 text-emerald-700" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-(--brand-ink)">
                       CANVAS DESIGN
                     </h3>
                   </div>
@@ -286,9 +292,9 @@ export function CanvasTopBar({
                 {/* Accent Color Section */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold text-[var(--brand-ink)]">Accent Color</label>
+                    <label className="text-xs font-bold text-(--brand-ink)">Accent Color</label>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-mono font-bold text-[var(--brand-muted)]">
+                      <span className="text-[10px] font-mono font-bold text-(--brand-muted)">
                         {resumeStyle?.accent || template.accent || "#28785b"}
                       </span>
                       <span
@@ -303,7 +309,7 @@ export function CanvasTopBar({
                     {/* Custom Color Wheel Swatch on Left Side */}
                     <label
                       className={cn(
-                        "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                        "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
                         !COLOR_SWATCHES.some(
                           (c) =>
                             c.value.toLowerCase() ===
@@ -335,7 +341,7 @@ export function CanvasTopBar({
                         onUpdateStyle?.({ ...resumeStyle, accent: e.target.value } as ResumeStyle)
                       }
                       placeholder={template.accent || "#28785b"}
-                      className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
+                      className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-(--brand-ink) outline-none focus:bg-white"
                     />
 
                     <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
@@ -351,7 +357,10 @@ export function CanvasTopBar({
                             key={color.name}
                             type="button"
                             onClick={() =>
-                              onUpdateStyle?.({ ...resumeStyle, accent: color.value } as ResumeStyle)
+                              onUpdateStyle?.({
+                                ...resumeStyle,
+                                accent: color.value,
+                              } as ResumeStyle)
                             }
                             className={cn(
                               "size-6 rounded-full border border-black/20 transition hover:scale-110 flex items-center justify-center shrink-0 cursor-pointer",
@@ -370,14 +379,24 @@ export function CanvasTopBar({
 
                 {/* Font / Typography Section */}
                 <div className="pt-3 border-t border-black/10 mb-4">
-                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                  <label className="block text-xs font-bold text-(--brand-ink) mb-2">
                     Font / Typography
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: "template", name: "Template", desc: "Designed pairing", cls: "font-sans" },
+                      {
+                        id: "template",
+                        name: "Template",
+                        desc: "Designed pairing",
+                        cls: "font-sans",
+                      },
                       { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
-                      { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
+                      {
+                        id: "serif",
+                        name: "Editorial",
+                        desc: "Classic & Formal",
+                        cls: "font-serif",
+                      },
                       { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
                     ].map((f) => {
                       const isSelected = (resumeStyle?.font || "template") === f.id;
@@ -402,7 +421,7 @@ export function CanvasTopBar({
                             Aa
                           </span>
                           <span className="text-[11px] font-bold leading-tight">{f.name}</span>
-                          <span className="text-[9px] text-[var(--brand-muted)]">{f.desc}</span>
+                          <span className="text-[9px] text-(--brand-muted)">{f.desc}</span>
                         </button>
                       );
                     })}
@@ -411,7 +430,7 @@ export function CanvasTopBar({
 
                 {/* Page Spacing Section */}
                 <div className="pt-3 border-t border-black/10">
-                  <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                  <label className="block text-xs font-bold text-(--brand-ink) mb-2">
                     Page Spacing
                   </label>
                   <div className="flex gap-1.5">
@@ -436,7 +455,7 @@ export function CanvasTopBar({
                             "flex-1 rounded-xl border py-1.5 text-center text-xs font-bold transition cursor-pointer",
                             isSelected
                               ? "border-emerald-600 bg-emerald-600 text-white"
-                              : "border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/25"
+                              : "border-black/10 bg-white text-(--brand-muted) hover:border-black/25"
                           )}
                         >
                           {p.label}
@@ -455,7 +474,7 @@ export function CanvasTopBar({
               type="button"
               onClick={onSave}
               disabled={isSaving}
-              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in disabled:opacity-50"
+              className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer animate-in fade-in disabled:opacity-50"
               title="Save changes to cloud"
             >
               {isSaving ? (
@@ -485,7 +504,7 @@ export function CanvasTopBar({
                   "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer disabled:opacity-60",
                   showExportMenu || exportDocxStatus === "exported"
                     ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
-                    : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+                    : "border-black/15 bg-white text-(--brand-ink) hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
                 )}
                 title="Export resume"
               >
@@ -494,26 +513,37 @@ export function CanvasTopBar({
                 ) : exportDocxStatus === "exported" ? (
                   <Check className={cn("size-3.5 transition-colors text-[#059669]")} />
                 ) : (
-                  <Download className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+                  <Download
+                    className={cn(
+                      "size-3.5 transition-colors",
+                      showExportMenu
+                        ? "text-[#059669]"
+                        : "text-emerald-600 group-hover:text-[#059669]"
+                    )}
+                  />
                 )}
                 <span>
                   {isExportingDocx
                     ? "Exporting..."
                     : exportDocxStatus === "exported"
-                    ? "Exported!"
-                    : "Export"}
+                      ? "Exported!"
+                      : "Export"}
                 </span>
                 {!isExportingDocx && exportDocxStatus !== "exported" && (
-                  <ChevronDown className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-[var(--brand-muted)] group-hover:text-[#059669]")} />
+                  <ChevronDown
+                    className={cn(
+                      "size-3.5 transition-colors",
+                      showExportMenu
+                        ? "text-[#059669]"
+                        : "text-(--brand-muted) group-hover:text-[#059669]"
+                    )}
+                  />
                 )}
               </button>
 
               {showExportMenu && (
                 <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setShowExportMenu(false)}
-                  />
+                  <div className="fixed inset-0 z-40" onClick={() => setShowExportMenu(false)} />
                   <div className="absolute right-0 top-10 z-50 w-56 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
                     {/* PDF */}
                     <button
@@ -523,14 +553,16 @@ export function CanvasTopBar({
                         if (onExportPdf) onExportPdf();
                         else window.print();
                       }}
-                      className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                      className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer"
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
                         <FileText className="size-4" />
                       </span>
                       <div className="text-left">
-                        <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
-                        <p className="text-[10px] text-[var(--brand-muted)] font-normal">Print-perfect layout</p>
+                        <p className="font-bold text-(--brand-ink)">PDF Document</p>
+                        <p className="text-[10px] text-(--brand-muted) font-normal">
+                          Print-perfect layout
+                        </p>
                       </div>
                     </button>
 
@@ -542,7 +574,7 @@ export function CanvasTopBar({
                         setShowExportMenu(false);
                         if (onExportDocx) onExportDocx();
                       }}
-                      className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                         {isExportingDocx ? (
@@ -552,10 +584,10 @@ export function CanvasTopBar({
                         )}
                       </span>
                       <div className="text-left">
-                        <p className="font-bold text-[var(--brand-ink)]">
+                        <p className="font-bold text-(--brand-ink)">
                           {isExportingDocx ? "Generating..." : "Word Document"}
                         </p>
-                        <p className="text-[10px] text-[var(--brand-muted)] font-normal">
+                        <p className="text-[10px] text-(--brand-muted) font-normal">
                           {isExportingDocx ? "Please wait..." : "Editable .docx file"}
                         </p>
                       </div>
@@ -575,9 +607,9 @@ export function CanvasTopBar({
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
             >
               {isFullscreen ? (
-                <Minimize2 className="size-3.5 text-[var(--brand-ink)] transition-colors group-hover:text-black" />
+                <Minimize2 className="size-3.5 text-(--brand-ink) transition-colors group-hover:text-black" />
               ) : (
-                <Maximize2 className="size-3.5 text-[var(--brand-ink)] transition-colors group-hover:text-black" />
+                <Maximize2 className="size-3.5 text-(--brand-ink) transition-colors group-hover:text-black" />
               )}
             </button>
           )}

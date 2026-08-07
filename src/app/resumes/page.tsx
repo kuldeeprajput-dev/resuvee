@@ -134,7 +134,7 @@ export default function SavedResumesPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-[var(--brand-ink)]">
+    <div className="min-h-screen flex flex-col bg-[#f8f7f2] text-(--brand-ink)">
       <SiteHeader />
 
       <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
@@ -145,10 +145,10 @@ export default function SavedResumesPage() {
               <Sparkles className="size-3.5 text-emerald-600" />
               <span>Supabase Cloud Sync</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--brand-ink)]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-(--brand-ink)">
               My Saved Resumes
             </h1>
-            <p className="text-sm text-[var(--brand-muted)] mt-1">
+            <p className="text-sm text-(--brand-muted) mt-1">
               Manage, edit, and duplicate your stored resumes in the cloud.
             </p>
           </div>
@@ -170,11 +170,12 @@ export default function SavedResumesPage() {
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 mb-4 border border-emerald-200">
               <LogIn className="size-7" />
             </div>
-            <h2 className="text-xl font-bold text-[var(--brand-ink)] mb-2">
+            <h2 className="text-xl font-bold text-(--brand-ink) mb-2">
               Sign in to view saved resumes
             </h2>
-            <p className="text-xs text-[var(--brand-muted)] mb-6 max-w-md mx-auto leading-relaxed">
-              Your saved resumes are stored securely in your account so you can access them anywhere.
+            <p className="text-xs text-(--brand-muted) mb-6 max-w-md mx-auto leading-relaxed">
+              Your saved resumes are stored securely in your account so you can access them
+              anywhere.
             </p>
             <button
               type="button"
@@ -199,7 +200,7 @@ export default function SavedResumesPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by title or target role..."
-                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-[var(--brand-ink)] outline-none focus:border-emerald-600 transition-colors shadow-2xs"
+                  className="h-10 w-full rounded-xl border border-black/15 bg-white pl-10 pr-4 text-xs font-semibold text-(--brand-ink) outline-none focus:border-emerald-600 transition-colors shadow-2xs"
                 />
               </div>
             )}
@@ -233,13 +234,13 @@ export default function SavedResumesPage() {
             {/* Empty Resumes State */}
             {!loading && resumes.length === 0 && (
               <div className="my-12 rounded-3xl border border-black/10 bg-white p-8 sm:p-12 text-center shadow-xs max-w-md mx-auto">
-                <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-[var(--brand-muted)] mb-4">
+                <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black/5 text-(--brand-muted) mb-4">
                   <FileText className="size-7" />
                 </div>
-                <h3 className="text-base font-bold text-[var(--brand-ink)] mb-1">
+                <h3 className="text-base font-bold text-(--brand-ink) mb-1">
                   No saved resumes yet
                 </h3>
-                <p className="text-xs text-[var(--brand-muted)] mb-6">
+                <p className="text-xs text-(--brand-muted) mb-6">
                   Build your resume in our interactive editor and save it directly to your account.
                 </p>
                 <Link
@@ -297,12 +298,12 @@ export default function SavedResumesPage() {
                           </div>
                         </div>
 
-                        <h3 className="text-sm font-bold text-[var(--brand-ink)] group-hover:text-emerald-800 transition line-clamp-1">
+                        <h3 className="text-sm font-bold text-(--brand-ink) group-hover:text-emerald-800 transition line-clamp-1">
                           {resume.title}
                         </h3>
 
                         {resume.target_role && (
-                          <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-[var(--brand-muted)]">
+                          <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-(--brand-muted)">
                             <Briefcase className="size-3 shrink-0" />
                             <span className="truncate">{resume.target_role}</span>
                           </div>
@@ -318,7 +319,7 @@ export default function SavedResumesPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenInBuilder(resume)}
-                          className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
+                          className="w-full flex h-9 items-center justify-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) hover:bg-black/5 hover:border-black/25 transition cursor-pointer"
                         >
                           <span>Open in Builder</span>
                           <ArrowRight className="size-3.5" />

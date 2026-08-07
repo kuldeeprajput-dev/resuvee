@@ -1,9 +1,4 @@
-import type {
-  CoverLetterData,
-  CanvasTheme,
-  ThemeOption,
-  ColorSwatch,
-} from "../types/cover-letter";
+import type { CoverLetterData, CanvasTheme, ThemeOption, ColorSwatch } from "../types/cover-letter";
 
 export const STORAGE_KEY = "resuvee_cover_letter";
 export const RESUME_KEY = "resuvee_builder_draft";
@@ -57,9 +52,9 @@ export const COLOR_SWATCHES: ColorSwatch[] = [
 ];
 
 export const themeStyles: Record<CanvasTheme, string> = {
-  dots: "bg-[#e5e7e2] [background-image:radial-gradient(#b8beb5_1.2px,transparent_1.2px)] [background-size:20px_20px]",
-  grid: "bg-[#e8e9e4] [background-image:linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] [background-size:24px_24px]",
-  studio: "bg-[#1e2320] [background-image:radial-gradient(#3a453f_1.5px,transparent_1.5px)] [background-size:24px_24px]",
+  dots: "bg-[#e5e7e2] bg-[radial-gradient(#b8beb5_1.2px,transparent_1.2px)] bg-size-[20px_20px]",
+  grid: "bg-[#e8e9e4] bg-[linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] bg-size-[24px_24px]",
+  studio: "bg-[#1e2320] bg-[radial-gradient(#3a453f_1.5px,transparent_1.5px)] bg-size-[24px_24px]",
   clean: "bg-[#dfe2dc]",
 };
 

@@ -160,7 +160,7 @@ export function SummarySection({ data, accent, inverted = false, compact = false
       <p
         className={cn(
           compact ? "text-[9.2px]" : "text-[9.8px]",
-          "leading-[1.5]",
+          "leading-normal",
           inverted ? "text-white/65" : "text-black/62"
         )}
       >
@@ -170,7 +170,12 @@ export function SummarySection({ data, accent, inverted = false, compact = false
   );
 }
 
-export function ExperienceSection({ data, accent, inverted = false, compact = false }: SectionProps) {
+export function ExperienceSection({
+  data,
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
   if (!data.experience.length) return null;
 
   return (
@@ -237,7 +242,12 @@ export function ExperienceSection({ data, accent, inverted = false, compact = fa
   );
 }
 
-export function EducationSection({ data, accent, inverted = false, compact = false }: SectionProps) {
+export function EducationSection({
+  data,
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
   if (!data.education.length) return null;
   return (
     <section>
@@ -309,7 +319,7 @@ export function SkillsSection({
                     key={`${group.id}-${index}`}
                     className={cn(
                       "rounded-[3px] px-1.5 py-0.5 text-[7.3px]",
-                      inverted ? "bg-white/10 text-white/65" : "bg-black/[0.045] text-black/58"
+                      inverted ? "bg-white/10 text-white/65" : "bg-black/4.5 text-black/58"
                     )}
                   >
                     {skill}
@@ -318,7 +328,7 @@ export function SkillsSection({
               ) : (
                 <p
                   className={cn(
-                    "text-[8.1px] leading-[1.5]",
+                    "text-[8.1px] leading-normal",
                     inverted ? "text-white/58" : "text-black/52"
                   )}
                 >
@@ -384,7 +394,12 @@ export function ProjectsSection({ data, accent, inverted = false, compact = fals
   );
 }
 
-export function CertificationsSection({ data, accent, inverted = false, compact = false }: SectionProps) {
+export function CertificationsSection({
+  data,
+  accent,
+  inverted = false,
+  compact = false,
+}: SectionProps) {
   if (!data.certifications || !data.certifications.length) return null;
   return (
     <section>
@@ -396,26 +411,32 @@ export function CertificationsSection({ data, accent, inverted = false, compact 
           <article key={cert.id} className="flex items-baseline justify-between gap-2">
             <div>
               <h3
-                className={cn(
-                  "text-[8.5px] font-bold",
-                  inverted ? "text-white" : "text-black/82"
-                )}
+                className={cn("text-[8.5px] font-bold", inverted ? "text-white" : "text-black/82")}
               >
                 {cert.title}
                 {cert.issuer && (
-                  <span className={cn("ml-1 font-normal", inverted ? "text-white/60" : "text-black/60")}>
+                  <span
+                    className={cn("ml-1 font-normal", inverted ? "text-white/60" : "text-black/60")}
+                  >
                     — {cert.issuer}
                   </span>
                 )}
               </h3>
               {cert.description && cert.description !== cert.issuer && (
-                <p className={cn("text-[7.2px] leading-[1.35]", inverted ? "text-white/50" : "text-black/50")}>
+                <p
+                  className={cn(
+                    "text-[7.2px] leading-[1.35]",
+                    inverted ? "text-white/50" : "text-black/50"
+                  )}
+                >
                   {cert.description}
                 </p>
               )}
             </div>
             {cert.date && (
-              <span className={cn("shrink-0 text-[7px]", inverted ? "text-white/40" : "text-black/40")}>
+              <span
+                className={cn("shrink-0 text-[7px]", inverted ? "text-white/40" : "text-black/40")}
+              >
                 {cert.date}
               </span>
             )}
@@ -441,7 +462,7 @@ export function Sheet({
     <article
       data-page-padding={pagePadding}
       className={cn(
-        "resume-print-area relative aspect-[210/297] min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)] transition-all duration-200",
+        "resume-print-area relative aspect-210/297 min-h-[842px] w-[595px] overflow-hidden bg-white font-sans text-[#202823] shadow-[0_24px_65px_rgba(22,32,28,0.18)] transition-all duration-200",
         pagePadding === "compact" && "resume-padding-compact",
         pagePadding === "spacious" && "resume-padding-spacious",
         className
@@ -452,4 +473,3 @@ export function Sheet({
     </article>
   );
 }
-

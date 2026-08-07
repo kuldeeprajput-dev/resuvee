@@ -12,14 +12,14 @@ interface FieldProps extends Omit<React.ComponentProps<"input">, "onChange"> {
 export function Field({ label, hint, className, onChange, ...props }: FieldProps) {
   return (
     <label className={cn("block space-y-2", className)}>
-      <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
+      <span className="flex items-center justify-between gap-3 text-xs font-bold text-(--brand-ink)">
         {label}
-        {hint && <span className="font-medium text-[var(--brand-muted)]">{hint}</span>}
+        {hint && <span className="font-medium text-(--brand-muted)">{hint}</span>}
       </span>
       <input
         {...props}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-xl border border-black/10 bg-white px-3.5 text-sm text-[var(--brand-ink)] shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
+        className="h-11 w-full rounded-xl border border-black/10 bg-white px-3.5 text-sm text-(--brand-ink) shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
       />
     </label>
   );
@@ -34,14 +34,14 @@ interface TextAreaFieldProps extends Omit<React.ComponentProps<"textarea">, "onC
 export function TextAreaField({ label, hint, className, onChange, ...props }: TextAreaFieldProps) {
   return (
     <label className={cn("block space-y-2", className)}>
-      <span className="flex items-center justify-between gap-3 text-xs font-bold text-[var(--brand-ink)]">
+      <span className="flex items-center justify-between gap-3 text-xs font-bold text-(--brand-ink)">
         {label}
-        {hint && <span className="font-medium text-[var(--brand-muted)]">{hint}</span>}
+        {hint && <span className="font-medium text-(--brand-muted)">{hint}</span>}
       </span>
       <textarea
         {...props}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-white px-3.5 py-3 text-sm leading-6 text-[var(--brand-ink)] shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
+        className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-white px-3.5 py-3 text-sm leading-6 text-(--brand-ink) shadow-sm outline-none transition placeholder:text-black/30 focus:border-[#315f45]/50 focus:ring-3 focus:ring-[#315f45]/10"
       />
     </label>
   );
@@ -55,7 +55,13 @@ interface EditorSectionProps {
   action?: React.ReactNode;
 }
 
-export function EditorSection({ eyebrow, title, description, children, action }: EditorSectionProps) {
+export function EditorSection({
+  eyebrow,
+  title,
+  description,
+  children,
+  action,
+}: EditorSectionProps) {
   return (
     <div className="mx-auto w-full max-w-2xl px-3 pb-6 pt-3 sm:px-7 sm:pb-12 sm:pt-7">
       <div className="mb-4 flex flex-col gap-2.5 sm:mb-7 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
@@ -63,10 +69,10 @@ export function EditorSection({ eyebrow, title, description, children, action }:
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#315f45] sm:text-[11px] sm:tracking-[0.18em]">
             {eyebrow}
           </p>
-          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-[var(--brand-ink)] sm:mt-1 sm:text-2xl">
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-(--brand-ink) sm:mt-1 sm:text-2xl">
             {title}
           </h2>
-          <p className="mt-1 text-xs leading-5 text-[var(--brand-muted)] sm:mt-1.5 sm:text-sm sm:leading-6">
+          <p className="mt-1 text-xs leading-5 text-(--brand-muted) sm:mt-1.5 sm:text-sm sm:leading-6">
             {description}
           </p>
         </div>
@@ -87,13 +93,13 @@ interface ItemCardProps {
 
 export function ItemCard({ title, subtitle, onRemove, children, canRemove = true }: ItemCardProps) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-black/[0.09] bg-[#fbfaf6] shadow-sm">
+    <article className="overflow-hidden rounded-2xl border border-black/9 bg-[#fbfaf6] shadow-sm">
       <div className="flex items-center gap-2.5 border-b border-black/[0.07] bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3">
         <GripVertical className="size-4 text-black/25" />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-xs font-bold text-[var(--brand-ink)] sm:text-sm">{title}</h3>
+          <h3 className="truncate text-xs font-bold text-(--brand-ink) sm:text-sm">{title}</h3>
           {subtitle && (
-            <p className="truncate text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
+            <p className="truncate text-[11px] text-(--brand-muted) sm:text-xs">{subtitle}</p>
           )}
         </div>
         <button
@@ -122,7 +128,7 @@ export function AddItemButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-white/50 text-sm font-bold text-[var(--brand-muted)] transition hover:border-[#315f45]/40 hover:bg-white hover:text-[var(--brand-ink)]"
+      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-white/50 text-sm font-bold text-(--brand-muted) transition hover:border-[#315f45]/40 hover:bg-white hover:text-(--brand-ink)"
     >
       <Plus className="size-4" />
       {children}
@@ -154,7 +160,7 @@ export function BulletEditor({
 
   return (
     <div>
-      <span className="mb-2 block text-xs font-bold text-[var(--brand-ink)]">{label}</span>
+      <span className="mb-2 block text-xs font-bold text-(--brand-ink)">{label}</span>
       <div className="space-y-2">
         {values.map((value, index) => (
           <div key={index} className="flex items-start gap-2">

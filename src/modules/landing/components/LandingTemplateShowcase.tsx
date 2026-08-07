@@ -145,10 +145,7 @@ export function LandingTemplateShowcase() {
         }
       }
 
-      const calculatedPage = Math.min(
-        Math.floor(closestItemIndex / itemsPerPage),
-        pageCount - 1
-      );
+      const calculatedPage = Math.min(Math.floor(closestItemIndex / itemsPerPage), pageCount - 1);
 
       setActivePage((current) => (current !== calculatedPage ? calculatedPage : current));
     });
@@ -172,7 +169,7 @@ export function LandingTemplateShowcase() {
 
   return (
     <>
-      <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none [scrollbar-width:none] sm:mx-0 sm:mb-8 sm:px-0 [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none scrollbar-none sm:mx-0 sm:mb-8 sm:px-0 [&::-webkit-scrollbar]:hidden">
         {filters.map((item) => (
           <button
             key={item.id}
@@ -181,8 +178,8 @@ export function LandingTemplateShowcase() {
             className={cn(
               "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition-all duration-200",
               filter === item.id
-                ? "bg-[var(--brand-ink)] text-white"
-                : "border border-black/10 bg-white/75 text-[var(--brand-muted)] hover:bg-white"
+                ? "bg-(--brand-ink) text-white"
+                : "border border-black/10 bg-white/75 text-(--brand-muted) hover:bg-white"
             )}
           >
             {item.label}
@@ -201,7 +198,7 @@ export function LandingTemplateShowcase() {
       <div
         ref={carouselRef}
         onScroll={handleScroll}
-        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[82%] gap-3.5 overflow-x-auto pb-0 scroll-smooth items-start [scrollbar-width:none] sm:auto-cols-[calc((100%_-_1.25rem)_/_2)] sm:gap-5 sm:pb-5 sm:items-stretch lg:auto-cols-[calc((100%_-_2.5rem)_/_3)] [&::-webkit-scrollbar]:hidden"
+        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[82%] gap-3.5 overflow-x-auto pb-0 scroll-smooth items-start scrollbar-none sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:pb-5 sm:items-stretch lg:auto-cols-[calc((100%-2.5rem)/3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
@@ -211,14 +208,14 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}&starter=template`
             }
-            className="group snap-start flex flex-col rounded-[20px] border border-black/[0.08] bg-white/55 p-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
+            className="group snap-start flex flex-col rounded-[20px] border border-black/8 bg-white/55 p-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
           >
             <div className="relative overflow-hidden rounded-xl bg-[#e9ece8] p-3 sm:rounded-2xl sm:p-8 md:p-10">
               <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
                 {String(index + 1).padStart(2, "0")}
               </span>
               {template.popular && (
-                <span className="absolute right-2.5 top-2.5 z-10 flex items-center gap-1 rounded-full bg-[var(--brand-lime)] px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.08em] sm:right-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
+                <span className="absolute right-2.5 top-2.5 z-10 flex items-center gap-1 rounded-full bg-(--brand-lime) px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.08em] sm:right-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
                   <Sparkles className="size-2.5" />
                   Popular
                 </span>
@@ -234,15 +231,19 @@ export function LandingTemplateShowcase() {
               <div className="flex items-start justify-between gap-2.5 sm:gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 min-w-0 sm:gap-2 sm:flex-wrap">
-                    <h3 className="truncate text-base font-bold tracking-[-0.025em] sm:text-xl">{template.name}</h3>
+                    <h3 className="truncate text-base font-bold tracking-tight sm:text-xl">
+                      {template.name}
+                    </h3>
                     <span
                       className="size-2 shrink-0 rounded-full sm:size-2.5"
                       style={{ backgroundColor: template.accent }}
                     />
                   </div>
-                  <p className="mt-0.5 truncate text-[11px] leading-4 text-[var(--brand-muted)] sm:line-clamp-none sm:mt-1 sm:text-sm sm:leading-normal">{template.suitableFor}</p>
+                  <p className="mt-0.5 truncate text-[11px] leading-4 text-(--brand-muted) sm:line-clamp-none sm:mt-1 sm:text-sm sm:leading-normal">
+                    {template.suitableFor}
+                  </p>
                 </div>
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-[var(--brand-lime)] sm:size-9">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-black/10 transition-colors group-hover:bg-(--brand-lime) sm:size-9">
                   <ArrowRight className="size-3.5 -rotate-45 transition-transform group-hover:rotate-0 sm:size-4" />
                 </span>
               </div>
@@ -270,14 +271,14 @@ export function LandingTemplateShowcase() {
           onClick={() => goToPage(activePage - 1)}
           disabled={activePage === 0}
           aria-label="Previous templates"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-(--brand-lime) disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ArrowLeft className="size-4" />
         </button>
 
         <div className="relative flex flex-1 items-center justify-center">
           <span className="absolute inset-x-0 h-px bg-black/15" />
-          <div className="relative flex items-center gap-2 rounded-full bg-[var(--brand-canvas)] px-4">
+          <div className="relative flex items-center gap-2 rounded-full bg-(--brand-canvas) px-4">
             {Array.from({ length: pageCount }).map((_, index) => (
               <button
                 key={index}
@@ -286,10 +287,10 @@ export function LandingTemplateShowcase() {
                 aria-label={`Show template page ${index + 1}`}
                 aria-current={activePage === index ? "page" : undefined}
                 className={cn(
-                  "size-2.5 rounded-full border-2 border-[var(--brand-canvas)] ring-1 ring-black/20 transition-all duration-200",
+                  "size-2.5 rounded-full border-2 border-(--brand-canvas) ring-1 ring-black/20 transition-all duration-200",
                   activePage === index
-                    ? "scale-125 bg-[var(--brand-ink)]"
-                    : "bg-[#c6cbc4] hover:bg-[var(--brand-lime)]"
+                    ? "scale-125 bg-(--brand-ink)"
+                    : "bg-[#c6cbc4] hover:bg-(--brand-lime)"
                 )}
               />
             ))}
@@ -301,7 +302,7 @@ export function LandingTemplateShowcase() {
           onClick={() => goToPage(activePage + 1)}
           disabled={activePage === pageCount - 1}
           aria-label="Next templates"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-[var(--brand-lime)] disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-200 hover:bg-(--brand-lime) disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ArrowRight className="size-4" />
         </button>

@@ -464,10 +464,10 @@ export async function exportResumeDocx(
         properties: {
           page: {
             margin: {
-              top: 1440,    // 1 inch
-              right: 1080,  // 0.75 inch
+              top: 1440, // 1 inch
+              right: 1080, // 0.75 inch
               bottom: 1440, // 1 inch
-              left: 1080,   // 0.75 inch
+              left: 1080, // 0.75 inch
             },
           },
         },

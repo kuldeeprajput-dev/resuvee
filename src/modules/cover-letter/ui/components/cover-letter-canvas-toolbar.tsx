@@ -1,7 +1,17 @@
 "use client";
 
 import React from "react";
-import { MousePointer, Hand, ZoomOut, ZoomIn, RotateCcw, Undo2, Redo2, Grid, Check } from "lucide-react";
+import {
+  MousePointer,
+  Hand,
+  ZoomOut,
+  ZoomIn,
+  RotateCcw,
+  Undo2,
+  Redo2,
+  Grid,
+  Check,
+} from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import type { CanvasTheme } from "../../types/cover-letter";
 
@@ -54,8 +64,8 @@ function CoverLetterCanvasToolbarBase({
           className={cn(
             "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             !isHandTool && !isSpacePressed
-              ? "bg-white text-[var(--brand-ink)] shadow-xs"
-              : "text-[var(--brand-muted)] hover:text-black"
+              ? "bg-white text-(--brand-ink) shadow-xs"
+              : "text-(--brand-muted) hover:text-black"
           )}
           title="Select Mode (Click text on PDF to highlight & edit)"
         >
@@ -67,8 +77,8 @@ function CoverLetterCanvasToolbarBase({
           className={cn(
             "flex size-8 items-center justify-center rounded-lg text-xs font-bold transition cursor-pointer",
             isHandTool || isSpacePressed
-              ? "bg-white text-[var(--brand-ink)] shadow-xs"
-              : "text-[var(--brand-muted)] hover:text-black"
+              ? "bg-white text-(--brand-ink) shadow-xs"
+              : "text-(--brand-muted) hover:text-black"
           )}
           title="Hand Tool (Click & drag canvas to pan view)"
         >
@@ -96,11 +106,11 @@ function CoverLetterCanvasToolbarBase({
             setShowPresetsMenu(!showPresetsMenu);
             setShowThemeMenu(false);
           }}
-          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/10 cursor-pointer"
+          className="flex h-8 items-center gap-1 rounded-xl bg-black/5 px-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/10 cursor-pointer"
           title="Choose Zoom Scale"
         >
           <span>{zoom}%</span>
-          <span className="text-[10px] text-[var(--brand-muted)]">▼</span>
+          <span className="text-[10px] text-(--brand-muted)">▼</span>
         </button>
 
         {showPresetsMenu && (
@@ -117,11 +127,10 @@ function CoverLetterCanvasToolbarBase({
                   "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition cursor-pointer",
                   zoom === p
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
-                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                    : "text-(--brand-ink) hover:bg-black/5"
                 )}
               >
-                {p}%
-                {zoom === p && <Check className="size-3 text-emerald-600" />}
+                {p}%{zoom === p && <Check className="size-3 text-emerald-600" />}
               </button>
             ))}
           </div>
@@ -193,7 +202,7 @@ function CoverLetterCanvasToolbarBase({
 
         {showThemeMenu && (
           <div className="absolute bottom-11 right-0 z-50 w-40 rounded-2xl border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
-            <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)]">
+            <p className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-(--brand-muted)">
               Canvas Theme
             </p>
             {(["dots", "grid", "studio", "clean"] as CanvasTheme[]).map((t) => (
@@ -208,7 +217,7 @@ function CoverLetterCanvasToolbarBase({
                   "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold transition capitalize cursor-pointer",
                   canvasTheme === t
                     ? "bg-emerald-50 text-emerald-900 font-extrabold"
-                    : "text-[var(--brand-ink)] hover:bg-black/5"
+                    : "text-(--brand-ink) hover:bg-black/5"
                 )}
               >
                 {t}

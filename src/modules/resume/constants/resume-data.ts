@@ -280,4 +280,3 @@ export const builderSections: {
     shortLabel: "Awards",
   },
 ];
-

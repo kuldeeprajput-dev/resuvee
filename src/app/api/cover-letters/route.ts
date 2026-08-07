@@ -101,9 +101,7 @@ export async function POST(request: NextRequest) {
     };
 
     const cleanId =
-      id && id !== "undefined" && id !== "null" && id.trim().length > 10
-        ? id.trim()
-        : undefined;
+      id && id !== "undefined" && id !== "null" && id.trim().length > 10 ? id.trim() : undefined;
 
     const supabase = await createClient();
 

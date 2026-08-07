@@ -100,7 +100,7 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
               />
             </div>
 
-            <label className="flex w-fit cursor-pointer items-center gap-2 text-xs font-semibold text-[var(--brand-muted)]">
+            <label className="flex w-fit cursor-pointer items-center gap-2 text-xs font-semibold text-(--brand-muted)">
               <input
                 type="checkbox"
                 checked={item.current}

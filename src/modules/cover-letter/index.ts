@@ -1,5 +1,13 @@
 // Types
-export type { CoverLetterData, CoverLetterTheme, CanvasTheme, TypographyFont, PageSpacing, ThemeOption, ColorSwatch } from "./types/cover-letter";
+export type {
+  CoverLetterData,
+  CoverLetterTheme,
+  CanvasTheme,
+  TypographyFont,
+  PageSpacing,
+  ThemeOption,
+  ColorSwatch,
+} from "./types/cover-letter";
 
 // UI Components
 export { CoverLetterStudio } from "./ui/components/cover-letter-studio";

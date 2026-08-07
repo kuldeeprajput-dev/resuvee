@@ -2,7 +2,20 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Cloud, Download, Eye, FileText, Sparkles, RotateCcw, Loader2, Check, Upload, ChevronDown, FileSpreadsheet } from "lucide-react";
+import {
+  ArrowLeft,
+  Cloud,
+  Download,
+  Eye,
+  FileText,
+  Sparkles,
+  RotateCcw,
+  Loader2,
+  Check,
+  Upload,
+  ChevronDown,
+  FileSpreadsheet,
+} from "lucide-react";
 import { Brand } from "@/shared/components/layout/SiteHeader";
 
 interface CoverLetterStudioHeaderProps {
@@ -36,13 +49,13 @@ function CoverLetterStudioHeaderBase({
   const [showExportMenu, setShowExportMenu] = useState(false);
 
   return (
-    <header className="no-print sticky top-0 z-[60] flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
+    <header className="no-print sticky top-0 z-60 flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-[#f8f7f2] px-3 sm:px-5">
       <div className="flex h-full items-center min-w-0 gap-1.5 sm:gap-3">
         {/* Back Button on Mobile */}
         <Link
           href="/"
           aria-label="Back to home"
-          className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-[var(--brand-muted)] transition hover:bg-black/5 hover:text-[var(--brand-ink)] lg:hidden shrink-0"
+          className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-(--brand-muted) transition hover:bg-black/5 hover:text-(--brand-ink) lg:hidden shrink-0"
         >
           <ArrowLeft className="size-4" />
         </Link>
@@ -56,7 +69,7 @@ function CoverLetterStudioHeaderBase({
         {/* Document Title */}
         <div className="min-w-0 pl-1.5 sm:pl-1">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-            <FileText className="hidden size-4 shrink-0 text-[var(--brand-muted)] sm:block" />
+            <FileText className="hidden size-4 shrink-0 text-(--brand-muted) sm:block" />
             <p
               className="hidden max-w-[100px] truncate text-xs font-bold sm:block sm:max-w-[220px] sm:text-sm md:max-w-[300px] lg:max-w-[380px]"
               title={documentTitle}
@@ -87,7 +100,7 @@ function CoverLetterStudioHeaderBase({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isImportingLetter}
-          className="group hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] items-center gap-1.5 cursor-pointer"
+          className="group hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] items-center gap-1.5 cursor-pointer"
           title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
         >
           {isImportingLetter ? (
@@ -95,13 +108,15 @@ function CoverLetterStudioHeaderBase({
           ) : (
             <Upload className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           )}
-          <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+          <span className="hidden sm:inline">
+            {isImportingLetter ? "Uploading..." : "Upload Letter"}
+          </span>
         </button>
 
         <button
           type="button"
           onClick={() => setShowAiDrawer(true)}
-          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
           title="Open AI Cover Letter Assistant"
         >
           <Sparkles className="size-3.5 sm:size-4 text-emerald-600 animate-pulse transition-colors group-hover:text-[#059669]" />
@@ -112,7 +127,7 @@ function CoverLetterStudioHeaderBase({
         <button
           type="button"
           onClick={() => setShowStartFreshModal(true)}
-          className="group hidden h-9 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] md:flex items-center gap-1.5 cursor-pointer"
+          className="group hidden h-9 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] md:flex items-center gap-1.5 cursor-pointer"
           title="Start fresh with a clean cover letter"
         >
           <RotateCcw className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
@@ -123,7 +138,7 @@ function CoverLetterStudioHeaderBase({
           type="button"
           onClick={handleSaveToCloud}
           disabled={isSaving}
-          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
           title="Save cover letter to your account"
         >
           {isSaving ? (
@@ -140,7 +155,7 @@ function CoverLetterStudioHeaderBase({
         <button
           type="button"
           onClick={() => setShowMobilePreview(true)}
-          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer lg:hidden"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer lg:hidden"
           title="Preview cover letter document"
         >
           <Eye className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
@@ -152,20 +167,17 @@ function CoverLetterStudioHeaderBase({
           <button
             type="button"
             onClick={() => setShowExportMenu(!showExportMenu)}
-            className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
+            className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
             title="Export cover letter options"
           >
             <Download className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             <span>Export</span>
-            <ChevronDown className="size-3.5 text-[var(--brand-muted)] transition-colors group-hover:text-[#059669]" />
+            <ChevronDown className="size-3.5 text-(--brand-muted) transition-colors group-hover:text-[#059669]" />
           </button>
 
           {showExportMenu && (
             <>
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setShowExportMenu(false)}
-              />
+              <div className="fixed inset-0 z-40" onClick={() => setShowExportMenu(false)} />
               <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
                 <button
                   type="button"
@@ -173,14 +185,16 @@ function CoverLetterStudioHeaderBase({
                     setShowExportMenu(false);
                     handleExportPdf();
                   }}
-                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer"
                 >
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
                     <FileText className="size-4" />
                   </span>
                   <div className="text-left">
-                    <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
-                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                    <p className="font-bold text-(--brand-ink)">PDF Document</p>
+                    <p className="text-[10px] text-(--brand-muted) font-normal">
+                      Export layout as PDF
+                    </p>
                   </div>
                 </button>
 
@@ -190,14 +204,16 @@ function CoverLetterStudioHeaderBase({
                     setShowExportMenu(false);
                     handleExportDocx();
                   }}
-                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer"
                 >
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                     <FileSpreadsheet className="size-4" />
                   </span>
                   <div className="text-left">
-                    <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
-                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .doc file</p>
+                    <p className="font-bold text-(--brand-ink)">Word Document</p>
+                    <p className="text-[10px] text-(--brand-muted) font-normal">
+                      Export editable .doc file
+                    </p>
                   </div>
                 </button>
               </div>

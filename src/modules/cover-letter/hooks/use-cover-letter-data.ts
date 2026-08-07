@@ -155,9 +155,10 @@ export function useCoverLetterData() {
     setIsSaving(true);
     try {
       const storedId = await idbGet<string>("active-cover-letter-id");
-      const activeId = storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
-        ? storedId
-        : undefined;
+      const activeId =
+        storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
+          ? storedId
+          : undefined;
 
       const authHeaders = await getAuthHeaders();
       const res = await fetch("/api/cover-letters", {
@@ -167,7 +168,9 @@ export function useCoverLetterData() {
           id: activeId,
           title: data.fullName
             ? `${data.fullName}'s Cover Letter`
-            : data.company ? `${data.company} — Cover Letter` : "Cover Letter",
+            : data.company
+              ? `${data.company} — Cover Letter`
+              : "Cover Letter",
           company: data.company,
           role: data.role,
           data,
@@ -185,7 +188,9 @@ export function useCoverLetterData() {
           id: letterId,
           title: data.fullName
             ? `${data.fullName}'s Cover Letter`
-            : data.company ? `${data.company} — Cover Letter` : "Cover Letter",
+            : data.company
+              ? `${data.company} — Cover Letter`
+              : "Cover Letter",
           company: data.company || "",
           role: data.role || "",
           data,
@@ -219,7 +224,9 @@ export function useCoverLetterData() {
     try {
       const rawText = await extractTextFromCoverLetterFile(file);
       if (!rawText || !rawText.trim()) {
-        throw new Error("Could not read text from this file. Please choose a readable PDF, DOCX, or TXT file.");
+        throw new Error(
+          "Could not read text from this file. Please choose a readable PDF, DOCX, or TXT file."
+        );
       }
       setHistory((prev) => [...prev, data]);
       setFuture([]);
@@ -241,15 +248,20 @@ export function useCoverLetterData() {
   };
 
   return {
-    data, setData,
-    theme, setTheme,
-    customAccent, setCustomAccent,
+    data,
+    setData,
+    theme,
+    setTheme,
+    customAccent,
+    setCustomAccent,
     saveLabel,
     isSaving,
     saveStatus,
     isImportingLetter,
-    history, setHistory,
-    future, setFuture,
+    history,
+    setHistory,
+    future,
+    setFuture,
     update,
     handleUndo,
     handleRedo,

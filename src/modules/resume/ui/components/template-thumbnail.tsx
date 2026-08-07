@@ -88,7 +88,7 @@ export function TemplateThumbnail({
       </div>
 
       {showLabel && (
-        <span className="absolute bottom-1.5 right-1.5 rounded-full border border-black/[0.06] bg-white/88 px-1.5 py-0.5 text-[5.5px] font-bold uppercase tracking-[0.14em] text-black/45 shadow-sm backdrop-blur sm:bottom-2 sm:right-2 sm:px-2 sm:py-1 sm:text-[6px]">
+        <span className="absolute bottom-1.5 right-1.5 rounded-full border border-black/6 bg-white/88 px-1.5 py-0.5 text-[5.5px] font-bold uppercase tracking-[0.14em] text-black/45 shadow-sm backdrop-blur sm:bottom-2 sm:right-2 sm:px-2 sm:py-1 sm:text-[6px]">
           {template.eyebrow}
         </span>
       )}

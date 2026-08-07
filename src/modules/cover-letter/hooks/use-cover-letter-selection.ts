@@ -40,7 +40,10 @@ export function useCoverLetterSelection({
 }: UseSelectionOptions) {
   const [selectedField, setSelectedField] = useState<keyof CoverLetterData | null>(null);
   const [highlightRect, setHighlightRect] = useState<{
-    top: number; left: number; width: number; height: number;
+    top: number;
+    left: number;
+    width: number;
+    height: number;
   } | null>(null);
   const [toolbarPos, setToolbarPos] = useState<{ top: number; left: number } | null>(null);
   const [inlineText, setInlineText] = useState("");
@@ -81,10 +84,21 @@ export function useCoverLetterSelection({
       const top = targetRect.top - containerRect.top;
       const left = targetRect.left - containerRect.left;
 
-      setHighlightRect({ top: top - 4, left: left - 4, width: targetRect.width + 8, height: targetRect.height + 8 });
+      setHighlightRect({
+        top: top - 4,
+        left: left - 4,
+        width: targetRect.width + 8,
+        height: targetRect.height + 8,
+      });
 
       const toolbarWidth = toolbarRef.current?.offsetWidth || 540;
-      let computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, left + targetRect.width / 2 - toolbarWidth / 2));
+      let computedLeft = Math.max(
+        12,
+        Math.min(
+          containerRect.width - toolbarWidth - 16,
+          left + targetRect.width / 2 - toolbarWidth / 2
+        )
+      );
       let computedTop = top - 64;
       if (computedTop < 65) computedTop = top + targetRect.height + 14;
 
@@ -94,7 +108,9 @@ export function useCoverLetterSelection({
 
   useEffect(() => {
     if (!selectedField) return;
-    const freshEl = containerRef.current?.querySelector(`[data-field="${selectedField}"]`) as HTMLElement | null;
+    const freshEl = containerRef.current?.querySelector(
+      `[data-field="${selectedField}"]`
+    ) as HTMLElement | null;
     if (!freshEl || !freshEl.isConnected) {
       clearSelection();
       return;
@@ -112,14 +128,24 @@ export function useCoverLetterSelection({
       window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", updateSelectionBounds);
     };
-  }, [selectedField, inlineText, data, zoom, pan, updateSelectionBounds, clearSelection, containerRef]);
+  }, [
+    selectedField,
+    inlineText,
+    data,
+    zoom,
+    pan,
+    updateSelectionBounds,
+    clearSelection,
+    containerRef,
+  ]);
 
   useEffect(() => {
     if (isHandTool || isSpacePressed || showDesignMenu || showTemplatesMenu) clearSelection();
   }, [isHandTool, isSpacePressed, showDesignMenu, showTemplatesMenu]);
 
   const handleSelectField = (e: React.MouseEvent<HTMLElement>, field: keyof CoverLetterData) => {
-    if (isHandTool || isSpacePressed || (typeof window !== "undefined" && window.innerWidth < 1024)) return;
+    if (isHandTool || isSpacePressed || (typeof window !== "undefined" && window.innerWidth < 1024))
+      return;
     e.stopPropagation();
     setSelectedField(field);
     selectedDomRef.current = e.currentTarget;
@@ -158,11 +184,14 @@ export function useCoverLetterSelection({
   };
 
   return {
-    selectedField, setSelectedField,
+    selectedField,
+    setSelectedField,
     highlightRect,
     toolbarPos,
-    inlineText, setInlineText,
-    showColorPicker, setShowColorPicker,
+    inlineText,
+    setInlineText,
+    showColorPicker,
+    setShowColorPicker,
     containerRef,
     selectedDomRef,
     toolbarRef,

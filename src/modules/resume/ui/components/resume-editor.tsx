@@ -1,10 +1,7 @@
 "use client";
 
 import type { BuilderSection, ResumeData, ResumeTemplate } from "../../types/resume";
-import {
-  PersonalDetailsEditor,
-  SummaryEditor,
-} from "./resume-editor-sections";
+import { PersonalDetailsEditor, SummaryEditor } from "./resume-editor-sections";
 import {
   ExperienceEditor,
   EducationEditor,

@@ -140,7 +140,9 @@ export function useCoverLetterAi({
     const trimmedKeyPoints = (aiKeyPoints || "").trim();
 
     if (!trimmedRole || !trimmedCompany || !trimmedHeadline || !trimmedKeyPoints) {
-      setAiErrorMessage("Please fill in all required fields (Target Role, Target Company, Title/Specialty, and Key Skills) before generating with AI.");
+      setAiErrorMessage(
+        "Please fill in all required fields (Target Role, Target Company, Title/Specialty, and Key Skills) before generating with AI."
+      );
       setAiSuccessMessage(false);
       return;
     }
@@ -206,11 +208,16 @@ export function useCoverLetterAi({
   };
 
   return {
-    aiRole, setAiRole: handleSetRole,
-    aiCompany, setAiCompany: handleSetCompany,
-    aiHeadline, setAiHeadline: handleSetHeadline,
-    aiKeyPoints, setAiKeyPoints: handleSetKeyPoints,
-    aiTone, setAiTone,
+    aiRole,
+    setAiRole: handleSetRole,
+    aiCompany,
+    setAiCompany: handleSetCompany,
+    aiHeadline,
+    setAiHeadline: handleSetHeadline,
+    aiKeyPoints,
+    setAiKeyPoints: handleSetKeyPoints,
+    aiTone,
+    setAiTone,
     isGeneratingAi,
     aiSuccessMessage,
     aiErrorMessage,

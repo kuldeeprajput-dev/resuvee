@@ -447,6 +447,14 @@ export const pivotData = professionalPreset({
   ],
 });
 
-
 // Re-export core presets for unified access
-export { meridianData, editorialData, summitData, columnData, horizonData, blueprintData, standardData, compactData } from "./resume-preset-data-core";
+export {
+  meridianData,
+  editorialData,
+  summitData,
+  columnData,
+  horizonData,
+  blueprintData,
+  standardData,
+  compactData,
+} from "./resume-preset-data-core";

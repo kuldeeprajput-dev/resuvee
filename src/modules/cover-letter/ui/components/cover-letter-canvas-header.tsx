@@ -1,9 +1,31 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Download, LayoutTemplate, Palette, Pipette, Check, X, Maximize2, Minimize2, Upload, Loader2, ChevronDown, FileText, FileSpreadsheet, Sparkles, Cloud } from "lucide-react";
+import {
+  Download,
+  LayoutTemplate,
+  Palette,
+  Pipette,
+  Check,
+  X,
+  Maximize2,
+  Minimize2,
+  Upload,
+  Loader2,
+  ChevronDown,
+  FileText,
+  FileSpreadsheet,
+  Sparkles,
+  Cloud,
+} from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { CoverLetterTheme, ThemeOption, TypographyFont, PageSpacing, ColorSwatch } from "../../types/cover-letter";
+import type {
+  CoverLetterTheme,
+  ThemeOption,
+  TypographyFont,
+  PageSpacing,
+  ColorSwatch,
+} from "../../types/cover-letter";
 
 interface CoverLetterCanvasHeaderProps {
   isFullscreen: boolean;
@@ -69,22 +91,22 @@ function CoverLetterCanvasHeaderBase({
   const activeTemplateName = (currentThemeObj?.name || theme).toUpperCase();
 
   return (
-    <div className="no-print absolute inset-x-0 top-0 z-[55] flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
+    <div className="no-print absolute inset-x-0 top-0 z-55 flex h-14 items-center justify-between gap-2 border-b border-black/10 bg-white/90 px-3 backdrop-blur sm:px-4 lg:px-5">
       <div className="flex flex-1 items-center gap-2 min-w-0 overflow-hidden sm:gap-2.5">
         {onCloseMobilePreview && (
           <button
             type="button"
             onClick={onCloseMobilePreview}
-            className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 lg:hidden cursor-pointer"
+            className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white text-(--brand-ink) shadow-2xs transition hover:bg-black/5 lg:hidden cursor-pointer"
             aria-label="Close preview"
             title="Close preview"
           >
-            <X className="size-4 text-[var(--brand-ink)]" />
+            <X className="size-4 text-(--brand-ink)" />
           </button>
         )}
         <div className="hidden lg:flex shrink-0 items-center gap-2">
           <span className="flex size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse shadow-xs" />
-          <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-[var(--brand-ink)]">
+          <p className="whitespace-nowrap text-xs font-extrabold tracking-tight text-(--brand-ink)">
             Letter Studio
           </p>
           <span className="text-black/25 text-xs font-semibold mx-0.5">·</span>
@@ -115,7 +137,7 @@ function CoverLetterCanvasHeaderBase({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isImportingLetter}
-            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
             title="Upload outside cover letter (PDF, DOCX, TXT) to edit"
           >
             {isImportingLetter ? (
@@ -123,7 +145,9 @@ function CoverLetterCanvasHeaderBase({
             ) : (
               <Upload className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             )}
-            <span className="hidden sm:inline">{isImportingLetter ? "Uploading..." : "Upload Letter"}</span>
+            <span className="hidden sm:inline">
+              {isImportingLetter ? "Uploading..." : "Upload Letter"}
+            </span>
             <span className="sm:hidden">{isImportingLetter ? "..." : "Upload"}</span>
           </button>
         )}
@@ -133,7 +157,7 @@ function CoverLetterCanvasHeaderBase({
           <button
             type="button"
             onClick={() => setShowAiDrawer(true)}
-            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
             title="Generate or refine letter with AI"
           >
             <Sparkles className="size-3.5 text-emerald-600 animate-pulse transition-colors group-hover:text-[#059669]" />
@@ -155,16 +179,21 @@ function CoverLetterCanvasHeaderBase({
               "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
               showTemplatesMenu
                 ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
-                : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+                : "border-black/15 bg-white text-(--brand-ink) hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
             )}
           >
-            <LayoutTemplate className={cn("size-3.5 transition-colors", showTemplatesMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+            <LayoutTemplate
+              className={cn(
+                "size-3.5 transition-colors",
+                showTemplatesMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]"
+              )}
+            />
             <span>Templates</span>
           </button>
 
           {showTemplatesMenu && (
             <div className="absolute top-10 right-0 z-50 w-64 rounded-2xl border border-black/15 bg-white p-2.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95">
-              <p className="px-2 pb-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-muted)] border-b border-black/10 mb-1.5">
+              <p className="px-2 pb-2 text-[10px] font-bold uppercase tracking-wider text-(--brand-muted) border-b border-black/10 mb-1.5">
                 Letter Templates
               </p>
               {themes.map((t) => (
@@ -179,7 +208,7 @@ function CoverLetterCanvasHeaderBase({
                     "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left transition mb-1 cursor-pointer",
                     theme === t.id
                       ? "bg-emerald-50 text-emerald-950 font-bold border border-emerald-500/30"
-                      : "hover:bg-black/5 text-[var(--brand-ink)]"
+                      : "hover:bg-black/5 text-(--brand-ink)"
                   )}
                 >
                   <div>
@@ -190,7 +219,7 @@ function CoverLetterCanvasHeaderBase({
                       />
                       <span className="text-xs font-bold">{t.name}</span>
                     </div>
-                    <span className="text-[10px] text-[var(--brand-muted)] font-normal block pl-4">
+                    <span className="text-[10px] text-(--brand-muted) font-normal block pl-4">
                       {t.description}
                     </span>
                   </div>
@@ -213,10 +242,15 @@ function CoverLetterCanvasHeaderBase({
               "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
               showDesignMenu
                 ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
-                : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+                : "border-black/15 bg-white text-(--brand-ink) hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
             )}
           >
-            <Palette className={cn("size-3.5 transition-colors", showDesignMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+            <Palette
+              className={cn(
+                "size-3.5 transition-colors",
+                showDesignMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]"
+              )}
+            />
             <span>Design</span>
           </button>
 
@@ -225,7 +259,7 @@ function CoverLetterCanvasHeaderBase({
               <div className="flex items-center justify-between pb-2.5 border-b border-black/10 mb-3">
                 <div className="flex items-center gap-2">
                   <Palette className="size-4 text-emerald-700" />
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-ink)]">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-(--brand-ink)">
                     LETTER DESIGN
                   </h3>
                 </div>
@@ -241,9 +275,9 @@ function CoverLetterCanvasHeaderBase({
               {/* Accent Color Section */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-[var(--brand-ink)]">Accent Color</label>
+                  <label className="text-xs font-bold text-(--brand-ink)">Accent Color</label>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-mono font-bold text-[var(--brand-muted)]">
+                    <span className="text-[10px] font-mono font-bold text-(--brand-muted)">
                       {activeAccent}
                     </span>
                     <span
@@ -256,7 +290,7 @@ function CoverLetterCanvasHeaderBase({
                   {/* Custom Color Wheel Swatch on Left Side */}
                   <label
                     className={cn(
-                      "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
+                      "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 shadow-xs transition hover:scale-110 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500",
                       !colorSwatches.some(
                         (c) => c.value.toLowerCase() === activeAccent.toLowerCase()
                       ) && "ring-2 ring-emerald-600 ring-offset-1"
@@ -278,7 +312,7 @@ function CoverLetterCanvasHeaderBase({
                     value={activeAccent}
                     onChange={(e) => setCustomAccent(e.target.value)}
                     placeholder="#28785b"
-                    className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
+                    className="w-16 h-6 rounded-lg border border-black/15 bg-black/5 px-1.5 text-[10px] font-mono font-bold text-(--brand-ink) outline-none focus:bg-white"
                   />
 
                   <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
@@ -309,12 +343,17 @@ function CoverLetterCanvasHeaderBase({
 
               {/* Font / Typography Section */}
               <div className="pt-3 border-t border-black/10 mb-4">
-                <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                <label className="block text-xs font-bold text-(--brand-ink) mb-2">
                   Font / Typography
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { id: "template", name: "Template", desc: "Designed pairing", cls: "font-sans" },
+                    {
+                      id: "template",
+                      name: "Template",
+                      desc: "Designed pairing",
+                      cls: "font-sans",
+                    },
                     { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
                     { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
                     { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
@@ -336,7 +375,7 @@ function CoverLetterCanvasHeaderBase({
                           Aa
                         </span>
                         <span className="text-[11px] font-bold leading-tight">{f.name}</span>
-                        <span className="text-[9px] text-[var(--brand-muted)]">{f.desc}</span>
+                        <span className="text-[9px] text-(--brand-muted)">{f.desc}</span>
                       </button>
                     );
                   })}
@@ -345,7 +384,7 @@ function CoverLetterCanvasHeaderBase({
 
               {/* Page Spacing Section */}
               <div className="pt-3 border-t border-black/10">
-                <label className="block text-xs font-bold text-[var(--brand-ink)] mb-2">
+                <label className="block text-xs font-bold text-(--brand-ink) mb-2">
                   Page Spacing
                 </label>
                 <div className="flex gap-1.5">
@@ -364,7 +403,7 @@ function CoverLetterCanvasHeaderBase({
                           "flex-1 rounded-xl border py-1.5 text-center text-xs font-bold transition cursor-pointer",
                           isSelected
                             ? "border-emerald-600 bg-emerald-600 text-white"
-                            : "border-black/10 bg-white text-[var(--brand-muted)] hover:border-black/25"
+                            : "border-black/10 bg-white text-(--brand-muted) hover:border-black/25"
                         )}
                       >
                         {p.label}
@@ -383,7 +422,7 @@ function CoverLetterCanvasHeaderBase({
             type="button"
             onClick={handleSaveToCloud}
             disabled={isSaving}
-            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
+            className="group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border border-black/15 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer"
             title="Save cover letter to your account"
           >
             {isSaving ? (
@@ -411,21 +450,30 @@ function CoverLetterCanvasHeaderBase({
                 "group flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-xs transition cursor-pointer",
                 showExportMenu
                   ? "border-[#10b981] bg-[#ecfdf5] text-[#047857] ring-2 ring-emerald-500/30"
-                  : "border-black/15 bg-white text-[var(--brand-ink)] hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
+                  : "border-black/15 bg-white text-(--brand-ink) hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857]"
               )}
               title="Export cover letter options"
             >
-              <Download className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]")} />
+              <Download
+                className={cn(
+                  "size-3.5 transition-colors",
+                  showExportMenu ? "text-[#059669]" : "text-emerald-600 group-hover:text-[#059669]"
+                )}
+              />
               <span>Export</span>
-              <ChevronDown className={cn("size-3.5 transition-colors", showExportMenu ? "text-[#059669]" : "text-[var(--brand-muted)] group-hover:text-[#059669]")} />
+              <ChevronDown
+                className={cn(
+                  "size-3.5 transition-colors",
+                  showExportMenu
+                    ? "text-[#059669]"
+                    : "text-(--brand-muted) group-hover:text-[#059669]"
+                )}
+              />
             </button>
 
             {showExportMenu && (
               <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowExportMenu(false)}
-                />
+                <div className="fixed inset-0 z-40" onClick={() => setShowExportMenu(false)} />
                 <div className="absolute right-0 top-10 z-50 w-52 rounded-2xl border border-black/15 bg-white p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95">
                   <button
                     type="button"
@@ -434,14 +482,16 @@ function CoverLetterCanvasHeaderBase({
                       if (handleExportPdf) handleExportPdf();
                       else window.print();
                     }}
-                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer"
                   >
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
                       <FileText className="size-4" />
                     </span>
                     <div className="text-left">
-                      <p className="font-bold text-[var(--brand-ink)]">PDF Document</p>
-                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export layout as PDF</p>
+                      <p className="font-bold text-(--brand-ink)">PDF Document</p>
+                      <p className="text-[10px] text-(--brand-muted) font-normal">
+                        Export layout as PDF
+                      </p>
                     </div>
                   </button>
 
@@ -451,14 +501,16 @@ function CoverLetterCanvasHeaderBase({
                       setShowExportMenu(false);
                       if (handleExportDocx) handleExportDocx();
                     }}
-                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                    className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-(--brand-ink) transition hover:bg-black/5 cursor-pointer"
                   >
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                       <FileSpreadsheet className="size-4" />
                     </span>
                     <div className="text-left">
-                      <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
-                      <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .docx file</p>
+                      <p className="font-bold text-(--brand-ink)">Word Document</p>
+                      <p className="text-[10px] text-(--brand-muted) font-normal">
+                        Export editable .docx file
+                      </p>
                     </div>
                   </button>
                 </div>
@@ -471,13 +523,13 @@ function CoverLetterCanvasHeaderBase({
         <button
           type="button"
           onClick={() => setIsFullscreen(!isFullscreen)}
-          className="group flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white text-[var(--brand-ink)] shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer hidden lg:flex"
+          className="group flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-black/15 bg-white text-(--brand-ink) shadow-xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] cursor-pointer hidden lg:flex"
           title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Preview"}
         >
           {isFullscreen ? (
-            <Minimize2 className="size-3.5 text-[var(--brand-muted)] transition-colors group-hover:text-[#059669]" />
+            <Minimize2 className="size-3.5 text-(--brand-muted) transition-colors group-hover:text-[#059669]" />
           ) : (
-            <Maximize2 className="size-3.5 text-[var(--brand-muted)] transition-colors group-hover:text-[#059669]" />
+            <Maximize2 className="size-3.5 text-(--brand-muted) transition-colors group-hover:text-[#059669]" />
           )}
         </button>
       </div>

@@ -12,11 +12,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const supabase = createClient();
 
     // Fetch initial user session
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    supabase.auth
+      .getUser()
+      .then(({ data: { user } }) => {
+        setUser(user);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
 
     // Listen for auth state changes (sign in, sign out, token refresh)
     const {

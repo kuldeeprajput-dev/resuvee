@@ -2,9 +2,32 @@ import React, { memo } from "react";
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
-import { ProfilePhoto, ContactList, SummarySection, ExperienceSection, EducationSection, SkillsSection, ProjectsSection, CertificationsSection, Sheet } from "./resume-preview-shared";
-import { BlueprintTemplate, ChronologicalTemplate, CompactTemplate, HybridTemplate, FinanceTemplate, HealthcareTemplate, SalesTemplate } from "./resume-preview-templates";
-import { AnalystTemplate, FresherTemplate, FirstStepTemplate, PivotTemplate } from "./resume-preview-specialist-templates";
+import {
+  ProfilePhoto,
+  ContactList,
+  SummarySection,
+  ExperienceSection,
+  EducationSection,
+  SkillsSection,
+  ProjectsSection,
+  CertificationsSection,
+  Sheet,
+} from "./resume-preview-shared";
+import {
+  BlueprintTemplate,
+  ChronologicalTemplate,
+  CompactTemplate,
+  HybridTemplate,
+  FinanceTemplate,
+  HealthcareTemplate,
+  SalesTemplate,
+} from "./resume-preview-templates";
+import {
+  AnalystTemplate,
+  FresherTemplate,
+  FirstStepTemplate,
+  PivotTemplate,
+} from "./resume-preview-specialist-templates";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -69,7 +92,10 @@ function EditorialTemplate(props: ResumePreviewProps) {
   return (
     <Sheet
       pagePadding={pagePadding}
-      className={cn("bg-[#fffefb] px-9 py-7 font-serif flex flex-col justify-between min-h-[842px] h-[842px]", className)}
+      className={cn(
+        "bg-[#fffefb] px-9 py-7 font-serif flex flex-col justify-between min-h-[842px] h-[842px]",
+        className
+      )}
     >
       <div>
         <header className="border-b border-black/55 pb-3 text-center">
@@ -147,7 +173,7 @@ function SummitTemplate(props: ResumePreviewProps) {
         className="relative flex flex-col px-5 py-8 text-white"
         style={{ backgroundColor: template.accent }}
       >
-        <div className="absolute right-0 top-0 h-24 w-12 bg-white/[0.06]" />
+        <div className="absolute right-0 top-0 h-24 w-12 bg-white/6" />
         <ProfilePhoto
           data={data}
           hidden={!showPhoto}
@@ -171,7 +197,7 @@ function ColumnTemplate(props: ResumePreviewProps) {
     <Sheet pagePadding={pagePadding} className={cn("bg-white px-11 py-10", className)}>
       <header className="mb-6 flex items-end justify-between gap-6 border-b border-black/70 pb-4">
         <div>
-          <h1 className="text-[30px] font-light leading-none tracking-[-0.05em] text-black/90">
+          <h1 className="text-[30px] font-light leading-none tracking-tighter text-black/90">
             {data.basics.fullName || "Your Name"}
           </h1>
           <p className="mt-2 text-[7px] font-bold uppercase tracking-[0.2em] text-black/50">
@@ -206,7 +232,7 @@ function HorizonTemplate(props: ResumePreviewProps) {
   return (
     <Sheet pagePadding={pagePadding} className={cn("bg-[#fbfdff]", className)}>
       <div className="absolute -right-16 -top-24 h-52 w-[430px] rotate-6 rounded-[50%] bg-[#dceeff]" />
-      <div className="absolute -right-6 -top-20 h-44 w-[350px] rotate-6 rounded-[50%] border-[18px] border-white/55" />
+      <div className="absolute -right-6 -top-20 h-44 w-[350px] rotate-6 rounded-[50%] border-18 border-white/55" />
       <header className="relative flex min-h-[150px] items-center justify-between gap-6 px-10 py-8">
         <div className="max-w-[360px]">
           <p

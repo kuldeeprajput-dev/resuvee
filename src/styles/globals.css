@@ -475,7 +475,7 @@
 
 @layer components {
   .dialog-label {
-    @apply mb-1.5 block text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)];
+    @apply mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-(--brand-muted);
   }
 
   .dialog-input {

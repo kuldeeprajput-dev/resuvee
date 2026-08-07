@@ -22,7 +22,7 @@ export function EditPlanCard({ suggestions }: EditPlanCardProps) {
         <ol className="space-y-3">
           {visibleSuggestions.map((suggestion, index) => (
             <li key={index} className="flex items-start gap-3">
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-[var(--premium-teal)] text-xs font-semibold text-white">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-(--premium-teal) text-xs font-semibold text-white">
                 {index + 1}
               </span>
               <span className="pt-0.5 text-sm leading-6 text-[#123c38]">{suggestion}</span>

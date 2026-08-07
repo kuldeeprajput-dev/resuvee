@@ -55,10 +55,12 @@ export function AnalyzerUploadCard({
             <FileText className="size-4 sm:size-[18px]" />
           </span>
           <div className="min-w-0">
-            <p className="text-base font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-lg">
+            <p className="text-base font-bold tracking-tight text-(--brand-ink) sm:text-lg">
               Upload your resume
             </p>
-            <p className="mt-0.5 text-xs text-[var(--brand-muted)] sm:mt-1 sm:text-sm">PDF or DOCX, up to 10MB</p>
+            <p className="mt-0.5 text-xs text-(--brand-muted) sm:mt-1 sm:text-sm">
+              PDF or DOCX, up to 10MB
+            </p>
           </div>
         </div>
         <span className="hidden shrink-0 rounded-full bg-[#eef2ec] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#536058] sm:inline-flex">
@@ -118,15 +120,15 @@ export function AnalyzerUploadCard({
             </div>
             <p
               title={selectedFile.name}
-              className="mt-1 max-w-full truncate text-xs font-bold text-[var(--brand-ink)] sm:mt-2 sm:text-sm"
+              className="mt-1 max-w-full truncate text-xs font-bold text-(--brand-ink) sm:mt-2 sm:text-sm"
             >
               {selectedFile.name}
             </p>
-            <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:mt-1 sm:text-xs">
+            <p className="mt-0.5 text-[11px] text-(--brand-muted) sm:mt-1 sm:text-xs">
               {formatFileSize(selectedFile.size)} · Ready to analyze
             </p>
             <div className="mt-2.5 flex items-center gap-2 sm:mt-4">
-              <span className="rounded-full border border-black/10 bg-white px-2.5 py-1 text-[10px] font-bold text-[var(--brand-ink)] sm:px-3 sm:py-1.5 sm:text-[11px]">
+              <span className="rounded-full border border-black/10 bg-white px-2.5 py-1 text-[10px] font-bold text-(--brand-ink) sm:px-3 sm:py-1.5 sm:text-[11px]">
                 Replace file
               </span>
               <button
@@ -135,7 +137,7 @@ export function AnalyzerUploadCard({
                   event.stopPropagation();
                   onRemoveFile();
                 }}
-                className="flex size-7 items-center justify-center rounded-full text-[var(--brand-muted)] transition hover:bg-white hover:text-red-700 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-red-200 sm:size-8"
+                className="flex size-7 items-center justify-center rounded-full text-(--brand-muted) transition hover:bg-white hover:text-red-700 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-red-200 sm:size-8"
                 aria-label="Remove selected file"
               >
                 <X className="size-3.5 sm:size-4" />
@@ -147,13 +149,13 @@ export function AnalyzerUploadCard({
             <div className="scale-75 sm:scale-100">
               <ResumeScanVisual status={isDragging ? "dragging" : "idle"} />
             </div>
-            <p className="mt-1 text-sm font-bold tracking-[-0.02em] text-[var(--brand-ink)] sm:mt-2 sm:text-base">
+            <p className="mt-1 text-sm font-bold tracking-[-0.02em] text-(--brand-ink) sm:mt-2 sm:text-base">
               {isDragging ? "Drop your resume here" : "Choose a resume"}
             </p>
-            <span className="mt-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-bold text-[var(--brand-ink)] shadow-xs transition group-hover:border-[#789584] sm:mt-3 sm:px-4 sm:py-2 sm:text-[11px]">
+            <span className="mt-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-bold text-(--brand-ink) shadow-xs transition group-hover:border-[#789584] sm:mt-3 sm:px-4 sm:py-2 sm:text-[11px]">
               Browse files
             </span>
-            <p className="mt-1 text-[10px] leading-4 text-[var(--brand-muted)] sm:mt-2 sm:text-[11px] sm:leading-5">
+            <p className="mt-1 text-[10px] leading-4 text-(--brand-muted) sm:mt-2 sm:text-[11px] sm:leading-5">
               or drag and drop a PDF or DOCX
             </p>
           </>
@@ -172,7 +174,7 @@ export function AnalyzerUploadCard({
 
       <Button
         onClick={onUpload}
-        className="mt-3 h-10 w-full gap-2 rounded-xl bg-[var(--brand-ink)] text-xs font-bold text-white shadow-sm hover:bg-[#27332f] disabled:bg-[#e1e5e0] disabled:text-[#737b75] disabled:opacity-100 sm:mt-4 sm:h-12 sm:text-sm"
+        className="mt-3 h-10 w-full gap-2 rounded-xl bg-(--brand-ink) text-xs font-bold text-white shadow-sm hover:bg-[#27332f] disabled:bg-[#e1e5e0] disabled:text-[#737b75] disabled:opacity-100 sm:mt-4 sm:h-12 sm:text-sm"
         disabled={!selectedFile || state !== "idle"}
         size="lg"
       >
@@ -191,7 +193,7 @@ export function AnalyzerUploadCard({
         {state === "idle" && selectedFile && <ArrowUpRight className="size-3.5 sm:size-4" />}
       </Button>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-black/8 pt-3 text-[10px] text-[var(--brand-muted)] sm:mt-4 sm:pt-4 sm:text-[11px]">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-black/8 pt-3 text-[10px] text-(--brand-muted) sm:mt-4 sm:pt-4 sm:text-[11px]">
         <span className="flex items-center gap-1.5">
           <LockKeyhole className="size-3 sm:size-3.5" />
           Private document review

@@ -43,7 +43,9 @@ export function useCoverLetterCanvas() {
 
   // Window width tracker for mobile vs desktop
   useEffect(() => {
-    const updateWidth = () => { setContainerWidth(window.innerWidth); };
+    const updateWidth = () => {
+      setContainerWidth(window.innerWidth);
+    };
     updateWidth();
     window.addEventListener("resize", updateWidth);
     return () => window.removeEventListener("resize", updateWidth);
@@ -98,7 +100,10 @@ export function useCoverLetterCanvas() {
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (e.code === "Space") { e.preventDefault(); setIsSpacePressed(true); }
+      if (e.code === "Space") {
+        e.preventDefault();
+        setIsSpacePressed(true);
+      }
     };
     const onUp = (e: KeyboardEvent) => {
       if (e.code === "Space") setIsSpacePressed(false);
@@ -218,27 +223,44 @@ export function useCoverLetterCanvas() {
   };
 
   return {
-    splitPercent, setSplitPercent,
-    isResizing, setIsResizing,
+    splitPercent,
+    setSplitPercent,
+    isResizing,
+    setIsResizing,
     splitContainerRef,
-    isLeftCollapsed, isRightCollapsed,
-    font, setFont,
-    pageSpacing, setPageSpacing,
-    zoom, setZoom,
-    pan, setPan,
+    isLeftCollapsed,
+    isRightCollapsed,
+    font,
+    setFont,
+    pageSpacing,
+    setPageSpacing,
+    zoom,
+    setZoom,
+    pan,
+    setPan,
     isDragging,
-    isHandTool, setIsHandTool,
+    isHandTool,
+    setIsHandTool,
     isSpacePressed,
-    canvasTheme, setCanvasTheme,
-    isFullscreen, setIsFullscreen,
-    showThemeMenu, setShowThemeMenu,
-    showPresetsMenu, setShowPresetsMenu,
-    showDesignMenu, setShowDesignMenu,
-    showTemplatesMenu, setShowTemplatesMenu,
-    showMobilePreview, setShowMobilePreview,
+    canvasTheme,
+    setCanvasTheme,
+    isFullscreen,
+    setIsFullscreen,
+    showThemeMenu,
+    setShowThemeMenu,
+    showPresetsMenu,
+    setShowPresetsMenu,
+    showDesignMenu,
+    setShowDesignMenu,
+    showTemplatesMenu,
+    setShowTemplatesMenu,
+    showMobilePreview,
+    setShowMobilePreview,
     containerWidth,
-    showStartFreshModal, setShowStartFreshModal,
-    showAiDrawer, setShowAiDrawer,
+    showStartFreshModal,
+    setShowStartFreshModal,
+    showAiDrawer,
+    setShowAiDrawer,
     containerRef,
     handleWheel,
     handleMouseDown,

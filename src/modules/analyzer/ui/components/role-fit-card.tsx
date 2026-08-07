@@ -11,7 +11,7 @@ interface RoleFitCardProps {
 
 export function RoleFitCard({ analysis }: RoleFitCardProps) {
   return (
-    <Card className="border-black/10 bg-white/[0.92] py-0 shadow-sm">
+    <Card className="border-black/10 bg-white/92 py-0 shadow-sm">
       <CardContent className="p-4 sm:p-5">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
           <div>
@@ -19,7 +19,7 @@ export function RoleFitCard({ analysis }: RoleFitCardProps) {
               <Target className="size-3.5" />
               Role fit
             </div>
-            <h2 className="text-2xl font-semibold leading-tight text-[var(--premium-ink)]">
+            <h2 className="text-2xl font-semibold leading-tight text-(--premium-ink)">
               {analysis.role}
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">{analysis.level}</p>
@@ -31,8 +31,8 @@ export function RoleFitCard({ analysis }: RoleFitCardProps) {
         </div>
 
         <div className="mt-5 border-t border-black/10 pt-5">
-          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--premium-ink)]">
-            <Layers3 className="size-4 text-[var(--premium-teal)]" />
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-(--premium-ink)">
+            <Layers3 className="size-4 text-(--premium-teal)" />
             Tech stack detected
           </div>
           <div className="flex flex-wrap gap-2">
@@ -41,7 +41,7 @@ export function RoleFitCard({ analysis }: RoleFitCardProps) {
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="h-auto min-h-7 max-w-full whitespace-normal rounded-lg border border-black/10 bg-white px-3 text-left text-sm text-[var(--premium-ink)]"
+                  className="h-auto min-h-7 max-w-full whitespace-normal rounded-lg border border-black/10 bg-white px-3 text-left text-sm text-(--premium-ink)"
                 >
                   {tech}
                 </Badge>

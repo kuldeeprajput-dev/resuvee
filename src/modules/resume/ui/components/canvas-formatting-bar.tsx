@@ -120,7 +120,7 @@ export function CanvasFormattingBar({
           type="text"
           value={inlineText}
           onChange={(e) => handleRealtimeTextChange(e.target.value)}
-          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
+          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-(--brand-ink) shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate"
           placeholder="Edit inline..."
         />
 
@@ -129,9 +129,7 @@ export function CanvasFormattingBar({
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
             "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
-            isExpanded
-              ? "bg-[#059669] text-white"
-              : "hover:bg-black/10 text-[var(--brand-muted)]"
+            isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-(--brand-muted)"
           )}
           title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
         >
@@ -140,13 +138,13 @@ export function CanvasFormattingBar({
 
         {/* Expandable Floating Paragraph Editor Card */}
         {isExpanded && (
-          <div className="absolute top-12 left-0 z-[100] flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+          <div className="absolute top-12 left-0 z-100 flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             <div className="flex items-center justify-between border-b border-black/10 pb-2">
               <div className="flex items-center gap-1.5">
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
                   {selectedElement.title || selectedElement.field || "Section"}
                 </span>
-                <span className="text-[10px] font-semibold text-[var(--brand-muted)]">
+                <span className="text-[10px] font-semibold text-(--brand-muted)">
                   {inlineText.length} chars
                 </span>
               </div>
@@ -168,7 +166,7 @@ export function CanvasFormattingBar({
                 <button
                   type="button"
                   onClick={() => setIsExpanded(false)}
-                  className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-[var(--brand-muted)] transition cursor-pointer"
+                  className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-(--brand-muted) transition cursor-pointer"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -179,7 +177,7 @@ export function CanvasFormattingBar({
               rows={5}
               value={inlineText}
               onChange={(e) => handleRealtimeTextChange(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
+              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-(--brand-ink) outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all"
               placeholder="Type or edit full section text..."
               autoFocus
             />
@@ -194,7 +192,7 @@ export function CanvasFormattingBar({
         <button
           type="button"
           onClick={() => changeFontSize(-1)}
-          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-(--brand-ink) hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Decrease font size"
         >
           A-
@@ -202,7 +200,7 @@ export function CanvasFormattingBar({
         <button
           type="button"
           onClick={() => changeFontSize(1)}
-          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-(--brand-ink) hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Increase font size"
         >
           A+
@@ -305,10 +303,10 @@ export function CanvasFormattingBar({
         )}
 
         {showColorPicker && (
-          <div className="absolute top-12 right-0 z-[100] flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+          <div className="absolute top-12 right-0 z-100 flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             {/* Custom Color Wheel Swatch */}
             <label
-              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
+              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
               title="Pick Custom Color"
             >
               <input
@@ -340,7 +338,7 @@ export function CanvasFormattingBar({
                 }
               }}
               placeholder="#059669"
-              className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
+              className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-(--brand-ink) outline-none focus:bg-white"
             />
 
             <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />

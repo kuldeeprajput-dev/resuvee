@@ -125,14 +125,14 @@ function CategoryCard({ category }: { category: AnalysisCategoryScore }) {
   return (
     <article
       id={categoryId(category.name)}
-      className="scroll-mt-24 rounded-[18px] border border-black/[0.08] bg-white p-3.5 sm:rounded-[22px] sm:p-5"
+      className="scroll-mt-24 rounded-[18px] border border-black/8 bg-white p-3.5 sm:rounded-[22px] sm:p-5"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-[var(--brand-muted)]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-(--brand-muted)">
             {category.name}
           </p>
-          <p className="mt-1.5 text-[11px] leading-4 text-[var(--brand-muted)] sm:mt-2 sm:text-xs sm:leading-5">
+          <p className="mt-1.5 text-[11px] leading-4 text-(--brand-muted) sm:mt-2 sm:text-xs sm:leading-5">
             {descriptions[category.name] ?? "Resume quality signals detected in this document."}
           </p>
         </div>
@@ -142,7 +142,7 @@ function CategoryCard({ category }: { category: AnalysisCategoryScore }) {
           {score}
         </span>
       </div>
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/[0.065] sm:mt-4 sm:h-2">
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/6.5 sm:mt-4 sm:h-2">
         <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${score}%` }} />
       </div>
       <p className={`mt-2 text-[11px] font-bold ${tone.text}`}>{tone.label}</p>
@@ -166,7 +166,7 @@ function FindingList({
   ]);
 
   return (
-    <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[24px] sm:p-6">
+    <section className="rounded-[20px] border border-black/8 bg-white p-4 sm:rounded-[24px] sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           <span
@@ -177,13 +177,13 @@ function FindingList({
             {positive ? <Check className="size-4" /> : <XCircle className="size-4" />}
           </span>
           <div>
-            <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+            <h3 className="text-sm font-bold tracking-tight text-(--brand-ink) sm:text-base">
               {title}
             </h3>
-            <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
+            <p className="mt-0.5 text-[11px] text-(--brand-muted) sm:text-xs">{subtitle}</p>
           </div>
         </div>
-        <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--brand-muted)] sm:text-[10px]">
+        <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.12em] text-(--brand-muted) sm:text-[10px]">
           {values.length} checks
         </span>
       </div>
@@ -196,9 +196,7 @@ function FindingList({
             <span
               className={`mt-2 size-1.5 shrink-0 rounded-full ${positive ? "bg-[#128274]" : "bg-[#c85f5b]"}`}
             />
-            <p className="text-xs leading-5 text-[var(--brand-muted)] sm:text-sm sm:leading-6">
-              {item}
-            </p>
+            <p className="text-xs leading-5 text-(--brand-muted) sm:text-sm sm:leading-6">{item}</p>
           </li>
         ))}
       </ul>
@@ -219,7 +217,7 @@ function TagPanel({
 }) {
   const values = stringList(items, 12);
   return (
-    <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[24px] sm:p-6">
+    <section className="rounded-[20px] border border-black/8 bg-white p-4 sm:rounded-[24px] sm:p-6">
       <div className="flex items-start gap-3">
         <span
           className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${
@@ -229,10 +227,10 @@ function TagPanel({
           {warning ? <Target className="size-4" /> : <Layers3 className="size-4" />}
         </span>
         <div>
-          <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+          <h3 className="text-sm font-bold tracking-tight text-(--brand-ink) sm:text-base">
             {title}
           </h3>
-          <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">{subtitle}</p>
+          <p className="mt-0.5 text-[11px] text-(--brand-muted) sm:text-xs">{subtitle}</p>
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2">
@@ -250,7 +248,7 @@ function TagPanel({
             </span>
           ))
         ) : (
-          <p className="text-sm text-[var(--brand-muted)]">Nothing was confidently detected.</p>
+          <p className="text-sm text-(--brand-muted)">Nothing was confidently detected.</p>
         )}
       </div>
     </section>
@@ -309,24 +307,24 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
   ]);
 
   return (
-    <section className="w-full overflow-hidden rounded-[20px] border border-black/[0.09] bg-[#f6f4ed] shadow-[0_24px_80px_rgba(21,30,26,0.10)] sm:rounded-[30px]">
-      <header className="flex flex-col gap-3 border-b border-black/[0.08] bg-white px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between">
+    <section className="w-full overflow-hidden rounded-[20px] border border-black/9 bg-[#f6f4ed] shadow-[0_24px_80px_rgba(21,30,26,0.10)] sm:rounded-[30px]">
+      <header className="flex flex-col gap-3 border-b border-black/8 bg-white px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 items-center gap-3">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#e5f2eb] text-[#0b6d61] sm:size-11 sm:rounded-2xl">
             <FileCheck2 className="size-4 sm:size-5" />
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-base font-bold tracking-[-0.03em] text-[var(--brand-ink)] sm:text-lg">
+              <h1 className="text-base font-bold tracking-[-0.03em] text-(--brand-ink) sm:text-lg">
                 Resume review complete
               </h1>
               <span
-                className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${tone.soft} ${tone.text}`}
+                className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${tone.soft} ${tone.text}`}
               >
                 {tone.label}
               </span>
             </div>
-            <p className="mt-0.5 max-w-[72vw] truncate text-[11px] text-[var(--brand-muted)] sm:max-w-[60vw] sm:text-xs">
+            <p className="mt-0.5 max-w-[72vw] truncate text-[11px] text-(--brand-muted) sm:max-w-[60vw] sm:text-xs">
               {fileName || "Uploaded resume"} · Calibrated quality report
             </p>
           </div>
@@ -335,13 +333,13 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-black/[0.1] bg-white px-3 text-[11px] font-bold text-[var(--brand-ink)] transition hover:bg-[#f4f4ef] cursor-pointer sm:h-10 sm:gap-2 sm:px-4 sm:text-xs"
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-black/10 bg-white px-3 text-[11px] font-bold text-(--brand-ink) transition hover:bg-[#f4f4ef] cursor-pointer sm:h-10 sm:gap-2 sm:px-4 sm:text-xs"
           >
             <RotateCcw className="size-4" /> Analyze another
           </button>
           <Link
             href="/builder"
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-[var(--brand-ink)] px-3.5 text-[11px] font-bold text-white shadow-xs transition hover:bg-[#27332f] cursor-pointer sm:h-10 sm:gap-2 sm:px-5 sm:text-xs"
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-(--brand-ink) px-3.5 text-[11px] font-bold text-white shadow-xs transition hover:bg-[#27332f] cursor-pointer sm:h-10 sm:gap-2 sm:px-5 sm:text-xs"
           >
             <PenLine className="size-4 text-white" /> Improve resume
           </Link>
@@ -349,7 +347,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
       </header>
 
       <div className="grid lg:grid-cols-[275px_minmax(0,1fr)]">
-        <aside className="border-b border-[#c5d6cb] bg-[#e2ece5] p-4 text-[var(--brand-ink)] sm:p-6 lg:min-h-[760px] lg:border-r lg:border-b-0">
+        <aside className="border-b border-[#c5d6cb] bg-[#e2ece5] p-4 text-(--brand-ink) sm:p-6 lg:min-h-[760px] lg:border-r lg:border-b-0">
           <div className="flex items-center gap-5 lg:block">
             <CircularProgress
               value={score}
@@ -357,7 +355,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
               strokeWidth={10}
               progressColor="text-[#5c9a72]"
               label={tone.label}
-              className="-m-2 shrink-0 scale-[0.84] [&_span]:text-[var(--brand-ink)] [&_span:last-child]:text-[#60766b] sm:m-0 sm:scale-100"
+              className="-m-2 shrink-0 scale-[0.84] [&_span]:text-(--brand-ink) [&_span:last-child]:text-[#60766b] sm:m-0 sm:scale-100"
             />
             <div className="min-w-0 lg:mt-5">
               <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#60766b] sm:text-[10px]">
@@ -403,26 +401,26 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
         </aside>
 
         <main className="min-w-0 p-3 sm:p-6 lg:p-8">
-          <section className="rounded-[20px] border border-black/[0.08] bg-white p-4 sm:rounded-[26px] sm:p-7">
+          <section className="rounded-[20px] border border-black/8 bg-white p-4 sm:rounded-[26px] sm:p-7">
             <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#557264]">
                   <Gauge className="size-4" /> Detected direction
                 </div>
-                <h2 className="mt-2 break-words text-xl font-bold tracking-[-0.045em] text-[var(--brand-ink)] sm:text-3xl">
+                <h2 className="mt-2 wrap-break-word text-xl font-bold tracking-[-0.045em] text-(--brand-ink) sm:text-3xl">
                   {analysis.role || "General applicant"}
                 </h2>
-                <p className="mt-1 text-xs font-semibold text-[var(--brand-muted)] sm:text-sm">
+                <p className="mt-1 text-xs font-semibold text-(--brand-muted) sm:text-sm">
                   {analysis.level || "Level not confidently detected"}
                 </p>
-                <p className="mt-3 max-w-3xl text-xs leading-5 text-[var(--brand-muted)] sm:mt-5 sm:text-sm sm:leading-6">
+                <p className="mt-3 max-w-3xl text-xs leading-5 text-(--brand-muted) sm:mt-5 sm:text-sm sm:leading-6">
                   {analysis.summary ||
                     "This review measures document structure, measurable evidence, writing quality, and inferred role language."}
                 </p>
               </div>
               <div className="grid shrink-0 grid-cols-2 gap-2 sm:grid-cols-3 xl:w-[360px]">
                 <div className="rounded-xl bg-[#eef6f1] p-3 sm:rounded-2xl sm:p-3.5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#557264]">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#557264]">
                     ATS read
                   </p>
                   <p className="mt-1 text-lg font-bold text-[#0b6d61] sm:text-xl">
@@ -430,7 +428,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
                   </p>
                 </div>
                 <div className="rounded-xl bg-[#fbf4df] p-3 sm:rounded-2xl sm:p-3.5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#76551f]">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#76551f]">
                     Role terms
                   </p>
                   <p className="mt-1 text-lg font-bold text-[#875f16] sm:text-xl">
@@ -438,10 +436,10 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
                   </p>
                 </div>
                 <div className="col-span-2 rounded-xl bg-[#f1f2ed] p-3 sm:col-span-1 sm:rounded-2xl sm:p-3.5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)]">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-(--brand-muted)">
                     Skills
                   </p>
-                  <p className="mt-1 text-lg font-bold text-[var(--brand-ink)] sm:text-xl">
+                  <p className="mt-1 text-lg font-bold text-(--brand-ink) sm:text-xl">
                     {skills.length}
                   </p>
                 </div>
@@ -455,11 +453,11 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#557264]">
                   Score breakdown
                 </p>
-                <h2 className="mt-1 text-lg font-bold tracking-[-0.035em] text-[var(--brand-ink)] sm:text-xl">
+                <h2 className="mt-1 text-lg font-bold tracking-[-0.035em] text-(--brand-ink) sm:text-xl">
                   Why this score
                 </h2>
               </div>
-              <p className="hidden text-xs text-[var(--brand-muted)] sm:block">
+              <p className="hidden text-xs text-(--brand-muted) sm:block">
                 Deterministic checks · repeatable results
               </p>
             </div>
@@ -484,16 +482,16 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
             />
           </div>
 
-          <section className="mt-4 rounded-[20px] border border-black/[0.08] bg-[#eef5f0] p-4 sm:mt-5 sm:rounded-[26px] sm:p-6">
+          <section className="mt-4 rounded-[20px] border border-black/8 bg-[#eef5f0] p-4 sm:mt-5 sm:rounded-[26px] sm:p-6">
             <div className="flex items-start gap-3">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#d5e9dc] text-[#176453] sm:size-9 sm:rounded-xl">
                 <Sparkles className="size-4" />
               </span>
               <div>
-                <h3 className="text-sm font-bold tracking-[-0.025em] text-[var(--brand-ink)] sm:text-base">
+                <h3 className="text-sm font-bold tracking-tight text-(--brand-ink) sm:text-base">
                   Priority edit plan
                 </h3>
-                <p className="mt-0.5 text-[11px] text-[var(--brand-muted)] sm:text-xs">
+                <p className="mt-0.5 text-[11px] text-(--brand-muted) sm:text-xs">
                   Apply these in order, then analyze the revised file.
                 </p>
               </div>
@@ -507,7 +505,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#d5e9dc] text-[11px] font-bold text-[#155e52] sm:size-7 sm:text-xs">
                     {index + 1}
                   </span>
-                  <p className="text-xs leading-5 text-[var(--brand-muted)] sm:text-sm sm:leading-6">
+                  <p className="text-xs leading-5 text-(--brand-muted) sm:text-sm sm:leading-6">
                     {item}
                   </p>
                 </li>
@@ -530,9 +528,9 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
           </div>
 
           {(parserIssues.length > 0 || analysis.scoreBreakdown?.capsApplied?.length) && (
-            <details className="group mt-4 rounded-[18px] border border-black/[0.08] bg-white p-3.5 sm:mt-5 sm:rounded-[22px] sm:p-5">
+            <details className="group mt-4 rounded-[18px] border border-black/8 bg-white p-3.5 sm:mt-5 sm:rounded-[22px] sm:p-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
-                <span className="flex items-center gap-2 text-xs font-bold text-[var(--brand-ink)] sm:text-sm">
+                <span className="flex items-center gap-2 text-xs font-bold text-(--brand-ink) sm:text-sm">
                   <AlertCircle className="size-4 text-[#c28a2c]" /> Parser notes and score limits
                 </span>
                 <ChevronRight className="size-4 transition group-open:rotate-90" />
@@ -544,7 +542,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
                 ).map((item, index) => (
                   <p
                     key={`${item}-${index}`}
-                    className="rounded-xl bg-[#f6f4ed] px-3 py-2.5 text-xs leading-5 text-[var(--brand-muted)]"
+                    className="rounded-xl bg-[#f6f4ed] px-3 py-2.5 text-xs leading-5 text-(--brand-muted)"
                   >
                     {item}
                   </p>
@@ -553,7 +551,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
             </details>
           )}
 
-          <div className="mt-4 flex flex-col gap-3 rounded-[20px] border border-[#bdd2c4] bg-[#dfebe3] p-4 text-[var(--brand-ink)] sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:rounded-[24px] sm:p-6">
+          <div className="mt-4 flex flex-col gap-3 rounded-[20px] border border-[#bdd2c4] bg-[#dfebe3] p-4 text-(--brand-ink) sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:rounded-[24px] sm:p-6">
             <div>
               <p className="text-sm font-bold">Turn the report into a stronger resume</p>
               <p className="mt-1 max-w-2xl text-[11px] leading-4 text-[#536a5f] sm:text-xs sm:leading-5">
@@ -563,7 +561,7 @@ export function ATSDashboard({ analysis, fileName, onReset }: ATSDashboardProps)
             </div>
             <Link
               href="/builder"
-              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-[#b5cabe] bg-white px-4 text-xs font-bold text-[var(--brand-ink)] transition hover:-translate-y-0.5 hover:bg-[#f7fbf8] sm:h-11 sm:px-5 sm:text-sm"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-full border border-[#b5cabe] bg-white px-4 text-xs font-bold text-(--brand-ink) transition hover:-translate-y-0.5 hover:bg-[#f7fbf8] sm:h-11 sm:px-5 sm:text-sm"
             >
               Open builder <ArrowUpRight className="size-4" />
             </Link>

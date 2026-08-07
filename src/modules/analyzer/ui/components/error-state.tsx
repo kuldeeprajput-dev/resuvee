@@ -21,7 +21,7 @@ export function ErrorState({ error, onRetry, onReset }: ErrorStateProps) {
           <FileWarning className="size-4" />
           Analysis stopped
         </div>
-        <h2 className="mt-3 text-2xl font-bold tracking-[-0.035em] text-[var(--brand-ink)]">
+        <h2 className="mt-3 text-2xl font-bold tracking-[-0.035em] text-(--brand-ink)">
           We could not read this resume.
         </h2>
         <p className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
@@ -32,21 +32,21 @@ export function ErrorState({ error, onRetry, onReset }: ErrorStateProps) {
           <Button
             onClick={onRetry}
             variant="outline"
-            className="h-11 justify-center gap-2 rounded-xl border-black/10 bg-white text-[var(--brand-ink)] hover:bg-[#f5f6f2]"
+            className="h-11 justify-center gap-2 rounded-xl border-black/10 bg-white text-(--brand-ink) hover:bg-[#f5f6f2]"
           >
             <RefreshCw className="size-4" />
             Try again
           </Button>
           <Button
             onClick={onReset}
-            className="h-11 justify-center gap-2 rounded-xl bg-[var(--brand-ink)] text-white hover:bg-[#27332f]"
+            className="h-11 justify-center gap-2 rounded-xl bg-(--brand-ink) text-white hover:bg-[#27332f]"
           >
             <Home className="size-4" />
             Choose another file
           </Button>
         </div>
 
-        <p className="mt-6 border-t border-black/10 pt-4 text-xs leading-5 text-[var(--brand-muted)]">
+        <p className="mt-6 border-t border-black/10 pt-4 text-xs leading-5 text-(--brand-muted)">
           Use a PDF or DOCX under 10MB and make sure the document contains selectable text.
         </p>
       </div>

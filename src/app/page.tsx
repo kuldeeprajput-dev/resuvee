@@ -37,7 +37,7 @@ const productTools = [
     features: ["Guided editor", "18 original layouts"],
     href: "/builder",
     action: "Build a resume",
-    accent: "bg-[var(--brand-lime)]",
+    accent: "bg-(--brand-lime)",
     wash: "from-[#eff8d8] to-[#fffefa]",
   },
   {
@@ -50,7 +50,7 @@ const productTools = [
     features: ["ATS score", "Clear next steps"],
     href: "/analyzer",
     action: "Check a resume",
-    accent: "bg-[var(--brand-blue)]",
+    accent: "bg-(--brand-blue)",
     wash: "from-[#e7f2fb] to-[#fffefa]",
   },
   {
@@ -82,15 +82,15 @@ const productTools = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen overflow-x-clip bg-[var(--brand-canvas)] text-[var(--brand-ink)]">
+    <div className="min-h-screen overflow-x-clip bg-(--brand-canvas) text-(--brand-ink)">
       <SiteHeader />
 
       <main>
-        <section className="relative border-b border-black/[0.08]">
+        <section className="relative border-b border-black/8">
           <div className="absolute inset-0 paper-grid opacity-60" />
           <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-4 px-5 pb-6 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
             <div className="relative z-10 max-w-[650px]">
-              <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-muted)] shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
+              <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-(--brand-muted) shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
                 <span className="truncate">
                   {resumeTemplates.length} original, white-page resume templates
@@ -102,7 +102,7 @@ export default function Home() {
                 <span className="relative ml-[0.08em] inline-block">
                   clearly told.
                   <svg
-                    className="absolute -bottom-[0.02em] left-0 -z-10 w-full text-[var(--brand-lime)]"
+                    className="absolute bottom-[-0.02em] left-0 -z-10 w-full text-(--brand-lime)"
                     viewBox="0 0 400 35"
                     aria-hidden="true"
                   >
@@ -117,7 +117,7 @@ export default function Home() {
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-[580px] text-base leading-7 text-[var(--brand-muted)] sm:mt-8 sm:text-xl sm:leading-8">
+              <p className="mt-6 max-w-[580px] text-base leading-7 text-(--brand-muted) sm:mt-8 sm:text-xl sm:leading-8">
                 Start with the format employers know, a focused fresher layout, or a role-specific
                 design. Then write, check, customize, and export from one focused workspace.
               </p>
@@ -125,7 +125,7 @@ export default function Home() {
               <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
                 <Button
                   asChild
-                  className="h-12 w-full rounded-full bg-[var(--brand-ink)] px-5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(22,32,28,0.18)] hover:bg-[#27332f] sm:h-13 sm:w-auto sm:px-6"
+                  className="h-12 w-full rounded-full bg-(--brand-ink) px-5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(22,32,28,0.18)] hover:bg-[#27332f] sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/builder">
                     Build my resume
@@ -148,10 +148,10 @@ export default function Home() {
                 {productBenefits.map((benefit) => (
                   <div
                     key={benefit}
-                    className="flex items-start gap-2.5 text-sm font-medium leading-6 text-[var(--brand-muted)]"
+                    className="flex items-start gap-2.5 text-sm font-medium leading-6 text-(--brand-muted)"
                   >
-                    <span className="flex size-5 items-center justify-center rounded-full bg-[var(--brand-lime)]">
-                      <Check className="size-3 text-[var(--brand-ink)]" />
+                    <span className="flex size-5 items-center justify-center rounded-full bg-(--brand-lime)">
+                      <Check className="size-3 text-(--brand-ink)" />
                     </span>
                     {benefit}
                   </div>
@@ -163,7 +163,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="hidden sm:block bg-[var(--brand-ink)] text-white">
+        <section className="hidden sm:block bg-(--brand-ink) text-white">
           <div className="mx-auto grid w-full max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               [String(resumeTemplates.length), "curated templates"],
@@ -171,7 +171,7 @@ export default function Home() {
               ["0", "design licensing worries"],
             ].map(([value, label]) => (
               <div key={label} className="flex items-baseline gap-3 py-7 sm:justify-center sm:py-8">
-                <span className="text-4xl font-bold tracking-[-0.05em] text-[var(--brand-lime)]">
+                <span className="text-4xl font-bold tracking-tighter text-(--brand-lime)">
                   {value}
                 </span>
                 <span className="text-sm font-medium text-white/60">{label}</span>
@@ -193,7 +193,7 @@ export default function Home() {
                 Start with a format people already understand.
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-6 text-[var(--brand-muted)] sm:text-base sm:leading-7">
+            <p className="max-w-md text-sm leading-6 text-(--brand-muted) sm:text-base sm:leading-7">
               Every card is rendered from the same layout and starter content used by the builder,
               so the template you choose is the document you edit. Each design is original to
               Resuvee.
@@ -205,10 +205,10 @@ export default function Home() {
 
         <section
           id="toolkit"
-          className="relative -mt-20 overflow-hidden bg-[var(--brand-canvas)] sm:-mt-0"
+          className="relative -mt-20 overflow-hidden bg-(--brand-canvas) sm:mt-0"
         >
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
-          <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-[var(--brand-lime)]/15 blur-3xl" />
+          <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-(--brand-lime)/15 blur-3xl" />
 
           <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-8 pt-5 sm:px-8 sm:pb-16 sm:pt-6 md:pb-16 md:pt-8 lg:px-12">
             <div className="grid gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-stretch xl:gap-12">
@@ -220,7 +220,7 @@ export default function Home() {
                   <h2 className="mt-4 max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
                     One workspace for the whole job search.
                   </h2>
-                  <p className="mt-5 max-w-lg text-base leading-7 text-[var(--brand-muted)]">
+                  <p className="mt-5 max-w-lg text-base leading-7 text-(--brand-muted)">
                     Build your story, check how it reads, tailor every application, and keep the
                     follow-up moving—all without leaving your private workspace.
                   </p>
@@ -239,14 +239,14 @@ export default function Home() {
                         key={benefit}
                         className="flex items-center gap-3 rounded-xl border border-black/[0.07] bg-white/70 px-3 py-2.5"
                       >
-                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--brand-lime)]">
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--brand-lime)">
                           <Check className="size-3" strokeWidth={2.5} />
                         </span>
                         <span className="text-xs font-bold">{benefit}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-3 text-xs leading-5 text-[var(--brand-muted)]">
+                  <p className="mt-3 text-xs leading-5 text-(--brand-muted)">
                     No scattered documents or repeated setup while you move from writing to
                     applying.
                   </p>
@@ -258,10 +258,10 @@ export default function Home() {
                   <Link
                     key={tool.href}
                     href={tool.href}
-                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-[var(--brand-paper)] p-3 shadow-[0_18px_55px_rgba(22,32,28,0.04)] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_70px_rgba(22,32,28,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d] sm:rounded-[26px] sm:p-6"
+                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-(--brand-paper) p-3 shadow-[0_18px_55px_rgba(22,32,28,0.04)] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-[0_24px_70px_rgba(22,32,28,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63864d] sm:rounded-[26px] sm:p-6"
                   >
                     <div
-                      className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tool.wash} opacity-0 transition duration-300 group-hover:opacity-100`}
+                      className={`pointer-events-none absolute inset-0 bg-linear-to-br ${tool.wash} opacity-0 transition duration-300 group-hover:opacity-100`}
                     />
                     <div className="relative flex items-start justify-between">
                       <span
@@ -284,7 +284,7 @@ export default function Home() {
                       <h3 className="mt-0.5 text-sm font-bold tracking-[-0.03em] sm:mt-1.5 sm:text-xl sm:tracking-[-0.035em]">
                         {tool.title}
                       </h3>
-                      <p className="mt-1 hidden text-xs leading-5 text-[var(--brand-muted)] sm:mt-2 sm:block sm:text-sm sm:leading-6">
+                      <p className="mt-1 hidden text-xs leading-5 text-(--brand-muted) sm:mt-2 sm:block sm:text-sm sm:leading-6">
                         {tool.description}
                       </p>
                     </div>
@@ -308,19 +308,15 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
-
           </div>
         </section>
 
-
-
-        <section className="bg-[var(--brand-canvas)] pb-6 pt-2 sm:pb-16 sm:pt-6">
+        <section className="bg-(--brand-canvas) pb-6 pt-2 sm:pb-16 sm:pt-6">
           <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
-            <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-[var(--brand-orange)] p-6 shadow-[0_24px_70px_-15px_rgba(217,93,48,0.3)] sm:rounded-[32px] sm:p-12 lg:p-14">
-              <div className="pointer-events-none absolute -right-16 -top-28 size-72 rounded-full border-[42px] border-white/20" />
-              <div className="pointer-events-none absolute -bottom-24 right-[30%] size-56 rounded-full bg-[var(--brand-lime)]/35 blur-3xl" />
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-200/35 via-transparent to-transparent opacity-80" />
+            <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-(--brand-orange) p-6 shadow-[0_24px_70px_-15px_rgba(217,93,48,0.3)] sm:rounded-[32px] sm:p-12 lg:p-14">
+              <div className="pointer-events-none absolute -right-16 -top-28 size-72 rounded-full border-42 border-white/20" />
+              <div className="pointer-events-none absolute -bottom-24 right-[30%] size-56 rounded-full bg-(--brand-lime)/35 blur-3xl" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-amber-200/35 via-transparent to-transparent opacity-80" />
 
               <div className="relative z-10 flex flex-col gap-5 sm:gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-3xl">
@@ -345,7 +341,7 @@ export default function Home() {
 
                 <Button
                   asChild
-                  className="group h-11 w-full shrink-0 rounded-full bg-[var(--brand-ink)] px-6 text-xs font-bold text-white shadow-xl transition-all duration-300 hover:scale-[1.03] hover:bg-[#18231f] sm:h-13 sm:w-fit sm:px-7 sm:text-sm"
+                  className="group h-11 w-full shrink-0 rounded-full bg-(--brand-ink) px-6 text-xs font-bold text-white shadow-xl transition-all duration-300 hover:scale-[1.03] hover:bg-[#18231f] sm:h-13 sm:w-fit sm:px-7 sm:text-sm"
                 >
                   <Link href="/builder">
                     Start building

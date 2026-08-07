@@ -77,7 +77,7 @@ function PhotoEditor({
   };
 
   return (
-    <div className="mb-6 rounded-2xl border border-black/[0.09] bg-white/60 p-4 shadow-sm">
+    <div className="mb-6 rounded-2xl border border-black/9 bg-white/60 p-4 shadow-sm">
       <input
         ref={inputRef}
         type="file"
@@ -88,7 +88,7 @@ function PhotoEditor({
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            "relative flex size-20 shrink-0 items-center justify-center overflow-hidden border border-black/10 bg-[#e8ece8] text-[var(--brand-muted)]",
+            "relative flex size-20 shrink-0 items-center justify-center overflow-hidden border border-black/10 bg-[#e8ece8] text-(--brand-muted)",
             shape === "circle" ? "rounded-full" : shape === "square" ? "rounded-md" : "rounded-2xl"
           )}
         >
@@ -106,15 +106,15 @@ function PhotoEditor({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold text-[var(--brand-ink)]">Profile photo</p>
-          <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
+          <p className="text-xs font-bold text-(--brand-ink)">Profile photo</p>
+          <p className="mt-1 text-[11px] leading-4 text-(--brand-muted)">
             Optional. Used only by templates designed for a headshot.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[var(--brand-ink)] px-3 text-[10px] font-bold text-white transition hover:bg-[#293630]"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-(--brand-ink) px-3 text-[10px] font-bold text-white transition hover:bg-[#293630]"
             >
               <ImagePlus className="size-3.5" />
               {photo ? "Replace photo" : "Upload photo"}
@@ -123,7 +123,7 @@ function PhotoEditor({
               <button
                 type="button"
                 onClick={() => onChange("")}
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-3 text-[10px] font-bold text-[var(--brand-muted)] transition hover:text-red-600"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-3 text-[10px] font-bold text-(--brand-muted) transition hover:text-red-600"
               >
                 <X className="size-3.5" />
                 Remove
@@ -139,7 +139,12 @@ function PhotoEditor({
 
 // ─── Personal Details ─────────────────────────────────────────────────────────
 
-export function PersonalDetailsEditor({ data, onChange, template, stepLabel }: ResumeEditorContentProps) {
+export function PersonalDetailsEditor({
+  data,
+  onChange,
+  template,
+  stepLabel,
+}: ResumeEditorContentProps) {
   const update = (field: keyof ResumeData["basics"], value: string) => {
     onChange({
       ...data,
@@ -168,7 +173,7 @@ export function PersonalDetailsEditor({ data, onChange, template, stepLabel }: R
       }
     >
       <div className="mb-4 grid grid-cols-3 gap-1.5 sm:mb-6 sm:gap-2">
-        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/8 bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
           {template.layout === "sidebar" ? (
             <Columns3 className="size-3.5 shrink-0 text-[#4d7141]" />
           ) : (
@@ -178,14 +183,14 @@ export function PersonalDetailsEditor({ data, onChange, template, stepLabel }: R
             {template.layout === "sidebar" ? "Sidebar" : "Single col"}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/8 bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
           <UserRound className="size-3.5 shrink-0 text-[#4d7141]" />
           <span className="truncate text-[9.5px] font-bold sm:text-[10px]">
             {template.supportsPhoto ? "Photo layout" : "Photo-free"}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 rounded-xl border border-black/[0.08] bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
-          <span className="flex size-3.5 shrink-0 items-center justify-center rounded-full border border-black/15 bg-black/5 text-[8px] font-extrabold text-[var(--brand-ink)]">
+        <div className="flex items-center gap-1.5 rounded-xl border border-black/8 bg-white/70 px-2 py-2 sm:px-3 sm:py-2.5">
+          <span className="flex size-3.5 shrink-0 items-center justify-center rounded-full border border-black/15 bg-black/5 text-[8px] font-extrabold text-(--brand-ink)">
             {template.sections.length}
           </span>
           <span className="truncate text-[9.5px] font-bold sm:text-[10px]">Editable sections</span>
@@ -206,7 +211,7 @@ export function PersonalDetailsEditor({ data, onChange, template, stepLabel }: R
           </span>
           <div>
             <p className="text-xs font-bold">Photo-free template</p>
-            <p className="mt-1 text-[11px] leading-4 text-[var(--brand-muted)]">
+            <p className="mt-1 text-[11px] leading-4 text-(--brand-muted)">
               This design intentionally omits a profile image for a simpler, ATS-focused document.
             </p>
           </div>
@@ -291,4 +296,3 @@ export function SummaryEditor({ data, onChange, stepLabel }: ResumeEditorContent
     </EditorSection>
   );
 }
-

@@ -228,7 +228,8 @@ export function InteractiveCanvas({
 
   // Direct Granular Element Click Handler + Left Editor Step Sync
   const handleSheetClick = (e: React.MouseEvent) => {
-    if (activeHand || isDragging || (typeof window !== "undefined" && window.innerWidth < 1024)) return;
+    if (activeHand || isDragging || (typeof window !== "undefined" && window.innerWidth < 1024))
+      return;
 
     const target = e.target as HTMLElement;
     const container = containerRef.current;
@@ -251,7 +252,11 @@ export function InteractiveCanvas({
     newElem.classList.add("resume-field-active");
 
     const clickedText = elem.textContent?.trim() || "";
-    const { found, inlineText: text } = findSelectedCanvasElement(clickedText, elem as HTMLElement, data);
+    const { found, inlineText: text } = findSelectedCanvasElement(
+      clickedText,
+      elem as HTMLElement,
+      data
+    );
 
     setInlineText(text);
     setSelectedElement(found);
@@ -371,10 +376,10 @@ export function InteractiveCanvas({
 
   // Background style classes
   const themeStyles: Record<CanvasTheme, string> = {
-    dots: "bg-[#e5e7e2] [background-image:radial-gradient(#b8beb5_1.2px,transparent_1.2px)] [background-size:20px_20px]",
-    grid: "bg-[#e8e9e4] [background-image:linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] [background-size:24px_24px]",
+    dots: "bg-[#e5e7e2] bg-[radial-gradient(#b8beb5_1.2px,transparent_1.2px)] bg-size-[20px_20px]",
+    grid: "bg-[#e8e9e4] bg-[linear-gradient(to_right,#d2d6cd_1px,transparent_1px),linear-gradient(to_bottom,#d2d6cd_1px,transparent_1px)] bg-size-[24px_24px]",
     studio:
-      "bg-[#1e2320] [background-image:radial-gradient(#3a453f_1.5px,transparent_1.5px)] [background-size:24px_24px]",
+      "bg-[#1e2320] bg-[radial-gradient(#3a453f_1.5px,transparent_1.5px)] bg-size-[24px_24px]",
     clean: "bg-[#dfe2dc]",
   };
 
@@ -382,7 +387,7 @@ export function InteractiveCanvas({
     <div
       className={cn(
         "relative flex flex-col overflow-hidden select-none transition-all duration-300",
-        isFullscreen ? "fixed inset-0 z-[120] bg-black" : "h-full w-full"
+        isFullscreen ? "fixed inset-0 z-120 bg-black" : "h-full w-full"
       )}
     >
       {/* Top Header Bar */}
@@ -516,8 +521,14 @@ export function InteractiveCanvas({
         onCanvasThemeChange={setCanvasTheme}
         onUndo={handleUndo}
         onRedo={handleRedo}
-        onTogglePresetsMenu={() => { setShowPresetsMenu(!showPresetsMenu); setShowThemeMenu(false); }}
-        onToggleThemeMenu={() => { setShowThemeMenu(!showThemeMenu); setShowPresetsMenu(false); }}
+        onTogglePresetsMenu={() => {
+          setShowPresetsMenu(!showPresetsMenu);
+          setShowThemeMenu(false);
+        }}
+        onToggleThemeMenu={() => {
+          setShowThemeMenu(!showThemeMenu);
+          setShowPresetsMenu(false);
+        }}
       />
     </div>
   );

@@ -32,7 +32,9 @@ function openDB(): Promise<IDBDatabase> {
     request.onsuccess = () => {
       _db = request.result;
       // Reset cached connection on close (e.g. version upgrade)
-      _db.onclose = () => { _db = null; };
+      _db.onclose = () => {
+        _db = null;
+      };
       resolve(_db);
     };
     request.onerror = () => reject(request.error);

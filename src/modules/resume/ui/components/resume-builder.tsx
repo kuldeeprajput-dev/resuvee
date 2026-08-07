@@ -19,7 +19,11 @@ import { TemplatePickerPanel, StartFreshModal } from "./resume-builder-panels";
 import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
 import { exportResumeDocx } from "../../utils/export-docx";
-import { extractTextFromResumeFile, parseExtractedResumeText, validateResumeFile } from "../../utils/import-resume";
+import {
+  extractTextFromResumeFile,
+  parseExtractedResumeText,
+  validateResumeFile,
+} from "../../utils/import-resume";
 import { idbGet, idbSet } from "../../services/resume-idb";
 import { useNotification } from "@/shared/lib/use-notification";
 
@@ -67,49 +71,63 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
 
   const uploadFileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUploadResume = useCallback(async (file: File) => {
-    // Validate before any async work
-    const validation = validateResumeFile(file);
-    if (!validation.valid) {
-      showToast("Invalid File", validation.error ?? "Unsupported file.", "error");
-      if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
-      return;
-    }
-
-    try {
-      setIsImportingResume(true);
-      const rawText = await extractTextFromResumeFile(file);
-      if (!rawText || !rawText.trim()) {
-        showToast(
-          "Empty File",
-          "Could not extract readable text from the uploaded file. Try a different format.",
-          "error"
-        );
+  const handleUploadResume = useCallback(
+    async (file: File) => {
+      // Validate before any async work
+      const validation = validateResumeFile(file);
+      if (!validation.valid) {
+        showToast("Invalid File", validation.error ?? "Unsupported file.", "error");
+        if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
         return;
       }
-      const { data: parsedData, stats } = parseExtractedResumeText(rawText, data);
-      updateData(parsedData);
 
-      const parts: string[] = [];
-      if (stats.experiences > 0) parts.push(`${stats.experiences} experience${stats.experiences !== 1 ? "s" : ""}`);
-      if (stats.education > 0) parts.push(`${stats.education} education entr${stats.education !== 1 ? "ies" : "y"}`);
-      if (stats.projects > 0) parts.push(`${stats.projects} project${stats.projects !== 1 ? "s" : ""}`);
-      if (stats.skills > 0) parts.push(`${stats.skills} skill${stats.skills !== 1 ? "s" : ""}`);
-      if (stats.certifications > 0) parts.push(`${stats.certifications} certification${stats.certifications !== 1 ? "s" : ""}`);
+      try {
+        setIsImportingResume(true);
+        const rawText = await extractTextFromResumeFile(file);
+        if (!rawText || !rawText.trim()) {
+          showToast(
+            "Empty File",
+            "Could not extract readable text from the uploaded file. Try a different format.",
+            "error"
+          );
+          return;
+        }
+        const { data: parsedData, stats } = parseExtractedResumeText(rawText, data);
+        updateData(parsedData);
 
-      const summary = parts.length > 0
-        ? `Imported! Found ${parts.join(", ")}.`
-        : "Resume imported. Review and fill in any missing fields.";
+        const parts: string[] = [];
+        if (stats.experiences > 0)
+          parts.push(`${stats.experiences} experience${stats.experiences !== 1 ? "s" : ""}`);
+        if (stats.education > 0)
+          parts.push(`${stats.education} education entr${stats.education !== 1 ? "ies" : "y"}`);
+        if (stats.projects > 0)
+          parts.push(`${stats.projects} project${stats.projects !== 1 ? "s" : ""}`);
+        if (stats.skills > 0) parts.push(`${stats.skills} skill${stats.skills !== 1 ? "s" : ""}`);
+        if (stats.certifications > 0)
+          parts.push(
+            `${stats.certifications} certification${stats.certifications !== 1 ? "s" : ""}`
+          );
 
-      showToast("Resume Imported", summary, "success");
-    } catch (err) {
-      console.error("Failed to upload resume:", err);
-      showToast("Import Failed", "Failed to parse uploaded resume. Please try another file.", "error");
-    } finally {
-      setIsImportingResume(false);
-      if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
-    }
-  }, [data, updateData, showToast]);
+        const summary =
+          parts.length > 0
+            ? `Imported! Found ${parts.join(", ")}.`
+            : "Resume imported. Review and fill in any missing fields.";
+
+        showToast("Resume Imported", summary, "success");
+      } catch (err) {
+        console.error("Failed to upload resume:", err);
+        showToast(
+          "Import Failed",
+          "Failed to parse uploaded resume. Please try another file.",
+          "error"
+        );
+      } finally {
+        setIsImportingResume(false);
+        if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
+      }
+    },
+    [data, updateData, showToast]
+  );
 
   useEffect(() => {
     async function loadCloudResume() {
@@ -189,11 +207,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       }
 
       setSaveStatus("saved");
-      showToast(
-        "Resume Saved",
-        "Your resume was saved successfully to your account.",
-        "success"
-      );
+      showToast("Resume Saved", "Your resume was saved successfully to your account.", "success");
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (err: any) {
       console.error("Save error:", err);
@@ -320,7 +334,9 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     Promise.resolve(useResumeBuilderStore.persist.rehydrate()).finally(() => {
       if (active) initialize(initialTemplate, initialStarter);
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [initialStarter, initialTemplate, initialize]);
 
   const goToRelativeSection = (direction: -1 | 1) => {
@@ -362,7 +378,11 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     } catch (err: any) {
       console.error("DOCX export error:", err);
       setExportDocxStatus("error");
-      showToast("Export Failed", "Could not generate the Word document. Please try again.", "error");
+      showToast(
+        "Export Failed",
+        "Could not generate the Word document. Please try again.",
+        "error"
+      );
       setTimeout(() => setExportDocxStatus("idle"), 3000);
     } finally {
       setIsExportingDocx(false);
@@ -370,7 +390,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
   };
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
+    <div className="h-dvh overflow-hidden bg-[#e8e8e2] text-(--brand-ink)">
       <ResumeBuilderHeader
         fullName={data.basics.fullName}
         data={data}
@@ -456,12 +476,12 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                 variant="outline"
                 onClick={() => goToRelativeSection(-1)}
                 disabled={activeIndex === 0}
-                className="h-9 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 disabled:opacity-30 cursor-pointer sm:h-10 sm:px-3.5"
+                className="h-9 rounded-xl border-black/10 bg-white px-3 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:bg-black/5 disabled:opacity-30 cursor-pointer sm:h-10 sm:px-3.5"
               >
-                <ChevronLeft className="size-3.5 text-[var(--brand-muted)] sm:size-4" />
+                <ChevronLeft className="size-3.5 text-(--brand-muted) sm:size-4" />
                 Back
               </Button>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--brand-muted)]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-(--brand-muted)">
                 {activeIndex + 1} / {visibleSections.length}
               </span>
               <Button
@@ -474,7 +494,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
                     goToRelativeSection(1);
                   }
                 }}
-                className="h-9 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs transition hover:bg-black/5 cursor-pointer sm:h-10 sm:px-4"
+                className="h-9 rounded-xl border-black/10 bg-white px-3.5 text-xs font-bold text-(--brand-ink) shadow-xs transition hover:bg-black/5 cursor-pointer sm:h-10 sm:px-4"
               >
                 <span>{activeIndex === visibleSections.length - 1 ? "Preview" : "Continue"}</span>
                 {activeIndex === visibleSections.length - 1 ? (
@@ -507,7 +527,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           <section
             className={cn(
               "resume-preview-panel relative min-h-0 flex-1 overflow-hidden bg-[#dfe1dc] lg:block",
-              showMobilePreview ? "fixed inset-0 z-[80] block" : "hidden"
+              showMobilePreview ? "fixed inset-0 z-80 block" : "hidden"
             )}
           >
             <InteractiveCanvas
@@ -542,7 +562,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         )}
       </div>
 
-      {isResizing && <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />}
+      {isResizing && <div className="fixed inset-0 z-9999 cursor-col-resize select-none" />}
 
       {/* Template Picker Overlay */}
       {showTemplates && (
@@ -558,7 +578,10 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       {/* Start Fresh Modal */}
       {showStartFreshModal && (
         <StartFreshModal
-          onConfirm={() => { clearResume(); setShowStartFreshModal(false); }}
+          onConfirm={() => {
+            clearResume();
+            setShowStartFreshModal(false);
+          }}
           onCancel={() => setShowStartFreshModal(false)}
         />
       )}

@@ -31,15 +31,15 @@ export function TemplatePickerPanel({
   });
 
   return (
-    <div className="no-print fixed inset-0 z-[300] flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
-      <div className="max-h-[92dvh] w-full max-w-6xl overflow-y-auto rounded-t-[24px] bg-[var(--brand-paper)] p-5 shadow-2xl sm:rounded-[24px] sm:p-7">
+    <div className="no-print fixed inset-0 z-300 flex items-end justify-center bg-black/35 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+      <div className="max-h-[92dvh] w-full max-w-6xl overflow-y-auto rounded-t-[24px] bg-(--brand-paper) p-5 shadow-2xl sm:rounded-[24px] sm:p-7">
         <div className="mb-6 flex items-start justify-between gap-6">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65b38]">
               Original collection
             </p>
             <h2 className="mt-1 text-2xl font-bold tracking-[-0.035em]">Choose a template</h2>
-            <p className="mt-1 text-sm text-[var(--brand-muted)]">
+            <p className="mt-1 text-sm text-(--brand-muted)">
               Your content stays. Select any template layout for your resume.
             </p>
           </div>
@@ -69,8 +69,8 @@ export function TemplatePickerPanel({
               className={cn(
                 "shrink-0 rounded-full px-3.5 py-2 text-[11px] font-bold transition",
                 templateFilter === id
-                  ? "bg-[var(--brand-ink)] text-white"
-                  : "border border-black/10 bg-white text-[var(--brand-muted)]"
+                  ? "bg-(--brand-ink) text-white"
+                  : "border border-black/10 bg-white text-(--brand-muted)"
               )}
             >
               {label}
@@ -95,14 +95,14 @@ export function TemplatePickerPanel({
               <div className="flex items-center justify-between gap-1 px-1 pb-1 pt-2.5">
                 <div className="min-w-0">
                   <p className="truncate text-xs font-bold">{item.name}</p>
-                  <p className="truncate text-[9px] text-[var(--brand-muted)]">
+                  <p className="truncate text-[9px] text-(--brand-muted)">
                     {item.layout === "sidebar" ? "Sidebar" : "Single column"}
                     {" · "}
                     {item.supportsPhoto ? "Photo" : "Photo-free"}
                   </p>
                 </div>
                 {templateId === item.id && (
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--brand-lime)]">
+                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--brand-lime)">
                     <Check className="size-3" />
                   </span>
                 )}
@@ -124,18 +124,18 @@ interface StartFreshModalProps {
 
 export function StartFreshModal({ onConfirm, onCancel }: StartFreshModalProps) {
   return (
-    <div className="no-print fixed inset-0 z-[300] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">
+    <div className="no-print fixed inset-0 z-300 flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in">
       <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-6 shadow-2xl animate-in zoom-in-95">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
             <RotateCcw className="size-5 text-emerald-700" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-[var(--brand-ink)]">Start fresh?</h3>
-            <p className="text-xs text-[var(--brand-muted)]">Clear all text and start blank</p>
+            <h3 className="text-base font-bold text-(--brand-ink)">Start fresh?</h3>
+            <p className="text-xs text-(--brand-muted)">Clear all text and start blank</p>
           </div>
         </div>
-        <p className="text-xs leading-relaxed text-[var(--brand-muted)] mb-6">
+        <p className="text-xs leading-relaxed text-(--brand-muted) mb-6">
           All current resume sections and details will be cleared to a completely blank template.
           Are you sure you want to start fresh?
         </p>
@@ -143,7 +143,7 @@ export function StartFreshModal({ onConfirm, onCancel }: StartFreshModalProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-[var(--brand-ink)] hover:bg-black/5 transition cursor-pointer"
+            className="h-9 rounded-xl border border-black/15 bg-white px-4 text-xs font-bold text-(--brand-ink) hover:bg-black/5 transition cursor-pointer"
           >
             Cancel
           </button>

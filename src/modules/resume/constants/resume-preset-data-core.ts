@@ -451,4 +451,3 @@ export const compactData = professionalPreset({
     ["Go", "AWS", "Terraform", "Kubernetes", "Datadog"],
   ],
 });
-

@@ -150,12 +150,18 @@ function CoverLetterFormattingToolbarBase({
           onClick={handleAiRefine}
           disabled={isRefining || isAiRefineDisabled}
           className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
-          title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
+          title={
+            isAiRefineDisabled
+              ? "AI Refine disabled for header & contact fields"
+              : "AI Smart Refine Text"
+          }
         >
           {isRefining ? (
             <Loader2 className="size-3.5 text-[#059669] animate-spin" />
           ) : (
-            <Sparkles className={cn("size-3.5", isAiRefineDisabled ? "text-gray-400" : "text-[#059669]")} />
+            <Sparkles
+              className={cn("size-3.5", isAiRefineDisabled ? "text-gray-400" : "text-[#059669]")}
+            />
           )}
         </button>
 
@@ -166,7 +172,7 @@ function CoverLetterFormattingToolbarBase({
             setInlineText(e.target.value);
             update(selectedField, e.target.value);
           }}
-          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-[var(--brand-ink)] shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate selection:bg-emerald-500/30 selection:text-emerald-950"
+          className="h-7 w-32 sm:w-44 rounded-xl bg-white px-2.5 text-xs font-bold text-(--brand-ink) shadow-xs outline-none focus:ring-1 focus:ring-[#059669] truncate selection:bg-emerald-500/30 selection:text-emerald-950"
           placeholder="Edit inline..."
         />
 
@@ -175,7 +181,7 @@ function CoverLetterFormattingToolbarBase({
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
             "flex size-6 shrink-0 items-center justify-center rounded-full transition cursor-pointer",
-            isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-[var(--brand-muted)]"
+            isExpanded ? "bg-[#059669] text-white" : "hover:bg-black/10 text-(--brand-muted)"
           )}
           title={isExpanded ? "Collapse Editor Card" : "Expand Full Paragraph Editor Card"}
         >
@@ -184,13 +190,13 @@ function CoverLetterFormattingToolbarBase({
 
         {/* Expandable Floating Paragraph Editor Card */}
         {isExpanded && (
-          <div className="absolute top-12 left-0 z-[100] flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+          <div className="absolute top-12 left-0 z-100 flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             <div className="flex items-center justify-between border-b border-black/10 pb-2">
               <div className="flex items-center gap-1.5">
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
                   {selectedField}
                 </span>
-                <span className="text-[10px] font-semibold text-[var(--brand-muted)]">
+                <span className="text-[10px] font-semibold text-(--brand-muted)">
                   {inlineText.length} chars
                 </span>
               </div>
@@ -201,7 +207,11 @@ function CoverLetterFormattingToolbarBase({
                   onClick={handleAiRefine}
                   disabled={isRefining || isAiRefineDisabled}
                   className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
-                  title={isAiRefineDisabled ? "AI Refine disabled for header & contact fields" : "AI Smart Refine Text"}
+                  title={
+                    isAiRefineDisabled
+                      ? "AI Refine disabled for header & contact fields"
+                      : "AI Smart Refine Text"
+                  }
                 >
                   {isRefining ? (
                     <Loader2 className="size-3 animate-spin" />
@@ -213,7 +223,7 @@ function CoverLetterFormattingToolbarBase({
                 <button
                   type="button"
                   onClick={() => setIsExpanded(false)}
-                  className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-[var(--brand-muted)] transition cursor-pointer"
+                  className="flex size-7 items-center justify-center rounded-xl hover:bg-black/5 text-(--brand-muted) transition cursor-pointer"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -227,7 +237,7 @@ function CoverLetterFormattingToolbarBase({
                 setInlineText(e.target.value);
                 update(selectedField, e.target.value);
               }}
-              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-[var(--brand-ink)] outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all selection:bg-emerald-500/30 selection:text-emerald-950"
+              className="w-full rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs font-medium leading-relaxed text-(--brand-ink) outline-none focus:border-[#059669] focus:bg-white resize-y scrollbar-thin transition-all selection:bg-emerald-500/30 selection:text-emerald-950"
               placeholder="Type or edit full section text..."
               autoFocus
             />
@@ -242,7 +252,7 @@ function CoverLetterFormattingToolbarBase({
         <button
           type="button"
           onClick={() => handleFontSize(-1)}
-          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-(--brand-ink) hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Decrease font size"
         >
           A-
@@ -250,7 +260,7 @@ function CoverLetterFormattingToolbarBase({
         <button
           type="button"
           onClick={() => handleFontSize(1)}
-          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-[var(--brand-ink)] hover:bg-white hover:shadow-xs transition cursor-pointer"
+          className="flex h-7 px-2 items-center justify-center rounded-lg text-xs font-bold text-(--brand-ink) hover:bg-white hover:shadow-xs transition cursor-pointer"
           title="Increase font size"
         >
           A+
@@ -358,7 +368,7 @@ function CoverLetterFormattingToolbarBase({
           className="builder-icon-button cursor-pointer"
           title="Move section up"
         >
-          <ArrowUp className="size-3.5 text-[var(--brand-ink)]" />
+          <ArrowUp className="size-3.5 text-(--brand-ink)" />
         </button>
 
         <button
@@ -367,7 +377,7 @@ function CoverLetterFormattingToolbarBase({
           className="builder-icon-button cursor-pointer"
           title="Move section down"
         >
-          <ArrowDown className="size-3.5 text-[var(--brand-ink)]" />
+          <ArrowDown className="size-3.5 text-(--brand-ink)" />
         </button>
       </div>
 
@@ -394,10 +404,10 @@ function CoverLetterFormattingToolbarBase({
         </button>
 
         {showColorPicker && (
-          <div className="absolute top-12 right-0 z-[100] flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+          <div className="absolute top-12 right-0 z-100 flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             {/* Color Wheel Picker */}
             <label
-              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
+              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
               title="Pick Custom Color"
             >
               <input
@@ -423,7 +433,7 @@ function CoverLetterFormattingToolbarBase({
                 }
               }}
               placeholder="#243d36"
-              className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-[var(--brand-ink)] outline-none focus:bg-white"
+              className="w-16 h-7 rounded-xl border border-black/15 bg-black/5 px-2 text-[10px] font-mono font-bold text-(--brand-ink) outline-none focus:bg-white"
             />
 
             <span className="h-4 w-px bg-black/15 mx-0.5 shrink-0" />
