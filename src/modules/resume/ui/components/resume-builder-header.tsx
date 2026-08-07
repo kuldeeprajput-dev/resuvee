@@ -120,73 +120,73 @@ export function ResumeBuilderHeader({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isImportingResume}
-          className="hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:bg-black/5 hover:border-black/25 items-center gap-1.5 cursor-pointer"
+          className="group hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] items-center gap-1.5 cursor-pointer"
           title="Upload outside resume (PDF, DOCX, TXT) to edit"
         >
           {isImportingResume ? (
-            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
           ) : (
-            <Upload className="size-3.5 sm:size-4 text-emerald-600" />
+            <Upload className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           )}
           <span>{isImportingResume ? "Importing..." : "Upload Resume"}</span>
         </button>
-        <Button
+
+        <button
           type="button"
-          variant="outline"
           onClick={onShowWritingCheck}
-          className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold lg:inline-flex"
+          className="group hidden h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] lg:flex items-center gap-1.5 cursor-pointer"
+          title="Check resume with AI"
         >
-          <SpellCheck2 className="size-4 text-emerald-600" />
-          Check with AI
-        </Button>
+          <SpellCheck2 className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          <span>Check with AI</span>
+        </button>
 
-        <Button
+        <button
           type="button"
-          variant="outline"
           onClick={onShowTailor}
-          className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold sm:inline-flex"
+          className="group hidden h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] sm:flex items-center gap-1.5 cursor-pointer"
+          title="Role match assistant"
         >
-          <ScanSearch className="size-4 text-emerald-600" />
-          Role match
-        </Button>
+          <ScanSearch className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          <span>Role match</span>
+        </button>
 
-        <Button
+        <button
           type="button"
-          variant="outline"
           onClick={onSave}
           disabled={isSaving}
-          className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition cursor-pointer"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer"
           title="Save resume to your account"
         >
           {isSaving ? (
-            <Loader2 className="size-3.5 sm:size-4 animate-spin text-emerald-600" />
+            <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
           ) : saveStatus === "saved" ? (
-            <Check className="size-3.5 sm:size-4 text-emerald-600" />
+            <Check className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           ) : (
-            <Cloud className="size-3.5 sm:size-4 text-emerald-600" />
+            <Cloud className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           )}
           <span>{isSaving ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save"}</span>
-        </Button>
+        </button>
 
-        <Button
+        <button
           type="button"
-          variant="outline"
           onClick={onStartFresh}
-          className="hidden h-9 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-xs font-bold text-(--brand-ink) md:inline-flex"
+          className="group hidden h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] md:flex items-center gap-1.5 cursor-pointer"
+          title="Start fresh with a clean resume"
         >
-          <FilePlus2 className="size-4 text-emerald-600" />
-          Start fresh
-        </Button>
+          <FilePlus2 className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          <span>Start fresh</span>
+        </button>
 
-        <Button
+        <button
           type="button"
-          variant="outline"
           onClick={onShowMobilePreview}
-          className="h-8.5 sm:h-10 rounded-xl border-black/10 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold lg:hidden"
+          className="group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer lg:hidden"
+          title="Preview resume document"
         >
-          <Eye className="size-3.5 sm:size-4 text-emerald-600" />
+          <Eye className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           <span className="hidden sm:inline">Preview</span>
-        </Button>
+        </button>
 
         {/* Export Dropdown Button with PDF & DOCX Options */}
         <div className="relative">
@@ -195,7 +195,7 @@ export function ResumeBuilderHeader({
             onClick={() => setShowExportMenu(!showExportMenu)}
             disabled={isExportingDocx}
             className={cn(
-              "h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer disabled:opacity-60",
+              "group h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] flex items-center gap-1.5 cursor-pointer disabled:opacity-60",
               exportDocxStatus === "exported" && "border-emerald-600/40 bg-emerald-50"
             )}
             title="Export resume options"
@@ -203,9 +203,9 @@ export function ResumeBuilderHeader({
             {isExportingDocx ? (
               <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
             ) : exportDocxStatus === "exported" ? (
-              <Check className="size-3.5 sm:size-4 text-emerald-600" />
+              <Check className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             ) : (
-              <Download className="size-3.5 sm:size-4 text-emerald-600" />
+              <Download className="size-3.5 sm:size-4 text-emerald-600 transition-colors group-hover:text-[#059669]" />
             )}
             <span>
               {isExportingDocx
@@ -215,7 +215,7 @@ export function ResumeBuilderHeader({
                   : "Export"}
             </span>
             {!isExportingDocx && exportDocxStatus !== "exported" && (
-              <ChevronDown className="size-3.5 text-(--brand-muted)" />
+              <ChevronDown className="size-3.5 text-(--brand-muted) transition-colors group-hover:text-[#059669]" />
             )}
           </button>
 
