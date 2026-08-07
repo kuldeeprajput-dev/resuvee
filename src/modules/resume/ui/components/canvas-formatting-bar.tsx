@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import {
   AlignCenter,
   AlignLeft,
@@ -53,6 +55,7 @@ interface CanvasFormattingBarProps {
   setShowColorPicker: (show: boolean) => void;
   deleteSelected: () => void;
   clearSelection: () => void;
+  updateSelectionBounds?: () => void;
 }
 
 export function CanvasFormattingBar({
@@ -78,12 +81,20 @@ export function CanvasFormattingBar({
   setShowColorPicker,
   deleteSelected,
   clearSelection,
+  updateSelectionBounds,
 }: CanvasFormattingBarProps) {
+  useEffect(() => {
+    // Re-sync selection bounds once toolbar DOM element is mounted and measured
+    if (toolbarRef.current && updateSelectionBounds) {
+      requestAnimationFrame(() => updateSelectionBounds());
+    }
+  }, [updateSelectionBounds, toolbarRef]);
+
   return (
     <div
       ref={toolbarRef}
       onClick={(e) => e.stopPropagation()}
-      className="no-print absolute z-50 hidden lg:flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all animate-in fade-in zoom-in-95 overflow-visible"
+      className="no-print absolute z-50 hidden lg:flex items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-opacity animate-in fade-in zoom-in-95 overflow-visible"
       style={{
         top: `${toolbarPos.top}px`,
         left: `${toolbarPos.left}px`,

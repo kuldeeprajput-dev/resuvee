@@ -57,6 +57,10 @@ export function useCanvasInteraction({
 
   const updateSelectionBounds = useCallback(() => {
     if (!selectedDomRef.current || !containerRef.current) return;
+    if (!selectedDomRef.current.isConnected) {
+      clearSelection();
+      return;
+    }
     const containerRect = containerRef.current.getBoundingClientRect();
     const targetRect = selectedDomRef.current.getBoundingClientRect();
 
@@ -70,7 +74,7 @@ export function useCanvasInteraction({
       height: targetRect.height + 8,
     });
 
-    const toolbarWidth = toolbarRef.current?.offsetWidth || 540;
+    const toolbarWidth = toolbarRef.current?.offsetWidth || 588;
     let computedLeft = left + targetRect.width / 2 - toolbarWidth / 2;
     computedLeft = Math.max(12, Math.min(containerRect.width - toolbarWidth - 16, computedLeft));
 
@@ -87,7 +91,11 @@ export function useCanvasInteraction({
 
   // ResizeObserver + Scroll + Window Resize listeners
   useEffect(() => {
-    if (!selectedElement || !selectedDomRef.current) return;
+    if (!selectedElement || !selectedDomRef.current) {
+      setHighlightRect(null);
+      setToolbarPos(null);
+      return;
+    }
 
     updateSelectionBounds();
 

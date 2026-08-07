@@ -146,15 +146,18 @@ export function InteractiveCanvas({
   const [isRefining, setIsRefining] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const user = useAuthStore((state) => state.user);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
+
   const clearSelection = useCallback(() => {
+    if (selectedDomRef.current) {
+      selectedDomRef.current.classList.remove("resume-field-active");
+    }
     setSelectedElement(null);
     setShowColorPicker(false);
     setIsExpanded(false);
     selectedDomRef.current = null;
   }, []);
-
-  const user = useAuthStore((state) => state.user);
-  const openAuthModal = useAuthStore((state) => state.openAuthModal);
 
   const {
     pan,
@@ -240,7 +243,12 @@ export function InteractiveCanvas({
       clearSelection();
       return;
     }
-    selectedDomRef.current = elem as HTMLElement;
+    if (selectedDomRef.current) {
+      selectedDomRef.current.classList.remove("resume-field-active");
+    }
+    const newElem = elem as HTMLElement;
+    selectedDomRef.current = newElem;
+    newElem.classList.add("resume-field-active");
 
     const clickedText = elem.textContent?.trim() || "";
     const { found, inlineText: text } = findSelectedCanvasElement(clickedText, elem as HTMLElement, data);
@@ -450,6 +458,7 @@ export function InteractiveCanvas({
             setShowColorPicker={setShowColorPicker}
             deleteSelected={deleteSelected}
             clearSelection={clearSelection}
+            updateSelectionBounds={updateSelectionBounds}
           />
         )}
 

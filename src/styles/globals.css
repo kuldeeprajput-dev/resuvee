@@ -655,4 +655,19 @@
     outline: none !important;
     cursor: default !important;
   }
+
+  /* Block hover outline on currently selected resume builder element */
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active p:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active span:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active h1:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active h2:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active h3:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active h4:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active li:hover,
+  .resume-preview-sheet:not(.hand-mode) .resume-field-active a:hover,
+  .resume-preview-sheet:not(.hand-mode) *:has(> .resume-field-active):hover {
+    outline: none !important;
+    cursor: default !important;
+  }
 }
