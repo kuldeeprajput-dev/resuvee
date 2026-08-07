@@ -8,6 +8,7 @@ import { createBlankResumeData } from "../constants/resume-seed-data";
 import { getTemplateStarterData } from "../constants/resume-presets";
 import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";
 import type { WritingIssue } from "../types/writing";
+import { idbGet, idbSet, idbDel } from "../services/resume-idb";
 
 export type TemplateFilter = "all" | "popular" | "fresher" | "professional";
 
@@ -56,7 +57,7 @@ interface ResumeBuilderState extends PersistedBuilderState {
   startFresh: () => void;
 }
 
-const STORAGE_KEY = "resuvee-builder-v3";
+export const RESUME_STORAGE_KEY = "resuvee-builder-v3";
 const LEGACY_STORAGE_KEYS = ["resulyra-builder-v3", "resulyra-draft-v1", "resumix-draft-v1"];
 
 export function isResumeTemplateId(value: string | undefined): value is ResumeTemplateId {
@@ -70,9 +71,35 @@ function safeTemplateId(value: unknown): ResumeTemplateId {
   return "standard";
 }
 
+/**
+ * Lightweight shallow clone — only deep-clones when absolutely required.
+ * Used for undo/redo snapshots where we need a true copy.
+ */
 function cloneData(data: ResumeData): ResumeData {
   return JSON.parse(JSON.stringify(data)) as ResumeData;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Custom IndexedDB storage engine for Zustand persist middleware.
+// createJSONStorage handles JSON serialization — we just need to store/retrieve
+// raw strings. IDB is async and non-blocking (unlike localStorage).
+// ─────────────────────────────────────────────────────────────────────────────
+const idbStringEngine = {
+  getItem: async (name: string): Promise<string | null> => {
+    return idbGet<string>(name);
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    return idbSet(name, value);
+  },
+  removeItem: async (name: string): Promise<void> => {
+    return idbDel(name);
+  },
+};
+
+// Debounce timer for history snapshots — prevents history from growing on every
+// single keystroke; only commits a snapshot 400 ms after the user stops typing.
+let historyDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+let pendingSnapshot: ResumeData | null = null;
 
 export const useResumeBuilderStore = create<ResumeBuilderState>()(
   persist(
@@ -105,6 +132,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
 
         let baseData = get().data;
 
+        // Migrate legacy localStorage keys on first load
         if (typeof window !== "undefined") {
           for (const key of LEGACY_STORAGE_KEYS) {
             try {
@@ -113,6 +141,8 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
                 const parsed = JSON.parse(raw);
                 if (parsed && typeof parsed === "object" && "basics" in parsed) {
                   baseData = parsed as ResumeData;
+                  // Clean up legacy key so we don't read it again
+                  localStorage.removeItem(key);
                   break;
                 }
               }
@@ -123,36 +153,48 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         }
 
         if (isResumeTemplateId(initialStarter)) {
-          const starter = getTemplateStarterData(initialStarter);
-          baseData = starter;
+          baseData = getTemplateStarterData(initialStarter);
         }
 
         set({
           data: baseData,
           templateId: requestedTemplate,
+          initialized: true,
+          hydrated: true,
         });
-
-        if (isResumeTemplateId(initialTemplate)) {
-          set({
-            templateId: requestedTemplate,
-          });
-        }
-
-        set({ initialized: true, hydrated: true });
       },
 
       setHydrated: (hydrated) => set({ hydrated }),
 
+      /**
+       * updateData — performance-critical hot path.
+       *
+       * Optimizations vs old implementation:
+       * 1. Only ONE JSON clone (for the history snapshot), not two.
+       * 2. Incoming `data` is passed directly — caller already has a new ref.
+       * 3. History push is debounced 400 ms so rapid typing doesn't grow the
+       *    history array on every single keystroke.
+       */
       updateData: (data) => {
         const current = get().data;
-        const snapshot = cloneData(current);
-        const nextData = cloneData(data);
-        set((state) => ({
-          data: nextData,
-          history: [...state.history.slice(-39), snapshot],
-          future: [],
-          saveLabel: "Saved locally",
-        }));
+
+        // Schedule a debounced history snapshot
+        if (historyDebounceTimer) clearTimeout(historyDebounceTimer);
+        pendingSnapshot = current; // capture before next render
+
+        historyDebounceTimer = setTimeout(() => {
+          if (!pendingSnapshot) return;
+          const snapshot = cloneData(pendingSnapshot);
+          set((state) => ({
+            history: [...state.history.slice(-29), snapshot],
+            future: [],
+          }));
+          pendingSnapshot = null;
+          historyDebounceTimer = null;
+        }, 400);
+
+        // Immediately update data for a responsive UI — no clone needed here
+        set({ data, saveLabel: "Saved locally" });
       },
 
       selectTemplate: (templateId) => {
@@ -191,11 +233,17 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         const state = get();
         const previous = state.history.at(-1);
         if (!previous) return;
+        // Cancel any pending debounced snapshot so undo is clean
+        if (historyDebounceTimer) {
+          clearTimeout(historyDebounceTimer);
+          historyDebounceTimer = null;
+          pendingSnapshot = null;
+        }
         const currentSnapshot = cloneData(state.data);
         set({
           data: cloneData(previous),
           history: state.history.slice(0, -1),
-          future: [currentSnapshot, ...state.future].slice(0, 40),
+          future: [currentSnapshot, ...state.future].slice(0, 30),
           saveLabel: "Undo applied",
         });
       },
@@ -204,19 +252,23 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         const state = get();
         const next = state.future[0];
         if (!next) return;
+        if (historyDebounceTimer) {
+          clearTimeout(historyDebounceTimer);
+          historyDebounceTimer = null;
+          pendingSnapshot = null;
+        }
         const currentSnapshot = cloneData(state.data);
         set({
           data: cloneData(next),
-          history: [...state.history.slice(-39), currentSnapshot],
+          history: [...state.history.slice(-29), currentSnapshot],
           future: state.future.slice(1),
           saveLabel: "Redo applied",
         });
       },
 
       startFresh: () => {
-        if (typeof window !== "undefined") {
-          localStorage.setItem("active-resume-id", "new");
-        }
+        // Fire-and-forget IDB write
+        idbSet("active-resume-id", "new").catch(console.error);
         set({
           data: createBlankResumeData(),
           resumeStyle: {
@@ -238,9 +290,10 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       },
     }),
     {
-      name: STORAGE_KEY,
+      name: RESUME_STORAGE_KEY,
       version: 3,
-      storage: createJSONStorage(() => localStorage),
+      // ── Async IndexedDB storage (non-blocking) ──
+      storage: createJSONStorage(() => idbStringEngine),
       skipHydration: true,
       partialize: (state): PersistedBuilderState => ({
         data: state.data,

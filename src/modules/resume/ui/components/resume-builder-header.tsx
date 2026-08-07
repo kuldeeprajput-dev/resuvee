@@ -33,8 +33,11 @@ interface ResumeBuilderHeaderProps {
   onShowWritingCheck: () => void;
   onExportPdf: () => void;
   onExportDocx: () => void;
+  isExportingDocx?: boolean;
+  exportDocxStatus?: "idle" | "exported" | "error";
   onUploadResume?: (file: File) => void;
   isImportingResume?: boolean;
+  uploadFileInputRef?: React.RefObject<HTMLInputElement | null>;
   data: ResumeData;
 }
 
@@ -50,10 +53,14 @@ export function ResumeBuilderHeader({
   onShowWritingCheck,
   onExportPdf,
   onExportDocx,
+  isExportingDocx,
+  exportDocxStatus,
   onUploadResume,
   isImportingResume,
+  uploadFileInputRef,
 }: ResumeBuilderHeaderProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const internalFileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = (uploadFileInputRef ?? internalFileInputRef) as React.RefObject<HTMLInputElement>;
   const [showExportMenu, setShowExportMenu] = useState(false);
   const cn = (...classes: (string | boolean | undefined)[]) =>
     classes.filter(Boolean).join(" ");
@@ -99,12 +106,11 @@ export function ResumeBuilderHeader({
         <input
           type="file"
           ref={fileInputRef}
-          accept=".pdf,.docx,.txt"
+          accept=".pdf,.docx,.doc,.txt"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file && onUploadResume) {
               onUploadResume(file);
-              e.target.value = "";
             }
           }}
           className="hidden"
@@ -122,7 +128,7 @@ export function ResumeBuilderHeader({
           ) : (
             <Upload className="size-3.5 sm:size-4 text-emerald-600" />
           )}
-          <span>{isImportingResume ? "Uploading..." : "Upload Resume"}</span>
+          <span>{isImportingResume ? "Importing..." : "Upload Resume"}</span>
         </button>
         <Button
           type="button"
@@ -187,12 +193,30 @@ export function ResumeBuilderHeader({
           <button
             type="button"
             onClick={() => setShowExportMenu(!showExportMenu)}
-            className="h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer"
+            disabled={isExportingDocx}
+            className={cn(
+              "h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3.5 text-[11px] sm:text-xs font-bold text-[var(--brand-ink)] shadow-2xs transition hover:bg-black/5 hover:border-black/25 flex items-center gap-1.5 cursor-pointer disabled:opacity-60",
+              exportDocxStatus === "exported" && "border-emerald-600/40 bg-emerald-50"
+            )}
             title="Export resume options"
           >
-            <Download className="size-3.5 sm:size-4 text-emerald-600" />
-            <span>Export</span>
-            <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+            {isExportingDocx ? (
+              <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />
+            ) : exportDocxStatus === "exported" ? (
+              <Check className="size-3.5 sm:size-4 text-emerald-600" />
+            ) : (
+              <Download className="size-3.5 sm:size-4 text-emerald-600" />
+            )}
+            <span>
+              {isExportingDocx
+                ? "Exporting..."
+                : exportDocxStatus === "exported"
+                ? "Exported!"
+                : "Export"}
+            </span>
+            {!isExportingDocx && exportDocxStatus !== "exported" && (
+              <ChevronDown className="size-3.5 text-[var(--brand-muted)]" />
+            )}
           </button>
 
           {showExportMenu && (
@@ -221,18 +245,27 @@ export function ResumeBuilderHeader({
 
                 <button
                   type="button"
+                  disabled={isExportingDocx}
                   onClick={() => {
                     setShowExportMenu(false);
                     onExportDocx();
                   }}
-                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer"
+                  className="flex w-full items-center gap-3 rounded-xl p-2.5 text-xs font-bold text-[var(--brand-ink)] transition hover:bg-black/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
-                    <FileSpreadsheet className="size-4" />
+                    {isExportingDocx ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <FileSpreadsheet className="size-4" />
+                    )}
                   </span>
                   <div className="text-left">
-                    <p className="font-bold text-[var(--brand-ink)]">Word Document</p>
-                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">Export editable .doc file</p>
+                    <p className="font-bold text-[var(--brand-ink)]">
+                      {isExportingDocx ? "Generating..." : "Word Document"}
+                    </p>
+                    <p className="text-[10px] text-[var(--brand-muted)] font-normal">
+                      {isExportingDocx ? "Please wait..." : "Editable .docx file"}
+                    </p>
                   </div>
                 </button>
               </div>

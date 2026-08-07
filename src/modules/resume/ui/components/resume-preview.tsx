@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import Image from "next/image";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
@@ -246,7 +247,7 @@ function HorizonTemplate(props: ResumePreviewProps) {
   );
 }
 
-export function ResumePreview(props: ResumePreviewProps) {
+function ResumePreviewInner(props: ResumePreviewProps) {
   switch (props.template.renderer) {
     case "meridian":
       return <MeridianTemplate {...props} />;
@@ -282,3 +283,10 @@ export function ResumePreview(props: ResumePreviewProps) {
       return <AnalystTemplate {...props} />;
   }
 }
+
+/**
+ * Memoized resume preview — only re-renders when data, template, or style
+ * props actually change. This prevents the expensive canvas re-render on
+ * every keystroke when other builder state (panels, zoom, selection) updates.
+ */
+export const ResumePreview = memo(ResumePreviewInner);

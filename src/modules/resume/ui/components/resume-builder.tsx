@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronLeft, ChevronRight, Eye, LayoutTemplate } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { builderSections, resumeTemplates } from "../../constants/resume-data";
 import { calculateResumeStrength } from "../../constants/resume-seed-data";
 import { useResumeBuilderStore } from "../../hooks/use-resume-builder-store";
@@ -19,7 +19,8 @@ import { TemplatePickerPanel, StartFreshModal } from "./resume-builder-panels";
 import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
 import { exportResumeDocx } from "../../utils/export-docx";
-import { extractTextFromResumeFile, parseExtractedResumeText } from "../../utils/import-resume";
+import { extractTextFromResumeFile, parseExtractedResumeText, validateResumeFile } from "../../utils/import-resume";
+import { idbGet, idbSet } from "../../services/resume-idb";
 import { useNotification } from "@/shared/lib/use-notification";
 
 interface ResumeBuilderProps {
@@ -61,31 +62,61 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
   const [isImportingResume, setIsImportingResume] = useState(false);
+  const [isExportingDocx, setIsExportingDocx] = useState(false);
+  const [exportDocxStatus, setExportDocxStatus] = useState<"idle" | "exported" | "error">("idle");
 
-  const handleUploadResume = async (file: File) => {
+  const uploadFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadResume = useCallback(async (file: File) => {
+    // Validate before any async work
+    const validation = validateResumeFile(file);
+    if (!validation.valid) {
+      showToast("Invalid File", validation.error ?? "Unsupported file.", "error");
+      if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
+      return;
+    }
+
     try {
       setIsImportingResume(true);
       const rawText = await extractTextFromResumeFile(file);
       if (!rawText || !rawText.trim()) {
-        showToast("Could not extract readable text from uploaded file.", "error");
+        showToast(
+          "Empty File",
+          "Could not extract readable text from the uploaded file. Try a different format.",
+          "error"
+        );
         return;
       }
-      const parsedData = parseExtractedResumeText(rawText, data);
+      const { data: parsedData, stats } = parseExtractedResumeText(rawText, data);
       updateData(parsedData);
-      showToast("Resume uploaded and parsed successfully!", "success");
+
+      const parts: string[] = [];
+      if (stats.experiences > 0) parts.push(`${stats.experiences} experience${stats.experiences !== 1 ? "s" : ""}`);
+      if (stats.education > 0) parts.push(`${stats.education} education entr${stats.education !== 1 ? "ies" : "y"}`);
+      if (stats.projects > 0) parts.push(`${stats.projects} project${stats.projects !== 1 ? "s" : ""}`);
+      if (stats.skills > 0) parts.push(`${stats.skills} skill${stats.skills !== 1 ? "s" : ""}`);
+      if (stats.certifications > 0) parts.push(`${stats.certifications} certification${stats.certifications !== 1 ? "s" : ""}`);
+
+      const summary = parts.length > 0
+        ? `Imported! Found ${parts.join(", ")}.`
+        : "Resume imported. Review and fill in any missing fields.";
+
+      showToast("Resume Imported", summary, "success");
     } catch (err) {
       console.error("Failed to upload resume:", err);
-      showToast("Failed to parse uploaded resume file.", "error");
+      showToast("Import Failed", "Failed to parse uploaded resume. Please try another file.", "error");
     } finally {
       setIsImportingResume(false);
+      if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
     }
-  };
+  }, [data, updateData, showToast]);
 
   useEffect(() => {
     async function loadCloudResume() {
       if (!user) return;
       try {
-        const storedId = typeof window !== "undefined" ? localStorage.getItem("active-resume-id") : null;
+        // Read active resume ID from IndexedDB (non-blocking)
+        const storedId = await idbGet<string>("active-resume-id");
         if (storedId === "new") return;
 
         if (storedId && storedId !== "undefined" && storedId !== "null") {
@@ -106,14 +137,15 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     loadCloudResume();
   }, [user, updateData]);
 
-  const handleSaveToCloud = async () => {
+  const handleSaveToCloud = useCallback(async () => {
     if (!user) {
       openAuthModal("sign_in", "Please sign in to save your resume to your account.");
       return;
     }
     setIsSaving(true);
     try {
-      const storedId = typeof window !== "undefined" ? localStorage.getItem("active-resume-id") : null;
+      // Read active resume ID from IndexedDB
+      const storedId = await idbGet<string>("active-resume-id");
       const activeId =
         storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
           ? storedId
@@ -137,24 +169,23 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       }
 
       const resumeId = json.data?.id || `local-${Date.now()}`;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("active-resume-id", resumeId);
-        try {
-          const localListRaw = localStorage.getItem("local-saved-resumes");
-          const localList: any[] = localListRaw ? JSON.parse(localListRaw) : [];
-          const newItem = {
-            id: resumeId,
-            title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
-            target_role: data.basics.headline || "",
-            data,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-          const updatedList = [newItem, ...localList.filter((item) => item.id !== resumeId)];
-          localStorage.setItem("local-saved-resumes", JSON.stringify(updatedList));
-        } catch (e) {
-          console.error("Local backup error:", e);
-        }
+
+      // Persist to IndexedDB (non-blocking, won't freeze UI)
+      await idbSet("active-resume-id", resumeId);
+      try {
+        const localList: any[] = (await idbGet<any[]>("local-saved-resumes")) || [];
+        const newItem = {
+          id: resumeId,
+          title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
+          target_role: data.basics.headline || "",
+          data,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        const updatedList = [newItem, ...localList.filter((item: any) => item.id !== resumeId)];
+        await idbSet("local-saved-resumes", updatedList);
+      } catch (e) {
+        console.error("Local IDB backup error:", e);
       }
 
       setSaveStatus("saved");
@@ -171,17 +202,30 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [user, data, openAuthModal, showToast]);
 
-  const template =
-    resumeTemplates.find((item) => item.id === templateId) ??
-    resumeTemplates.find((item) => item.id === "standard") ??
-    resumeTemplates[0];
+  // Memoize expensive derivations so they don't recompute on every render
+  const template = useMemo(
+    () =>
+      resumeTemplates.find((item) => item.id === templateId) ??
+      resumeTemplates.find((item) => item.id === "standard") ??
+      resumeTemplates[0],
+    [templateId]
+  );
   const isFresherTemplate = template.audience === "fresher";
-  const visibleSections = template.sections
-    .map((sectionId) => builderSections.find((section) => section.id === sectionId))
-    .filter((section): section is (typeof builderSections)[number] => Boolean(section));
-  const strength = calculateResumeStrength(data, { fresher: isFresherTemplate });
+  const visibleSections = useMemo(
+    () =>
+      template.sections
+        .map((sectionId) => builderSections.find((section) => section.id === sectionId))
+        .filter((section): section is (typeof builderSections)[number] => Boolean(section)),
+    [template.sections]
+  );
+  const strength = useMemo(
+    () => calculateResumeStrength(data, { fresher: isFresherTemplate }),
+    // Only recompute strength when the relevant data fields change, not on every keystroke
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data.basics, data.experience, data.education, data.skillGroups, isFresherTemplate]
+  );
   const activeIndex = visibleSections.findIndex((section) => section.id === activeSection);
 
   // Resizable Editor & Studio Canvas Split State
@@ -306,6 +350,25 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     accent: resumeStyle.accent || template.accent,
   };
 
+  const handleExportDocx = async () => {
+    if (isExportingDocx) return;
+    setIsExportingDocx(true);
+    setExportDocxStatus("idle");
+    try {
+      const { fileName } = await exportResumeDocx(data, template.accent);
+      setExportDocxStatus("exported");
+      showToast("Exported!", `Saved as "${fileName}".`, "success");
+      setTimeout(() => setExportDocxStatus("idle"), 3000);
+    } catch (err: any) {
+      console.error("DOCX export error:", err);
+      setExportDocxStatus("error");
+      showToast("Export Failed", "Could not generate the Word document. Please try again.", "error");
+      setTimeout(() => setExportDocxStatus("idle"), 3000);
+    } finally {
+      setIsExportingDocx(false);
+    }
+  };
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#e8e8e2] text-[var(--brand-ink)]">
       <ResumeBuilderHeader
@@ -320,9 +383,12 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         onShowTailor={() => setShowTailor(true)}
         onShowWritingCheck={() => setShowWritingCheck(true)}
         onExportPdf={() => window.print()}
-        onExportDocx={async () => await exportResumeDocx(data, template.accent)}
+        onExportDocx={handleExportDocx}
+        isExportingDocx={isExportingDocx}
+        exportDocxStatus={exportDocxStatus}
         onUploadResume={handleUploadResume}
         isImportingResume={isImportingResume}
+        uploadFileInputRef={uploadFileInputRef}
       />
 
       <div
@@ -462,12 +528,15 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               onUpdateStyle={setResumeStyle}
               onSelectSection={setActiveSection}
               onExportPdf={() => window.print()}
-              onExportDocx={async () => await exportResumeDocx(data, template.accent)}
+              onExportDocx={handleExportDocx}
+              isExportingDocx={isExportingDocx}
+              exportDocxStatus={exportDocxStatus}
               onSave={handleSaveToCloud}
               isSaving={isSaving}
               saveStatus={saveStatus}
               onUploadResume={handleUploadResume}
               isImportingResume={isImportingResume}
+              uploadFileInputRef={uploadFileInputRef}
             />
           </section>
         )}

@@ -3,22 +3,26 @@ import {
   Packer,
   Paragraph,
   TextRun,
-  Table,
-  TableRow,
-  TableCell,
   WidthType,
   BorderStyle,
   AlignmentType,
+  ExternalHyperlink,
 } from "docx";
 import type { ResumeData } from "../types/resume";
 
-export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
+export interface ExportDocxResult {
+  fileName: string;
+}
+
+export async function exportResumeDocx(
+  data: ResumeData,
+  accent = "#28785b"
+): Promise<ExportDocxResult> {
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
   const docFont = "Calibri";
 
-  const title = data.basics.fullName
-    ? `${data.basics.fullName}'s Resume`
-    : "Resume";
+  const personName = data.basics.fullName?.trim() || "Resume";
+  const title = data.basics.fullName ? `${personName}'s Resume` : "Resume";
 
   const fileName = `${title
     .toLowerCase()
@@ -27,7 +31,7 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
 
   const paragraphs: Paragraph[] = [];
 
-  // 1. Full Name
+  // ── 1. Full Name ────────────────────────────────────────────────────────
   if (data.basics.fullName) {
     paragraphs.push(
       new Paragraph({
@@ -46,7 +50,7 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     );
   }
 
-  // 2. Headline / Target Role
+  // ── 2. Headline ─────────────────────────────────────────────────────────
   if (data.basics.headline) {
     paragraphs.push(
       new Paragraph({
@@ -66,37 +70,61 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     );
   }
 
-  // 3. Contact Details Bar
-  const contactParts = [
-    data.basics.email,
-    data.basics.phone,
-    data.basics.location,
-    data.basics.website,
-  ].filter(Boolean);
+  // ── 3. Contact Details Bar ──────────────────────────────────────────────
+  const contactTextParts: string[] = [];
+  if (data.basics.email) contactTextParts.push(data.basics.email);
+  if (data.basics.phone) contactTextParts.push(data.basics.phone);
+  if (data.basics.location) contactTextParts.push(data.basics.location);
 
-  if (contactParts.length > 0) {
-    paragraphs.push(
-      new Paragraph({
-        alignment: AlignmentType.LEFT,
-        spacing: { after: 200 },
+  const contactChildren: (TextRun | ExternalHyperlink)[] = [];
+
+  if (contactTextParts.length > 0) {
+    contactChildren.push(
+      new TextRun({
+        text: contactTextParts.join("   ·   "),
+        size: 18,
+        color: "666666",
+        font: docFont,
+      })
+    );
+  }
+
+  if (data.basics.website) {
+    contactChildren.push(
+      new TextRun({ text: "   ·   ", size: 18, color: "666666", font: docFont })
+    );
+    contactChildren.push(
+      new ExternalHyperlink({
+        link: data.basics.website,
         children: [
           new TextRun({
-            text: contactParts.join("   ·   "),
-            size: 18, // 9pt
-            color: "666666",
+            text: data.basics.website.replace(/^https?:\/\//, ""),
+            size: 18,
+            color: "0066CC",
             font: docFont,
+            underline: { type: "single" },
           }),
         ],
       })
     );
   }
 
-  // Helper for Section Heading
+  if (contactChildren.length > 0) {
+    paragraphs.push(
+      new Paragraph({
+        alignment: AlignmentType.LEFT,
+        spacing: { after: 240 },
+        children: contactChildren,
+      })
+    );
+  }
+
+  // ── Helper: Section Heading ─────────────────────────────────────────────
   const addSectionHeading = (text: string) => {
     paragraphs.push(
       new Paragraph({
         alignment: AlignmentType.LEFT,
-        spacing: { before: 240, after: 120 },
+        spacing: { before: 280, after: 140 },
         border: {
           bottom: { style: BorderStyle.SINGLE, size: 6, color: accentHex },
         },
@@ -113,16 +141,35 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     );
   };
 
-  // 4. Summary Section
+  // ── Helper: Bullet ──────────────────────────────────────────────────────
+  const addBullet = (text: string) => {
+    if (!text.trim()) return;
+    paragraphs.push(
+      new Paragraph({
+        bullet: { level: 0 },
+        spacing: { after: 40, line: 240 },
+        children: [
+          new TextRun({
+            text: text.trim(),
+            size: 20,
+            color: "333333",
+            font: docFont,
+          }),
+        ],
+      })
+    );
+  };
+
+  // ── 4. Summary ──────────────────────────────────────────────────────────
   if (data.basics.summary?.trim()) {
     addSectionHeading("Professional Summary");
     paragraphs.push(
       new Paragraph({
-        spacing: { after: 160, line: 250 },
+        spacing: { after: 160, line: 260 },
         children: [
           new TextRun({
             text: data.basics.summary.trim(),
-            size: 20, // 10pt
+            size: 20,
             color: "333333",
             font: docFont,
           }),
@@ -131,7 +178,7 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     );
   }
 
-  // 5. Work Experience Section
+  // ── 5. Work Experience ──────────────────────────────────────────────────
   if (data.experience && data.experience.length > 0) {
     addSectionHeading("Work Experience");
     for (const exp of data.experience) {
@@ -139,14 +186,15 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
         .filter(Boolean)
         .join(" — ");
 
+      // Role | Company (Dates)
       paragraphs.push(
         new Paragraph({
-          spacing: { before: 120, after: 40 },
+          spacing: { before: 140, after: 40 },
           children: [
             new TextRun({
               text: exp.role || "Role",
               bold: true,
-              size: 21, // 10.5pt
+              size: 21,
               color: "111111",
               font: docFont,
             }),
@@ -167,36 +215,41 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
         })
       );
 
+      // Location sub-line
+      if (exp.location) {
+        paragraphs.push(
+          new Paragraph({
+            spacing: { after: 40 },
+            children: [
+              new TextRun({
+                text: exp.location,
+                size: 18,
+                color: "888888",
+                italics: true,
+                font: docFont,
+              }),
+            ],
+          })
+        );
+      }
+
+      // Highlights as bullets
       if (exp.highlights && exp.highlights.length > 0) {
         for (const highlight of exp.highlights) {
-          if (!highlight.trim()) continue;
-          paragraphs.push(
-            new Paragraph({
-              bullet: { level: 0 },
-              spacing: { after: 40, line: 240 },
-              children: [
-                new TextRun({
-                  text: highlight.trim(),
-                  size: 20,
-                  color: "333333",
-                  font: docFont,
-                }),
-              ],
-            })
-          );
+          addBullet(highlight);
         }
       }
     }
   }
 
-  // 6. Education Section
+  // ── 6. Education ────────────────────────────────────────────────────────
   if (data.education && data.education.length > 0) {
     addSectionHeading("Education");
     for (const edu of data.education) {
       const dates = [edu.startDate, edu.endDate].filter(Boolean).join(" — ");
       paragraphs.push(
         new Paragraph({
-          spacing: { before: 100, after: 40 },
+          spacing: { before: 120, after: 40 },
           children: [
             new TextRun({
               text: edu.degree || "Degree",
@@ -220,6 +273,22 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
           ],
         })
       );
+      if (edu.location) {
+        paragraphs.push(
+          new Paragraph({
+            spacing: { after: 40 },
+            children: [
+              new TextRun({
+                text: edu.location,
+                size: 18,
+                color: "888888",
+                italics: true,
+                font: docFont,
+              }),
+            ],
+          })
+        );
+      }
       if (edu.details?.trim()) {
         paragraphs.push(
           new Paragraph({
@@ -238,34 +307,65 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     }
   }
 
-  // 7. Projects Section
+  // ── 7. Projects ─────────────────────────────────────────────────────────
   if (data.projects && data.projects.length > 0) {
     addSectionHeading("Projects");
     for (const proj of data.projects) {
+      const projChildren: (TextRun | ExternalHyperlink)[] = [
+        new TextRun({
+          text: proj.name || "Project",
+          bold: true,
+          size: 21,
+          color: "111111",
+          font: docFont,
+        }),
+      ];
+
+      if (proj.date) {
+        projChildren.push(
+          new TextRun({
+            text: `   (${proj.date})`,
+            size: 19,
+            color: "666666",
+            font: docFont,
+          })
+        );
+      }
+
       paragraphs.push(
         new Paragraph({
-          spacing: { before: 100, after: 40 },
-          children: [
-            new TextRun({
-              text: proj.name || "Project",
-              bold: true,
-              size: 21,
-              color: "111111",
-              font: docFont,
-            }),
-            new TextRun({
-              text: proj.link ? `  (${proj.link})` : "",
-              size: 19,
-              color: "0066CC",
-              font: docFont,
-            }),
-          ],
+          spacing: { before: 120, after: 40 },
+          children: projChildren,
         })
       );
+
+      // Link
+      if (proj.link?.trim()) {
+        paragraphs.push(
+          new Paragraph({
+            spacing: { after: 40 },
+            children: [
+              new ExternalHyperlink({
+                link: proj.link,
+                children: [
+                  new TextRun({
+                    text: proj.link,
+                    size: 18,
+                    color: "0066CC",
+                    underline: { type: "single" },
+                    font: docFont,
+                  }),
+                ],
+              }),
+            ],
+          })
+        );
+      }
+
       if (proj.description?.trim()) {
         paragraphs.push(
           new Paragraph({
-            spacing: { after: 60 },
+            spacing: { after: 40 },
             children: [
               new TextRun({
                 text: proj.description.trim(),
@@ -277,17 +377,24 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
           })
         );
       }
+
+      // Project highlights as bullets
+      if (proj.highlights && proj.highlights.length > 0) {
+        for (const highlight of proj.highlights) {
+          addBullet(highlight);
+        }
+      }
     }
   }
 
-  // 8. Skills Section
+  // ── 8. Skills ───────────────────────────────────────────────────────────
   if (data.skillGroups && data.skillGroups.length > 0) {
     addSectionHeading("Skills & Expertise");
     for (const group of data.skillGroups) {
       if (!group.skills || group.skills.length === 0) continue;
       paragraphs.push(
         new Paragraph({
-          spacing: { after: 60 },
+          spacing: { after: 70 },
           children: [
             new TextRun({
               text: group.name ? `${group.name}: ` : "",
@@ -308,16 +415,59 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
     }
   }
 
+  // ── 9. Certifications ───────────────────────────────────────────────────
+  if (data.certifications && data.certifications.length > 0) {
+    addSectionHeading("Certifications & Awards");
+    for (const cert of data.certifications) {
+      const certChildren: TextRun[] = [
+        new TextRun({
+          text: cert.title || "Certification",
+          bold: true,
+          size: 21,
+          color: "111111",
+          font: docFont,
+        }),
+      ];
+      if (cert.issuer) {
+        certChildren.push(
+          new TextRun({
+            text: `  —  ${cert.issuer}`,
+            size: 20,
+            color: "444444",
+            font: docFont,
+          })
+        );
+      }
+      if (cert.date) {
+        certChildren.push(
+          new TextRun({
+            text: `   (${cert.date})`,
+            size: 19,
+            color: "666666",
+            font: docFont,
+          })
+        );
+      }
+      paragraphs.push(
+        new Paragraph({
+          spacing: { before: 100, after: 60 },
+          children: certChildren,
+        })
+      );
+    }
+  }
+
+  // ── Build & Download ────────────────────────────────────────────────────
   const doc = new Document({
     sections: [
       {
         properties: {
           page: {
             margin: {
-              top: 720, // 0.5 in
-              right: 720,
-              bottom: 720,
-              left: 720,
+              top: 1440,    // 1 inch
+              right: 1080,  // 0.75 inch
+              bottom: 1440, // 1 inch
+              left: 1080,   // 0.75 inch
             },
           },
         },
@@ -335,4 +485,6 @@ export async function exportResumeDocx(data: ResumeData, accent = "#28785b") {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+
+  return { fileName };
 }

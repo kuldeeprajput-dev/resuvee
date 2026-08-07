@@ -54,8 +54,11 @@ interface InteractiveCanvasProps {
   onRedo?: () => void;
   onExportPdf?: () => void;
   onExportDocx?: () => void;
+  isExportingDocx?: boolean;
+  exportDocxStatus?: "idle" | "exported" | "error";
   onUploadResume?: (file: File) => void;
   isImportingResume?: boolean;
+  uploadFileInputRef?: React.RefObject<HTMLInputElement | null>;
   onSave?: () => void;
   isSaving?: boolean;
   saveStatus?: "idle" | "saved" | "error";
@@ -103,8 +106,11 @@ export function InteractiveCanvas({
   onRedo,
   onExportPdf,
   onExportDocx,
+  isExportingDocx,
+  exportDocxStatus,
   onUploadResume,
   isImportingResume,
+  uploadFileInputRef,
   onSave,
   isSaving,
   saveStatus,
@@ -392,8 +398,11 @@ export function InteractiveCanvas({
         onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
         onExportPdf={onExportPdf}
         onExportDocx={onExportDocx}
+        isExportingDocx={isExportingDocx}
+        exportDocxStatus={exportDocxStatus}
         onUploadResume={onUploadResume}
         isImportingResume={isImportingResume}
+        uploadFileInputRef={uploadFileInputRef}
         onSave={onSave}
         isSaving={isSaving}
         saveStatus={saveStatus}
