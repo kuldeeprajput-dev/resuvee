@@ -190,7 +190,7 @@ function CoverLetterFormattingToolbarBase({
 
         {/* Expandable Floating Paragraph Editor Card */}
         {isExpanded && (
-          <div className="absolute top-12 left-0 z-100 flex w-80 sm:w-[400px] flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
+          <div className="absolute top-12 left-0 z-100 flex w-80 sm:w-100 flex-col gap-2 rounded-2xl border border-black/15 bg-white p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             <div className="flex items-center justify-between border-b border-black/10 pb-2">
               <div className="flex items-center gap-1.5">
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-[#059669] border border-emerald-500/20">
@@ -407,7 +407,7 @@ function CoverLetterFormattingToolbarBase({
           <div className="absolute top-12 right-0 z-100 flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">
             {/* Color Wheel Picker */}
             <label
-              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-green-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
+              className="relative flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-black/20 bg-[conic-gradient(at_center,var(--tw-gradient-stops))] from-red-500 via-blue-500 to-red-500 shadow-xs transition hover:scale-105"
               title="Pick Custom Color"
             >
               <input

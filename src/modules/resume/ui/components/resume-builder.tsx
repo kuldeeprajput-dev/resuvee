@@ -46,7 +46,10 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     templateFilter,
     resumeStyle,
     zoom,
+    activeResumeId,
+    initialized,
     initialize,
+    setActiveResumeId,
     updateData,
     selectTemplate,
     setActiveSection,
@@ -60,6 +63,14 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     setZoom,
     startFresh: clearResume,
   } = useResumeBuilderStore();
+
+  // Keep a stable ref to selectTemplate + setResumeStyle for the load effect
+  const selectTemplateRef = useRef(selectTemplate);
+  const setResumeStyleRef = useRef(setResumeStyle);
+  useEffect(() => {
+    selectTemplateRef.current = selectTemplate;
+    setResumeStyleRef.current = setResumeStyle;
+  });
 
   const user = useAuthStore((state) => state.user);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
@@ -130,30 +141,45 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
   );
 
   useEffect(() => {
-    async function loadCloudResume() {
-      if (!user) return;
-      try {
-        // Read active resume ID from IndexedDB (non-blocking)
-        const storedId = await idbGet<string>("active-resume-id");
-        if (storedId === "new") return;
+    // Wait until the store is initialized (IDB rehydrated + initialize() done)
+    // before trying to overlay a cloud resume — avoids race with initialize().
+    if (!initialized || !user) return;
 
-        if (storedId && storedId !== "undefined" && storedId !== "null") {
-          const authHeaders = await getAuthHeaders();
-          const res = await fetch("/api/resumes", { headers: authHeaders });
-          const json = await res.json();
-          if (json.success && Array.isArray(json.data)) {
-            const target = json.data.find((item: any) => item.id === storedId);
-            if (target && target.data) {
-              updateData(target.data);
-            }
-          }
+    let cancelled = false;
+    async function loadCloudResume() {
+      try {
+        const storedId = activeResumeId || (await idbGet<string>("active-resume-id"));
+        if (!storedId || storedId === "new" || storedId === "undefined" || storedId === "null")
+          return;
+
+        const authHeaders = await getAuthHeaders();
+        // Fetch only the specific resume by ID — much faster than fetching all
+        const res = await fetch(`/api/resumes/${storedId}`, { headers: authHeaders });
+        if (!res.ok) return; // 404 = resume deleted, silently skip
+        const json = await res.json();
+
+        if (!json.success || !json.data?.data || cancelled) return;
+
+        const { __meta, ...resumeData } = json.data.data as any;
+        updateData(resumeData);
+        if (json.data?.id) {
+          setActiveResumeId(json.data.id);
+        }
+        if (__meta?.templateId) {
+          selectTemplateRef.current(__meta.templateId);
+        }
+        if (__meta?.resumeStyle) {
+          setResumeStyleRef.current(__meta.resumeStyle);
         }
       } catch (err) {
         console.error("Cloud fetch initial resume error:", err);
       }
     }
     loadCloudResume();
-  }, [user, updateData]);
+    return () => {
+      cancelled = true;
+    };
+  }, [initialized, user, updateData, activeResumeId, setActiveResumeId]);
 
   const handleSaveToCloud = useCallback(async () => {
     if (!user) {
@@ -162,12 +188,18 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     }
     setIsSaving(true);
     try {
-      // Read active resume ID from IndexedDB
-      const storedId = await idbGet<string>("active-resume-id");
+      // Read active resume ID from store or fallback to IndexedDB
+      const storedId = activeResumeId || (await idbGet<string>("active-resume-id"));
       const activeId =
         storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
           ? storedId
           : undefined;
+
+      // Bundle templateId + resumeStyle into __meta so they survive save/load
+      const dataWithMeta = {
+        ...data,
+        __meta: { templateId, resumeStyle },
+      };
 
       const authHeaders = await getAuthHeaders();
       const res = await fetch("/api/resumes", {
@@ -177,7 +209,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           id: activeId,
           title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
           targetRole: data.basics.headline || "",
-          data,
+          data: dataWithMeta,
         }),
       });
 
@@ -188,7 +220,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
 
       const resumeId = json.data?.id || `local-${Date.now()}`;
 
-      // Persist to IndexedDB (non-blocking, won't freeze UI)
+      // Persist to store & IndexedDB
+      setActiveResumeId(resumeId);
       await idbSet("active-resume-id", resumeId);
       try {
         const localList: any[] = (await idbGet<any[]>("local-saved-resumes")) || [];
@@ -216,7 +249,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     } finally {
       setIsSaving(false);
     }
-  }, [user, data, openAuthModal, showToast]);
+  }, [user, data, templateId, resumeStyle, activeResumeId, setActiveResumeId, openAuthModal, showToast]);
 
   // Memoize expensive derivations so they don't recompute on every render
   const template = useMemo(

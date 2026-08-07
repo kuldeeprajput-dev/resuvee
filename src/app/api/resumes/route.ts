@@ -108,7 +108,8 @@ export async function POST(request: NextRequest) {
         .select()
         .maybeSingle();
 
-      if (!error && updated) {
+      if (error) throw error;
+      if (updated) {
         return NextResponse.json({ success: true, data: updated });
       }
     }

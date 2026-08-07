@@ -13,6 +13,7 @@ import { idbGet, idbSet, idbDel } from "../services/resume-idb";
 export type TemplateFilter = "all" | "popular" | "fresher" | "professional";
 
 interface PersistedBuilderState {
+  activeResumeId: string | null;
   data: ResumeData;
   templateId: ResumeTemplateId;
   resumeStyle: ResumeStyle;
@@ -37,6 +38,7 @@ interface ResumeBuilderState extends PersistedBuilderState {
   writingIssues: WritingIssue[];
   writingHasChecked: boolean;
   initialize: (template?: string, starter?: string) => void;
+  setActiveResumeId: (id: string | null) => void;
   setHydrated: (hydrated: boolean) => void;
   updateData: (data: ResumeData) => void;
   selectTemplate: (templateId: ResumeTemplateId) => void;
@@ -104,6 +106,7 @@ let pendingSnapshot: ResumeData | null = null;
 export const useResumeBuilderStore = create<ResumeBuilderState>()(
   persist(
     (set, get) => ({
+      activeResumeId: null,
       data: getTemplateStarterData("standard"),
       templateId: "standard",
       resumeStyle: defaultResumeStyle,
@@ -164,6 +167,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         });
       },
 
+      setActiveResumeId: (activeResumeId) => set({ activeResumeId }),
       setHydrated: (hydrated) => set({ hydrated }),
 
       /**
@@ -270,6 +274,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
         // Fire-and-forget IDB write
         idbSet("active-resume-id", "new").catch(console.error);
         set({
+          activeResumeId: null,
           data: createBlankResumeData(),
           resumeStyle: {
             accent: "#000000",
@@ -296,6 +301,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       storage: createJSONStorage(() => idbStringEngine),
       skipHydration: true,
       partialize: (state): PersistedBuilderState => ({
+        activeResumeId: state.activeResumeId,
         data: state.data,
         templateId: state.templateId,
         resumeStyle: state.resumeStyle,

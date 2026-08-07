@@ -59,7 +59,7 @@ function CoverLetterPreviewBase({
   return (
     <article
       className={cn(
-        "cover-letter-print-area cover-letter-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-[595px] h-[842px] shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] wrap-break-word wrap-anywhere",
+        "cover-letter-print-area cover-letter-preview-sheet cover-letter-print-sheet relative flex flex-col justify-between w-148.75 h-210.5 shrink-0 overflow-hidden bg-white text-[#232824] shadow-[0_24px_65px_rgba(22,32,28,0.18)] wrap-break-word",
         spacingClass,
         fontClass,
         isHandTool && "hand-mode"

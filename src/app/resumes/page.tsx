@@ -22,6 +22,7 @@ import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
+import { idbSet } from "@/modules/resume/services/resume-idb";
 
 interface SavedResumeItem {
   id: string;
@@ -67,15 +68,27 @@ export default function SavedResumesPage() {
     }
   }, [user, authLoading]);
 
-  const handleOpenInBuilder = (resume: SavedResumeItem) => {
+  const handleOpenInBuilder = async (resume: SavedResumeItem) => {
     try {
-      if (typeof window !== "undefined" && resume.data) {
-        localStorage.setItem("resume-builder-data", JSON.stringify(resume.data));
-        localStorage.setItem("active-resume-id", resume.id);
-      }
-      router.push("/builder");
+      const { __meta, ...cleanData } = (resume.data || {}) as any;
+      const templateId = __meta?.templateId || "standard";
+      const resumeStyle = __meta?.resumeStyle;
+
+      const stateToPersist = {
+        state: {
+          activeResumeId: resume.id,
+          data: cleanData,
+          templateId,
+          resumeStyle,
+        },
+        version: 3,
+      };
+      await idbSet("resuvee-builder-v3", JSON.stringify(stateToPersist));
+      await idbSet("active-resume-id", resume.id);
+      window.location.href = "/builder";
     } catch (err) {
       console.error("Failed to load resume into builder:", err);
+      window.location.href = "/builder";
     }
   };
 

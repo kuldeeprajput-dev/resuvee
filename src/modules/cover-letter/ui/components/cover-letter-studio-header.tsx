@@ -71,7 +71,7 @@ function CoverLetterStudioHeaderBase({
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             <FileText className="hidden size-4 shrink-0 text-(--brand-muted) sm:block" />
             <p
-              className="hidden max-w-[100px] truncate text-xs font-bold sm:block sm:max-w-[220px] sm:text-sm md:max-w-[300px] lg:max-w-[380px]"
+              className="hidden max-w-25 truncate text-xs font-bold sm:block sm:max-w-55 sm:text-sm md:max-w-75 lg:max-w-95"
               title={documentTitle}
             >
               {documentTitle}

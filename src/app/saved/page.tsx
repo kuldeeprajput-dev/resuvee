@@ -24,6 +24,11 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
 import { idbGet, idbSet, idbDel } from "@/modules/cover-letter/services/cover-letter-idb";
+import {
+  idbGet as resumeIdbGet,
+  idbSet as resumeIdbSet,
+  idbDel as resumeIdbDel,
+} from "@/modules/resume/services/resume-idb";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
 import { cn } from "@/shared/lib/utils";
@@ -155,27 +160,37 @@ export default function SavedDocumentsPage() {
   };
 
   // Resume Actions
-  const handleOpenResumeInBuilder = (resume: SavedResumeItem) => {
-    if (typeof window !== "undefined" && resume.data) {
-      localStorage.setItem("active-resume-id", resume.id);
-      localStorage.setItem(
-        "resuvee-builder-v3",
-        JSON.stringify({ state: { data: resume.data }, version: 3 })
-      );
+  const handleOpenResumeInBuilder = async (resume: SavedResumeItem) => {
+    try {
+      const { __meta, ...cleanData } = (resume.data || {}) as any;
+      const templateId = __meta?.templateId || "standard";
+      const resumeStyle = __meta?.resumeStyle;
+
+      const stateToPersist = {
+        state: {
+          activeResumeId: resume.id,
+          data: cleanData,
+          templateId,
+          resumeStyle,
+        },
+        version: 3,
+      };
+      await resumeIdbSet("resuvee-builder-v3", JSON.stringify(stateToPersist));
+      await resumeIdbSet("active-resume-id", resume.id);
       window.location.href = "/builder";
-    } else {
-      router.push("/builder");
+    } catch (err) {
+      console.error("Failed to load resume into builder:", err);
+      window.location.href = "/builder";
     }
   };
 
-  const handleCreateNewResume = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("active-resume-id", "new");
-      localStorage.removeItem("resuvee-builder-v3");
-      localStorage.removeItem("resume-builder-data");
+  const handleCreateNewResume = async () => {
+    try {
+      await resumeIdbSet("active-resume-id", "new");
+      await resumeIdbDel("resuvee-builder-v3");
       window.location.href = "/builder";
-    } else {
-      router.push("/builder");
+    } catch (e) {
+      window.location.href = "/builder";
     }
   };
 
