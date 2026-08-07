@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ResumeData } from "../types/resume";
 import type { SelectedCanvasElement } from "../ui/components/interactive-canvas";
 
@@ -216,6 +216,93 @@ export function useCanvasInteraction({
     setIsDragging(false);
   };
 
+  const zoomRef = useRef(zoom);
+  useEffect(() => {
+    zoomRef.current = zoom;
+  }, [zoom]);
+
+  const lastZoomSentRef = useRef<number>(zoom);
+
+  // Prevent full-screen browser zoom on trackpad pinch / touch pinch, scaling ONLY the document canvas
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onWheelNative = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 8 : -8;
+        const nextZoom = Math.min(Math.max(zoomRef.current + delta, 30), 200);
+        if (nextZoom !== lastZoomSentRef.current) {
+          lastZoomSentRef.current = nextZoom;
+          onZoomChange(nextZoom);
+        }
+      }
+    };
+
+    const onTouchMoveNative = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener("wheel", onWheelNative, { passive: false });
+    el.addEventListener("touchmove", onTouchMoveNative, { passive: false });
+
+    return () => {
+      el.removeEventListener("wheel", onWheelNative);
+      el.removeEventListener("touchmove", onTouchMoveNative);
+    };
+  }, [containerRef, onZoomChange]);
+
+  // Mobile Touch Pinch-to-Zoom & Touch Pan
+  const touchStartDistRef = useRef<number | null>(null);
+  const touchStartZoomRef = useRef<number>(zoom);
+  const rafIdRef = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      touchStartDistRef.current = dist;
+      touchStartZoomRef.current = zoom;
+    } else if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.touches[0].clientX - pan.x, y: e.touches[0].clientY - pan.y });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && touchStartDistRef.current !== null) {
+      const currentDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const scale = currentDist / touchStartDistRef.current;
+      const newZoom = Math.min(Math.max(Math.round(touchStartZoomRef.current * scale), 30), 200);
+      if (newZoom !== lastZoomSentRef.current) {
+        lastZoomSentRef.current = newZoom;
+        if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = requestAnimationFrame(() => onZoomChange(newZoom));
+      }
+    } else if (e.touches.length === 1 && isDragging) {
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        setPan({ x: touchX - dragStart.x, y: touchY - dragStart.y });
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+    touchStartDistRef.current = null;
+    setIsDragging(false);
+  };
+
   const fitToWidth = () => {
     if (!containerRef.current) return;
     const containerWidth = containerRef.current.clientWidth - 80;
@@ -247,6 +334,9 @@ export function useCanvasInteraction({
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     fitToWidth,
     fitToPage,
   };

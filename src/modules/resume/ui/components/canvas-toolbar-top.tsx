@@ -180,8 +180,8 @@ export function CanvasTopBar({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 pl-2 ml-auto z-10">
-          {/* Upload Resume — only in fullscreen / mobile preview */}
-          {showFullscreenControls && onUploadResume && (
+          {/* Upload Resume — only in desktop fullscreen */}
+          {isFullscreen && !isMobilePreview && onUploadResume && (
             <>
               <input
                 type="file"
@@ -214,8 +214,8 @@ export function CanvasTopBar({
             </>
           )}
 
-          {/* Check with AI — only in fullscreen / mobile preview */}
-          {showFullscreenControls && onShowWritingCheck && (
+          {/* Check with AI — only in desktop fullscreen */}
+          {isFullscreen && !isMobilePreview && onShowWritingCheck && (
             <button
               type="button"
               onClick={onShowWritingCheck}
@@ -227,8 +227,8 @@ export function CanvasTopBar({
             </button>
           )}
 
-          {/* Role match — only in fullscreen / mobile preview */}
-          {showFullscreenControls && onShowTailor && (
+          {/* Role match — only in desktop fullscreen */}
+          {isFullscreen && !isMobilePreview && onShowTailor && (
             <button
               type="button"
               onClick={onShowTailor}

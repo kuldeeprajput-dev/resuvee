@@ -171,6 +171,9 @@ export function InteractiveCanvas({
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     fitToWidth,
     fitToPage,
   } = useCanvasInteraction({
@@ -429,6 +432,10 @@ export function InteractiveCanvas({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className={cn(
           "canvas-bg relative flex-1 overflow-hidden transition-colors duration-300",
           themeStyles[canvasTheme],
@@ -468,7 +475,7 @@ export function InteractiveCanvas({
         )}
 
         {/* Rendered Document Sheet Container */}
-        <div className="absolute inset-0 flex items-center justify-center p-8 overflow-auto">
+        <div className="absolute inset-x-0 top-14 bottom-0 flex items-center justify-center p-4 sm:p-8 overflow-auto">
           <div
             style={{
               transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
