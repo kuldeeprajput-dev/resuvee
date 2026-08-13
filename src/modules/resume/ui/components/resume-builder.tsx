@@ -249,7 +249,16 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     } finally {
       setIsSaving(false);
     }
-  }, [user, data, templateId, resumeStyle, activeResumeId, setActiveResumeId, openAuthModal, showToast]);
+  }, [
+    user,
+    data,
+    templateId,
+    resumeStyle,
+    activeResumeId,
+    setActiveResumeId,
+    openAuthModal,
+    showToast,
+  ]);
 
   // Memoize expensive derivations so they don't recompute on every render
   const template = useMemo(

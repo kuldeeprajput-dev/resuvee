@@ -63,7 +63,8 @@ export const resumeTemplates: ResumeTemplate[] = [
     renderer: "chronological",
     name: "Data Analyst",
     eyebrow: "Reverse chronological",
-    description: "A conventional one-page format for analytics skills and experience presented newest first.",
+    description:
+      "A conventional one-page format for analytics skills and experience presented newest first.",
     accent: "#243d36",
     background: "#e9eeeb",
     suitableFor: "Data, business intelligence and analytics",

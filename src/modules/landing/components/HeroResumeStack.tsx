@@ -29,6 +29,7 @@ const resumeSheets = [
     alt: "Daniel Kim engineering director resume template",
     className:
       "pointer-events-auto left-[8%] top-[16%] z-10 w-[42%] rotate-[-7deg] cursor-default group-hover:-translate-x-6 group-hover:rotate-[-10deg] hover:z-50 hover:scale-[1.045] sm:left-[10%] sm:w-[36%]",
+    priority: true,
   },
   {
     id: "noah-bennett",
@@ -36,6 +37,7 @@ const resumeSheets = [
     alt: "Noah Bennett full-stack software engineer resume template",
     className:
       "pointer-events-auto right-[7%] top-[14%] z-20 w-[42%] rotate-[7deg] cursor-default group-hover:translate-x-6 group-hover:rotate-10 hover:z-50 hover:scale-[1.045] sm:right-[9%] sm:w-[36%]",
+    priority: true,
   },
   {
     id: "ethan-brooks",
@@ -43,7 +45,7 @@ const resumeSheets = [
     alt: "Ethan Brooks product strategy lead resume template",
     className:
       "pointer-events-auto left-1/2 top-[10%] z-30 w-[46%] -translate-x-1/2 cursor-default shadow-[0_30px_80px_rgba(22,32,28,0.24)] group-hover:-translate-y-3 hover:z-50 hover:scale-[1.055] sm:w-[39%]",
-    preload: true,
+    priority: true,
   },
 ] as const;
 
@@ -74,7 +76,7 @@ export function HeroResumeStack() {
               src={sheet.src}
               alt={sheet.alt}
               fill
-              preload={"preload" in sheet ? sheet.preload : false}
+              priority={"priority" in sheet ? sheet.priority : false}
               quality={90}
               sizes="(min-width: 1024px) 300px, (min-width: 640px) 34vw, 42vw"
               className="object-cover"

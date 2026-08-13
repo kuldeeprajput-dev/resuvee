@@ -4,10 +4,7 @@ import { createClient, getAuthUser } from "@/shared/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 // GET /api/resumes/[id] - Fetch a single resume by ID
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const user = await getAuthUser();
@@ -74,4 +71,3 @@ export async function DELETE(
     );
   }
 }
-

@@ -6,3 +6,5 @@ build
 package-lock.json
 bun.lockb
 bun.lock
+.agents
+.husky
