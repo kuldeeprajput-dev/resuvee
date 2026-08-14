@@ -54,15 +54,15 @@ export function HeroResumeStack() {
     <div className="group relative mx-auto min-w-0 w-full max-w-[740px] cursor-default">
       <div className="relative hidden h-[330px] sm:block sm:h-[440px] lg:h-[520px]">
         <div
-          className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-(--brand-lime)/20 blur-[90px]"
+          className="absolute inset-x-[8%] top-[9%] h-[72%] rounded-full bg-[radial-gradient(circle,rgba(210,252,82,0.35)_0%,transparent_70%)]"
           aria-hidden="true"
         />
         <div
-          className="absolute right-[8%] top-[16%] size-40 rounded-full bg-[#e36c43]/15 blur-[70px]"
+          className="absolute right-[8%] top-[16%] size-40 rounded-full bg-[radial-gradient(circle,rgba(227,108,67,0.25)_0%,transparent_70%)]"
           aria-hidden="true"
         />
 
-        <div className="absolute right-[4%] top-[2%] z-40 hidden items-center gap-2 rounded-full border border-black/10 bg-white/85 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-(--brand-muted) shadow-sm backdrop-blur sm:flex">
+        <div className="absolute right-[4%] top-[2%] z-40 hidden items-center gap-2 rounded-full border border-black/10 bg-white/90 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-(--brand-muted) shadow-xs sm:flex">
           <MousePointer2 className="size-3.5 text-[#c65b38]" />
           Hover to explore
         </div>
@@ -77,7 +77,7 @@ export function HeroResumeStack() {
               alt={sheet.alt}
               fill
               priority={"priority" in sheet ? sheet.priority : false}
-              quality={90}
+              quality={75}
               sizes="(min-width: 1024px) 300px, (min-width: 640px) 34vw, 42vw"
               className="object-cover"
             />
@@ -86,8 +86,8 @@ export function HeroResumeStack() {
       </div>
 
       {/* Left-Aligned Hero Feature List */}
-      <div className="relative z-10 mt-6 grid grid-cols-1 gap-2.5 sm:mt-[-28px] sm:grid-cols-2 sm:px-2">
-        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-4 py-3 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)]">
+      <div className="relative z-10 mt-4.5 grid grid-cols-1 gap-2 sm:mt-[-28px] sm:grid-cols-2 sm:gap-2.5 sm:px-2">
+        <div className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/95 px-3.5 py-2.5 shadow-[0_8px_30px_rgba(22,32,28,0.08)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_36px_rgba(22,32,28,0.12)] sm:px-4 sm:py-3">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-(--brand-lime) text-xs font-black text-(--brand-ink) shadow-xs">
             90%
           </span>
@@ -104,7 +104,7 @@ export function HeroResumeStack() {
             <Layers3 className="size-4" />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-xs font-bold text-(--brand-ink)">6 Original Layouts</p>
+            <p className="truncate text-xs font-bold text-(--brand-ink)">16 Original Templates</p>
             <p className="truncate text-[10px] font-medium text-(--brand-muted)">
               Switch designs anytime
             </p>
@@ -128,9 +128,9 @@ export function HeroResumeStack() {
             <FileDown className="size-4" />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-xs font-bold text-(--brand-ink)">Clean PDF Export</p>
+            <p className="truncate text-xs font-bold text-(--brand-ink)">PDF & DOCX Export</p>
             <p className="truncate text-[10px] font-medium text-(--brand-muted)">
-              Vector quality PDF
+              Vector PDF & Word formats
             </p>
           </div>
         </div>

@@ -30,7 +30,7 @@ export function Brand() {
     >
       <span className="relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-black/10 bg-white transition-transform duration-300 group-hover:-rotate-2 sm:size-9">
         <Image
-          src="/resulyra-mark.png"
+          src="/resuvee-mark.webp"
           alt="Resuvee logo"
           width={28}
           height={28}
@@ -60,9 +60,19 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
 
-      if (currentScrollPos < 20) {
+      // Always show near top of page
+      if (currentScrollPos < 25) {
         setIsVisible(true);
-      } else if (currentScrollPos > prevScrollPos) {
+        setPrevScrollPos(currentScrollPos);
+        return;
+      }
+
+      // Ignore micro scroll movements (< 8px) to prevent mobile touch jitter
+      if (Math.abs(currentScrollPos - prevScrollPos) < 8) {
+        return;
+      }
+
+      if (currentScrollPos > prevScrollPos) {
         // Scrolling down -> hide navbar
         setIsVisible(false);
       } else {
@@ -83,7 +93,7 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
         className={cn(
           "pointer-events-auto relative mx-auto flex h-[54px] w-full max-w-5xl items-center justify-between gap-2 rounded-[20px] border border-black/8 px-3 shadow-[0_12px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-300 sm:h-[64px] sm:rounded-[22px] sm:px-5",
           blendWithPage ? "bg-white/95" : "bg-white/90",
-          !isVisible && "-translate-y-20 opacity-0 pointer-events-none"
+          !isVisible && "-translate-y-24 opacity-0 pointer-events-none"
         )}
       >
         <div className="flex shrink-0 items-center">
@@ -129,7 +139,10 @@ export function SiteHeader({ blendWithPage = false }: { blendWithPage?: boolean 
 
           {/* Mobile Hamburger Navigation with Auth inside */}
           <details className="md:hidden">
-            <summary className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full border border-black/10 bg-white text-(--brand-ink) transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-(--brand-lime)/50 [&::-webkit-details-marker]:hidden">
+            <summary
+              aria-label="Open navigation menu"
+              className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full border border-black/10 bg-white text-(--brand-ink) transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-(--brand-lime)/50 [&::-webkit-details-marker]:hidden"
+            >
               <Menu className="size-4" aria-hidden="true" />
               <span className="sr-only">Open navigation</span>
             </summary>

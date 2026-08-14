@@ -1,13 +1,4 @@
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  WidthType,
-  BorderStyle,
-  AlignmentType,
-  ExternalHyperlink,
-} from "docx";
+import type * as DocxTypes from "docx";
 import type { ResumeData } from "../types/resume";
 
 export interface ExportDocxResult {
@@ -18,6 +9,17 @@ export async function exportResumeDocx(
   data: ResumeData,
   accent = "#28785b"
 ): Promise<ExportDocxResult> {
+  const {
+    Document,
+    Packer,
+    Paragraph,
+    TextRun,
+    WidthType,
+    BorderStyle,
+    AlignmentType,
+    ExternalHyperlink,
+  } = await import("docx");
+
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
   const docFont = "Calibri";
 
@@ -29,7 +31,7 @@ export async function exportResumeDocx(
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")}.docx`;
 
-  const paragraphs: Paragraph[] = [];
+  const paragraphs: DocxTypes.Paragraph[] = [];
 
   // ── 1. Full Name ────────────────────────────────────────────────────────
   if (data.basics.fullName) {
@@ -76,7 +78,7 @@ export async function exportResumeDocx(
   if (data.basics.phone) contactTextParts.push(data.basics.phone);
   if (data.basics.location) contactTextParts.push(data.basics.location);
 
-  const contactChildren: (TextRun | ExternalHyperlink)[] = [];
+  const contactChildren: (DocxTypes.TextRun | DocxTypes.ExternalHyperlink)[] = [];
 
   if (contactTextParts.length > 0) {
     contactChildren.push(
@@ -311,7 +313,7 @@ export async function exportResumeDocx(
   if (data.projects && data.projects.length > 0) {
     addSectionHeading("Projects");
     for (const proj of data.projects) {
-      const projChildren: (TextRun | ExternalHyperlink)[] = [
+      const projChildren: (DocxTypes.TextRun | DocxTypes.ExternalHyperlink)[] = [
         new TextRun({
           text: proj.name || "Project",
           bold: true,
@@ -419,7 +421,7 @@ export async function exportResumeDocx(
   if (data.certifications && data.certifications.length > 0) {
     addSectionHeading("Certifications & Awards");
     for (const cert of data.certifications) {
-      const certChildren: TextRun[] = [
+      const certChildren: DocxTypes.TextRun[] = [
         new TextRun({
           text: cert.title || "Certification",
           bold: true,

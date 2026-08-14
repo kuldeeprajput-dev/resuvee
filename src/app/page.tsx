@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   ArrowRight,
   Check,
@@ -9,10 +10,26 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
-import { HeroResumeStack, LandingTemplateShowcase } from "@/modules/landing";
+import { HeroResumeStack } from "@/modules/landing";
 import { resumeTemplates } from "@/modules/resume";
+
+const LandingTemplateShowcase = dynamic(
+  () =>
+    import("@/modules/landing/components/LandingTemplateShowcase").then(
+      (mod) => mod.LandingTemplateShowcase
+    ),
+  {
+    loading: () => (
+      <div className="h-96 w-full animate-pulse rounded-2xl bg-black/5" />
+    ),
+  }
+);
+
+const SiteFooter = dynamic(
+  () =>
+    import("@/shared/components/layout/SiteFooter").then((mod) => mod.SiteFooter)
+);
 
 const productBenefits = [
   `${resumeTemplates.length} original templates across proven resume formats`,
@@ -33,8 +50,8 @@ const productTools = [
     icon: PenLine,
     title: "Resume Builder",
     description:
-      "Write section by section, check spelling and grammar with AI, tune the design, and export a clean PDF.",
-    features: ["Guided editor", "18 original layouts"],
+      "Write section by section, check spelling and grammar with AI, tune the design, and export clean PDF & Word files.",
+    features: ["Guided editor", "16 original templates"],
     href: "/builder",
     action: "Build a resume",
     accent: "bg-(--brand-lime)",
@@ -88,9 +105,9 @@ export default function Home() {
       <main>
         <section className="relative border-b border-black/8">
           <div className="absolute inset-0 paper-grid opacity-60" />
-          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-4 px-5 pb-6 pt-14 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
+          <div className="relative mx-auto grid min-h-0 w-full max-w-[1440px] items-center gap-4 px-5 pb-6 pt-6 sm:gap-14 sm:px-8 sm:pb-20 sm:pt-20 lg:min-h-[690px] lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:pb-24 lg:pt-24">
             <div className="relative z-10 max-w-[650px]">
-              <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-(--brand-muted) shadow-sm sm:mb-7 sm:text-xs sm:tracking-[0.12em]">
+              <div className="mb-3.5 inline-flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-(--brand-muted) shadow-sm sm:mb-7 sm:py-2 sm:text-xs sm:tracking-[0.12em]">
                 <Sparkles className="size-3.5 text-[#e36c43]" />
                 <span className="truncate">
                   {resumeTemplates.length} original, white-page resume templates
@@ -117,12 +134,12 @@ export default function Home() {
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-[580px] text-base leading-7 text-(--brand-muted) sm:mt-8 sm:text-xl sm:leading-8">
+              <p className="mt-4 max-w-[580px] text-base leading-7 text-(--brand-muted) sm:mt-8 sm:text-xl sm:leading-8">
                 Start with the format employers know, a focused fresher layout, or a role-specific
                 design. Then write, check, customize, and export from one focused workspace.
               </p>
 
-              <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
+              <div className="mt-5 flex flex-col gap-2.5 sm:mt-9 sm:flex-row sm:gap-3">
                 <Button
                   asChild
                   className="h-12 w-full rounded-full bg-(--brand-ink) px-5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(22,32,28,0.18)] hover:bg-[#27332f] sm:h-13 sm:w-auto sm:px-6"
@@ -135,7 +152,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white mt-1.5 sm:mt-0 sm:h-13 sm:w-auto sm:px-6"
+                  className="h-12 w-full rounded-full border-black/15 bg-white/65 px-5 text-sm font-bold hover:bg-white sm:h-13 sm:w-auto sm:px-6"
                 >
                   <Link href="/analyzer">
                     <FileSearch className="size-4" />
@@ -182,9 +199,9 @@ export default function Home() {
 
         <section
           id="templates"
-          className="mx-auto w-full max-w-[1440px] px-5 pb-4 pt-4 sm:px-8 sm:pb-8 sm:pt-16 md:pb-10 md:pt-24 lg:px-12"
+          className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-8 sm:pb-8 sm:pt-16 md:pb-10 md:pt-24 lg:px-12"
         >
-          <div className="mb-3 flex flex-col gap-3 sm:mb-10 md:flex-row md:items-end md:justify-between">
+          <div className="mb-6 flex flex-col gap-3 sm:mb-10 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#c65b38] sm:mb-4">
                 Live template library
@@ -205,7 +222,7 @@ export default function Home() {
 
         <section
           id="toolkit"
-          className="relative -mt-20 overflow-hidden bg-(--brand-canvas) sm:mt-0"
+          className="relative overflow-hidden bg-(--brand-canvas)"
         >
           <div className="paper-grid pointer-events-none absolute inset-0 opacity-35" />
           <div className="pointer-events-none absolute -right-32 -top-40 size-[420px] rounded-full bg-(--brand-lime)/15 blur-3xl" />
@@ -328,7 +345,7 @@ export default function Home() {
                     Make the resume you wish you already had.
                   </h2>
                   <div className="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-2.5">
-                    {["Free to start", "Cloud & Local Sync", "Clean PDF export"].map((benefit) => (
+                    {["Free to start", "Cloud & Local Sync", "PDF & DOCX Export"].map((benefit) => (
                       <span
                         key={benefit}
                         className="rounded-full border border-white/40 bg-white/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-[#2c1d18] shadow-sm backdrop-blur-md transition-colors hover:bg-white/45 sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.08em]"

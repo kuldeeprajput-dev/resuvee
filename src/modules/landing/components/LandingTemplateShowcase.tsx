@@ -198,7 +198,7 @@ export function LandingTemplateShowcase() {
       <div
         ref={carouselRef}
         onScroll={handleScroll}
-        className="grid snap-x snap-mandatory grid-flow-col grid-rows-1 auto-cols-[82%] gap-3.5 overflow-x-auto pb-0 scroll-smooth items-start scrollbar-none sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:pb-5 sm:items-stretch lg:auto-cols-[calc((100%-2.5rem)/3)] [&::-webkit-scrollbar]:hidden"
+        className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3.5 overflow-x-auto px-5 pb-2 scroll-smooth items-start scrollbar-none touch-pan-x overscroll-x-contain [-webkit-overflow-scrolling:touch] sm:mx-0 sm:grid sm:grid-flow-col sm:grid-rows-1 sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:px-0 sm:pb-5 sm:scroll-px-0 sm:items-stretch lg:auto-cols-[calc((100%-2.5rem)/3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
@@ -208,7 +208,7 @@ export function LandingTemplateShowcase() {
                 ? `/builder?template=${template.id}&starter=fresher`
                 : `/builder?template=${template.id}&starter=template`
             }
-            className="group snap-start flex flex-col rounded-[20px] border border-black/8 bg-white/55 p-3 transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5 [content-visibility:auto] [contain-intrinsic-size:360px_480px]"
+            className="group snap-start flex w-[84vw] shrink-0 flex-col rounded-[20px] border border-black/8 bg-white/55 p-3.5 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:w-auto sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5"
           >
             <div className="relative overflow-hidden rounded-xl bg-[#e9ece8] p-3 sm:rounded-2xl sm:p-8 md:p-10">
               <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-black/55 shadow-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1 sm:text-[9px]">
