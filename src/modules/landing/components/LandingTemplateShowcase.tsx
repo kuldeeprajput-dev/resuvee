@@ -198,7 +198,7 @@ export function LandingTemplateShowcase() {
       <div
         ref={carouselRef}
         onScroll={handleScroll}
-        className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3.5 overflow-x-auto px-5 pb-2 scroll-smooth items-start scrollbar-none touch-pan-x overscroll-x-contain [-webkit-overflow-scrolling:touch] sm:mx-0 sm:grid sm:grid-flow-col sm:grid-rows-1 sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:px-0 sm:pb-5 sm:scroll-px-0 sm:items-stretch lg:auto-cols-[calc((100%-2.5rem)/3)] [&::-webkit-scrollbar]:hidden"
+        className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3.5 overflow-x-auto px-5 pb-2 scroll-smooth items-start scrollbar-none [-webkit-overflow-scrolling:touch] sm:mx-0 sm:grid sm:grid-flow-col sm:grid-rows-1 sm:auto-cols-[calc((100%-1.25rem)/2)] sm:gap-5 sm:px-0 sm:pb-5 sm:scroll-px-0 sm:items-stretch lg:auto-cols-[calc((100%-2.5rem)/3)] [&::-webkit-scrollbar]:hidden"
       >
         {visibleTemplates.map((template, index) => (
           <Link
