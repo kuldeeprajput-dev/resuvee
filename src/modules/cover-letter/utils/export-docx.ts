@@ -10,23 +10,26 @@ import {
   BorderStyle,
   AlignmentType,
 } from "docx";
-import type { CoverLetterData, TypographyFont, PageSpacing } from "../types/cover-letter";
+import type { CoverLetterData, CoverLetterTheme, TypographyFont, PageSpacing } from "../types/cover-letter";
 
 export async function exportCoverLetterDocx(
   data: CoverLetterData,
   accent = "#28785b",
   font: TypographyFont = "template",
-  pageSpacing: PageSpacing = "normal"
+  pageSpacing: PageSpacing = "normal",
+  theme: CoverLetterTheme = "linen"
 ) {
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
 
   const docFont =
-    font === "serif"
-      ? "Georgia"
-      : font === "mono"
-        ? "Consolas"
-        : font === "sans"
-          ? "Calibri"
+    font === "template"
+      ? theme === "signal"
+        ? "Calibri"
+        : "Georgia"
+      : font === "serif"
+        ? "Georgia"
+        : font === "mono"
+          ? "Consolas"
           : "Calibri";
 
   const title = data.fullName

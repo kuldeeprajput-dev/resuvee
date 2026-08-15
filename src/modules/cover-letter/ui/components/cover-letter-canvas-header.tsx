@@ -352,7 +352,7 @@ function CoverLetterCanvasHeaderBase({
                       id: "template",
                       name: "Template",
                       desc: "Designed pairing",
-                      cls: "font-sans",
+                      cls: theme === "signal" ? "font-sans" : "font-serif",
                     },
                     { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
                     { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },

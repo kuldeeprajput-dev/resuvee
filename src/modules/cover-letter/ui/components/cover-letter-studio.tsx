@@ -116,7 +116,7 @@ export function CoverLetterStudio() {
   const activeAccent = customAccent || activeTheme.accent;
 
   const handleExportDocx = async () => {
-    await exportCoverLetterDocx(data, activeAccent, font, pageSpacing);
+    await exportCoverLetterDocx(data, activeAccent, font, pageSpacing, theme);
   };
 
   const documentTitle = data.fullName

@@ -32,13 +32,13 @@ function CoverLetterPreviewBase({
 }: CoverLetterPreviewProps) {
   const fontClass =
     font === "template"
-      ? theme === "ledger"
-        ? "font-serif"
-        : "font-sans"
-      : font === "sans"
+      ? theme === "signal"
         ? "font-sans"
-        : font === "serif"
-          ? "font-serif"
+        : "font-serif"
+      : font === "serif"
+        ? "font-serif"
+        : font === "sans"
+          ? "font-sans"
           : "font-mono";
 
   const spacingClass =
@@ -104,35 +104,46 @@ function CoverLetterPreviewBase({
       </header>
 
       <section className="relative mt-4 flex-1 space-y-3 text-xs leading-normal text-[#2d342f]">
-        <div className="flex items-center justify-between text-[11px] font-medium text-(--brand-muted)">
-          <p
-            data-field="date"
-            onClick={(e) => onSelectField?.(e, "date")}
-            className={getFieldClass("date")}
-          >
-            {data.date}
-          </p>
-          <div className="flex items-center gap-1.5">
-            {data.company && (
-              <span
-                data-field="company"
-                onClick={(e) => onSelectField?.(e, "company")}
-                className={getFieldClass("company")}
-              >
-                {data.company}
-              </span>
-            )}
-            {data.company && data.role && <span>·</span>}
-            {data.role && (
-              <span
-                data-field="role"
-                onClick={(e) => onSelectField?.(e, "role")}
-                className={getFieldClass("role")}
-              >
-                {data.role}
-              </span>
-            )}
+        <div className="space-y-1 text-[11px] text-(--brand-muted)">
+          <div className="flex items-center justify-between font-medium">
+            <p
+              data-field="date"
+              onClick={(e) => onSelectField?.(e, "date")}
+              className={getFieldClass("date")}
+            >
+              {data.date}
+            </p>
+            <div className="flex items-center gap-1.5">
+              {data.company && (
+                <span
+                  data-field="company"
+                  onClick={(e) => onSelectField?.(e, "company")}
+                  className={getFieldClass("company")}
+                >
+                  {data.company}
+                </span>
+              )}
+              {data.company && data.role && <span>·</span>}
+              {data.role && (
+                <span
+                  data-field="role"
+                  onClick={(e) => onSelectField?.(e, "role")}
+                  className={getFieldClass("role")}
+                >
+                  {data.role}
+                </span>
+              )}
+            </div>
           </div>
+          {(data.recipient || selectedField === "recipient") && (
+            <p
+              data-field="recipient"
+              onClick={(e) => onSelectField?.(e, "recipient")}
+              className={cn("font-medium text-[#1e2320]", getFieldClass("recipient"))}
+            >
+              {data.recipient}
+            </p>
+          )}
         </div>
 
         <div className="pt-2">
