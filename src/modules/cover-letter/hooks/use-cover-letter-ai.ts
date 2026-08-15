@@ -10,16 +10,12 @@ import type { CoverLetterData } from "../types/cover-letter";
 interface UseAiOptions {
   data: CoverLetterData;
   showAiDrawer: boolean;
-  setHistory: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
-  setFuture: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
   setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
 }
 
 export function useCoverLetterAi({
   data,
   showAiDrawer,
-  setHistory,
-  setFuture,
   setData,
 }: UseAiOptions) {
   const { user, openAuthModal } = useAuthStore();
@@ -190,8 +186,6 @@ export function useCoverLetterAi({
         signoff: json.data.signoff || data.signoff,
       };
 
-      setHistory((prev) => [...prev, data]);
-      setFuture([]);
       setData(updatedLetter);
 
       await idbSet(STORAGE_KEY, { data: updatedLetter });

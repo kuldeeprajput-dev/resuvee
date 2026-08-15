@@ -165,6 +165,7 @@ function CoverLetterCanvasToolbarBase({
       {/* Undo Button */}
       <button
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={handleUndo}
         disabled={historyLength === 0}
         className="builder-icon-button disabled:opacity-30 cursor-pointer"
@@ -176,6 +177,7 @@ function CoverLetterCanvasToolbarBase({
       {/* Redo Button */}
       <button
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={handleRedo}
         disabled={futureLength === 0}
         className="builder-icon-button disabled:opacity-30 cursor-pointer"

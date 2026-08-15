@@ -18,8 +18,6 @@ export function useCoverLetterState() {
     isSpacePressed: canvasHook.isSpacePressed,
     showDesignMenu: canvasHook.showDesignMenu,
     showTemplatesMenu: canvasHook.showTemplatesMenu,
-    setHistory: dataHook.setHistory,
-    setFuture: dataHook.setFuture,
     setData: dataHook.setData,
     containerRef: canvasHook.containerRef,
   });
@@ -27,15 +25,12 @@ export function useCoverLetterState() {
   const aiHook = useCoverLetterAi({
     data: dataHook.data,
     showAiDrawer: canvasHook.showAiDrawer,
-    setHistory: dataHook.setHistory,
-    setFuture: dataHook.setFuture,
     setData: dataHook.setData,
   });
 
   // Keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y / Ctrl+Shift+Z (redo)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         e.shiftKey ? dataHook.handleRedo() : dataHook.handleUndo();

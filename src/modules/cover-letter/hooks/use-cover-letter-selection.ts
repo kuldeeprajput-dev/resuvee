@@ -19,8 +19,6 @@ interface UseSelectionOptions {
   isSpacePressed: boolean;
   showDesignMenu: boolean;
   showTemplatesMenu: boolean;
-  setHistory: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
-  setFuture: React.Dispatch<React.SetStateAction<CoverLetterData[]>>;
   setData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
   containerRef?: React.RefObject<HTMLDivElement | null>;
 }
@@ -33,8 +31,6 @@ export function useCoverLetterSelection({
   isSpacePressed,
   showDesignMenu,
   showTemplatesMenu,
-  setHistory,
-  setFuture,
   setData,
   containerRef: externalContainerRef,
 }: UseSelectionOptions) {
@@ -160,8 +156,6 @@ export function useCoverLetterSelection({
     const prevField = SECTION_ORDER[index - 1];
     const currentVal = data[selectedField];
     const prevVal = data[prevField];
-    setHistory((prev) => [...prev, data]);
-    setFuture([]);
     setData((cur) => ({ ...cur, [selectedField]: prevVal, [prevField]: currentVal }));
     setSelectedField(prevField);
     setInlineText(currentVal);
@@ -175,8 +169,6 @@ export function useCoverLetterSelection({
     const nextField = SECTION_ORDER[index + 1];
     const currentVal = data[selectedField];
     const nextVal = data[nextField];
-    setHistory((prev) => [...prev, data]);
-    setFuture([]);
     setData((cur) => ({ ...cur, [selectedField]: nextVal, [nextField]: currentVal }));
     setSelectedField(nextField);
     setInlineText(currentVal);

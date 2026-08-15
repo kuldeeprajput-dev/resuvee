@@ -14,7 +14,7 @@ export function useCoverLetterData() {
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const showToast = useNotification((state) => state.showToast);
 
-  const [data, setData] = useState<CoverLetterData>(emptyLetter);
+  const [data, setDataInternal] = useState<CoverLetterData>(emptyLetter);
   const [theme, setTheme] = useState<CoverLetterTheme>("linen");
   const [customAccent, setCustomAccent] = useState<string | null>(null);
   const [saveLabel, setSaveLabel] = useState("Saved locally");
@@ -22,11 +22,26 @@ export function useCoverLetterData() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
   const [isImportingLetter, setIsImportingLetter] = useState(false);
 
+  // history = stack of snapshots BEFORE changes. future = redo stack.
   const [history, setHistory] = useState<CoverLetterData[]>([]);
   const [future, setFuture] = useState<CoverLetterData[]>([]);
 
+  // We keep refs for history/future so handleUndo/handleRedo read current values
+  // without needing them in their dependency arrays.
+  const historyRef = useRef<CoverLetterData[]>([]);
+  const futureRef = useRef<CoverLetterData[]>([]);
+  const dataRef = useRef<CoverLetterData>(emptyLetter);
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // snapshot captured at the START of a typing session (before the first keystroke)
+  const typingStartSnapshot = useRef<CoverLetterData | null>(null);
+
   const hasLoaded = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => { dataRef.current = data; }, [data]);
+  useEffect(() => { historyRef.current = history; }, [history]);
+  useEffect(() => { futureRef.current = future; }, [future]);
 
   // Load from IndexedDB / cloud on mount
   useEffect(() => {
@@ -42,9 +57,15 @@ export function useCoverLetterData() {
             (loadedData.paragraphs && loadedData.paragraphs.some((p: string) => p && p.trim()))
           );
           if (isNonEmpty) {
-            setData(loadedData);
+            setDataInternal(loadedData);
+            dataRef.current = loadedData;
             if (stored.theme) setTheme(stored.theme);
             if (stored.customAccent) setCustomAccent(stored.customAccent);
+            setHistory([]);
+            setFuture([]);
+            historyRef.current = [];
+            futureRef.current = [];
+            typingStartSnapshot.current = null;
             hasLoaded.current = true;
             return;
           }
@@ -52,8 +73,14 @@ export function useCoverLetterData() {
 
         const activeId = await idbGet<string>("active-cover-letter-id");
         if (activeId === "new") {
-          setData(emptyLetter);
+          setDataInternal(emptyLetter);
+          dataRef.current = emptyLetter;
           await idbSet(STORAGE_KEY, { data: emptyLetter });
+          setHistory([]);
+          setFuture([]);
+          historyRef.current = [];
+          futureRef.current = [];
+          typingStartSnapshot.current = null;
           hasLoaded.current = true;
           return;
         }
@@ -67,8 +94,14 @@ export function useCoverLetterData() {
               if (json.success && Array.isArray(json.data)) {
                 const target = json.data.find((item: any) => item.id === activeId);
                 if (target && target.data) {
-                  setData(target.data);
+                  setDataInternal(target.data);
+                  dataRef.current = target.data;
                   await idbSet(STORAGE_KEY, { data: target.data });
+                  setHistory([]);
+                  setFuture([]);
+                  historyRef.current = [];
+                  futureRef.current = [];
+                  typingStartSnapshot.current = null;
                   hasLoaded.current = true;
                   return;
                 }
@@ -99,48 +132,151 @@ export function useCoverLetterData() {
     }, 400);
   }, [data, theme, customAccent]);
 
-  const historyDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastSnapshotRef = useRef<CoverLetterData>(data);
-
-  useEffect(() => {
-    lastSnapshotRef.current = data;
-  }, [data]);
-
+  // Single-field typing update — debounced snapshot push so Undo pops ONE entry per typing session
   const update = useCallback((field: keyof CoverLetterData, value: string) => {
-    setData((current) => {
-      const next = { ...current, [field]: value };
-      if (historyDebounceTimer.current) clearTimeout(historyDebounceTimer.current);
-      historyDebounceTimer.current = setTimeout(() => {
-        setHistory((prev) => {
-          if (prev.length >= 30) return [...prev.slice(1), lastSnapshotRef.current];
-          return [...prev, lastSnapshotRef.current];
-        });
-      }, 500);
+    const current = dataRef.current;
+
+    // Capture the state at the START of this typing session (before any keystroke this session)
+    if (!typingStartSnapshot.current) {
+      typingStartSnapshot.current = JSON.parse(JSON.stringify(current));
+    }
+
+    // Each keystroke resets the debounce timer. When user pauses for 600ms, commit snapshot to history.
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      if (typingStartSnapshot.current) {
+        const snap = typingStartSnapshot.current;
+        typingStartSnapshot.current = null;
+        const snapStr = JSON.stringify(snap);
+        const nowStr = JSON.stringify(dataRef.current);
+        if (snapStr !== nowStr) {
+          const newHistory = [...historyRef.current.slice(-29), snap];
+          historyRef.current = newHistory;
+          setHistory(newHistory);
+          futureRef.current = [];
+          setFuture([]);
+        }
+      }
+      debounceTimer.current = null;
+    }, 600);
+
+    // Clear redo stack immediately on any edit
+    futureRef.current = [];
+    setFuture([]);
+
+    // Update data immediately
+    setDataInternal((prev) => {
+      const next = { ...prev, [field]: value };
+      dataRef.current = next;
       return next;
     });
-    setFuture([]);
   }, []);
 
-  const handleUndo = useCallback(() => {
-    if (history.length === 0) return;
-    const previous = history[history.length - 1];
-    setFuture((prev) => [data, ...prev]);
-    setData(previous);
-    setHistory((prev) => prev.slice(0, prev.length - 1));
-  }, [history, data]);
+  // Batch setData (used for bulk operations like "Create editable starter", AI generation, etc.)
+  // Always pushes the pre-change state to history immediately.
+  const setData = useCallback((updater: React.SetStateAction<CoverLetterData>) => {
+    // Flush any in-progress typing session first
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+      debounceTimer.current = null;
+    }
+    const snapBefore = typingStartSnapshot.current || dataRef.current;
+    typingStartSnapshot.current = null;
+    const cloned = JSON.parse(JSON.stringify(snapBefore));
 
+    const newHistory = [...historyRef.current.slice(-29), cloned];
+    historyRef.current = newHistory;
+    setHistory(newHistory);
+    futureRef.current = [];
+    setFuture([]);
+
+    setDataInternal((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      dataRef.current = next;
+      return next;
+    });
+  }, []);
+
+  // Undo — always ONE click. Pops the last history entry.
+  const handleUndo = useCallback(() => {
+    // If user is mid-typing, flush the typing session snapshot first, then undo it
+    if (typingStartSnapshot.current) {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+        debounceTimer.current = null;
+      }
+      const snapshot = typingStartSnapshot.current;
+      typingStartSnapshot.current = null;
+      const currentCopy = JSON.parse(JSON.stringify(dataRef.current));
+      const newFuture = [currentCopy, ...futureRef.current].slice(0, 30);
+      futureRef.current = newFuture;
+      setFuture(newFuture);
+      setDataInternal(snapshot);
+      dataRef.current = snapshot;
+      setSaveLabel("Undo applied");
+      return;
+    }
+
+    const hist = historyRef.current;
+    if (hist.length === 0) return;
+    const previous = hist[hist.length - 1];
+    const currentCopy = JSON.parse(JSON.stringify(dataRef.current));
+    const newHistory = hist.slice(0, -1);
+    const newFuture = [currentCopy, ...futureRef.current].slice(0, 30);
+    historyRef.current = newHistory;
+    futureRef.current = newFuture;
+    setHistory(newHistory);
+    setFuture(newFuture);
+    setDataInternal(previous);
+    dataRef.current = previous;
+    setSaveLabel("Undo applied");
+  }, []);
+
+  // Redo — always ONE click.
   const handleRedo = useCallback(() => {
-    if (future.length === 0) return;
-    const next = future[0];
-    setHistory((prev) => [...prev, data]);
-    setData(next);
-    setFuture((prev) => prev.slice(1));
-  }, [future, data]);
+    // Flush any in-progress typing before redo
+    if (typingStartSnapshot.current) {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+        debounceTimer.current = null;
+      }
+      const snap = typingStartSnapshot.current;
+      typingStartSnapshot.current = null;
+      const nowStr = JSON.stringify(dataRef.current);
+      const snapStr = JSON.stringify(snap);
+      if (snapStr !== nowStr) {
+        const newHistory = [...historyRef.current.slice(-29), snap];
+        historyRef.current = newHistory;
+        setHistory(newHistory);
+      }
+    }
+
+    const fut = futureRef.current;
+    if (fut.length === 0) return;
+    const next = fut[0];
+    const currentCopy = JSON.parse(JSON.stringify(dataRef.current));
+    const newHistory = [...historyRef.current.slice(-29), currentCopy];
+    const newFuture = fut.slice(1);
+    historyRef.current = newHistory;
+    futureRef.current = newFuture;
+    setHistory(newHistory);
+    setFuture(newFuture);
+    setDataInternal(next);
+    dataRef.current = next;
+    setSaveLabel("Redo applied");
+  }, []);
 
   const handleConfirmStartFresh = async () => {
-    setHistory((prev) => [...prev, data]);
+    if (debounceTimer.current) { clearTimeout(debounceTimer.current); debounceTimer.current = null; }
+    const snap = typingStartSnapshot.current || dataRef.current;
+    typingStartSnapshot.current = null;
+    const newHistory = [...historyRef.current.slice(-29), JSON.parse(JSON.stringify(snap))];
+    historyRef.current = newHistory;
+    futureRef.current = [];
+    setHistory(newHistory);
     setFuture([]);
-    setData(emptyLetter);
+    setDataInternal(emptyLetter);
+    dataRef.current = emptyLetter;
     setCustomAccent("#000000");
     setTheme(themes[0].id);
     await idbSet("active-cover-letter-id", "new");
@@ -228,10 +364,17 @@ export function useCoverLetterData() {
           "Could not read text from this file. Please choose a readable PDF, DOCX, or TXT file."
         );
       }
-      setHistory((prev) => [...prev, data]);
+      if (debounceTimer.current) { clearTimeout(debounceTimer.current); debounceTimer.current = null; }
+      const snapBefore = typingStartSnapshot.current || dataRef.current;
+      typingStartSnapshot.current = null;
+      const newHistory = [...historyRef.current.slice(-29), JSON.parse(JSON.stringify(snapBefore))];
+      historyRef.current = newHistory;
+      futureRef.current = [];
+      setHistory(newHistory);
       setFuture([]);
       const updatedData = parseExtractedLetterText(rawText, data);
-      setData(updatedData);
+      setDataInternal(updatedData);
+      dataRef.current = updatedData;
       await idbSet(STORAGE_KEY, { data: updatedData, theme, customAccent });
       await idbSet("active-cover-letter-id", "draft");
       showToast(
@@ -259,9 +402,7 @@ export function useCoverLetterData() {
     saveStatus,
     isImportingLetter,
     history,
-    setHistory,
     future,
-    setFuture,
     update,
     handleUndo,
     handleRedo,
