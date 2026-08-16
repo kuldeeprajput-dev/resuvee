@@ -22,15 +22,13 @@ export async function exportCoverLetterDocx(
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
 
   const docFont =
-    font === "template"
-      ? theme === "signal"
-        ? "Calibri"
-        : "Georgia"
+    font === "sans"
+      ? "Segoe UI"
       : font === "serif"
-        ? "Georgia"
+        ? "Calibri"
         : font === "mono"
           ? "Consolas"
-          : "Calibri";
+          : "Georgia";
 
   const title = data.fullName
     ? `${data.fullName}'s Cover Letter`

@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { AuthProvider, AuthModal } from "@/modules/auth";
 import { NotificationProvider } from "@/shared/components/ui/notification-provider";
 
@@ -8,6 +8,12 @@ const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
+});
+
+const fontModern = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-modern",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://resuvee.com";
@@ -107,7 +113,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`h-full antialiased ${fontSans.variable}`}
+      className={`h-full antialiased ${fontSans.variable} ${fontModern.variable}`}
     >
       <head>
         <script

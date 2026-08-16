@@ -9,6 +9,12 @@
   overflow-wrap: anywhere;
 }
 
+/* Modern Typography for Cover Letter */
+.cl-font-modern {
+  font-family: var(--font-modern), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  letter-spacing: -0.015em;
+}
+
 /* Cover Letter Dedicated Selection Highlight (Theme Green) */
 .cover-letter-preview-panel ::selection,
 .cover-letter-preview-sheet ::selection {

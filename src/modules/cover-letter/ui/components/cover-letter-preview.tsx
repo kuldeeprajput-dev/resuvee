@@ -31,15 +31,13 @@ function CoverLetterPreviewBase({
   isHandTool = false,
 }: CoverLetterPreviewProps) {
   const fontClass =
-    font === "template"
-      ? theme === "signal"
-        ? "font-sans"
-        : "font-serif"
+    font === "sans"
+      ? "cl-font-modern"
       : font === "serif"
-        ? "font-serif"
-        : font === "sans"
-          ? "font-sans"
-          : "font-mono";
+        ? "font-sans"
+        : font === "mono"
+          ? "font-mono"
+          : "font-serif";
 
   const spacingClass =
     pageSpacing === "compact"

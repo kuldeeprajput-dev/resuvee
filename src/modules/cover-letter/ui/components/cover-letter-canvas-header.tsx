@@ -352,10 +352,10 @@ function CoverLetterCanvasHeaderBase({
                       id: "template",
                       name: "Template",
                       desc: "Designed pairing",
-                      cls: theme === "signal" ? "font-sans" : "font-serif",
+                      cls: "font-serif",
                     },
-                    { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "font-sans" },
-                    { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-serif" },
+                    { id: "sans", name: "Modern", desc: "Clean & Direct", cls: "cl-font-modern" },
+                    { id: "serif", name: "Editorial", desc: "Classic & Formal", cls: "font-sans" },
                     { id: "mono", name: "Technical", desc: "Structured", cls: "font-mono" },
                   ].map((f) => {
                     const isSelected = font === f.id;
