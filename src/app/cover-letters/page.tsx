@@ -18,7 +18,7 @@ import {
   LogIn,
   Search,
 } from "lucide-react";
-import { idbSet } from "@/modules/cover-letter/services/cover-letter-idb";
+import { idbSet, idbDel, idbGet } from "@/modules/cover-letter/services/cover-letter-idb";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
@@ -73,13 +73,27 @@ export default function SavedCoverLettersPage() {
   const handleOpenInStudio = async (letter: SavedCoverLetterItem) => {
     try {
       if (letter.data) {
-        await idbSet("cover-letter-studio-data", { data: letter.data });
+        const { __meta, ...cleanData } = letter.data;
+        await idbSet("resuvee_cover_letter", {
+          data: cleanData,
+          theme: __meta?.theme || "linen",
+          customAccent: __meta?.customAccent || null,
+        });
+        await idbSet("active-cover-letter-id", letter.id);
+      } else {
         await idbSet("active-cover-letter-id", letter.id);
       }
-      router.push("/cover-letter");
+      window.location.href = "/cover-letter";
     } catch (err) {
       console.error("Failed to load cover letter into studio:", err);
+      window.location.href = "/cover-letter";
     }
+  };
+
+  const handleCreateNew = async () => {
+    await idbSet("active-cover-letter-id", "new");
+    await idbDel("resuvee_cover_letter");
+    window.location.href = "/cover-letter";
   };
 
   const handleDuplicate = async (letter: SavedCoverLetterItem) => {
@@ -162,13 +176,14 @@ export default function SavedCoverLettersPage() {
           </div>
 
           {user && (
-            <Link
-              href="/cover-letter"
+            <button
+              type="button"
+              onClick={handleCreateNew}
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 text-xs font-bold text-white shadow-md hover:bg-emerald-900 transition cursor-pointer shrink-0"
             >
               <Plus className="size-4" />
               <span>Write New Cover Letter</span>
-            </Link>
+            </button>
           )}
         </div>
 
@@ -251,13 +266,14 @@ export default function SavedCoverLettersPage() {
                 <p className="text-xs text-(--brand-muted) mb-6">
                   Write cover letters tailored to target companies and save them to your account.
                 </p>
-                <Link
-                  href="/cover-letter"
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 text-xs font-bold text-white shadow-sm hover:bg-emerald-900 transition"
+                <button
+                  type="button"
+                  onClick={handleCreateNew}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-emerald-800 px-5 text-xs font-bold text-white shadow-sm hover:bg-emerald-900 transition cursor-pointer"
                 >
                   <Plus className="size-4" />
                   <span>Write Cover Letter</span>
-                </Link>
+                </button>
               </div>
             )}
 

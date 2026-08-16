@@ -251,17 +251,23 @@ export default function SavedDocumentsPage() {
   // Cover Letter Actions
   const handleOpenLetterInStudio = async (letter: SavedCoverLetterItem) => {
     if (letter.data) {
-      await idbSet("cover-letter-studio-data", { data: letter.data });
+      const { __meta, ...cleanData } = letter.data;
+      await idbSet("resuvee_cover_letter", {
+        data: cleanData,
+        theme: __meta?.theme || "linen",
+        customAccent: __meta?.customAccent || null,
+      });
       await idbSet("active-cover-letter-id", letter.id);
       window.location.href = "/cover-letter";
     } else {
-      router.push("/cover-letter");
+      await idbSet("active-cover-letter-id", letter.id);
+      window.location.href = "/cover-letter";
     }
   };
 
   const handleCreateNewLetter = async () => {
     await idbSet("active-cover-letter-id", "new");
-    await idbDel("cover-letter-studio-data");
+    await idbDel("resuvee_cover_letter");
     window.location.href = "/cover-letter";
   };
 

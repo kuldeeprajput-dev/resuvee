@@ -21,6 +21,9 @@ export function useCoverLetterData() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
   const [isImportingLetter, setIsImportingLetter] = useState(false);
+  const [activeCoverLetterId, setActiveCoverLetterId] = useState<string | null>(null);
+  const activeCoverLetterIdRef = useRef<string | null>(null);
+  useEffect(() => { activeCoverLetterIdRef.current = activeCoverLetterId; }, [activeCoverLetterId]);
 
   // history = stack of snapshots BEFORE changes. future = redo stack.
   const [history, setHistory] = useState<CoverLetterData[]>([]);
@@ -45,34 +48,13 @@ export function useCoverLetterData() {
 
   // Load from IndexedDB / cloud on mount
   useEffect(() => {
+    let cancelled = false;
     async function loadInitialData() {
       try {
-        const stored = await idbGet<any>(STORAGE_KEY);
-        if (stored && (stored.data || stored.fullName !== undefined)) {
-          const loadedData = stored.data || stored;
-          const isNonEmpty = Boolean(
-            loadedData.fullName ||
-            loadedData.role ||
-            loadedData.company ||
-            (loadedData.paragraphs && loadedData.paragraphs.some((p: string) => p && p.trim()))
-          );
-          if (isNonEmpty) {
-            setDataInternal(loadedData);
-            dataRef.current = loadedData;
-            if (stored.theme) setTheme(stored.theme);
-            if (stored.customAccent) setCustomAccent(stored.customAccent);
-            setHistory([]);
-            setFuture([]);
-            historyRef.current = [];
-            futureRef.current = [];
-            typingStartSnapshot.current = null;
-            hasLoaded.current = true;
-            return;
-          }
-        }
-
         const activeId = await idbGet<string>("active-cover-letter-id");
+
         if (activeId === "new") {
+          setActiveCoverLetterId(null);
           setDataInternal(emptyLetter);
           dataRef.current = emptyLetter;
           await idbSet(STORAGE_KEY, { data: emptyLetter });
@@ -85,18 +67,54 @@ export function useCoverLetterData() {
           return;
         }
 
-        if (activeId && activeId !== "undefined" && activeId !== "null") {
+        if (activeId && activeId !== "undefined" && activeId !== "null" && activeId !== "draft") {
+          setActiveCoverLetterId(activeId);
+        }
+
+        const stored = await idbGet<any>(STORAGE_KEY);
+        if (stored && (stored.data || stored.fullName !== undefined)) {
+          const loadedData = stored.data || stored;
+          const isNonEmpty = Boolean(
+            loadedData.fullName ||
+            loadedData.role ||
+            loadedData.company ||
+            loadedData.opening ||
+            loadedData.evidence ||
+            loadedData.closing ||
+            (loadedData.paragraphs && loadedData.paragraphs.some((p: string) => p && p.trim()))
+          );
+          if (isNonEmpty) {
+            setDataInternal(loadedData);
+            dataRef.current = loadedData;
+            if (stored.theme) setTheme(stored.theme);
+            else if (loadedData.__meta?.theme) setTheme(loadedData.__meta.theme);
+            if (stored.customAccent) setCustomAccent(stored.customAccent);
+            else if (loadedData.__meta?.customAccent) setCustomAccent(loadedData.__meta.customAccent);
+            setHistory([]);
+            setFuture([]);
+            historyRef.current = [];
+            futureRef.current = [];
+            typingStartSnapshot.current = null;
+            hasLoaded.current = true;
+            return;
+          }
+        }
+
+        // If no local data in STORAGE_KEY but activeId exists in cloud
+        if (activeId && activeId !== "undefined" && activeId !== "null" && activeId !== "draft") {
           if (user) {
             try {
               const authHeaders = await getAuthHeaders();
-              const res = await fetch("/api/cover-letters", { headers: authHeaders });
-              const json = await res.json();
-              if (json.success && Array.isArray(json.data)) {
-                const target = json.data.find((item: any) => item.id === activeId);
-                if (target && target.data) {
-                  setDataInternal(target.data);
-                  dataRef.current = target.data;
-                  await idbSet(STORAGE_KEY, { data: target.data });
+              const res = await fetch(`/api/cover-letters/${activeId}`, { headers: authHeaders });
+              if (res.ok) {
+                const json = await res.json();
+                if (json.success && json.data?.data && !cancelled) {
+                  const { __meta, ...letterData } = json.data.data;
+                  setDataInternal(letterData);
+                  dataRef.current = letterData;
+                  if (__meta?.theme) setTheme(__meta.theme);
+                  if (__meta?.customAccent) setCustomAccent(__meta.customAccent);
+                  await idbSet(STORAGE_KEY, { data: letterData, theme: __meta?.theme, customAccent: __meta?.customAccent });
                   setHistory([]);
                   setFuture([]);
                   historyRef.current = [];
@@ -113,12 +131,14 @@ export function useCoverLetterData() {
         }
       } catch (err) {
         console.error("IDB load error:", err);
-        await idbDel(STORAGE_KEY);
       } finally {
         hasLoaded.current = true;
       }
     }
     loadInitialData();
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
 
   // Auto-save to IndexedDB on change
@@ -290,11 +310,22 @@ export function useCoverLetterData() {
     }
     setIsSaving(true);
     try {
-      const storedId = await idbGet<string>("active-cover-letter-id");
+      const storedId = activeCoverLetterIdRef.current || (await idbGet<string>("active-cover-letter-id"));
       const activeId =
-        storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
+        storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new" && storedId !== "draft"
           ? storedId
           : undefined;
+
+      const dataToSave = {
+        ...data,
+        __meta: { theme, customAccent },
+      };
+
+      const letterTitle = data.fullName
+        ? `${data.fullName}'s Cover Letter`
+        : data.company
+          ? `${data.company} — Cover Letter`
+          : "Cover Letter";
 
       const authHeaders = await getAuthHeaders();
       const res = await fetch("/api/cover-letters", {
@@ -302,35 +333,29 @@ export function useCoverLetterData() {
         headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify({
           id: activeId,
-          title: data.fullName
-            ? `${data.fullName}'s Cover Letter`
-            : data.company
-              ? `${data.company} — Cover Letter`
-              : "Cover Letter",
-          company: data.company,
-          role: data.role,
-          data,
+          title: letterTitle,
+          company: data.company || "",
+          role: data.role || "",
+          data: dataToSave,
         }),
       });
 
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.error || "Could not save cover letter.");
 
-      const letterId = json.data?.id || `local-${Date.now()}`;
+      const letterId = json.data?.id || activeId || `local-${Date.now()}`;
+      setActiveCoverLetterId(letterId);
       await idbSet("active-cover-letter-id", letterId);
+
       try {
         const localList: any[] = (await idbGet<any[]>("local-saved-cover-letters")) || [];
         const newItem = {
           id: letterId,
-          title: data.fullName
-            ? `${data.fullName}'s Cover Letter`
-            : data.company
-              ? `${data.company} — Cover Letter`
-              : "Cover Letter",
+          title: letterTitle,
           company: data.company || "",
           role: data.role || "",
-          data,
-          created_at: new Date().toISOString(),
+          data: dataToSave,
+          created_at: json.data?.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };
         const updatedList = [newItem, ...localList.filter((item) => item.id !== letterId)];
@@ -341,15 +366,18 @@ export function useCoverLetterData() {
 
       setSaveStatus("saved");
       showToast(
-        "Cover Letter Saved",
-        "Your cover letter was saved successfully to your account.",
+        activeId ? "Cover Letter Updated" : "Cover Letter Saved",
+        activeId
+          ? "Your changes were updated in your account."
+          : "Your cover letter was saved successfully to your account.",
         "success"
       );
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      setTimeout(() => setSaveStatus("idle"), 2500);
     } catch (err: any) {
       console.error("Save cover letter error:", err);
       showToast("Save Error", err.message || "Failed to save cover letter.", "error");
       setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
     } finally {
       setIsSaving(false);
     }
