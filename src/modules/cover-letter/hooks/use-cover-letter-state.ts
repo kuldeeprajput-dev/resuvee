@@ -46,7 +46,26 @@ export function useCoverLetterState() {
 
   const handleExportPdf = () => {
     selectionHook.clearSelection();
+    const originalTitle = document.title;
+    const title = dataHook.data.fullName
+      ? `${dataHook.data.fullName}'s Cover Letter`
+      : dataHook.data.company
+        ? `${dataHook.data.company} — Cover Letter`
+        : "Cover Letter";
+    const fileName = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    document.title = fileName || "cover-letter";
     window.print();
+
+    const restoreTitle = () => {
+      document.title = originalTitle;
+      window.removeEventListener("afterprint", restoreTitle);
+    };
+    window.addEventListener("afterprint", restoreTitle);
+    setTimeout(restoreTitle, 2000);
   };
 
   // Wrap handleConfirmStartFresh to also close the modal

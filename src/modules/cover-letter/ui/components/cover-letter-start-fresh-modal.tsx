@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { RotateCcw } from "lucide-react";
+import { FilePlus } from "lucide-react";
 
 interface CoverLetterStartFreshModalProps {
   onCancel: () => void;
@@ -17,7 +17,7 @@ export function CoverLetterStartFreshModal({
       <div className="w-full max-w-md rounded-2xl border border-black/15 bg-white p-6 shadow-2xl animate-in zoom-in-95">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-            <RotateCcw className="size-5 text-emerald-700" />
+            <FilePlus className="size-5 text-emerald-700" />
           </div>
           <div>
             <h3 className="text-base font-bold text-(--brand-ink)">Start fresh?</h3>

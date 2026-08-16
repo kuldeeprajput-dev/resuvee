@@ -9,7 +9,7 @@ import {
   Eye,
   FileText,
   Sparkles,
-  RotateCcw,
+  FilePlus,
   Loader2,
   Check,
   Upload,
@@ -130,7 +130,7 @@ function CoverLetterStudioHeaderBase({
           className="group hidden h-9 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] md:flex items-center gap-1.5 cursor-pointer"
           title="Start fresh with a clean cover letter"
         >
-          <RotateCcw className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
+          <FilePlus className="size-3.5 text-emerald-600 transition-colors group-hover:text-[#059669]" />
           <span>Start fresh</span>
         </button>
 

@@ -91,13 +91,7 @@ function CoverLetterPreviewBase({
             getFieldClass("headline")
           )}
         >
-          {data.headline
-            ? data.headline
-                .replace(/SENIORPRODUCTSPECIALIST/i, "SENIOR PRODUCT SPECIALIST")
-                .replace(/PRODUCTMANAGER/i, "PRODUCT MANAGER")
-                .replace(/SOFTWAREENGINEER/i, "SOFTWARE ENGINEER")
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-            : ""}
+          {data.headline || ""}
         </p>
       </header>
 
