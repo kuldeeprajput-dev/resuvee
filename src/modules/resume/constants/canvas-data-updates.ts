@@ -9,6 +9,17 @@ export function updateDataForFieldChange(
   const { section, id, field, highlightIndex } = selectedElement;
 
   if (section === "basics") {
+    if (field === "customLink" && id && data.basics.customLinks) {
+      return {
+        ...data,
+        basics: {
+          ...data.basics,
+          customLinks: data.basics.customLinks.map((l) =>
+            l.id === id ? { ...l, label: newText } : l
+          ),
+        },
+      };
+    }
     const fieldKey = (field || "fullName") as keyof ResumeData["basics"];
     return {
       ...data,

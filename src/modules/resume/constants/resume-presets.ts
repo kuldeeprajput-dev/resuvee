@@ -22,7 +22,13 @@ export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData)
   const basics = Object.fromEntries(
     Object.entries(starter.basics).map(([key, sampleValue]) => {
       const currentValue = current.basics[key as keyof ResumeData["basics"]];
-      return [key, currentValue?.trim() ? currentValue : sampleValue];
+      const hasVal =
+        typeof currentValue === "string"
+          ? currentValue.trim().length > 0
+          : Array.isArray(currentValue)
+            ? currentValue.length > 0
+            : Boolean(currentValue);
+      return [key, hasVal ? currentValue : sampleValue];
     })
   ) as unknown as ResumeData["basics"];
 

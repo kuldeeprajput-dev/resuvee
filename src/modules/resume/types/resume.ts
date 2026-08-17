@@ -34,6 +34,13 @@ export type ResumeRendererId =
   | "sales"
   | "analyst";
 
+export interface ResumeCustomLink {
+  id: string;
+  icon?: string;
+  label?: string;
+  url?: string;
+}
+
 export interface ResumeBasics {
   fullName: string;
   headline: string;
@@ -42,6 +49,12 @@ export interface ResumeBasics {
   phone: string;
   location: string;
   website: string;
+  linkedin?: string;
+  github?: string;
+  textOnlyLinks?: Record<string, boolean>;
+  customLabels?: Record<string, string>;
+  contactOrder?: string[];
+  customLinks?: ResumeCustomLink[];
   summary: string;
 }
 

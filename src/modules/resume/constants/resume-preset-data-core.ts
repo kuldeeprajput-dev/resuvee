@@ -7,6 +7,8 @@ interface ProfessionalSeed {
   phone: string;
   location: string;
   website: string;
+  linkedin?: string;
+  github?: string;
   photo?: string;
   summary: string;
   role: string;
@@ -28,6 +30,7 @@ interface ProfessionalSeed {
 }
 
 export function professionalPreset(seed: ProfessionalSeed): ResumeData {
+  const slug = seed.name.toLowerCase().replace(/[^a-z0-9]/g, "");
   return {
     basics: {
       fullName: seed.name,
@@ -36,6 +39,8 @@ export function professionalPreset(seed: ProfessionalSeed): ResumeData {
       email: seed.email,
       phone: seed.phone,
       location: seed.location,
+      linkedin: seed.linkedin ?? `linkedin.com/in/${slug}`,
+      github: seed.github ?? `github.com/${slug}`,
       website: seed.website,
       summary: seed.summary,
     },

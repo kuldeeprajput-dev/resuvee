@@ -186,7 +186,9 @@ export const analystData: ResumeData = {
     email: "kabir.malhotra@example.com",
     phone: "+91 98765 41028",
     location: "New Delhi, India",
-    website: "linkedin.com/in/kabirmalhotra",
+    linkedin: "linkedin.com/in/kabirmalhotra",
+    github: "github.com/kabirmalhotra",
+    website: "kabirmalhotra.dev",
     summary:
       "Data analyst with practical experience using SQL, Python, Excel, and Power BI to clean complex datasets, build decision-ready dashboards, and explain performance trends to business teams.",
   },
@@ -297,7 +299,9 @@ export const launchpadData: ResumeData = {
     email: "arjun.rao@example.com",
     phone: "+91 98765 43120",
     location: "Bengaluru, India",
-    website: "github.com/arjunrao",
+    linkedin: "linkedin.com/in/arjunrao",
+    github: "github.com/arjunrao",
+    website: "arjunrao.dev",
     summary:
       "Computer Science graduate with practical experience building accessible web applications using React, TypeScript, and REST APIs. Strong foundations in data structures, testing, and collaborative development demonstrated through academic and independent projects.",
   },
@@ -360,6 +364,8 @@ export const firstStepData: ResumeData = {
     email: "finn.carter@example.com",
     phone: "+1 617 555 0140",
     location: "Boston, MA",
+    linkedin: "linkedin.com/in/finncarter",
+    github: "github.com/finncarter",
     website: "finncarter.work",
     summary:
       "Business analytics student combining quantitative coursework, campus leadership, and hands-on reporting projects. Interested in operations roles where careful analysis can improve everyday decisions.",

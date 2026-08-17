@@ -19,15 +19,61 @@ export function findSelectedCanvasElement(
   } else if (clickedText === data.basics.summary) {
     found = { section: "basics", field: "summary", title: "Summary" };
     inlineText = data.basics.summary;
-  } else if (clickedText === data.basics.email) {
+  } else if (
+    clickedText === data.basics.email ||
+    clickedText === "Email" ||
+    (data.basics.customLabels?.email && clickedText === data.basics.customLabels.email)
+  ) {
     found = { section: "basics", field: "email", title: "Email" };
     inlineText = data.basics.email;
-  } else if (clickedText === data.basics.phone) {
+  } else if (
+    clickedText === data.basics.phone ||
+    clickedText === "Phone" ||
+    (data.basics.customLabels?.phone && clickedText === data.basics.customLabels.phone)
+  ) {
     found = { section: "basics", field: "phone", title: "Phone" };
     inlineText = data.basics.phone;
-  } else if (clickedText === data.basics.location) {
+  } else if (
+    clickedText === data.basics.location ||
+    clickedText === "Location" ||
+    (data.basics.customLabels?.location && clickedText === data.basics.customLabels.location)
+  ) {
     found = { section: "basics", field: "location", title: "Location" };
     inlineText = data.basics.location;
+  } else if (
+    clickedText === data.basics.website ||
+    clickedText === "Portfolio" ||
+    clickedText === "Website" ||
+    (data.basics.customLabels?.website && clickedText === data.basics.customLabels.website)
+  ) {
+    found = { section: "basics", field: "website", title: "Website" };
+    inlineText = data.basics.website;
+  } else if (
+    clickedText === data.basics.linkedin ||
+    clickedText === "LinkedIn" ||
+    (data.basics.customLabels?.linkedin && clickedText === data.basics.customLabels.linkedin)
+  ) {
+    found = { section: "basics", field: "linkedin", title: "LinkedIn" };
+    inlineText = data.basics.linkedin || "";
+  } else if (
+    clickedText === data.basics.github ||
+    clickedText === "GitHub" ||
+    (data.basics.customLabels?.github && clickedText === data.basics.customLabels.github)
+  ) {
+    found = { section: "basics", field: "github", title: "GitHub" };
+    inlineText = data.basics.github || "";
+  } else if (data.basics.customLinks) {
+    for (const link of data.basics.customLinks) {
+      if (link.label && clickedText === link.label) {
+        found = { section: "basics", id: link.id, field: "customLink", title: "Custom Link" };
+        inlineText = link.label;
+        break;
+      } else if (link.url && clickedText === link.url) {
+        found = { section: "basics", id: link.id, field: "customLink", title: "Custom Link" };
+        inlineText = link.url;
+        break;
+      }
+    }
   }
 
   // Experience

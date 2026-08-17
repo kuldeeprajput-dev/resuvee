@@ -9,6 +9,8 @@ export const defaultResumeData: ResumeData = {
     phone: "+1 646 555 0184",
     location: "New York, NY",
     website: "mirashah.work",
+    linkedin: "linkedin.com/in/mirashah",
+    github: "github.com/mirashah",
     summary:
       "Product and strategy leader with 8+ years of experience turning complex customer needs into focused digital products. I partner with design, engineering, and commercial teams to launch useful experiences, build strong operating systems, and deliver measurable growth.",
   },
@@ -119,7 +121,9 @@ export const fresherResumeData: ResumeData = {
     email: "aarav.mehta@example.com",
     phone: "+91 98765 43210",
     location: "Pune, India",
-    website: "github.com/aarav-builds",
+    linkedin: "linkedin.com/in/aaravmehta",
+    github: "github.com/aarav-builds",
+    website: "aaravmehta.dev",
     summary:
       "Computer Science graduate with hands-on experience building accessible web applications using React, TypeScript, and REST APIs. Strong foundation in data structures, collaborative development, and user-centered problem solving, demonstrated through academic and independent projects.",
   },
@@ -187,6 +191,8 @@ export function createBlankResumeData(): ResumeData {
       phone: "",
       location: "",
       website: "",
+      linkedin: "",
+      github: "",
       summary: "",
     },
     experience: [],

@@ -168,16 +168,20 @@ export function parseExtractedResumeText(
   );
   if (phoneMatch) newData.basics.phone = phoneMatch[0];
 
-  // LinkedIn takes priority over generic website
-  const linkedinMatch = fullText.match(/(?:linkedin\.com\/in\/[a-zA-Z0-9_-]+)/i);
-  if (linkedinMatch) newData.basics.website = `https://${linkedinMatch[0]}`;
-  else {
-    const githubMatch = fullText.match(/(?:github\.com\/[a-zA-Z0-9_-]+)/i);
-    if (githubMatch) newData.basics.website = `https://${githubMatch[0]}`;
-    else {
-      const webMatch = fullText.match(/https?:\/\/[^\s,]+/i);
-      if (webMatch) newData.basics.website = webMatch[0];
-    }
+  // Social links & website extraction
+  const linkedinMatch = fullText.match(/(?:(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+)/i);
+  if (linkedinMatch) {
+    newData.basics.linkedin = linkedinMatch[0].replace(/^https?:\/\/(?:www\.)?/i, "");
+  }
+
+  const githubMatch = fullText.match(/(?:(?:https?:\/\/)?(?:www\.)?github\.com\/[a-zA-Z0-9_-]+)/i);
+  if (githubMatch) {
+    newData.basics.github = githubMatch[0].replace(/^https?:\/\/(?:www\.)?/i, "");
+  }
+
+  const webMatch = fullText.match(/https?:\/\/[^\s,]+/i);
+  if (webMatch && !webMatch[0].includes("linkedin.com") && !webMatch[0].includes("github.com")) {
+    newData.basics.website = webMatch[0];
   }
 
   const locationMatch = fullText.match(LOCATION_REGEX);
