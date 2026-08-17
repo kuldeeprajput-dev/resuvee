@@ -2,6 +2,11 @@ import Image from "next/image";
 import { Globe2, Mail, MapPin, Phone } from "lucide-react";
 import type { ResumeData, ResumeTemplate } from "../../types/resume";
 import { cn } from "@/shared/lib/utils";
+import {
+  LinkedinIcon,
+  GithubIcon,
+  getCustomLinkIcon,
+} from "../../constants/custom-link-icons";
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -125,12 +130,76 @@ export function ContactList({
   horizontal?: boolean;
   hideIcons?: boolean;
 }) {
-  const items = [
-    { id: "email", icon: Mail, value: data.basics.email },
-    { id: "phone", icon: Phone, value: data.basics.phone },
-    { id: "location", icon: MapPin, value: data.basics.location },
-    { id: "website", icon: Globe2, value: data.basics.website },
-  ].filter((item) => item.value?.trim());
+  const getDisplayValue = (key: string, fallbackValue?: string, defaultShort?: string) => {
+    const custom = data.basics.customLabels?.[key];
+    if (custom && custom.trim().length > 0) {
+      return custom.trim();
+    }
+    if (data.basics.textOnlyLinks?.[key]) {
+      return defaultShort || fallbackValue || "";
+    }
+    return fallbackValue || "";
+  };
+
+  const allItems: {
+    id: string;
+    icon: React.ComponentType<{ className?: string }>;
+    value: string;
+    rawValue?: string;
+  }[] = [
+    {
+      id: "email",
+      icon: Mail,
+      value: getDisplayValue("email", data.basics.email, "Email"),
+      rawValue: data.basics.email,
+    },
+    {
+      id: "phone",
+      icon: Phone,
+      value: getDisplayValue("phone", data.basics.phone, "Phone"),
+      rawValue: data.basics.phone,
+    },
+    {
+      id: "location",
+      icon: MapPin,
+      value: getDisplayValue("location", data.basics.location, "Location"),
+      rawValue: data.basics.location,
+    },
+    {
+      id: "linkedin",
+      icon: LinkedinIcon,
+      value: getDisplayValue("linkedin", data.basics.linkedin, "LinkedIn"),
+      rawValue: data.basics.linkedin,
+    },
+    {
+      id: "github",
+      icon: GithubIcon,
+      value: getDisplayValue("github", data.basics.github, "GitHub"),
+      rawValue: data.basics.github,
+    },
+    {
+      id: "website",
+      icon: Globe2,
+      value: getDisplayValue("website", data.basics.website, "Portfolio"),
+      rawValue: data.basics.website,
+    },
+    ...(data.basics.customLinks || []).map((link) => ({
+      id: link.id,
+      icon: getCustomLinkIcon(link.icon),
+      value: link.label?.trim() || link.url?.replace(/^https?:\/\/(www\.)?/, "") || "",
+      rawValue: link.label || link.url,
+    })),
+  ].filter((item) => item.rawValue && item.rawValue.trim().length > 0);
+
+  let items = allItems;
+  if (data.basics.contactOrder && data.basics.contactOrder.length > 0) {
+    const orderMap = new Map(data.basics.contactOrder.map((id, index) => [id, index]));
+    items = [...allItems].sort((a, b) => {
+      const indexA = orderMap.has(a.id) ? orderMap.get(a.id)! : 999;
+      const indexB = orderMap.has(b.id) ? orderMap.get(b.id)! : 999;
+      return indexA - indexB;
+    });
+  }
 
   return (
     <div

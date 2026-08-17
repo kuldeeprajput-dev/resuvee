@@ -73,42 +73,125 @@ export async function exportResumeDocx(
   }
 
   // ── 3. Contact Details Bar ──────────────────────────────────────────────
-  const contactTextParts: string[] = [];
-  if (data.basics.email) contactTextParts.push(data.basics.email);
-  if (data.basics.phone) contactTextParts.push(data.basics.phone);
-  if (data.basics.location) contactTextParts.push(data.basics.location);
+  const getDisplayValue = (key: string, fallbackValue?: string, defaultShort?: string) => {
+    const custom = data.basics.customLabels?.[key];
+    if (custom && custom.trim().length > 0) {
+      return custom.trim();
+    }
+    if (data.basics.textOnlyLinks?.[key]) {
+      return defaultShort || fallbackValue || "";
+    }
+    return fallbackValue || "";
+  };
+
+  interface DocxContactItem {
+    id: string;
+    isLink: boolean;
+    value: string;
+    label: string;
+  }
+
+  const allDocxContactItems: DocxContactItem[] = [
+    {
+      id: "email",
+      isLink: false,
+      value: data.basics.email,
+      label: getDisplayValue("email", data.basics.email, "Email"),
+    },
+    {
+      id: "phone",
+      isLink: false,
+      value: data.basics.phone,
+      label: getDisplayValue("phone", data.basics.phone, "Phone"),
+    },
+    {
+      id: "location",
+      isLink: false,
+      value: data.basics.location,
+      label: getDisplayValue("location", data.basics.location, "Location"),
+    },
+    {
+      id: "linkedin",
+      isLink: true,
+      value: data.basics.linkedin || "",
+      label: getDisplayValue(
+        "linkedin",
+        data.basics.linkedin?.replace(/^https?:\/\/(www\.)?/, ""),
+        "LinkedIn"
+      ),
+    },
+    {
+      id: "github",
+      isLink: true,
+      value: data.basics.github || "",
+      label: getDisplayValue(
+        "github",
+        data.basics.github?.replace(/^https?:\/\/(www\.)?/, ""),
+        "GitHub"
+      ),
+    },
+    {
+      id: "website",
+      isLink: true,
+      value: data.basics.website || "",
+      label: getDisplayValue(
+        "website",
+        data.basics.website?.replace(/^https?:\/\//, ""),
+        "Portfolio"
+      ),
+    },
+    ...(data.basics.customLinks || []).map((l) => ({
+      id: l.id,
+      isLink: Boolean(l.url && l.url.trim()),
+      value: l.url || l.label || "",
+      label: l.label?.trim() || l.url?.replace(/^https?:\/\/(www\.)?/, "") || "",
+    })),
+  ].filter((item) => item.value && item.value.trim().length > 0);
+
+  let orderedDocxContactItems = allDocxContactItems;
+  if (data.basics.contactOrder && data.basics.contactOrder.length > 0) {
+    const orderMap = new Map(data.basics.contactOrder.map((id, index) => [id, index]));
+    orderedDocxContactItems = [...allDocxContactItems].sort((a, b) => {
+      const indexA = orderMap.has(a.id) ? orderMap.get(a.id)! : 999;
+      const indexB = orderMap.has(b.id) ? orderMap.get(b.id)! : 999;
+      return indexA - indexB;
+    });
+  }
 
   const contactChildren: (DocxTypes.TextRun | DocxTypes.ExternalHyperlink)[] = [];
 
-  if (contactTextParts.length > 0) {
-    contactChildren.push(
-      new TextRun({
-        text: contactTextParts.join("   ·   "),
-        size: 18,
-        color: "666666",
-        font: docFont,
-      })
-    );
-  }
-
-  if (data.basics.website) {
-    contactChildren.push(
-      new TextRun({ text: "   ·   ", size: 18, color: "666666", font: docFont })
-    );
-    contactChildren.push(
-      new ExternalHyperlink({
-        link: data.basics.website,
-        children: [
-          new TextRun({
-            text: data.basics.website.replace(/^https?:\/\//, ""),
-            size: 18,
-            color: "0066CC",
-            font: docFont,
-            underline: { type: "single" },
-          }),
-        ],
-      })
-    );
+  for (let i = 0; i < orderedDocxContactItems.length; i++) {
+    const item = orderedDocxContactItems[i];
+    if (i > 0) {
+      contactChildren.push(
+        new TextRun({ text: "   ·   ", size: 18, color: "666666", font: docFont })
+      );
+    }
+    if (item.isLink) {
+      contactChildren.push(
+        new ExternalHyperlink({
+          link: item.value.startsWith("http") ? item.value : `https://${item.value}`,
+          children: [
+            new TextRun({
+              text: item.label || item.value,
+              size: 18,
+              color: "0066CC",
+              font: docFont,
+              underline: { type: "single" },
+            }),
+          ],
+        })
+      );
+    } else {
+      contactChildren.push(
+        new TextRun({
+          text: item.label || item.value,
+          size: 18,
+          color: "666666",
+          font: docFont,
+        })
+      );
+    }
   }
 
   if (contactChildren.length > 0) {
