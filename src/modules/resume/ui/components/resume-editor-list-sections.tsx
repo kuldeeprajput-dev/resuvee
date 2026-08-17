@@ -51,6 +51,15 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
     });
   };
 
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= data.experience.length) return;
+    const nextList = [...data.experience];
+    const [moved] = nextList.splice(index, 1);
+    nextList.splice(targetIndex, 0, moved);
+    onChange({ ...data, experience: nextList });
+  };
+
   return (
     <EditorSection
       eyebrow={stepLabel}
@@ -58,12 +67,14 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
       description="List your most relevant work first. Focus each highlight on an action, the context, and a result."
     >
       <div className="space-y-4">
-        {data.experience.map((item) => (
+        {data.experience.map((item, idx) => (
           <ItemCard
             key={item.id}
             title={item.role || "Untitled role"}
             subtitle={item.company || "Add company"}
             onRemove={() => removeItem(item.id)}
+            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
+            onMoveDown={idx < data.experience.length - 1 ? () => moveItem(idx, 1) : undefined}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
@@ -145,6 +156,15 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
     });
   };
 
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= data.education.length) return;
+    const nextList = [...data.education];
+    const [moved] = nextList.splice(index, 1);
+    nextList.splice(targetIndex, 0, moved);
+    onChange({ ...data, education: nextList });
+  };
+
   return (
     <EditorSection
       eyebrow={stepLabel}
@@ -152,7 +172,7 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
       description="Include degrees, certifications, bootcamps, or relevant training. You can keep this concise once you have work experience."
     >
       <div className="space-y-4">
-        {data.education.map((item) => (
+        {data.education.map((item, idx) => (
           <ItemCard
             key={item.id}
             title={item.degree || "Untitled education"}
@@ -163,6 +183,8 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
                 education: data.education.filter((education) => education.id !== item.id),
               })
             }
+            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
+            onMoveDown={idx < data.education.length - 1 ? () => moveItem(idx, 1) : undefined}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
@@ -231,6 +253,15 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
     });
   };
 
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= data.projects.length) return;
+    const nextList = [...data.projects];
+    const [moved] = nextList.splice(index, 1);
+    nextList.splice(targetIndex, 0, moved);
+    onChange({ ...data, projects: nextList });
+  };
+
   return (
     <EditorSection
       eyebrow={stepLabel}
@@ -238,7 +269,7 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
       description="Projects are especially useful for showing hands-on ability, independent work, and relevant interests."
     >
       <div className="space-y-4">
-        {data.projects.map((item) => (
+        {data.projects.map((item, idx) => (
           <ItemCard
             key={item.id}
             title={item.name || "Untitled project"}
@@ -249,6 +280,8 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
                 projects: data.projects.filter((project) => project.id !== item.id),
               })
             }
+            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
+            onMoveDown={idx < data.projects.length - 1 ? () => moveItem(idx, 1) : undefined}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
@@ -314,6 +347,15 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
     });
   };
 
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= data.skillGroups.length) return;
+    const nextList = [...data.skillGroups];
+    const [moved] = nextList.splice(index, 1);
+    nextList.splice(targetIndex, 0, moved);
+    onChange({ ...data, skillGroups: nextList });
+  };
+
   return (
     <EditorSection
       eyebrow={stepLabel}
@@ -321,7 +363,7 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
       description="Group related skills so they are easy to scan. Prioritize the tools and abilities mentioned in your target job descriptions."
     >
       <div className="space-y-4">
-        {data.skillGroups.map((item) => (
+        {data.skillGroups.map((item, idx) => (
           <ItemCard
             key={item.id}
             title={item.name || "Untitled skill group"}
@@ -332,6 +374,8 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
                 skillGroups: data.skillGroups.filter((group) => group.id !== item.id),
               })
             }
+            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
+            onMoveDown={idx < data.skillGroups.length - 1 ? () => moveItem(idx, 1) : undefined}
           >
             <Field
               label="Group name"
@@ -387,6 +431,15 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
     });
   };
 
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= certifications.length) return;
+    const nextList = [...certifications];
+    const [moved] = nextList.splice(index, 1);
+    nextList.splice(targetIndex, 0, moved);
+    onChange({ ...data, certifications: nextList });
+  };
+
   return (
     <EditorSection
       eyebrow={stepLabel}
@@ -394,7 +447,7 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
       description="Include relevant credentials, competitive achievements, and recognition that strengthen your target-role evidence."
     >
       <div className="space-y-4">
-        {certifications.map((item) => (
+        {certifications.map((item, idx) => (
           <ItemCard
             key={item.id}
             title={item.title || "Untitled credential"}
@@ -407,6 +460,8 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
                 ),
               })
             }
+            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
+            onMoveDown={idx < certifications.length - 1 ? () => moveItem(idx, 1) : undefined}
           >
             <div className="grid grid-cols-1 gap-4 min-[500px]:grid-cols-2">
               <Field
