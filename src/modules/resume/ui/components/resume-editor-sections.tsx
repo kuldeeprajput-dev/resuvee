@@ -1,10 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { Columns3, ImagePlus, LayoutPanelTop, Sparkles, UserRound, X } from "lucide-react";
+import {
+  Columns3,
+  ImagePlus,
+  LayoutPanelTop,
+  Sparkles,
+  UserRound,
+  X,
+  Plus,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { useRef, useState } from "react";
+import { DisplayLabelControl } from "./display-label-control";
+import { ContactOrderManager } from "./contact-order-manager";
+import { CustomLinkItemCard } from "./custom-link-item-card";
 import type {
   ResumeCertification,
+  ResumeCustomLink,
   ResumeData,
   ResumeEducation,
   ResumeExperience,
@@ -145,11 +160,24 @@ export function PersonalDetailsEditor({
   template,
   stepLabel,
 }: ResumeEditorContentProps) {
-  const update = (field: keyof ResumeData["basics"], value: string) => {
+  const update = <K extends keyof ResumeData["basics"]>(
+    field: K,
+    value: ResumeData["basics"][K]
+  ) => {
     onChange({
       ...data,
       basics: { ...data.basics, [field]: value },
     });
+  };
+
+  const setCustomLabel = (key: string, label: string | undefined) => {
+    const currentMap = { ...(data.basics.customLabels || {}) };
+    if (label && label.trim().length > 0) {
+      currentMap[key] = label.trim();
+    } else {
+      delete currentMap[key];
+    }
+    update("customLabels", currentMap);
   };
 
   return (
@@ -238,6 +266,15 @@ export function PersonalDetailsEditor({
           value={data.basics.email}
           onChange={(value) => update("email", value)}
           placeholder="you@example.com"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.email}
+              defaultShortLabel="Email"
+              customLabel={data.basics.customLabels?.email}
+              align="left"
+              onSetLabel={(text) => setCustomLabel("email", text)}
+            />
+          }
         />
         <Field
           label="Phone"
@@ -245,19 +282,149 @@ export function PersonalDetailsEditor({
           value={data.basics.phone}
           onChange={(value) => update("phone", value)}
           placeholder="+1 555 000 0000"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.phone}
+              defaultShortLabel="Phone"
+              customLabel={data.basics.customLabels?.phone}
+              align="right"
+              onSetLabel={(text) => setCustomLabel("phone", text)}
+            />
+          }
         />
         <Field
           label="Location"
           value={data.basics.location}
           onChange={(value) => update("location", value)}
           placeholder="City, Country"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.location}
+              defaultShortLabel="Location"
+              customLabel={data.basics.customLabels?.location}
+              align="left"
+              onSetLabel={(text) => setCustomLabel("location", text)}
+            />
+          }
         />
         <Field
-          label="Website or portfolio"
+          label="LinkedIn"
+          value={data.basics.linkedin || ""}
+          onChange={(value) => update("linkedin", value)}
+          placeholder="linkedin.com/in/username"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.linkedin}
+              defaultShortLabel="LinkedIn"
+              customLabel={data.basics.customLabels?.linkedin}
+              align="right"
+              onSetLabel={(text) => setCustomLabel("linkedin", text)}
+            />
+          }
+        />
+        <Field
+          label="GitHub"
+          value={data.basics.github || ""}
+          onChange={(value) => update("github", value)}
+          placeholder="github.com/username"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.github}
+              defaultShortLabel="GitHub"
+              customLabel={data.basics.customLabels?.github}
+              align="left"
+              onSetLabel={(text) => setCustomLabel("github", text)}
+            />
+          }
+        />
+        <Field
+          label="Portfolio"
           value={data.basics.website}
           onChange={(value) => update("website", value)}
           placeholder="yourportfolio.com"
+          action={
+            <DisplayLabelControl
+              currentValue={data.basics.website}
+              defaultShortLabel="Portfolio"
+              customLabel={data.basics.customLabels?.website}
+              align="right"
+              onSetLabel={(text) => setCustomLabel("website", text)}
+            />
+          }
         />
+      </div>
+
+      {/* Interactive Contact & Links Order Manager */}
+      <ContactOrderManager
+        data={data}
+        onUpdateOrder={(newOrder) => update("contactOrder", newOrder)}
+      />
+
+      {/* Custom Links & Additional Contact Details */}
+      <div className="pt-5 border-t border-black/10 space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-xs font-bold text-(--brand-ink)">Custom Links & Additional Details</h4>
+            <p className="text-[11px] text-(--brand-muted)">
+              Add portfolio, social profiles, or custom details with selectable icons and custom display text.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {(data.basics.customLinks || []).map((link, idx) => (
+            <CustomLinkItemCard
+              key={link.id || `custom-link-${idx}`}
+              item={link}
+              onMoveUp={
+                idx > 0
+                  ? () => {
+                      const nextLinks = [...(data.basics.customLinks || [])];
+                      const [moved] = nextLinks.splice(idx, 1);
+                      nextLinks.splice(idx - 1, 0, moved);
+                      update("customLinks", nextLinks);
+                    }
+                  : undefined
+              }
+              onMoveDown={
+                idx < (data.basics.customLinks || []).length - 1
+                  ? () => {
+                      const nextLinks = [...(data.basics.customLinks || [])];
+                      const [moved] = nextLinks.splice(idx, 1);
+                      nextLinks.splice(idx + 1, 0, moved);
+                      update("customLinks", nextLinks);
+                    }
+                  : undefined
+              }
+              onUpdate={(updated) => {
+                const nextLinks = [...(data.basics.customLinks || [])];
+                nextLinks[idx] = updated;
+                update("customLinks", nextLinks);
+              }}
+              onRemove={() => {
+                const nextLinks = (data.basics.customLinks || []).filter((_, i) => i !== idx);
+                update("customLinks", nextLinks);
+              }}
+            />
+          ))}
+
+          <button
+            type="button"
+            onClick={() => {
+              const newLink: ResumeCustomLink = {
+                id: `custom-link-${Date.now()}`,
+                icon: "globe",
+                label: "",
+                url: "",
+              };
+              update("customLinks", [...(data.basics.customLinks || []), newLink]);
+            }}
+            className="w-full py-2.5 px-3 rounded-xl border border-dashed border-black/20 bg-black/2 hover:bg-black/5 hover:border-emerald-600/40 text-xs font-semibold text-(--brand-ink) flex items-center justify-center gap-1.5 transition cursor-pointer"
+          >
+            <Plus className="size-4 text-emerald-700" />
+            <span>Add Custom Link or Detail</span>
+          </button>
+        </div>
       </div>
     </EditorSection>
   );
