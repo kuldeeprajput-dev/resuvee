@@ -424,25 +424,58 @@ export async function exportResumeDocx(
         })
       );
 
-      // Link
+      // Links (Live Demo & GitHub)
+      const linkRuns: (DocxTypes.TextRun | DocxTypes.ExternalHyperlink)[] = [];
       if (proj.link?.trim()) {
+        const linkUrl = proj.link.startsWith("http") ? proj.link : `https://${proj.link}`;
+        linkRuns.push(
+          new ExternalHyperlink({
+            link: linkUrl,
+            children: [
+              new TextRun({
+                text: proj.linkLabel || proj.link,
+                size: 18,
+                color: "0066CC",
+                underline: { type: "single" },
+                font: docFont,
+              }),
+            ],
+          })
+        );
+      }
+      if (proj.githubUrl?.trim()) {
+        if (linkRuns.length > 0) {
+          linkRuns.push(
+            new TextRun({
+              text: "   ·   ",
+              size: 18,
+              color: "888888",
+              font: docFont,
+            })
+          );
+        }
+        const githubUrl = proj.githubUrl.startsWith("http") ? proj.githubUrl : `https://${proj.githubUrl}`;
+        linkRuns.push(
+          new ExternalHyperlink({
+            link: githubUrl,
+            children: [
+              new TextRun({
+                text: proj.githubLabel || proj.githubUrl,
+                size: 18,
+                color: "0066CC",
+                underline: { type: "single" },
+                font: docFont,
+              }),
+            ],
+          })
+        );
+      }
+
+      if (linkRuns.length > 0) {
         paragraphs.push(
           new Paragraph({
             spacing: { after: 40 },
-            children: [
-              new ExternalHyperlink({
-                link: proj.link,
-                children: [
-                  new TextRun({
-                    text: proj.link,
-                    size: 18,
-                    color: "0066CC",
-                    underline: { type: "single" },
-                    font: docFont,
-                  }),
-                ],
-              }),
-            ],
+            children: linkRuns,
           })
         );
       }

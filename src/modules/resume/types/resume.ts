@@ -84,6 +84,9 @@ export interface ResumeProject {
   name: string;
   description: string;
   link: string;
+  githubUrl?: string;
+  linkLabel?: string;
+  githubLabel?: string;
   date?: string;
   highlights: string[];
 }

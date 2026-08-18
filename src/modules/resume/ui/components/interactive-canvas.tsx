@@ -519,8 +519,8 @@ export function InteractiveCanvas({
         showThemeMenu={showThemeMenu}
         isHandTool={isHandTool}
         onZoomChange={onZoomChange}
-        onZoomIn={() => onZoomChange(Math.min(200, zoom + 10))}
-        onZoomOut={() => onZoomChange(Math.max(30, zoom - 10))}
+        onZoomIn={() => onZoomChange(Math.min(300, zoom + 10))}
+        onZoomOut={() => onZoomChange(Math.max(25, zoom - 10))}
         onResetPan={resetPanAndZoom}
         onFitToWidth={fitToWidth}
         onFitToPage={fitToPage}

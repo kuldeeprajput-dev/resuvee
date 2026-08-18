@@ -91,8 +91,14 @@ interface ItemCardProps {
   title: string;
   subtitle?: string;
   onRemove: () => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
+  draggable?: boolean;
+  onDragStart?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragEnter?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragOver?: (e: React.DragEvent<HTMLElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragEnd?: (e: React.DragEvent<HTMLElement>) => void;
+  isDragging?: boolean;
+  isDragOver?: boolean;
   children: React.ReactNode;
   canRemove?: boolean;
 }
@@ -101,43 +107,42 @@ export function ItemCard({
   title,
   subtitle,
   onRemove,
-  onMoveUp,
-  onMoveDown,
+  draggable,
+  onDragStart,
+  onDragEnter,
+  onDragOver,
+  onDrop,
+  onDragEnd,
+  isDragging,
+  isDragOver,
   children,
   canRemove = true,
 }: ItemCardProps) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-black/9 bg-[#fbfaf6] shadow-sm">
-      <div className="flex items-center gap-2 border-b border-black/[0.07] bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3">
-        <GripVertical className="size-4 text-black/25 shrink-0" />
+    <article
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnter={onDragEnter}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
+      className={cn(
+        "relative rounded-2xl border border-black/9 bg-[#fbfaf6] shadow-sm transition-all",
+        isDragging && "opacity-40 scale-[0.99] border-dashed border-emerald-500 bg-emerald-50/50",
+        isDragOver && "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50/70 scale-[1.005]"
+      )}
+    >
+      <div className={cn(
+        "group flex items-center gap-2 border-b border-black/[0.07] bg-white/70 px-3 py-2.5 sm:px-4 sm:py-3 rounded-t-2xl transition-colors",
+        draggable && "cursor-grab active:cursor-grabbing select-none"
+      )}>
+        <GripVertical className="size-4 text-black/30 group-hover:text-emerald-700 shrink-0 transition" />
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-xs font-bold text-(--brand-ink) sm:text-sm">{title}</h3>
           {subtitle && (
             <p className="truncate text-[11px] text-(--brand-muted) sm:text-xs">{subtitle}</p>
           )}
         </div>
-        {(onMoveUp || onMoveDown) && (
-          <div className="flex items-center gap-0.5 mr-1">
-            <button
-              type="button"
-              onClick={onMoveUp}
-              disabled={!onMoveUp}
-              title="Move item up"
-              className="flex size-7 items-center justify-center rounded-lg text-black/40 transition hover:bg-black/5 hover:text-black disabled:opacity-20 disabled:pointer-events-none cursor-pointer sm:size-8"
-            >
-              <ChevronUp className="size-4" />
-            </button>
-            <button
-              type="button"
-              onClick={onMoveDown}
-              disabled={!onMoveDown}
-              title="Move item down"
-              className="flex size-7 items-center justify-center rounded-lg text-black/40 transition hover:bg-black/5 hover:text-black disabled:opacity-20 disabled:pointer-events-none cursor-pointer sm:size-8"
-            >
-              <ChevronDown className="size-4" />
-            </button>
-          </div>
-        )}
         <button
           type="button"
           onClick={onRemove}
@@ -148,7 +153,15 @@ export function ItemCard({
           <Trash2 className="size-3.5" />
         </button>
       </div>
-      <div className="space-y-3 p-3 sm:space-y-4 sm:p-4">{children}</div>
+      <div
+        className="space-y-3 p-3 sm:space-y-4 sm:p-4 rounded-b-2xl"
+        draggable={false}
+        onDragStart={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        {children}
+      </div>
     </article>
   );
 }
@@ -164,7 +177,7 @@ export function AddItemButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-white/50 text-sm font-bold text-(--brand-muted) transition hover:border-[#315f45]/40 hover:bg-white hover:text-(--brand-ink)"
+      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-white shadow-2xs text-sm font-bold text-(--brand-muted) transition hover:border-[#315f45]/40 hover:bg-emerald-50/30 hover:text-(--brand-ink) cursor-pointer"
     >
       <Plus className="size-4" />
       {children}

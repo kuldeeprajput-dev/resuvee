@@ -9,16 +9,12 @@ import { cn } from "@/shared/lib/utils";
 
 interface CustomLinkItemCardProps {
   item: ResumeCustomLink;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onUpdate: (updated: ResumeCustomLink) => void;
   onRemove: () => void;
 }
 
 export function CustomLinkItemCard({
   item,
-  onMoveUp,
-  onMoveDown,
   onUpdate,
   onRemove,
 }: CustomLinkItemCardProps) {
@@ -81,40 +77,15 @@ export function CustomLinkItemCard({
           )}
         </div>
 
-        {/* Action Buttons: Move Up/Down & Delete */}
-        <div className="flex items-center gap-1">
-          {(onMoveUp || onMoveDown) && (
-            <div className="flex items-center gap-0.5 mr-0.5">
-              <button
-                type="button"
-                onClick={onMoveUp}
-                disabled={!onMoveUp}
-                title="Move item up"
-                className="flex size-7 items-center justify-center rounded-lg text-black/40 hover:bg-black/5 hover:text-black disabled:opacity-20 disabled:pointer-events-none transition cursor-pointer"
-              >
-                <ChevronUp className="size-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={onMoveDown}
-                disabled={!onMoveDown}
-                title="Move item down"
-                className="flex size-7 items-center justify-center rounded-lg text-black/40 hover:bg-black/5 hover:text-black disabled:opacity-20 disabled:pointer-events-none transition cursor-pointer"
-              >
-                <ChevronDown className="size-3.5" />
-              </button>
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={onRemove}
-            className="rounded-lg p-1.5 text-black/40 hover:bg-red-50 hover:text-red-600 transition cursor-pointer"
-            title="Remove this item"
-          >
-            <Trash2 className="size-4" />
-          </button>
-        </div>
+        {/* Action Button: Delete */}
+        <button
+          type="button"
+          onClick={onRemove}
+          className="rounded-lg p-1.5 text-black/40 hover:bg-red-50 hover:text-red-600 transition cursor-pointer"
+          title="Remove this item"
+        >
+          <Trash2 className="size-4" />
+        </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">

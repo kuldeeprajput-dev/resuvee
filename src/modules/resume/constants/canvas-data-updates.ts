@@ -55,6 +55,8 @@ export function updateDataForFieldChange(
       projects: data.projects.map((item) => {
         if (item.id !== id) return item;
         if (field === "description") return { ...item, description: newText };
+        if (field === "link") return { ...item, link: newText };
+        if (field === "githubUrl") return { ...item, githubUrl: newText };
         return { ...item, name: newText };
       }),
     };

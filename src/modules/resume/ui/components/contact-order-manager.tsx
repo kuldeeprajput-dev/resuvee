@@ -139,11 +139,11 @@ export function ContactOrderManager({
   if (activeItems.length <= 1) return null;
 
   return (
-    <div className="mt-4 rounded-2xl border border-black/10 bg-white/80 overflow-hidden shadow-2xs">
+    <div className="mt-4 rounded-2xl bg-white overflow-hidden shadow-2xs">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3.5 py-2.5 bg-black/[0.02] hover:bg-black/[0.05] transition cursor-pointer text-left"
+        className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white hover:bg-black/[0.02] transition cursor-pointer text-left"
       >
         <div className="flex items-center gap-2">
           <ArrowUpDown className="size-3.5 text-emerald-700 shrink-0" />
@@ -161,7 +161,7 @@ export function ContactOrderManager({
       </button>
 
       {isOpen && (
-        <div className="p-3.5 space-y-2 border-t border-black/8 bg-white/95">
+        <div className="p-3.5 space-y-2 border-t border-black/6 bg-white">
           <p className="text-[11px] text-(--brand-muted) mb-2">
             Drag items up or down to set the exact order they appear on your resume.
           </p>

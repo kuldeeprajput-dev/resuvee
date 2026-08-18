@@ -234,6 +234,9 @@ export function getEmptyProject(index: number) {
     name: "",
     description: "",
     link: "",
+    githubUrl: "",
+    linkLabel: "",
+    githubLabel: "",
     date: "",
     highlights: [""],
   };

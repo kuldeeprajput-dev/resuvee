@@ -376,26 +376,6 @@ export function PersonalDetailsEditor({
             <CustomLinkItemCard
               key={link.id || `custom-link-${idx}`}
               item={link}
-              onMoveUp={
-                idx > 0
-                  ? () => {
-                      const nextLinks = [...(data.basics.customLinks || [])];
-                      const [moved] = nextLinks.splice(idx, 1);
-                      nextLinks.splice(idx - 1, 0, moved);
-                      update("customLinks", nextLinks);
-                    }
-                  : undefined
-              }
-              onMoveDown={
-                idx < (data.basics.customLinks || []).length - 1
-                  ? () => {
-                      const nextLinks = [...(data.basics.customLinks || [])];
-                      const [moved] = nextLinks.splice(idx, 1);
-                      nextLinks.splice(idx + 1, 0, moved);
-                      update("customLinks", nextLinks);
-                    }
-                  : undefined
-              }
               onUpdate={(updated) => {
                 const nextLinks = [...(data.basics.customLinks || [])];
                 nextLinks[idx] = updated;
@@ -419,7 +399,7 @@ export function PersonalDetailsEditor({
               };
               update("customLinks", [...(data.basics.customLinks || []), newLink]);
             }}
-            className="w-full py-2.5 px-3 rounded-xl border border-dashed border-black/20 bg-black/2 hover:bg-black/5 hover:border-emerald-600/40 text-xs font-semibold text-(--brand-ink) flex items-center justify-center gap-1.5 transition cursor-pointer"
+            className="w-full py-2.5 px-3 rounded-xl border border-dashed border-black/20 bg-white shadow-2xs hover:border-emerald-600/50 hover:bg-emerald-50/30 text-xs font-bold text-(--brand-ink) flex items-center justify-center gap-1.5 transition cursor-pointer"
           >
             <Plus className="size-4 text-emerald-700" />
             <span>Add Custom Link or Detail</span>

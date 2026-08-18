@@ -70,7 +70,7 @@ export function CanvasBottomToolbar({
   onToggleThemeMenu,
 }: CanvasBottomToolbarProps) {
   return (
-    <div className="no-print absolute bottom-6 left-1/2 z-40 hidden -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200 lg:flex">
+    <div className="no-print absolute bottom-6 left-1/2 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/15 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md transition-all duration-200">
       {/* Select vs Hand/Pan Tool Switcher */}
       <div className="flex items-center rounded-xl bg-black/5 p-0.5">
         <button

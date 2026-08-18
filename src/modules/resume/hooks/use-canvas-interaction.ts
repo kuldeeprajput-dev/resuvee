@@ -129,13 +129,13 @@ export function useCanvasInteraction({
         setIsSpacePressed(true);
       }
 
-      if ((e.ctrlKey || e.metaKey) && (e.key === "=" || e.key === "+")) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "=" || e.key === "+" || e.code === "Equal" || e.code === "NumpadAdd")) {
         e.preventDefault();
-        onZoomChange(zoom + 10);
-      } else if ((e.ctrlKey || e.metaKey) && e.key === "-") {
+        onZoomChange(Math.min(300, zoom + 10));
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "-" || e.key === "_" || e.code === "Minus" || e.code === "NumpadSubtract")) {
         e.preventDefault();
-        onZoomChange(zoom - 10);
-      } else if ((e.ctrlKey || e.metaKey) && e.key === "0") {
+        onZoomChange(Math.max(25, zoom - 10));
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "0" || e.code === "Digit0" || e.code === "Numpad0")) {
         e.preventDefault();
         resetPanAndZoom();
       } else if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) {
@@ -182,7 +182,7 @@ export function useCanvasInteraction({
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         const delta = e.deltaY < 0 ? 8 : -8;
-        onZoomChange(zoom + delta);
+        onZoomChange(Math.min(Math.max(zoom + delta, 25), 300));
       } else {
         setPan((prev) => ({
           x: prev.x - e.deltaX * 0.8,
@@ -217,11 +217,12 @@ export function useCanvasInteraction({
   };
 
   const zoomRef = useRef(zoom);
+  const lastZoomSentRef = useRef<number>(zoom);
+
   useEffect(() => {
     zoomRef.current = zoom;
+    lastZoomSentRef.current = zoom;
   }, [zoom]);
-
-  const lastZoomSentRef = useRef<number>(zoom);
 
   // Prevent full-screen browser zoom on trackpad pinch / touch pinch, scaling ONLY the document canvas
   useEffect(() => {
@@ -232,7 +233,7 @@ export function useCanvasInteraction({
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         const delta = e.deltaY < 0 ? 8 : -8;
-        const nextZoom = Math.min(Math.max(zoomRef.current + delta, 30), 200);
+        const nextZoom = Math.min(Math.max(zoomRef.current + delta, 25), 300);
         if (nextZoom !== lastZoomSentRef.current) {
           lastZoomSentRef.current = nextZoom;
           onZoomChange(nextZoom);

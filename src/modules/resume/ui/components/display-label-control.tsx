@@ -81,8 +81,8 @@ export function DisplayLabelControl({
           />
           <div
             className={cn(
-              "absolute top-full mt-1.5 z-50 w-72 max-w-[calc(100vw-2.5rem)] rounded-2xl border border-black/15 bg-white p-3.5 shadow-2xl space-y-2.5",
-              align === "left" ? "left-0 sm:-left-2" : "right-0 sm:-right-2"
+              "absolute top-full mt-1.5 z-50 w-72 max-w-[calc(100vw-3rem)] sm:w-80 rounded-2xl border border-black/15 bg-white p-3.5 shadow-2xl space-y-2.5",
+              align === "left" ? "left-0" : "right-0"
             )}
             onClick={(e) => e.stopPropagation()}
           >

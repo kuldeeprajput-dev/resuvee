@@ -170,6 +170,14 @@ export function findSelectedCanvasElement(
         };
         inlineText = item.description;
         break;
+      } else if (item.link && clickedText === item.link) {
+        found = { section: "projects", id: item.id, field: "link", title: "Project Link" };
+        inlineText = item.link;
+        break;
+      } else if (item.githubUrl && clickedText === item.githubUrl) {
+        found = { section: "projects", id: item.id, field: "githubUrl", title: "Project GitHub" };
+        inlineText = item.githubUrl;
+        break;
       }
     }
   }
