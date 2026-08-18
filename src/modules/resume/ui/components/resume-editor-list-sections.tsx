@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import type {
   ResumeCertification,
   ResumeData,
@@ -17,6 +18,7 @@ import {
   getEmptySkillGroup,
 } from "../../constants/resume-seed-data";
 import { cn } from "@/shared/lib/utils";
+import { DisplayLabelControl } from "./display-label-control";
 import {
   AddItemButton,
   BulletEditor,
@@ -37,6 +39,9 @@ interface ResumeEditorContentProps {
 // ─── Experience ───────────────────────────────────────────────────────────────
 
 export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
   const updateItem = (id: string, updates: Partial<ResumeExperience>) => {
     onChange({
       ...data,
@@ -51,12 +56,11 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
     });
   };
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= data.experience.length) return;
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const nextList = [...data.experience];
-    const [moved] = nextList.splice(index, 1);
-    nextList.splice(targetIndex, 0, moved);
+    const [moved] = nextList.splice(fromIndex, 1);
+    nextList.splice(toIndex, 0, moved);
     onChange({ ...data, experience: nextList });
   };
 
@@ -73,8 +77,34 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
             title={item.role || "Untitled role"}
             subtitle={item.company || "Add company"}
             onRemove={() => removeItem(item.id)}
-            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
-            onMoveDown={idx < data.experience.length - 1 ? () => moveItem(idx, 1) : undefined}
+            draggable
+            onDragStart={(e) => {
+              setDraggedIdx(idx);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", `${idx}`);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              setDragOverIdx(idx);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (draggedIdx !== null && draggedIdx !== idx) {
+                reorderItems(draggedIdx, idx);
+              }
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            onDragEnd={() => {
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            isDragging={draggedIdx === idx}
+            isDragOver={dragOverIdx === idx && draggedIdx !== idx}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
@@ -149,6 +179,9 @@ export function ExperienceEditor({ data, onChange, stepLabel }: ResumeEditorCont
 // ─── Education ────────────────────────────────────────────────────────────────
 
 export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
   const updateItem = (id: string, updates: Partial<ResumeEducation>) => {
     onChange({
       ...data,
@@ -156,12 +189,11 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
     });
   };
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= data.education.length) return;
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const nextList = [...data.education];
-    const [moved] = nextList.splice(index, 1);
-    nextList.splice(targetIndex, 0, moved);
+    const [moved] = nextList.splice(fromIndex, 1);
+    nextList.splice(toIndex, 0, moved);
     onChange({ ...data, education: nextList });
   };
 
@@ -183,8 +215,34 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
                 education: data.education.filter((education) => education.id !== item.id),
               })
             }
-            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
-            onMoveDown={idx < data.education.length - 1 ? () => moveItem(idx, 1) : undefined}
+            draggable
+            onDragStart={(e) => {
+              setDraggedIdx(idx);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", `${idx}`);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              setDragOverIdx(idx);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (draggedIdx !== null && draggedIdx !== idx) {
+                reorderItems(draggedIdx, idx);
+              }
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            onDragEnd={() => {
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            isDragging={draggedIdx === idx}
+            isDragOver={dragOverIdx === idx && draggedIdx !== idx}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
@@ -246,6 +304,9 @@ export function EducationEditor({ data, onChange, stepLabel }: ResumeEditorConte
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
 export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
   const updateItem = (id: string, updates: Partial<ResumeProject>) => {
     onChange({
       ...data,
@@ -253,12 +314,11 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
     });
   };
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= data.projects.length) return;
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const nextList = [...data.projects];
-    const [moved] = nextList.splice(index, 1);
-    nextList.splice(targetIndex, 0, moved);
+    const [moved] = nextList.splice(fromIndex, 1);
+    nextList.splice(toIndex, 0, moved);
     onChange({ ...data, projects: nextList });
   };
 
@@ -273,35 +333,91 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
           <ItemCard
             key={item.id}
             title={item.name || "Untitled project"}
-            subtitle={item.link || "Add a project link"}
+            subtitle={
+              [
+                item.linkLabel || item.link,
+                item.githubLabel || item.githubUrl,
+              ]
+                .filter(Boolean)
+                .join(" · ") || "Add project links"
+            }
             onRemove={() =>
               onChange({
                 ...data,
                 projects: data.projects.filter((project) => project.id !== item.id),
               })
             }
-            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
-            onMoveDown={idx < data.projects.length - 1 ? () => moveItem(idx, 1) : undefined}
+            draggable
+            onDragStart={(e) => {
+              setDraggedIdx(idx);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", `${idx}`);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              setDragOverIdx(idx);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (draggedIdx !== null && draggedIdx !== idx) {
+                reorderItems(draggedIdx, idx);
+              }
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            onDragEnd={() => {
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            isDragging={draggedIdx === idx}
+            isDragOver={dragOverIdx === idx && draggedIdx !== idx}
           >
             <div className="grid gap-4 grid-cols-1 min-[500px]:grid-cols-2">
               <Field
                 label="Project name"
                 value={item.name}
                 onChange={(value) => updateItem(item.id, { name: value })}
-                placeholder="Project name"
-              />
-              <Field
-                label="Link"
-                value={item.link}
-                onChange={(value) => updateItem(item.id, { link: value })}
-                placeholder="project.example.com"
+                placeholder="E-commerce Platform"
               />
               <Field
                 label="Date or timeframe"
                 value={item.date ?? ""}
                 onChange={(value) => updateItem(item.id, { date: value })}
                 placeholder="Mar 2025 – Apr 2025"
-                className="min-[500px]:col-span-2"
+              />
+              <Field
+                label="Live link"
+                value={item.link}
+                onChange={(value) => updateItem(item.id, { link: value })}
+                placeholder="e.g. project.example.com"
+                action={
+                  <DisplayLabelControl
+                    currentValue={item.link}
+                    defaultShortLabel="Live Demo"
+                    customLabel={item.linkLabel}
+                    align="left"
+                    onSetLabel={(text) => updateItem(item.id, { linkLabel: text })}
+                  />
+                }
+              />
+              <Field
+                label="GitHub link"
+                value={item.githubUrl ?? ""}
+                onChange={(value) => updateItem(item.id, { githubUrl: value })}
+                placeholder="e.g. github.com/username/project"
+                action={
+                  <DisplayLabelControl
+                    currentValue={item.githubUrl}
+                    defaultShortLabel="GitHub"
+                    customLabel={item.githubLabel}
+                    align="right"
+                    onSetLabel={(text) => updateItem(item.id, { githubLabel: text })}
+                  />
+                }
               />
               <TextAreaField
                 label="Short description"
@@ -337,7 +453,88 @@ export function ProjectsEditor({ data, onChange, stepLabel }: ResumeEditorConten
 
 // ─── Skills ───────────────────────────────────────────────────────────────────
 
+function SkillGroupItemCard({
+  item,
+  onUpdate,
+  onRemove,
+  draggable,
+  onDragStart,
+  onDragEnter,
+  onDragOver,
+  onDrop,
+  onDragEnd,
+  isDragging,
+  isDragOver,
+}: {
+  item: ResumeSkillGroup;
+  onUpdate: (updates: Partial<ResumeSkillGroup>) => void;
+  onRemove: () => void;
+  draggable?: boolean;
+  onDragStart?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragEnter?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragOver?: (e: React.DragEvent<HTMLElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLElement>) => void;
+  onDragEnd?: (e: React.DragEvent<HTMLElement>) => void;
+  isDragging?: boolean;
+  isDragOver?: boolean;
+}) {
+  const [skillsText, setSkillsText] = useState(() => item.skills.join(", "));
+
+  // Keep local string in sync if item.skills changes externally
+  useEffect(() => {
+    const currentParsed = skillsText
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (JSON.stringify(currentParsed) !== JSON.stringify(item.skills)) {
+      setSkillsText(item.skills.join(", "));
+    }
+  }, [item.skills]);
+
+  const handleSkillsChange = (text: string) => {
+    setSkillsText(text);
+    const parsed = text
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+    onUpdate({ skills: parsed });
+  };
+
+  return (
+    <ItemCard
+      title={item.name || "Untitled skill group"}
+      subtitle={`${item.skills.length} skills`}
+      onRemove={onRemove}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnter={onDragEnter}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
+      isDragging={isDragging}
+      isDragOver={isDragOver}
+    >
+      <Field
+        label="Group name"
+        value={item.name}
+        onChange={(value) => onUpdate({ name: value })}
+        placeholder="e.g. Languages, Design, Tools"
+      />
+      <Field
+        label="Skills"
+        hint="Separate with commas"
+        value={skillsText}
+        onChange={handleSkillsChange}
+        placeholder="TypeScript, React, Node.js"
+      />
+    </ItemCard>
+  );
+}
+
 export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
   const updateItem = (id: string, updates: Partial<ResumeSkillGroup>) => {
     onChange({
       ...data,
@@ -347,12 +544,11 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
     });
   };
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= data.skillGroups.length) return;
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const nextList = [...data.skillGroups];
-    const [moved] = nextList.splice(index, 1);
-    nextList.splice(targetIndex, 0, moved);
+    const [moved] = nextList.splice(fromIndex, 1);
+    nextList.splice(toIndex, 0, moved);
     onChange({ ...data, skillGroups: nextList });
   };
 
@@ -364,40 +560,45 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
     >
       <div className="space-y-4">
         {data.skillGroups.map((item, idx) => (
-          <ItemCard
+          <SkillGroupItemCard
             key={item.id}
-            title={item.name || "Untitled skill group"}
-            subtitle={`${item.skills.length} skills`}
+            item={item}
+            onUpdate={(updates) => updateItem(item.id, updates)}
             onRemove={() =>
               onChange({
                 ...data,
                 skillGroups: data.skillGroups.filter((group) => group.id !== item.id),
               })
             }
-            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
-            onMoveDown={idx < data.skillGroups.length - 1 ? () => moveItem(idx, 1) : undefined}
-          >
-            <Field
-              label="Group name"
-              value={item.name}
-              onChange={(value) => updateItem(item.id, { name: value })}
-              placeholder="e.g. Languages, Design, Tools"
-            />
-            <Field
-              label="Skills"
-              hint="Separate with commas"
-              value={item.skills.join(", ")}
-              onChange={(value) =>
-                updateItem(item.id, {
-                  skills: value
-                    .split(",")
-                    .map((skill) => skill.trim())
-                    .filter(Boolean),
-                })
+            draggable
+            onDragStart={(e) => {
+              setDraggedIdx(idx);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", `${idx}`);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              setDragOverIdx(idx);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (draggedIdx !== null && draggedIdx !== idx) {
+                reorderItems(draggedIdx, idx);
               }
-              placeholder="TypeScript, React, Node.js"
-            />
-          </ItemCard>
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            onDragEnd={() => {
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            isDragging={draggedIdx === idx}
+            isDragOver={dragOverIdx === idx && draggedIdx !== idx}
+          />
         ))}
         <AddItemButton
           onClick={() =>
@@ -421,7 +622,10 @@ export function SkillsEditor({ data, onChange, stepLabel }: ResumeEditorContentP
 // ─── Certifications ───────────────────────────────────────────────────────────
 
 export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditorContentProps) {
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const certifications = data.certifications ?? [];
+
   const updateItem = (id: string, updates: Partial<ResumeCertification>) => {
     onChange({
       ...data,
@@ -431,12 +635,11 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
     });
   };
 
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= certifications.length) return;
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const nextList = [...certifications];
-    const [moved] = nextList.splice(index, 1);
-    nextList.splice(targetIndex, 0, moved);
+    const [moved] = nextList.splice(fromIndex, 1);
+    nextList.splice(toIndex, 0, moved);
     onChange({ ...data, certifications: nextList });
   };
 
@@ -460,8 +663,34 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
                 ),
               })
             }
-            onMoveUp={idx > 0 ? () => moveItem(idx, -1) : undefined}
-            onMoveDown={idx < certifications.length - 1 ? () => moveItem(idx, 1) : undefined}
+            draggable
+            onDragStart={(e) => {
+              setDraggedIdx(idx);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", `${idx}`);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              setDragOverIdx(idx);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (draggedIdx !== null && draggedIdx !== idx) {
+                reorderItems(draggedIdx, idx);
+              }
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            onDragEnd={() => {
+              setDraggedIdx(null);
+              setDragOverIdx(null);
+            }}
+            isDragging={draggedIdx === idx}
+            isDragOver={dragOverIdx === idx && draggedIdx !== idx}
           >
             <div className="grid grid-cols-1 gap-4 min-[500px]:grid-cols-2">
               <Field
@@ -512,3 +741,4 @@ export function CertificationsEditor({ data, onChange, stepLabel }: ResumeEditor
     </EditorSection>
   );
 }
+
