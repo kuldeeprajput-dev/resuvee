@@ -219,6 +219,61 @@
   }
 }
 
+/* Resume-builder continuation pages keep the selected template, but replace
+   its repeated identity block with an ATS-safe name and page marker. */
+.resume-continuation-sheet .resume-continuation-header {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  min-height: 28px !important;
+  height: 28px !important;
+  margin: 0 0 16px !important;
+  padding: 0 0 8px !important;
+  border: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--resume-continuation-accent) 58%, transparent) !important;
+  background: transparent !important;
+  text-align: left !important;
+}
+
+.resume-continuation-sheet .resume-continuation-header > * {
+  display: none !important;
+}
+
+.resume-continuation-sheet .resume-continuation-header::before,
+.resume-continuation-sheet .resume-continuation-header::after {
+  display: block;
+  font-family: inherit;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.resume-continuation-sheet .resume-continuation-header::before {
+  content: attr(data-continuation-name);
+  overflow: hidden;
+  color: color-mix(in srgb, var(--resume-continuation-accent) 72%, #111 28%);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.015em;
+  text-overflow: ellipsis;
+}
+
+.resume-continuation-sheet .resume-continuation-header::after {
+  content: attr(data-continuation-page);
+  flex: none;
+  margin-left: 16px;
+  color: rgb(0 0 0 / 48%);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.resume-continuation-sheet .resume-continuation-contact {
+  display: none !important;
+}
+
 @layer components {
   .footer-link {
     color: var(--brand-muted);
@@ -470,6 +525,81 @@
   .resume-preview-scroll {
     overflow: visible !important;
     padding: 0 !important;
+  }
+
+  /* Resume builder multi-page output. Scoped so analyzer and cover letters
+     retain their existing print behavior. */
+  html:has(.resume-page-stack),
+  body:has(.resume-page-stack) {
+    display: block !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    overflow: visible !important;
+  }
+
+  body:has(.resume-page-stack) .resume-builder-root,
+  body:has(.resume-page-stack) .resume-builder-workspace,
+  body:has(.resume-page-stack) .resume-canvas-root,
+  body:has(.resume-page-stack) .canvas-bg {
+    position: static !important;
+    display: block !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  body:has(.resume-page-stack) .resume-preview-panel,
+  body:has(.resume-page-stack) .resume-preview-stage {
+    position: static !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    overflow: visible !important;
+  }
+
+  body:has(.resume-page-stack) .resume-preview-scroll,
+  body:has(.resume-page-stack) .resume-page-viewport {
+    position: static !important;
+    display: block !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  body:has(.resume-page-stack) .resume-preview-sheet,
+  body:has(.resume-page-stack) .resume-page-stack {
+    position: static !important;
+    display: block !important;
+    width: 210mm !important;
+    height: auto !important;
+    gap: 0 !important;
+  }
+
+  body:has(.resume-page-stack) .resume-page-shell {
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  body:has(.resume-page-stack) .resume-page-shell:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  body:has(.resume-page-stack) article.resume-print-area {
+    position: relative !important;
+    inset: auto !important;
+    zoom: 1.332 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
 

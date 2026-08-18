@@ -239,9 +239,6 @@ export function AnalystTemplate(props: ResumePreviewProps) {
         </main>
       </div>
 
-      <div className="mt-auto pt-2 flex items-center justify-end text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resuvee · {template.name}
-      </div>
     </Sheet>
   );
 }
@@ -332,7 +329,6 @@ export function FresherTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Education · Projects · Skills</span>
-        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -392,9 +388,6 @@ export function FirstStepTemplate(props: ResumePreviewProps) {
 
           <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </div>
-        <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
-          Resuvee · {template.name}
-        </p>
       </aside>
 
       {/* Main */}
@@ -614,9 +607,6 @@ export function PivotTemplate(props: ResumePreviewProps) {
             </section>
           )}
         </div>
-        <p className="absolute bottom-5 right-8 text-[5px] uppercase tracking-[0.14em] text-black/22">
-          Resuvee · {template.name}
-        </p>
       </main>
     </Sheet>
   );

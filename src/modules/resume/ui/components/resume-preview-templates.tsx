@@ -164,10 +164,11 @@ export function BlueprintTemplate({
               </div>
             </section>
           )}
+
+          {/* Keep supporting education in the technical rail so the main
+              column stays focused on engineering experience and projects. */}
+          <EducationSection data={data} accent={template.accent} inverted compact />
         </div>
-        <p className="relative mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resuvee · {template.name}
-        </p>
       </aside>
 
       {/* Main content */}
@@ -228,8 +229,6 @@ export function BlueprintTemplate({
               </div>
             </section>
           )}
-
-          <EducationSection data={data} accent={template.accent} compact />
         </div>
       </main>
     </Sheet>
@@ -306,10 +305,8 @@ export function ChronologicalTemplate(props: ResumePreviewProps) {
           </div>
         )}
 
-        {/* Education + Skills side-by-side */}
-        <div className="grid grid-cols-2 gap-8 border-t border-black/12 pt-5">
-          <EducationSection data={data} accent={template.accent} compact />
-          <div>
+        {data.skillGroups.length > 0 && (
+          <section className="border-t border-black/12 pt-5">
             <SectionTitle accent={template.accent}>Skills</SectionTitle>
             <div className="space-y-2">
               {data.skillGroups.map((group) => (
@@ -319,19 +316,24 @@ export function ChronologicalTemplate(props: ResumePreviewProps) {
                 </p>
               ))}
             </div>
-          </div>
-        </div>
+          </section>
+        )}
 
         {(data.certifications?.length ?? 0) > 0 && (
           <div className="border-t border-black/12 pt-5">
             <CertificationsSection data={data} accent={template.accent} compact />
           </div>
         )}
+
+        {data.education.length > 0 && (
+          <div className="border-t border-black/12 pt-5">
+            <EducationSection data={data} accent={template.accent} compact />
+          </div>
+        )}
       </main>
 
       <div className="absolute bottom-5 left-11 right-11 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>{data.basics.website}</span>
-        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -439,9 +441,6 @@ export function CompactTemplate(props: ResumePreviewProps) {
         </aside>
       </main>
 
-      <p className="absolute bottom-4 right-9 text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resuvee · {template.name}
-      </p>
     </Sheet>
   );
 }
@@ -544,9 +543,6 @@ export function HybridTemplate(props: ResumePreviewProps) {
         </div>
       </main>
 
-      <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-black/20">
-        Resuvee · {template.name}
-      </p>
     </Sheet>
   );
 }
@@ -652,7 +648,6 @@ export function FinanceTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-10 right-10 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Performance · Planning · Decisions</span>
-        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -806,9 +801,6 @@ export function HealthcareTemplate(props: ResumePreviewProps) {
             </div>
           )}
         </div>
-        <p className="absolute bottom-5 right-8 text-[5px] uppercase tracking-[0.14em] text-black/22">
-          Resuvee · {template.name}
-        </p>
       </main>
     </Sheet>
   );
@@ -944,7 +936,6 @@ export function SalesTemplate(props: ResumePreviewProps) {
 
       <div className="absolute bottom-5 left-9 right-9 flex justify-between border-t border-black/10 pt-2 text-[5px] uppercase tracking-[0.14em] text-black/22">
         <span>Revenue · Relationships · Growth</span>
-        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );

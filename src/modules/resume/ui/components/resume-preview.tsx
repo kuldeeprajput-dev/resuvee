@@ -86,6 +86,11 @@ function fmtDate(start?: string, end?: string, current?: boolean) {
 // ---------------------------------------------------------------------------
 function MeridianTemplate(props: ResumePreviewProps) {
   const { data, template, className, showPhoto = true, pagePadding } = props;
+  const hasSidebarContent =
+    data.skillGroups.length > 0 ||
+    (data.certifications?.length ?? 0) > 0 ||
+    data.education.length > 0;
+
   return (
     <Sheet pagePadding={pagePadding} className={cn("bg-[#fbfdfb]", className)}>
       {/* Decorative blobs */}
@@ -116,38 +121,52 @@ function MeridianTemplate(props: ResumePreviewProps) {
       </header>
 
       {/* Body */}
-      <div className="relative grid grid-cols-[165px_1fr] gap-7 px-11 pb-10">
+      <div
+        className={cn(
+          "relative grid px-11 pb-10",
+          hasSidebarContent ? "grid-cols-[165px_1fr] gap-7" : "grid-cols-1"
+        )}
+      >
         {/* Aside — Skills, Certifications, Education only */}
-        <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
-          {data.skillGroups.length > 0 && (
-            <section>
-              <SectionTitle accent={template.accent}>Skills</SectionTitle>
-              <div className="space-y-2">
-                {data.skillGroups.map((group) => (
-                  <div key={group.id}>
-                    <p className="mb-0.5 text-[7px] font-extrabold text-black/65">{group.name}</p>
-                    <div className="flex flex-wrap gap-0.5">
-                      {group.skills.map((skill, i) => (
-                        <span
-                          key={i}
-                          className="rounded-[3px] bg-black/5 px-1 py-0.5 text-[6.8px] text-black/55"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+        {hasSidebarContent && (
+          <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
+            {data.skillGroups.length > 0 && (
+              <section>
+                <SectionTitle accent={template.accent}>Skills</SectionTitle>
+                <div className="space-y-2">
+                  {data.skillGroups.map((group) => (
+                    <div key={group.id}>
+                      <p className="mb-0.5 text-[7px] font-extrabold text-black/65">
+                        {group.name}
+                      </p>
+                      <div className="flex flex-wrap gap-0.5">
+                        {group.skills.map((skill, i) => (
+                          <span
+                            key={i}
+                            className="rounded-[3px] bg-black/5 px-1 py-0.5 text-[6.8px] text-black/55"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+                  ))}
+                </div>
+              </section>
+            )}
 
-          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
-          <EducationSection data={data} accent={template.accent} compact />
-        </aside>
+            <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
+            <EducationSection data={data} accent={template.accent} compact />
+          </aside>
+        )}
 
         {/* Main — Summary, Experience, Projects */}
-        <main className="space-y-5 border-l border-black/[0.06] pl-7">
+        <main
+          className={cn(
+            "space-y-5",
+            hasSidebarContent && "border-l border-black/[0.06] pl-7"
+          )}
+        >
           <SummarySection data={data} accent={template.accent} compact />
           <ExperienceSection data={data} accent={template.accent} compact />
 
@@ -189,9 +208,6 @@ function MeridianTemplate(props: ResumePreviewProps) {
         </main>
       </div>
 
-      <p className="absolute bottom-5 right-11 text-[5.5px] font-semibold uppercase tracking-[0.14em] text-black/25">
-        Resuvee · {template.name}
-      </p>
     </Sheet>
   );
 }
@@ -302,7 +318,6 @@ function EditorialTemplate(props: ResumePreviewProps) {
 
       <div className="mt-auto pt-2 flex items-center justify-between border-t border-black/15 font-sans text-[5px] uppercase tracking-[0.12em] text-black/25">
         <span>{data.basics.website}</span>
-        <span>Resuvee · {template.name}</span>
       </div>
     </Sheet>
   );
@@ -409,9 +424,6 @@ function SummitTemplate(props: ResumePreviewProps) {
           <EducationSection data={data} accent={template.accent} compact inverted />
           <CertificationsSection data={data} accent={template.accent} compact sidebarOnly inverted />
         </div>
-        <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
-          Resuvee · {template.name}
-        </p>
       </aside>
     </Sheet>
   );
@@ -545,9 +557,6 @@ function ColumnTemplate(props: ResumePreviewProps) {
         </main>
       </div>
 
-      <p className="absolute bottom-5 left-11 text-[5px] uppercase tracking-[0.18em] text-black/20">
-        Resuvee · {template.name}
-      </p>
     </Sheet>
   );
 }
@@ -660,9 +669,6 @@ function HorizonTemplate(props: ResumePreviewProps) {
         </aside>
       </div>
 
-      <p className="absolute bottom-5 right-10 text-[5px] uppercase tracking-[0.14em] text-[#2d70a6]/35">
-        Resuvee · {template.name}
-      </p>
     </Sheet>
   );
 }
