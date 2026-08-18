@@ -390,7 +390,7 @@ export function FirstStepTemplate(props: ResumePreviewProps) {
             </section>
           )}
 
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </div>
         <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
           Resuvee · {template.name}
@@ -508,7 +508,7 @@ export function PivotTemplate(props: ResumePreviewProps) {
           )}
 
           <EducationSection data={data} accent={template.accent} compact />
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </div>
         <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-black/25">
           Transferable strengths

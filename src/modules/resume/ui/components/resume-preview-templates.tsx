@@ -229,7 +229,6 @@ export function BlueprintTemplate({
             </section>
           )}
 
-          <CertificationsSection data={data} accent={template.accent} compact />
           <EducationSection data={data} accent={template.accent} compact />
         </div>
       </main>
@@ -435,7 +434,8 @@ export function CompactTemplate(props: ResumePreviewProps) {
           )}
 
           <EducationSection data={data} accent={template.accent} compact />
-          <CertificationsSection data={data} accent={template.accent} compact />
+
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </aside>
       </main>
 
@@ -644,7 +644,7 @@ export function FinanceTemplate(props: ResumePreviewProps) {
                 </div>
               </section>
             )}
-            <CertificationsSection data={data} accent={template.accent} compact />
+            <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
             <EducationSection data={data} accent={template.accent} compact />
           </div>
         </div>
@@ -706,7 +706,7 @@ export function HealthcareTemplate(props: ResumePreviewProps) {
             </section>
           )}
           <EducationSection data={data} accent={template.accent} compact />
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </div>
         <p className="absolute bottom-5 left-6 text-[5px] uppercase tracking-[0.14em] text-black/25">
           Care · Quality · Outcomes
@@ -840,7 +840,7 @@ export function SalesTemplate(props: ResumePreviewProps) {
       </header>
 
       <main className="grid grid-cols-[1fr_165px] gap-7 px-9 py-6">
-        {/* Main */}
+        {/* Main — Summary, Experience, Projects */}
         <div className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
 
@@ -883,33 +883,34 @@ export function SalesTemplate(props: ResumePreviewProps) {
               </div>
             </section>
           )}
-        </div>
 
-        {/* Aside */}
-        <aside className="space-y-5 rounded-xl bg-[#f6eee9] px-4 py-4">
-          {/* Projects with links */}
           {data.projects.length > 0 && (
             <section>
-              <SectionTitle accent={template.accent}>Projects</SectionTitle>
-              <div className="space-y-2">
+              <SectionTitle accent={template.accent}>Selected projects</SectionTitle>
+              <div className="space-y-2.5">
                 {data.projects.map((project) => (
                   <article key={project.id}>
-                    <h3 className="text-[8.5px] font-extrabold text-black/80">
-                      {project.name}
-                      <ProjectLinks
-                        link={project.link}
-                        linkLabel={project.linkLabel}
-                        githubUrl={project.githubUrl}
-                        githubLabel={project.githubLabel}
-                      />
-                    </h3>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-[9px] font-extrabold text-black/82">
+                        {project.name}
+                        <ProjectLinks
+                          link={project.link}
+                          linkLabel={project.linkLabel}
+                          githubUrl={project.githubUrl}
+                          githubLabel={project.githubLabel}
+                        />
+                      </h3>
+                      {project.date && (
+                        <span className="shrink-0 text-[7.2px] text-black/38">{project.date}</span>
+                      )}
+                    </div>
                     {project.description && (
-                      <p className="mt-0.5 text-[7.5px] leading-[1.4] text-black/50">
+                      <p className="mt-0.5 text-[8px] leading-[1.4] text-black/52">
                         {project.description}
                       </p>
                     )}
                     {project.highlights.filter(Boolean).map((h, i) => (
-                      <p key={i} className="mt-0.5 text-[7px] leading-[1.35] text-black/40">
+                      <p key={i} className="mt-0.5 text-[7.5px] leading-[1.38] text-black/42">
                         — {h}
                       </p>
                     ))}
@@ -918,8 +919,10 @@ export function SalesTemplate(props: ResumePreviewProps) {
               </div>
             </section>
           )}
+        </div>
 
-          {/* Skills with group names */}
+        {/* Aside — Skills, Education, Certifications only */}
+        <aside className="space-y-5 rounded-xl bg-[#f6eee9] px-4 py-4">
           {data.skillGroups.length > 0 && (
             <section>
               <SectionTitle accent={template.accent}>Skills</SectionTitle>
@@ -935,7 +938,7 @@ export function SalesTemplate(props: ResumePreviewProps) {
           )}
 
           <EducationSection data={data} accent={template.accent} compact />
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </aside>
       </main>
 

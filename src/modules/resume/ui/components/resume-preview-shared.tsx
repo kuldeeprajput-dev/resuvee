@@ -24,6 +24,7 @@ interface SectionProps {
   accent: string;
   inverted?: boolean;
   compact?: boolean;
+  sidebarOnly?: boolean;
 }
 
 function initials(name: string) {
@@ -431,11 +432,23 @@ export function ProjectsSection({ data, accent, inverted = false, compact = fals
               >
                 {project.name || "Project name"}
               </h3>
-              {project.link && (
-                <span className={cn("text-[6.8px]", inverted ? "text-white/38" : "text-black/35")}>
-                  {project.link}
-                </span>
-              )}
+              <div className="flex items-center gap-1.5 shrink-0">
+                {project.link && (
+                  <span className={cn("text-[6.8px]", inverted ? "text-white/45" : "text-black/40")}>
+                    {project.linkLabel || project.link}
+                  </span>
+                )}
+                {project.link && project.githubUrl && (
+                  <span className={cn("text-[6.8px]", inverted ? "text-white/25" : "text-black/25")}>
+                    ·
+                  </span>
+                )}
+                {project.githubUrl && (
+                  <span className={cn("text-[6.8px]", inverted ? "text-white/45" : "text-black/40")}>
+                    {project.githubLabel || project.githubUrl}
+                  </span>
+                )}
+              </div>
             </div>
             <p
               className={cn(
@@ -468,46 +481,71 @@ export function CertificationsSection({
   accent,
   inverted = false,
   compact = false,
-}: SectionProps) {
+  sidebarOnly = false,
+}: SectionProps & { sidebarOnly?: boolean }) {
   if (!data.certifications || !data.certifications.length) return null;
   return (
     <section>
       <SectionTitle accent={accent} inverted={inverted}>
-        Awards & Certifications
+        {sidebarOnly ? "Certifications" : "Awards & Certifications"}
       </SectionTitle>
       <div className={compact ? "space-y-1.5" : "space-y-2"}>
         {data.certifications.map((cert) => (
-          <article key={cert.id} className="flex items-baseline justify-between gap-2">
-            <div>
-              <h3
-                className={cn("text-[8.5px] font-bold", inverted ? "text-white" : "text-black/82")}
-              >
-                {cert.title}
+          <article key={cert.id} className={sidebarOnly ? "" : "flex items-baseline justify-between gap-2"}>
+            {sidebarOnly ? (
+              // Sidebar mode: title + date on one line, issuer on next — no description
+              <div>
+                <div className="flex items-baseline justify-between gap-1">
+                  <h3 className={cn("text-[7.5px] font-semibold leading-snug", inverted ? "text-white/85" : "text-black/78")}>
+                    {cert.title}
+                  </h3>
+                  {cert.date && (
+                    <span className={cn("shrink-0 text-[6.5px]", inverted ? "text-white/40" : "text-black/38")}>
+                      {cert.date}
+                    </span>
+                  )}
+                </div>
                 {cert.issuer && (
-                  <span
-                    className={cn("ml-1 font-normal", inverted ? "text-white/60" : "text-black/60")}
+                  <p className={cn("text-[6.8px]", inverted ? "text-white/50" : "text-black/45")}>
+                    {cert.issuer}
+                  </p>
+                )}
+              </div>
+            ) : (
+              // Full mode: title + issuer inline, description below, date right-aligned
+              <>
+                <div>
+                  <h3
+                    className={cn("text-[8.5px] font-bold", inverted ? "text-white" : "text-black/82")}
                   >
-                    — {cert.issuer}
+                    {cert.title}
+                    {cert.issuer && (
+                      <span
+                        className={cn("ml-1 font-normal", inverted ? "text-white/60" : "text-black/60")}
+                      >
+                        — {cert.issuer}
+                      </span>
+                    )}
+                  </h3>
+                  {cert.description && cert.description !== cert.issuer && (
+                    <p
+                      className={cn(
+                        "text-[7.2px] leading-[1.35]",
+                        inverted ? "text-white/50" : "text-black/50"
+                      )}
+                    >
+                      {cert.description}
+                    </p>
+                  )}
+                </div>
+                {cert.date && (
+                  <span
+                    className={cn("shrink-0 text-[7px]", inverted ? "text-white/40" : "text-black/40")}
+                  >
+                    {cert.date}
                   </span>
                 )}
-              </h3>
-              {cert.description && cert.description !== cert.issuer && (
-                <p
-                  className={cn(
-                    "text-[7.2px] leading-[1.35]",
-                    inverted ? "text-white/50" : "text-black/50"
-                  )}
-                >
-                  {cert.description}
-                </p>
-              )}
-            </div>
-            {cert.date && (
-              <span
-                className={cn("shrink-0 text-[7px]", inverted ? "text-white/40" : "text-black/40")}
-              >
-                {cert.date}
-              </span>
+              </>
             )}
           </article>
         ))}
