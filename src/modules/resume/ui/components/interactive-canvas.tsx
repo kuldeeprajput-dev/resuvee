@@ -5,7 +5,7 @@ import { useAuthStore } from "@/modules/auth";
 import { Maximize2, Minimize2 } from "lucide-react";
 import type { BuilderSection, ResumeData, ResumeTemplate } from "../../types/resume";
 import { useResumeBuilderStore } from "../../hooks/use-resume-builder-store";
-import { ResumePreview } from "./resume-preview";
+import { PaginatedResumePreview } from "./paginated-resume-preview";
 import { resumeFontClass, type ResumeStyle } from "./customize-panel";
 import { cn } from "@/shared/lib/utils";
 import { CanvasTopBar } from "./canvas-toolbar-top";
@@ -389,7 +389,7 @@ export function InteractiveCanvas({
   return (
     <div
       className={cn(
-        "relative flex flex-col overflow-hidden select-none transition-all duration-300",
+        "resume-canvas-root relative flex flex-col overflow-hidden select-none transition-all duration-300",
         isFullscreen ? "fixed inset-0 z-120 bg-black" : "h-full w-full"
       )}
     >
@@ -475,34 +475,36 @@ export function InteractiveCanvas({
         )}
 
         {/* Rendered Document Sheet Container */}
-        <div className="absolute inset-x-0 top-14 bottom-0 flex items-center justify-center p-4 sm:p-8 overflow-auto">
-          <div
-            style={{
-              transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
-              transformOrigin: "center center",
-              transition: isDragging ? "none" : "transform 0.15s ease-out",
-            }}
-            className="no-print-transform flex items-center justify-center shadow-2xl"
-          >
+        <div className="resume-preview-scroll absolute inset-x-0 top-14 bottom-0 overflow-auto">
+          <div className="resume-page-viewport flex min-h-full min-w-max items-center justify-center p-4 sm:p-8">
             <div
-              ref={sheetRef}
-              onClick={handleSheetClick}
-              className={cn(
-                "resume-preview-sheet pointer-events-auto relative shadow-[0_28px_85px_rgba(0,0,0,0.22)]",
-                activeHand && "hand-mode"
-              )}
+              style={{
+                transform: `scale(${zoom / 100}) translate(${pan.x}px, ${pan.y}px)`,
+                transformOrigin: "center center",
+                transition: isDragging ? "none" : "transform 0.15s ease-out",
+              }}
+              className="no-print-transform flex items-center justify-center"
             >
-              {/* Resume Sheet Preview */}
-              <ResumePreview
-                data={data}
-                template={previewTemplate}
-                showPhoto={showPhoto}
-                pagePadding={resumeStyle?.pagePadding || "normal"}
-                sectionSpacing={resumeStyle?.sectionSpacing || "normal"}
-                fontSizeScale={resumeStyle?.fontSizeScale || 1.0}
-                lineHeight={resumeStyle?.lineHeight || "normal"}
-                className={resumeFontClass(font)}
-              />
+              <div
+                ref={sheetRef}
+                onClick={handleSheetClick}
+                className={cn(
+                  "resume-preview-sheet pointer-events-auto relative",
+                  activeHand && "hand-mode"
+                )}
+              >
+                {/* Resume Sheet Preview */}
+                <PaginatedResumePreview
+                  data={data}
+                  template={previewTemplate}
+                  showPhoto={showPhoto}
+                  pagePadding={resumeStyle?.pagePadding || "normal"}
+                  sectionSpacing={resumeStyle?.sectionSpacing || "normal"}
+                  fontSizeScale={resumeStyle?.fontSizeScale || 1.0}
+                  lineHeight={resumeStyle?.lineHeight || "normal"}
+                  className={resumeFontClass(font)}
+                />
+              </div>
             </div>
           </div>
         </div>

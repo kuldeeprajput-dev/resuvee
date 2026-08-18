@@ -432,7 +432,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
   };
 
   return (
-    <div className="h-dvh overflow-hidden bg-[#e8e8e2] text-(--brand-ink)">
+    <div className="resume-builder-root h-dvh overflow-hidden bg-[#e8e8e2] text-(--brand-ink)">
       <ResumeBuilderHeader
         fullName={data.basics.fullName}
         data={data}
@@ -456,7 +456,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       <div
         ref={containerRef}
         className={cn(
-          "relative flex h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] w-full max-w-full overflow-hidden",
+          "resume-builder-workspace relative flex h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] w-full max-w-full overflow-hidden",
           isResizing && "select-none"
         )}
       >
