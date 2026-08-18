@@ -117,9 +117,8 @@ function MeridianTemplate(props: ResumePreviewProps) {
 
       {/* Body */}
       <div className="relative grid grid-cols-[165px_1fr] gap-7 px-11 pb-10">
-        {/* Aside */}
+        {/* Aside — Skills, Certifications, Education only */}
         <aside className="space-y-5 rounded-[18px] bg-[#edf6f0] px-4 py-5">
-          {/* Skills with group names */}
           {data.skillGroups.length > 0 && (
             <section>
               <SectionTitle accent={template.accent}>Skills</SectionTitle>
@@ -143,29 +142,42 @@ function MeridianTemplate(props: ResumePreviewProps) {
             </section>
           )}
 
-          {/* Projects with links */}
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
+          <EducationSection data={data} accent={template.accent} compact />
+        </aside>
+
+        {/* Main — Summary, Experience, Projects */}
+        <main className="space-y-5 border-l border-black/[0.06] pl-7">
+          <SummarySection data={data} accent={template.accent} compact />
+          <ExperienceSection data={data} accent={template.accent} compact />
+
           {data.projects.length > 0 && (
             <section>
-              <SectionTitle accent={template.accent}>Projects</SectionTitle>
-              <div className="space-y-2">
+              <SectionTitle accent={template.accent}>Selected projects</SectionTitle>
+              <div className="space-y-2.5">
                 {data.projects.map((project) => (
                   <article key={project.id}>
-                    <h3 className="text-[8.5px] font-extrabold text-black/80">
-                      {project.name}
-                      <InlineProjectLinks
-                        link={project.link}
-                        linkLabel={project.linkLabel}
-                        githubUrl={project.githubUrl}
-                        githubLabel={project.githubLabel}
-                      />
-                    </h3>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-[9px] font-extrabold text-black/82">
+                        {project.name}
+                        <InlineProjectLinks
+                          link={project.link}
+                          linkLabel={project.linkLabel}
+                          githubUrl={project.githubUrl}
+                          githubLabel={project.githubLabel}
+                        />
+                      </h3>
+                      {project.date && (
+                        <span className="shrink-0 text-[7.2px] text-black/38">{project.date}</span>
+                      )}
+                    </div>
                     {project.description && (
-                      <p className="mt-0.5 text-[7.5px] leading-[1.4] text-black/50">
+                      <p className="mt-0.5 text-[8px] leading-[1.4] text-black/52">
                         {project.description}
                       </p>
                     )}
                     {project.highlights.filter(Boolean).map((h, i) => (
-                      <p key={i} className="mt-0.5 text-[7px] leading-[1.35] text-black/40">
+                      <p key={i} className="mt-0.5 text-[7.5px] leading-[1.38] text-black/42">
                         — {h}
                       </p>
                     ))}
@@ -174,15 +186,6 @@ function MeridianTemplate(props: ResumePreviewProps) {
               </div>
             </section>
           )}
-
-          <CertificationsSection data={data} accent={template.accent} compact />
-          <EducationSection data={data} accent={template.accent} compact />
-        </aside>
-
-        {/* Main */}
-        <main className="space-y-5 border-l border-black/[0.06] pl-7">
-          <SummarySection data={data} accent={template.accent} compact />
-          <ExperienceSection data={data} accent={template.accent} compact />
         </main>
       </div>
 
@@ -334,11 +337,47 @@ function SummitTemplate(props: ResumePreviewProps) {
         <div className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
           <ExperienceSection data={data} accent={template.accent} compact />
-          <EducationSection data={data} accent={template.accent} compact />
+
+          {/* Projects in main column */}
+          {data.projects.length > 0 && (
+            <section>
+              <SectionTitle accent={template.accent}>Selected projects</SectionTitle>
+              <div className="space-y-2.5">
+                {data.projects.map((project) => (
+                  <article key={project.id}>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-[9px] font-extrabold text-black/82">
+                        {project.name}
+                        <InlineProjectLinks
+                          link={project.link}
+                          linkLabel={project.linkLabel}
+                          githubUrl={project.githubUrl}
+                          githubLabel={project.githubLabel}
+                        />
+                      </h3>
+                      {project.date && (
+                        <span className="shrink-0 text-[7.2px] text-black/38">{project.date}</span>
+                      )}
+                    </div>
+                    {project.description && (
+                      <p className="mt-0.5 text-[8px] leading-[1.4] text-black/52">
+                        {project.description}
+                      </p>
+                    )}
+                    {project.highlights.filter(Boolean).map((h, i) => (
+                      <p key={i} className="mt-0.5 text-[7.5px] leading-[1.38] text-black/42">
+                        — {h}
+                      </p>
+                    ))}
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
 
-      {/* Dark aside */}
+      {/* Dark aside — Photo, Skills, Certifications, Education */}
       <aside
         className="relative flex flex-col px-5 py-8 text-white"
         style={{ backgroundColor: template.accent }}
@@ -350,41 +389,6 @@ function SummitTemplate(props: ResumePreviewProps) {
           className="relative z-10 mb-6 size-[90px] self-center rounded-full border-4 border-white/20"
         />
         <div className="space-y-5">
-          {/* Projects with links (inverted) */}
-          {data.projects.length > 0 && (
-            <section>
-              <SectionTitle accent={template.accent} inverted>
-                Projects
-              </SectionTitle>
-              <div className="space-y-2">
-                {data.projects.map((project) => (
-                  <article key={project.id}>
-                    <h3 className="text-[8px] font-extrabold text-white/85">
-                      {project.name}
-                      <InlineProjectLinks
-                        link={project.link}
-                        linkLabel={project.linkLabel}
-                        githubUrl={project.githubUrl}
-                        githubLabel={project.githubLabel}
-                        inverted
-                      />
-                    </h3>
-                    {project.description && (
-                      <p className="mt-0.5 text-[7px] leading-[1.4] text-white/55">
-                        {project.description}
-                      </p>
-                    )}
-                    {project.highlights.filter(Boolean).map((h, i) => (
-                      <p key={i} className="mt-0.5 text-[6.5px] leading-[1.35] text-white/42">
-                        — {h}
-                      </p>
-                    ))}
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-
           {/* Skills (inverted) with group names */}
           {data.skillGroups.length > 0 && (
             <section>
@@ -402,27 +406,8 @@ function SummitTemplate(props: ResumePreviewProps) {
             </section>
           )}
 
-          {/* Certifications (inverted) */}
-          {(data.certifications?.length ?? 0) > 0 && (
-            <section>
-              <SectionTitle accent={template.accent} inverted>
-                Certifications
-              </SectionTitle>
-              <div className="space-y-1">
-                {data.certifications?.map((cert) => (
-                  <div key={cert.id}>
-                    <p className="text-[7.5px] font-bold text-white/80">{cert.title}</p>
-                    {cert.issuer && (
-                      <p className="text-[7px] text-white/50">{cert.issuer}</p>
-                    )}
-                    {cert.date && (
-                      <p className="text-[6.5px] text-white/38">{cert.date}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          <EducationSection data={data} accent={template.accent} compact inverted />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly inverted />
         </div>
         <p className="mt-auto text-[5px] uppercase tracking-[0.14em] text-white/25">
           Resuvee · {template.name}
@@ -457,9 +442,8 @@ function ColumnTemplate(props: ResumePreviewProps) {
       </header>
 
       <div className="grid grid-cols-[138px_1fr] gap-8">
-        {/* Aside */}
+        {/* Aside — Skills, Education, Certifications only */}
         <aside className="space-y-5 border-r border-black/10 pr-6">
-          {/* Skills with group names */}
           {data.skillGroups.length > 0 && (
             <section>
               <SectionTitle accent={template.accent}>Skills</SectionTitle>
@@ -477,47 +461,13 @@ function ColumnTemplate(props: ResumePreviewProps) {
           )}
 
           <EducationSection data={data} accent={template.accent} compact />
-
-          {/* Projects with links */}
-          {data.projects.length > 0 && (
-            <section>
-              <SectionTitle accent={template.accent}>Projects</SectionTitle>
-              <div className="space-y-2">
-                {data.projects.map((project) => (
-                  <article key={project.id}>
-                    <h3 className="text-[8.5px] font-extrabold text-black/80">
-                      {project.name}
-                      <InlineProjectLinks
-                        link={project.link}
-                        linkLabel={project.linkLabel}
-                        githubUrl={project.githubUrl}
-                        githubLabel={project.githubLabel}
-                      />
-                    </h3>
-                    {project.description && (
-                      <p className="mt-0.5 text-[7.5px] leading-[1.4] text-black/50">
-                        {project.description}
-                      </p>
-                    )}
-                    {project.highlights.filter(Boolean).map((h, i) => (
-                      <p key={i} className="mt-0.5 text-[7px] leading-[1.35] text-black/40">
-                        — {h}
-                      </p>
-                    ))}
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </aside>
 
-        {/* Main */}
+        {/* Main — Summary, Experience, Projects */}
         <main className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
 
-          {/* Experience with accent-colored company */}
           {data.experience.length > 0 && (
             <section>
               <SectionTitle accent={template.accent}>Experience</SectionTitle>
@@ -551,6 +501,42 @@ function ColumnTemplate(props: ResumePreviewProps) {
                         </li>
                       ))}
                     </ul>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {data.projects.length > 0 && (
+            <section>
+              <SectionTitle accent={template.accent}>Selected projects</SectionTitle>
+              <div className="space-y-2.5">
+                {data.projects.map((project) => (
+                  <article key={project.id}>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-[9px] font-extrabold text-black/82">
+                        {project.name}
+                        <InlineProjectLinks
+                          link={project.link}
+                          linkLabel={project.linkLabel}
+                          githubUrl={project.githubUrl}
+                          githubLabel={project.githubLabel}
+                        />
+                      </h3>
+                      {project.date && (
+                        <span className="shrink-0 text-[7.2px] text-black/38">{project.date}</span>
+                      )}
+                    </div>
+                    {project.description && (
+                      <p className="mt-0.5 text-[8px] leading-[1.4] text-black/52">
+                        {project.description}
+                      </p>
+                    )}
+                    {project.highlights.filter(Boolean).map((h, i) => (
+                      <p key={i} className="mt-0.5 text-[7.5px] leading-[1.38] text-black/42">
+                        — {h}
+                      </p>
+                    ))}
                   </article>
                 ))}
               </div>
@@ -602,37 +588,38 @@ function HorizonTemplate(props: ResumePreviewProps) {
 
       {/* Body */}
       <div className="relative grid grid-cols-[1.3fr_0.7fr] gap-7 px-10 pb-9">
-        {/* Main */}
+        {/* Main — Summary, Experience, Projects */}
         <main className="space-y-5">
           <SummarySection data={data} accent={template.accent} compact />
           <ExperienceSection data={data} accent={template.accent} compact />
-        </main>
 
-        {/* Aside */}
-        <aside className="space-y-5 border-l border-[#9fc9f0]/40 pl-6">
-          {/* Projects with links */}
           {data.projects.length > 0 && (
             <section>
-              <SectionTitle accent={template.accent}>Projects</SectionTitle>
-              <div className="space-y-2">
+              <SectionTitle accent={template.accent}>Selected projects</SectionTitle>
+              <div className="space-y-2.5">
                 {data.projects.map((project) => (
                   <article key={project.id}>
-                    <h3 className="text-[8.5px] font-extrabold text-black/80">
-                      {project.name}
-                      <InlineProjectLinks
-                        link={project.link}
-                        linkLabel={project.linkLabel}
-                        githubUrl={project.githubUrl}
-                        githubLabel={project.githubLabel}
-                      />
-                    </h3>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-[9px] font-extrabold text-black/82">
+                        {project.name}
+                        <InlineProjectLinks
+                          link={project.link}
+                          linkLabel={project.linkLabel}
+                          githubUrl={project.githubUrl}
+                          githubLabel={project.githubLabel}
+                        />
+                      </h3>
+                      {project.date && (
+                        <span className="shrink-0 text-[7.2px] text-black/38">{project.date}</span>
+                      )}
+                    </div>
                     {project.description && (
-                      <p className="mt-0.5 text-[7.5px] leading-[1.4] text-black/50">
+                      <p className="mt-0.5 text-[8px] leading-[1.4] text-black/52">
                         {project.description}
                       </p>
                     )}
                     {project.highlights.filter(Boolean).map((h, i) => (
-                      <p key={i} className="mt-0.5 text-[7px] leading-[1.35] text-black/40">
+                      <p key={i} className="mt-0.5 text-[7.5px] leading-[1.38] text-black/42">
                         — {h}
                       </p>
                     ))}
@@ -641,8 +628,10 @@ function HorizonTemplate(props: ResumePreviewProps) {
               </div>
             </section>
           )}
+        </main>
 
-          {/* Skills with group names */}
+        {/* Aside — Skills, Education, Certifications only */}
+        <aside className="space-y-5 border-l border-[#9fc9f0]/40 pl-6">
           {data.skillGroups.length > 0 && (
             <section>
               <SectionTitle accent={template.accent}>Skills</SectionTitle>
@@ -667,7 +656,7 @@ function HorizonTemplate(props: ResumePreviewProps) {
           )}
 
           <EducationSection data={data} accent={template.accent} compact />
-          <CertificationsSection data={data} accent={template.accent} compact />
+          <CertificationsSection data={data} accent={template.accent} compact sidebarOnly />
         </aside>
       </div>
 
