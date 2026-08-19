@@ -1,5 +1,11 @@
 import type * as DocxTypes from "docx";
 import type { ResumeData } from "../types/resume";
+import {
+  createDocxResumePayload,
+  DOCX_RESUME_DATA_PROPERTY,
+  DOCX_RESUME_SCHEMA_PROPERTY,
+  DOCX_RESUME_SCHEMA_VERSION,
+} from "./docx-resume-metadata";
 
 export interface ExportDocxResult {
   fileName: string;
@@ -460,7 +466,9 @@ export async function exportResumeDocx(
             })
           );
         }
-        const githubUrl = proj.githubUrl.startsWith("http") ? proj.githubUrl : `https://${proj.githubUrl}`;
+        const githubUrl = proj.githubUrl.startsWith("http")
+          ? proj.githubUrl
+          : `https://${proj.githubUrl}`;
         linkRuns.push(
           new ExternalHyperlink({
             link: githubUrl,
@@ -578,15 +586,45 @@ export async function exportResumeDocx(
           children: certChildren,
         })
       );
+      if (cert.description?.trim()) {
+        paragraphs.push(
+          new Paragraph({
+            spacing: { after: 80, line: 240 },
+            keepLines: true,
+            children: [
+              new TextRun({
+                text: cert.description.trim(),
+                size: 19,
+                color: "555555",
+                font: docFont,
+              }),
+            ],
+          })
+        );
+      }
     }
   }
 
   // ── Build & Download ────────────────────────────────────────────────────
   const doc = new Document({
+    customProperties: [
+      {
+        name: DOCX_RESUME_SCHEMA_PROPERTY,
+        value: String(DOCX_RESUME_SCHEMA_VERSION),
+      },
+      {
+        name: DOCX_RESUME_DATA_PROPERTY,
+        value: createDocxResumePayload(data),
+      },
+    ],
     sections: [
       {
         properties: {
           page: {
+            size: {
+              width: 11906,
+              height: 16838,
+            },
             margin: {
               top: 1440, // 1 inch
               right: 1080, // 0.75 inch
@@ -608,7 +646,7 @@ export async function exportResumeDocx(
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
 
   return { fileName };
 }

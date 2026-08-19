@@ -20,8 +20,9 @@ import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
 import { exportResumeDocx, getResumeExportBaseName } from "../../utils/export-docx";
 import {
-  extractTextFromResumeFile,
+  extractResumeFileContent,
   parseExtractedResumeText,
+  statsForResumeData,
   validateResumeFile,
 } from "../../utils/import-resume";
 import { idbGet, idbSet } from "../../services/resume-idb";
@@ -96,8 +97,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
 
       try {
         setIsImportingResume(true);
-        const rawText = await extractTextFromResumeFile(file);
-        if (!rawText || !rawText.trim()) {
+        const { text: rawText, embeddedData } = await extractResumeFileContent(file);
+        if ((!rawText || !rawText.trim()) && !embeddedData) {
           showToast(
             "Empty File",
             "Could not extract readable text from the uploaded file. Try a different format.",
@@ -105,7 +106,9 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           );
           return;
         }
-        const { data: parsedData, stats } = parseExtractedResumeText(rawText, data);
+        const { data: parsedData, stats } = embeddedData
+          ? { data: embeddedData, stats: statsForResumeData(embeddedData) }
+          : parseExtractedResumeText(rawText, data);
         const structuredItemCount =
           stats.experiences +
           stats.education +

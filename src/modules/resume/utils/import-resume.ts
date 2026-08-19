@@ -1,6 +1,8 @@
 import mammoth from "mammoth";
+import JSZip from "jszip";
 import { extractTextFromPDF } from "@/shared/lib/extractors/client-pdf";
 import type { ResumeData } from "../types/resume";
+import { DOCX_RESUME_DATA_PROPERTY, parseDocxResumePayload } from "./docx-resume-metadata";
 import { parseResumeText, type ParseStats } from "./resume-text-parser";
 
 export const ALLOWED_RESUME_TYPES = [
@@ -84,15 +86,57 @@ function htmlToStructuredText(html: string) {
 }
 
 export async function extractTextFromResumeFile(file: File): Promise<string> {
+  return (await extractResumeFileContent(file)).text;
+}
+
+async function readEmbeddedResumeData(arrayBuffer: ArrayBuffer) {
+  try {
+    const archive = await JSZip.loadAsync(arrayBuffer);
+    const customProperties = archive.file("docProps/custom.xml");
+    if (!customProperties) return null;
+    const xml = await customProperties.async("string");
+    const documentNode = new DOMParser().parseFromString(xml, "application/xml");
+    if (documentNode.querySelector("parsererror")) return null;
+    const property = Array.from(documentNode.getElementsByTagNameNS("*", "property")).find(
+      (node) => node.getAttribute("name") === DOCX_RESUME_DATA_PROPERTY
+    );
+    return parseDocxResumePayload(property?.textContent ?? "");
+  } catch {
+    return null;
+  }
+}
+
+export interface ExtractedResumeFileContent {
+  text: string;
+  embeddedData: ResumeData | null;
+}
+
+export async function extractResumeFileContent(file: File): Promise<ExtractedResumeFileContent> {
   const extension = resumeExtension(file.name);
   if (!extension) throw new Error("Unsupported resume format.");
   await assertFileSignature(file, extension);
 
-  if (extension === ".pdf") return extractTextFromPDF(file);
+  if (extension === ".pdf") {
+    return { text: await extractTextFromPDF(file), embeddedData: null };
+  }
 
   const arrayBuffer = await file.arrayBuffer();
+  const embeddedData = await readEmbeddedResumeData(arrayBuffer);
   const result = await mammoth.convertToHtml({ arrayBuffer });
-  return htmlToStructuredText(result.value || "");
+  return {
+    text: htmlToStructuredText(result.value || ""),
+    embeddedData,
+  };
+}
+
+export function statsForResumeData(data: ResumeData): ParseStats {
+  return {
+    experiences: data.experience.length,
+    education: data.education.length,
+    projects: data.projects.length,
+    skills: data.skillGroups.reduce((total, group) => total + group.skills.length, 0),
+    certifications: data.certifications?.length ?? 0,
+  };
 }
 
 export function parseExtractedResumeText(
