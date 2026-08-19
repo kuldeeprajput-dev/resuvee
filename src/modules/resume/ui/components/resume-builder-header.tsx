@@ -106,7 +106,7 @@ export function ResumeBuilderHeader({
         <input
           type="file"
           ref={fileInputRef}
-          accept=".pdf,.docx,.doc,.txt"
+          accept=".pdf,.docx"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file && onUploadResume) {
@@ -121,7 +121,7 @@ export function ResumeBuilderHeader({
           onClick={() => fileInputRef.current?.click()}
           disabled={isImportingResume}
           className="group hidden sm:flex h-8.5 sm:h-10 rounded-xl border border-black/15 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-(--brand-ink) shadow-2xs transition hover:border-[#10b981] hover:bg-[#ecfdf5] hover:text-[#047857] items-center gap-1.5 cursor-pointer"
-          title="Upload outside resume (PDF, DOCX, TXT) to edit"
+          title="Import a PDF or DOCX resume to edit"
         >
           {isImportingResume ? (
             <Loader2 className="size-3.5 sm:size-4 animate-spin text-[#059669]" />

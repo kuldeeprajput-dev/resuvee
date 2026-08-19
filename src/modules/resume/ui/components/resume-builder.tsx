@@ -18,7 +18,7 @@ import { ResumeBuilderHeader } from "./resume-builder-header";
 import { TemplatePickerPanel, StartFreshModal } from "./resume-builder-panels";
 import { ResumeSidebar } from "./resume-sidebar";
 import { ResumeStepTrack } from "./resume-step-track";
-import { exportResumeDocx } from "../../utils/export-docx";
+import { exportResumeDocx, getResumeExportBaseName } from "../../utils/export-docx";
 import {
   extractTextFromResumeFile,
   parseExtractedResumeText,
@@ -84,6 +84,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
 
   const handleUploadResume = useCallback(
     async (file: File) => {
+      if (isImportingResume) return;
+
       // Validate before any async work
       const validation = validateResumeFile(file);
       if (!validation.valid) {
@@ -104,7 +106,24 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
           return;
         }
         const { data: parsedData, stats } = parseExtractedResumeText(rawText, data);
+        const structuredItemCount =
+          stats.experiences +
+          stats.education +
+          stats.projects +
+          stats.skills +
+          stats.certifications;
+        const hasIdentity = Boolean(parsedData.basics.fullName || parsedData.basics.email);
+        const hasReadableContent = Boolean(parsedData.basics.summary || structuredItemCount > 0);
+        if (!hasIdentity && !hasReadableContent) {
+          showToast(
+            "Could not structure this resume",
+            "Use a text-based PDF or DOCX. Scanned images need OCR before they can be imported.",
+            "error"
+          );
+          return;
+        }
         updateData(parsedData);
+        selectTemplate("standard");
 
         const parts: string[] = [];
         if (stats.experiences > 0)
@@ -124,20 +143,20 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
             ? `Imported! Found ${parts.join(", ")}.`
             : "Resume imported. Review and fill in any missing fields.";
 
-        showToast("Resume Imported", summary, "success");
+        showToast("Resume Imported", `${summary} Professional template applied.`, "success");
       } catch (err) {
         console.error("Failed to upload resume:", err);
-        showToast(
-          "Import Failed",
-          "Failed to parse uploaded resume. Please try another file.",
-          "error"
-        );
+        const message =
+          err instanceof Error && /valid (?:PDF|DOCX)|unsupported resume format/i.test(err.message)
+            ? err.message
+            : "We could not read this resume. Try exporting it again as a text-based PDF or DOCX.";
+        showToast("Import Failed", message, "error");
       } finally {
         setIsImportingResume(false);
         if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
       }
     },
-    [data, updateData, showToast]
+    [data, isImportingResume, updateData, selectTemplate, showToast]
   );
 
   useEffect(() => {
@@ -431,6 +450,32 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
     }
   };
 
+  const handleExportPdf = () => {
+    const previousTitle = document.title;
+    const exportTitle = getResumeExportBaseName(data.basics.fullName);
+    let restored = false;
+
+    const restoreTitle = () => {
+      if (restored) return;
+      restored = true;
+      window.removeEventListener("afterprint", restoreTitle);
+      window.removeEventListener("focus", restoreAfterFocus);
+      if (document.title === exportTitle) document.title = previousTitle;
+    };
+    const restoreAfterFocus = () => window.setTimeout(restoreTitle, 0);
+
+    document.title = exportTitle;
+    window.addEventListener("afterprint", restoreTitle, { once: true });
+    window.addEventListener("focus", restoreAfterFocus, { once: true });
+
+    try {
+      window.print();
+    } catch (error) {
+      restoreTitle();
+      throw error;
+    }
+  };
+
   return (
     <div className="resume-builder-root h-dvh overflow-hidden bg-[#e8e8e2] text-(--brand-ink)">
       <ResumeBuilderHeader
@@ -444,7 +489,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         onShowMobilePreview={() => setShowMobilePreview(true)}
         onShowTailor={() => setShowTailor(true)}
         onShowWritingCheck={() => setShowWritingCheck(true)}
-        onExportPdf={() => window.print()}
+        onExportPdf={handleExportPdf}
         onExportDocx={handleExportDocx}
         isExportingDocx={isExportingDocx}
         exportDocxStatus={exportDocxStatus}
@@ -589,7 +634,7 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
               onUpdateData={updateData}
               onUpdateStyle={setResumeStyle}
               onSelectSection={setActiveSection}
-              onExportPdf={() => window.print()}
+              onExportPdf={handleExportPdf}
               onExportDocx={handleExportDocx}
               isExportingDocx={isExportingDocx}
               exportDocxStatus={exportDocxStatus}

@@ -5,6 +5,18 @@ export interface ExportDocxResult {
   fileName: string;
 }
 
+export function getResumeExportBaseName(fullName?: string) {
+  const personName = fullName?.trim();
+  const title = personName ? `${personName}'s Resume` : "Resume";
+
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || "resume"
+  );
+}
+
 export async function exportResumeDocx(
   data: ResumeData,
   accent = "#28785b"
@@ -23,13 +35,7 @@ export async function exportResumeDocx(
   const accentHex = accent.replace("#", "").toUpperCase() || "28785B";
   const docFont = "Calibri";
 
-  const personName = data.basics.fullName?.trim() || "Resume";
-  const title = data.basics.fullName ? `${personName}'s Resume` : "Resume";
-
-  const fileName = `${title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")}.docx`;
+  const fileName = `${getResumeExportBaseName(data.basics.fullName)}.docx`;
 
   const paragraphs: DocxTypes.Paragraph[] = [];
 

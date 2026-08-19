@@ -192,7 +192,7 @@ export function CanvasTopBar({
                     onUploadResume(file);
                   }
                 }}
-                accept=".pdf,.docx,.doc,.txt"
+                accept=".pdf,.docx"
                 className="hidden"
               />
               <button

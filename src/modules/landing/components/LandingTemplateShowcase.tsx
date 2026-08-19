@@ -203,11 +203,7 @@ export function LandingTemplateShowcase() {
         {visibleTemplates.map((template, index) => (
           <Link
             key={template.id}
-            href={
-              template.audience === "fresher"
-                ? `/builder?template=${template.id}&starter=fresher`
-                : `/builder?template=${template.id}&starter=template`
-            }
+            href={`/builder?template=${template.id}&starter=${template.id}`}
             className="group snap-start flex w-[84vw] shrink-0 flex-col rounded-[20px] border border-black/8 bg-white/55 p-3.5 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:bg-white sm:w-auto sm:h-full sm:justify-between sm:rounded-[24px] sm:p-5"
           >
             <div className="relative overflow-hidden rounded-xl bg-[#e9ece8] p-3 sm:rounded-2xl sm:p-8 md:p-10">

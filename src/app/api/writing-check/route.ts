@@ -3,9 +3,9 @@ import { analyzeLocalWritingFallback, analyzeResumeWriting } from "@/modules/ana
 import type { WritingTarget } from "@/modules/resume";
 import { createClient } from "@/shared/lib/supabase/server";
 
-const MAX_TARGETS = 60;
-const MAX_TARGET_LENGTH = 1600;
-const MAX_TOTAL_LENGTH = 16000;
+const MAX_TARGETS = 80;
+const MAX_TARGET_LENGTH = 4000;
+const MAX_TOTAL_LENGTH = 32000;
 const TARGET_ID_PATTERN = /^[a-zA-Z0-9-_.]+/;
 
 export const dynamic = "force-dynamic";
@@ -30,13 +30,13 @@ function validateTargets(value: unknown): WritingTarget[] {
     const candidate = item as Record<string, unknown>;
     const id = typeof candidate.id === "string" ? candidate.id : "";
     const label = typeof candidate.label === "string" ? candidate.label.trim().slice(0, 100) : "";
-    const text = typeof candidate.text === "string" ? candidate.text.trim() : "";
+    let text = typeof candidate.text === "string" ? candidate.text.trim() : "";
 
     if (!TARGET_ID_PATTERN.test(id) || !label || !text) {
       throw new Error("A writing field is incomplete or unsupported.");
     }
     if (text.length > MAX_TARGET_LENGTH) {
-      throw new Error(`Each writing field must be under ${MAX_TARGET_LENGTH} characters.`);
+      text = text.slice(0, MAX_TARGET_LENGTH);
     }
     return { id, label, text };
   });

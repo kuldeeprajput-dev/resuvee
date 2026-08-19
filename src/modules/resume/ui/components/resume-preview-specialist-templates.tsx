@@ -219,18 +219,23 @@ export function AnalystTemplate(props: ResumePreviewProps) {
             <section>
               <AnalystRuleTitle>Education</AnalystRuleTitle>
               {data.education.map((item) => (
-                <article key={item.id} className="flex items-start justify-between gap-6">
-                  <div>
-                    <h3 className="text-[8.8px] font-bold">{item.degree}</h3>
+                <article
+                  key={item.id}
+                  className="grid grid-cols-[minmax(0,1fr)_minmax(0,42%)] items-start gap-6"
+                >
+                  <div className="min-w-0">
+                    <h3 className="break-words text-[8.8px] font-bold">{item.degree}</h3>
                     <p className="mt-0.5 text-[7.8px] italic text-black/65">
                       {[item.school, item.location].filter(Boolean).join(", ")}
                     </p>
                   </div>
-                  <div className="shrink-0 text-right">
+                  <div className="min-w-0 text-right">
                     <p className="text-[8px] font-bold">
                       {[item.startDate, item.endDate].filter(Boolean).join(" – ")}
                     </p>
-                    <p className="mt-0.5 text-[7.5px] italic text-black/60">{item.details}</p>
+                    <p className="mt-0.5 break-words text-[7.5px] italic text-black/60">
+                      {item.details}
+                    </p>
                   </div>
                 </article>
               ))}

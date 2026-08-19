@@ -5,7 +5,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { defaultResumeStyle, type ResumeStyle } from "../ui/components/customize-panel";
 import { resumeTemplates } from "../constants/resume-data";
 import { createBlankResumeData } from "../constants/resume-seed-data";
-import { getTemplateStarterData } from "../constants/resume-presets";
+import { getTemplateStarterData, hasResumeContent } from "../constants/resume-presets";
 import type { BuilderSection, ResumeData, ResumeTemplateId } from "../types/resume";
 import type { WritingIssue } from "../types/writing";
 import { idbGet, idbSet, idbDel } from "../services/resume-idb";
@@ -107,7 +107,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
   persist(
     (set, get) => ({
       activeResumeId: null,
-      data: getTemplateStarterData("standard"),
+      data: createBlankResumeData(),
       templateId: "standard",
       resumeStyle: defaultResumeStyle,
       activeSection: "basics",
@@ -127,7 +127,10 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
       writingHasChecked: false,
 
       initialize: (initialTemplate, initialStarter) => {
-        if (get().initialized) return;
+        // A template link can mount the builder again in the same browser
+        // session. Process that explicit selection even after an earlier
+        // builder mount; a direct revisit without a template remains a no-op.
+        if (get().initialized && !isResumeTemplateId(initialTemplate)) return;
 
         const requestedTemplate = isResumeTemplateId(initialTemplate)
           ? initialTemplate
@@ -155,7 +158,7 @@ export const useResumeBuilderStore = create<ResumeBuilderState>()(
           }
         }
 
-        if (isResumeTemplateId(initialStarter)) {
+        if (isResumeTemplateId(initialStarter) && !hasResumeContent(baseData)) {
           baseData = getTemplateStarterData(initialStarter);
         }
 

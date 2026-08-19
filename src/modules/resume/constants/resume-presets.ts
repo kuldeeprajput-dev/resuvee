@@ -18,6 +18,67 @@ function hasText(values: string[]) {
   return values.some((value) => value.trim().length > 0);
 }
 
+/**
+ * Returns true only when the canvas contains meaningful resume content.
+ * Empty editor rows and their generated IDs do not count as user content.
+ */
+export function hasResumeContent(data: ResumeData) {
+  const basics = data.basics;
+  const customLinks = basics.customLinks ?? [];
+
+  return (
+    hasText([
+      basics.fullName,
+      basics.headline,
+      basics.photo,
+      basics.email,
+      basics.phone,
+      basics.location,
+      basics.website,
+      basics.linkedin ?? "",
+      basics.github ?? "",
+      basics.summary,
+      ...customLinks.flatMap((link) => [link.label ?? "", link.url ?? ""]),
+    ]) ||
+    data.experience.some((item) =>
+      hasText([
+        item.role,
+        item.company,
+        item.location,
+        item.startDate,
+        item.endDate,
+        ...item.highlights,
+      ])
+    ) ||
+    data.education.some((item) =>
+      hasText([
+        item.degree,
+        item.school,
+        item.location,
+        item.startDate,
+        item.endDate,
+        item.details,
+      ])
+    ) ||
+    data.projects.some((item) =>
+      hasText([
+        item.name,
+        item.description,
+        item.link,
+        item.githubUrl ?? "",
+        item.linkLabel ?? "",
+        item.githubLabel ?? "",
+        item.date ?? "",
+        ...item.highlights,
+      ])
+    ) ||
+    data.skillGroups.some((group) => hasText([group.name, ...group.skills])) ||
+    (data.certifications ?? []).some((item) =>
+      hasText([item.title, item.issuer, item.date, item.description])
+    )
+  );
+}
+
 export function mergeResumeWithStarter(current: ResumeData, starter: ResumeData): ResumeData {
   const basics = Object.fromEntries(
     Object.entries(starter.basics).map(([key, sampleValue]) => {
