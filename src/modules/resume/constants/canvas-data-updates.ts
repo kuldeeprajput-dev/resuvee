@@ -9,6 +9,9 @@ export function updateDataForFieldChange(
   const { section, id, field, highlightIndex } = selectedElement;
 
   if (section === "basics") {
+    if (field === "custom") {
+      return data;
+    }
     if (field === "customLink" && id && data.basics.customLinks) {
       return {
         ...data,
@@ -21,10 +24,13 @@ export function updateDataForFieldChange(
       };
     }
     const fieldKey = (field || "fullName") as keyof ResumeData["basics"];
-    return {
-      ...data,
-      basics: { ...data.basics, [fieldKey]: newText },
-    };
+    if (fieldKey in data.basics) {
+      return {
+        ...data,
+        basics: { ...data.basics, [fieldKey]: newText },
+      };
+    }
+    return data;
   } else if (section === "experience" && id) {
     return {
       ...data,
@@ -157,26 +163,63 @@ export function deleteSelectedItem(
   data: ResumeData,
   selectedElement: SelectedCanvasElement
 ): ResumeData {
-  if (selectedElement.section === "experience" && selectedElement.id) {
+  const { section, id, field, highlightIndex } = selectedElement;
+
+  if (section === "experience" && id) {
+    if (field === "highlight" && highlightIndex !== undefined) {
+      return {
+        ...data,
+        experience: data.experience.map((item) =>
+          item.id === id
+            ? {
+                ...item,
+                highlights: item.highlights.filter((_, idx) => idx !== highlightIndex),
+              }
+            : item
+        ),
+      };
+    }
     return {
       ...data,
-      experience: data.experience.filter((i) => i.id !== selectedElement.id),
+      experience: data.experience.filter((i) => i.id !== id),
     };
-  } else if (selectedElement.section === "education" && selectedElement.id) {
+  } else if (section === "education" && id) {
     return {
       ...data,
-      education: data.education.filter((i) => i.id !== selectedElement.id),
+      education: data.education.filter((i) => i.id !== id),
     };
-  } else if (selectedElement.section === "projects" && selectedElement.id) {
+  } else if (section === "projects" && id) {
     return {
       ...data,
-      projects: data.projects.filter((i) => i.id !== selectedElement.id),
+      projects: data.projects.filter((i) => i.id !== id),
     };
-  } else if (selectedElement.section === "certifications" && selectedElement.id) {
+  } else if (section === "skills" && id) {
     return {
       ...data,
-      certifications: (data.certifications ?? []).filter((item) => item.id !== selectedElement.id),
+      skillGroups: data.skillGroups.filter((group) => group.id !== id),
     };
+  } else if (section === "certifications" && id) {
+    return {
+      ...data,
+      certifications: (data.certifications ?? []).filter((item) => item.id !== id),
+    };
+  } else if (section === "basics") {
+    if (field === "customLink" && id && data.basics.customLinks) {
+      return {
+        ...data,
+        basics: {
+          ...data.basics,
+          customLinks: data.basics.customLinks.filter((l) => l.id !== id),
+        },
+      };
+    }
+    const fieldKey = (field || "summary") as keyof ResumeData["basics"];
+    if (fieldKey in data.basics) {
+      return {
+        ...data,
+        basics: { ...data.basics, [fieldKey]: "" },
+      };
+    }
   }
 
   return data;

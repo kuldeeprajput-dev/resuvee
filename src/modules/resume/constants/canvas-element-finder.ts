@@ -238,7 +238,7 @@ export function findSelectedCanvasElement(
   if (!found) {
     found = {
       section: "basics",
-      field: "fullName",
+      field: "custom",
       title: "Selected Text",
     };
     inlineText = clickedText;

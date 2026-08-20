@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { createClient } from "@/shared/lib/supabase/server";
+import { getGroqModel } from "@/shared/lib/groq-model";
+import { createClient, getAuthUser } from "@/shared/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -27,10 +28,7 @@ function getGroqClient(): OpenAI {
 
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getAuthUser();
 
     if (!user) {
       return NextResponse.json(
@@ -41,9 +39,9 @@ export async function POST(req: Request) {
 
     const { text, fieldName } = await req.json();
 
-    if (!text || typeof text !== "string" || !text.trim()) {
+    if (!text || typeof text !== "string" || text.trim().length < 15) {
       return NextResponse.json(
-        { error: "Text content is required for refinement." },
+        { error: "Text must be at least 15 characters to refine." },
         { status: 400 }
       );
     }
@@ -52,12 +50,13 @@ export async function POST(req: Request) {
 
     // Ultra-optimized short system prompt to minimize token consumption
     const systemPrompt =
-      "You are an expert cover letter copy editor. Polish the text to sound professional, impactful, and clear. Return ONLY the refined text without intro or quotation marks.";
+      "You are an expert resume and document copy editor. Polish the text to sound professional, impactful, clear, and ATS-friendly. Return ONLY the refined text without intro or quotation marks.";
 
     const userPrompt = `Field: ${fieldName || "cover letter section"}\nText: ${text.trim()}`;
 
     const completion = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: getGroqModel(),
+      reasoning_effort: "low",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },

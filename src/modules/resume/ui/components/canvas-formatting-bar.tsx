@@ -90,6 +90,20 @@ export function CanvasFormattingBar({
     }
   }, [updateSelectionBounds, toolbarRef]);
 
+  const trimmedText = (inlineText || "").trim();
+  const isSmallText = trimmedText.length < 15;
+  const isNonRefinableField =
+    (selectedElement.section === "basics" && selectedElement.field !== "summary") ||
+    selectedElement.field === "date" ||
+    selectedElement.field === "company" ||
+    selectedElement.field === "school" ||
+    selectedElement.field === "degree" ||
+    selectedElement.field === "link" ||
+    selectedElement.field === "githubUrl" ||
+    selectedElement.field === "customLink" ||
+    selectedElement.field === "issuer";
+  const isAiRefineDisabled = isSmallText || isNonRefinableField;
+
   return (
     <div
       ref={toolbarRef}
@@ -105,14 +119,20 @@ export function CanvasFormattingBar({
         <button
           type="button"
           onClick={handleAiRefine}
-          disabled={isRefining}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-50"
-          title="AI Smart Refine Text"
+          disabled={isRefining || isAiRefineDisabled}
+          className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-black/10 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+          title={
+            isAiRefineDisabled
+              ? "AI Refine is disabled for short text & contact fields (min 15 characters)"
+              : "AI Smart Refine Text"
+          }
         >
           {isRefining ? (
             <Loader2 className="size-3.5 text-[#059669] animate-spin" />
           ) : (
-            <Sparkles className="size-3.5 text-[#059669]" />
+            <Sparkles
+              className={cn("size-3.5", isAiRefineDisabled ? "text-gray-400" : "text-[#059669]")}
+            />
           )}
         </button>
 
@@ -153,8 +173,13 @@ export function CanvasFormattingBar({
                 <button
                   type="button"
                   onClick={handleAiRefine}
-                  disabled={isRefining}
-                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-50"
+                  disabled={isRefining || isAiRefineDisabled}
+                  className="flex h-7 items-center gap-1 rounded-xl bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-[#059669] hover:bg-emerald-100 transition cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+                  title={
+                    isAiRefineDisabled
+                      ? "AI Refine is disabled for short text & contact fields (min 15 characters)"
+                      : "AI Smart Refine Text"
+                  }
                 >
                   {isRefining ? (
                     <Loader2 className="size-3 animate-spin" />
@@ -291,16 +316,14 @@ export function CanvasFormattingBar({
           <Palette className="size-3.5 text-[#059669]" />
         </button>
 
-        {selectedElement.id && (
-          <button
-            type="button"
-            onClick={deleteSelected}
-            className="builder-icon-button text-red-600 hover:bg-red-50 cursor-pointer"
-            title="Delete item"
-          >
-            <Trash2 className="size-3.5" />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={deleteSelected}
+          className="builder-icon-button text-red-600 hover:bg-red-50 cursor-pointer"
+          title="Delete item / Clear field text"
+        >
+          <Trash2 className="size-3.5" />
+        </button>
 
         {showColorPicker && (
           <div className="absolute top-12 right-0 z-100 flex items-center gap-2 rounded-full border border-black/15 bg-white p-2 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 pointer-events-auto">

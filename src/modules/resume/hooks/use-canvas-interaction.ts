@@ -56,9 +56,13 @@ export function useCanvasInteraction({
   }, [onZoomChange]);
 
   const updateSelectionBounds = useCallback(() => {
-    if (!selectedDomRef.current || !containerRef.current) return;
-    if (!selectedDomRef.current.isConnected) {
-      clearSelection();
+    if (
+      !selectedDomRef.current ||
+      !(selectedDomRef.current instanceof Element) ||
+      !selectedDomRef.current.isConnected ||
+      !containerRef.current ||
+      !(containerRef.current instanceof Element)
+    ) {
       return;
     }
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -91,7 +95,13 @@ export function useCanvasInteraction({
 
   // ResizeObserver + Scroll + Window Resize listeners
   useEffect(() => {
-    if (!selectedElement || !selectedDomRef.current) {
+    const currentElem = selectedDomRef.current;
+    if (
+      !selectedElement ||
+      !currentElem ||
+      !(currentElem instanceof Element) ||
+      !currentElem.isConnected
+    ) {
       setHighlightRect(null);
       setToolbarPos(null);
       return;
@@ -99,10 +109,15 @@ export function useCanvasInteraction({
 
     updateSelectionBounds();
 
-    const observer = new ResizeObserver(() => {
-      updateSelectionBounds();
-    });
-    observer.observe(selectedDomRef.current);
+    let observer: ResizeObserver | null = null;
+    try {
+      observer = new ResizeObserver(() => {
+        updateSelectionBounds();
+      });
+      observer.observe(currentElem);
+    } catch (e) {
+      console.warn("ResizeObserver observe error:", e);
+    }
 
     const handleScroll = () => {
       updateSelectionBounds();
@@ -112,7 +127,9 @@ export function useCanvasInteraction({
     window.addEventListener("resize", updateSelectionBounds);
 
     return () => {
-      observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
       window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("resize", updateSelectionBounds);
     };

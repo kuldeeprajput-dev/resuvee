@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/modules/auth";
+import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { Maximize2, Minimize2 } from "lucide-react";
 import type { BuilderSection, ResumeData, ResumeTemplate } from "../../types/resume";
 import { useResumeBuilderStore } from "../../hooks/use-resume-builder-store";
@@ -199,15 +200,17 @@ export function InteractiveCanvas({
       return;
     }
 
-    if (!inlineText || !inlineText.trim() || isRefining) return;
+    const trimmed = (inlineText || "").trim();
+    if (!trimmed || trimmed.length < 15 || isRefining) return;
     setIsRefining(true);
 
     try {
+      const authHeaders = await getAuthHeaders();
       const res = await fetch("/api/refine-text", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify({
-          text: inlineText,
+          text: trimmed,
           fieldName: selectedElement?.field || selectedElement?.title || "resume section",
         }),
       });
@@ -369,11 +372,16 @@ export function InteractiveCanvas({
     }
   };
 
-  // Delete Selected Item
+  // Delete Selected Item or Clear Field
   const deleteSelected = () => {
-    if (!selectedElement || !onUpdateData) return;
-    const nextData = deleteSelectedItem(data, selectedElement);
-    onUpdateData(nextData);
+    setInlineText("");
+    if (selectedDomRef.current) {
+      selectedDomRef.current.textContent = "";
+    }
+    if (selectedElement && onUpdateData) {
+      const nextData = deleteSelectedItem(data, selectedElement);
+      onUpdateData(nextData);
+    }
     clearSelection();
   };
 
