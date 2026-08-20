@@ -16,7 +16,7 @@ const fontModern = Inter({
   variable: "--font-modern",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://resuvee.com";
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://resuvee.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
