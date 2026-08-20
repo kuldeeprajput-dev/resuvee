@@ -20,6 +20,9 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://resuvee.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "./",
+  },
   title: {
     default: "Resuvee — Professional Resume Builder & ATS Analyzer",
     template: "%s | Resuvee",
@@ -59,6 +62,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "Resuvee — Professional Resume Builder & ATS Analyzer",
       },
     ],
@@ -68,7 +72,14 @@ export const metadata: Metadata = {
     title: "Resuvee — Professional Resume Builder & ATS Analyzer",
     description:
       "Build ATS-friendly professional resumes with 16 original templates, perform AI writing checks, analyze ATS keyword scores, and export clean PDF & Word files.",
-    images: ["/og-image.png"],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Resuvee — Professional Resume Builder & ATS Analyzer",
+      },
+    ],
   },
   robots: {
     index: true,
@@ -89,18 +100,33 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Resuvee",
-  operatingSystem: "All",
-  applicationCategory: "BusinessApplication",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-  },
-  description:
-    "Build ATS-friendly professional resumes with 16 original templates, perform AI writing checks, analyze ATS keyword scores, and export clean PDF & Word files.",
-  url: siteUrl,
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "Resuvee",
+      description:
+        "Build ATS-friendly professional resumes with 16 original templates, perform AI writing checks, analyze ATS keyword scores, and export clean PDF & Word files.",
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${siteUrl}/#application`,
+      name: "Resuvee",
+      operatingSystem: "All",
+      applicationCategory: "BusinessApplication",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      description:
+        "Build ATS-friendly professional resumes with 16 original templates, perform AI writing checks, analyze ATS keyword scores, and export clean PDF & Word files.",
+      url: siteUrl,
+      image: `${siteUrl}/og-image.png`,
+    },
+  ],
 };
 
 export default function RootLayout({
