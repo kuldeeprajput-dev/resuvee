@@ -86,3 +86,33 @@ export async function idbDel(key: string): Promise<void> {
     console.error(`idbDel error for key "${key}":`, e);
   }
 }
+
+export interface LocalResumeRecord {
+  id: string;
+  title: string;
+  target_role: string;
+  data: any;
+  created_at: string;
+  updated_at: string;
+}
+
+const LOCAL_RESUMES_KEY = "local-saved-resumes";
+
+export async function getLocalSavedResumes(): Promise<LocalResumeRecord[]> {
+  const records = await idbGet<LocalResumeRecord[]>(LOCAL_RESUMES_KEY);
+  return records || [];
+}
+
+export async function saveLocalResumeBackup(record: LocalResumeRecord): Promise<void> {
+  const current = await getLocalSavedResumes();
+  const filtered = current.filter((item) => item.id !== record.id);
+  await idbSet(LOCAL_RESUMES_KEY, [record, ...filtered]);
+}
+
+export async function deleteLocalResumeBackup(id: string): Promise<void> {
+  const current = await getLocalSavedResumes();
+  await idbSet(
+    LOCAL_RESUMES_KEY,
+    current.filter((item) => item.id !== id)
+  );
+}

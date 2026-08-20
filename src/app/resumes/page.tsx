@@ -22,7 +22,13 @@ import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { useAuthStore } from "@/modules/auth";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
-import { idbSet } from "@/modules/resume/services/resume-idb";
+import {
+  idbGet,
+  idbSet,
+  idbDel,
+  getLocalSavedResumes,
+  deleteLocalResumeBackup,
+} from "@/modules/resume/services/resume-idb";
 
 interface SavedResumeItem {
   id: string;
@@ -46,18 +52,38 @@ export default function SavedResumesPage() {
   const fetchResumes = async () => {
     setLoading(true);
     setError(null);
+    let apiResumes: SavedResumeItem[] = [];
     try {
-      const res = await fetch("/api/resumes");
+      const authHeaders = await getAuthHeaders();
+      const res = await fetch("/api/resumes", { headers: authHeaders });
       const json = await res.json();
-      if (!res.ok || !json.success) {
+      if (res.ok && json.success) {
+        apiResumes = json.data || [];
+      } else if (!json.tableMissing) {
         throw new Error(json.error || "Could not fetch saved resumes.");
       }
-      setResumes(json.data || []);
     } catch (err: any) {
-      setError(err.message || "Failed to load saved resumes.");
-    } finally {
-      setLoading(false);
+      console.error("Fetch saved resumes error:", err);
     }
+
+    if (typeof window !== "undefined") {
+      try {
+        const idbResumes = await getLocalSavedResumes();
+        const localResumesRaw = localStorage.getItem("local-saved-resumes");
+        const legacyResumes: SavedResumeItem[] = localResumesRaw ? JSON.parse(localResumesRaw) : [];
+        const localResumes = [...idbResumes, ...legacyResumes];
+        const mergedMap = new Map<string, SavedResumeItem>();
+        [...apiResumes, ...localResumes].forEach((item) => {
+          if (!mergedMap.has(item.id)) mergedMap.set(item.id, item as SavedResumeItem);
+        });
+        apiResumes = Array.from(mergedMap.values());
+      } catch (e) {
+        console.error("Local resume merge error:", e);
+      }
+    }
+
+    setResumes(apiResumes);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -94,10 +120,11 @@ export default function SavedResumesPage() {
 
   const handleDuplicate = async (resume: SavedResumeItem) => {
     try {
+      const authHeaders = await getAuthHeaders();
       const copyTitle = `${resume.title} (Copy)`;
       const res = await fetch("/api/resumes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify({
           title: copyTitle,
           targetRole: resume.target_role,
@@ -107,6 +134,7 @@ export default function SavedResumesPage() {
       const json = await res.json();
       if (json.success) {
         fetchResumes();
+        showToast("Resume duplicated", undefined, "success");
       }
     } catch (err) {
       console.error("Duplicate error:", err);
@@ -129,6 +157,21 @@ export default function SavedResumesPage() {
           const json = await res.json();
           if (json.success) {
             setResumes((prev) => prev.filter((r) => r.id !== id));
+            if (typeof window !== "undefined") {
+              try {
+                await deleteLocalResumeBackup(id);
+                const localListRaw = localStorage.getItem("local-saved-resumes");
+                if (localListRaw) {
+                  const localList: SavedResumeItem[] = JSON.parse(localListRaw);
+                  localStorage.setItem(
+                    "local-saved-resumes",
+                    JSON.stringify(localList.filter((r) => r.id !== id))
+                  );
+                }
+              } catch (e) {
+                console.error("Local resume delete error:", e);
+              }
+            }
             showToast("Resume deleted", undefined, "info");
           }
         } catch (err) {

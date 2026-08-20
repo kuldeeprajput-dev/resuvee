@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import OpenAI from "openai";
+import { getGroqModel } from "@/shared/lib/groq-model";
 import type { ResumeAnalysis } from "../index";
 import { auditCategoryScores, auditResumeText, calibratedResumeScore } from "./resume-evidence";
 
@@ -119,7 +120,8 @@ export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis>
 
   try {
     const completion = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: getGroqModel(),
+      reasoning_effort: "low",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {
@@ -130,6 +132,7 @@ export async function analyzeResume(resumeText: string): Promise<ResumeAnalysis>
       temperature: 0.05,
       top_p: 0.85,
       max_tokens: 1200,
+      response_format: { type: "json_object" },
     });
 
     responseText = completion.choices[0]?.message?.content ?? "";

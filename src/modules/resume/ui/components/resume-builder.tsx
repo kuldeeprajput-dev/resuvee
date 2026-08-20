@@ -25,7 +25,7 @@ import {
   statsForResumeData,
   validateResumeFile,
 } from "../../utils/import-resume";
-import { idbGet, idbSet } from "../../services/resume-idb";
+import { idbGet, idbSet, saveLocalResumeBackup } from "../../services/resume-idb";
 import { useNotification } from "@/shared/lib/use-notification";
 
 interface ResumeBuilderProps {
@@ -127,6 +127,8 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         }
         updateData(parsedData);
         selectTemplate("standard");
+        setActiveResumeId(null);
+        await idbSet("active-resume-id", "draft");
 
         const parts: string[] = [];
         if (stats.experiences > 0)
@@ -159,19 +161,28 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         if (uploadFileInputRef.current) uploadFileInputRef.current.value = "";
       }
     },
-    [data, isImportingResume, updateData, selectTemplate, showToast]
+    [data, isImportingResume, updateData, selectTemplate, setActiveResumeId, showToast]
   );
+
+  const hasLoadedCloudResumeRef = useRef(false);
 
   useEffect(() => {
     // Wait until the store is initialized (IDB rehydrated + initialize() done)
-    // before trying to overlay a cloud resume — avoids race with initialize().
-    if (!initialized || !user) return;
+    // before trying to overlay a cloud resume — runs only once on initial mount.
+    if (!initialized || !user || hasLoadedCloudResumeRef.current) return;
+    hasLoadedCloudResumeRef.current = true;
 
     let cancelled = false;
     async function loadCloudResume() {
       try {
         const storedId = activeResumeId || (await idbGet<string>("active-resume-id"));
-        if (!storedId || storedId === "new" || storedId === "undefined" || storedId === "null")
+        if (
+          !storedId ||
+          storedId === "new" ||
+          storedId === "draft" ||
+          storedId === "undefined" ||
+          storedId === "null"
+        )
           return;
 
         const authHeaders = await getAuthHeaders();
@@ -213,15 +224,25 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
       // Read active resume ID from store or fallback to IndexedDB
       const storedId = activeResumeId || (await idbGet<string>("active-resume-id"));
       const activeId =
-        storedId && storedId !== "undefined" && storedId !== "null" && storedId !== "new"
+        storedId &&
+        storedId !== "undefined" &&
+        storedId !== "null" &&
+        storedId !== "new" &&
+        storedId !== "draft"
           ? storedId
           : undefined;
 
       // Bundle templateId + resumeStyle into __meta so they survive save/load
-      const dataWithMeta = {
+      const dataToSave = {
         ...data,
         __meta: { templateId, resumeStyle },
       };
+
+      const resumeTitle = data.basics.fullName
+        ? `${data.basics.fullName}'s Resume`
+        : data.basics.headline
+          ? `${data.basics.headline} — Resume`
+          : "Untitled Resume";
 
       const authHeaders = await getAuthHeaders();
       const res = await fetch("/api/resumes", {
@@ -229,9 +250,9 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify({
           id: activeId,
-          title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
+          title: resumeTitle,
           targetRole: data.basics.headline || "",
-          data: dataWithMeta,
+          data: dataToSave,
         }),
       });
 
@@ -240,34 +261,38 @@ export function ResumeBuilder({ initialTemplate, initialStarter }: ResumeBuilder
         throw new Error(json.error || "Could not save resume.");
       }
 
-      const resumeId = json.data?.id || `local-${Date.now()}`;
+      const resumeId = json.data?.id || activeId || `local-${Date.now()}`;
 
       // Persist to store & IndexedDB
       setActiveResumeId(resumeId);
       await idbSet("active-resume-id", resumeId);
       try {
-        const localList: any[] = (await idbGet<any[]>("local-saved-resumes")) || [];
-        const newItem = {
+        await saveLocalResumeBackup({
           id: resumeId,
-          title: data.basics.fullName ? `${data.basics.fullName}'s Resume` : "Untitled Resume",
+          title: resumeTitle,
           target_role: data.basics.headline || "",
-          data,
-          created_at: new Date().toISOString(),
+          data: dataToSave,
+          created_at: json.data?.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        };
-        const updatedList = [newItem, ...localList.filter((item: any) => item.id !== resumeId)];
-        await idbSet("local-saved-resumes", updatedList);
+        });
       } catch (e) {
         console.error("Local IDB backup error:", e);
       }
 
       setSaveStatus("saved");
-      showToast("Resume Saved", "Your resume was saved successfully to your account.", "success");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      showToast(
+        activeId ? "Resume Updated" : "Resume Saved",
+        activeId
+          ? "Your changes were updated in your account."
+          : "Your resume was saved successfully to your account.",
+        "success"
+      );
+      setTimeout(() => setSaveStatus("idle"), 2500);
     } catch (err: any) {
-      console.error("Save error:", err);
+      console.error("Save resume error:", err);
       showToast("Save Error", err.message || "Failed to save resume.", "error");
       setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
     } finally {
       setIsSaving(false);
     }

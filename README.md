@@ -99,6 +99,7 @@ Create `.env.local` in the project root:
 
 ```env
 GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 The builder and all template features run without an API key. The key is only

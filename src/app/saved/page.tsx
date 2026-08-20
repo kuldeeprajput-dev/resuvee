@@ -28,6 +28,8 @@ import {
   idbGet as resumeIdbGet,
   idbSet as resumeIdbSet,
   idbDel as resumeIdbDel,
+  getLocalSavedResumes,
+  deleteLocalResumeBackup,
 } from "@/modules/resume/services/resume-idb";
 import { getAuthHeaders } from "@/shared/lib/api-headers";
 import { useNotification } from "@/shared/lib/use-notification";
@@ -121,14 +123,17 @@ export default function SavedDocumentsPage() {
       console.error("Fetch saved items error:", err);
     }
 
-    // Merge with LocalStorage backups so saved items always appear
+    // Merge with IndexedDB backups so saved items always appear
     if (typeof window !== "undefined") {
       try {
+        const idbResumes = await getLocalSavedResumes();
         const localResumesRaw = localStorage.getItem("local-saved-resumes");
-        const localResumes: SavedResumeItem[] = localResumesRaw ? JSON.parse(localResumesRaw) : [];
+        const legacyResumes: SavedResumeItem[] = localResumesRaw ? JSON.parse(localResumesRaw) : [];
+        const localResumes = [...idbResumes, ...legacyResumes];
         const mergedResumesMap = new Map<string, SavedResumeItem>();
         [...apiResumes, ...localResumes].forEach((item) => {
-          if (!mergedResumesMap.has(item.id)) mergedResumesMap.set(item.id, item);
+          if (!mergedResumesMap.has(item.id))
+            mergedResumesMap.set(item.id, item as SavedResumeItem);
         });
         apiResumes = Array.from(mergedResumesMap.values());
 
@@ -231,13 +236,18 @@ export default function SavedDocumentsPage() {
           );
           setResumes((prev) => prev.filter((r) => r.id !== id));
           if (typeof window !== "undefined") {
-            const localListRaw = localStorage.getItem("local-saved-resumes");
-            if (localListRaw) {
-              const localList: SavedResumeItem[] = JSON.parse(localListRaw);
-              localStorage.setItem(
-                "local-saved-resumes",
-                JSON.stringify(localList.filter((r) => r.id !== id))
-              );
+            try {
+              await deleteLocalResumeBackup(id);
+              const localListRaw = localStorage.getItem("local-saved-resumes");
+              if (localListRaw) {
+                const localList: SavedResumeItem[] = JSON.parse(localListRaw);
+                localStorage.setItem(
+                  "local-saved-resumes",
+                  JSON.stringify(localList.filter((r) => r.id !== id))
+                );
+              }
+            } catch (e) {
+              console.error("Local resume delete error:", e);
             }
           }
           showToast("Resume deleted", undefined, "info");

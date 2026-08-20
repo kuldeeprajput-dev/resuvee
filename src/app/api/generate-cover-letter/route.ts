@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getGroqModel } from "@/shared/lib/groq-model";
 import { createClient } from "@/shared/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -130,7 +131,8 @@ Tone: ${writingTone}
 Write an exceptional, impact-driven cover letter. Avoid generic buzzwords; emphasize clear value and ownership.`;
 
     const response = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: getGroqModel(),
+      reasoning_effort: "low",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },

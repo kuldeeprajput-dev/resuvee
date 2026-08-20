@@ -45,11 +45,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getAuthUser();
 
     if (!user) {
       return NextResponse.json(
@@ -57,6 +53,9 @@ export async function DELETE(
         { status: 401 }
       );
     }
+
+    const { id } = await params;
+    const supabase = await createClient();
 
     const { error } = await supabase.from("resumes").delete().eq("id", id).eq("user_id", user.id);
 

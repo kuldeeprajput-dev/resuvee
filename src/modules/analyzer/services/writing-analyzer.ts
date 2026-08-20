@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { getGroqModel } from "@/shared/lib/groq-model";
 import type {
   WritingCheckResponse,
   WritingIssue,
@@ -620,7 +621,8 @@ export async function analyzeResumeWriting(
 
   try {
     const completion = await getWritingClient().chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: getGroqModel(),
+      reasoning_effort: "low",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {
@@ -631,6 +633,7 @@ export async function analyzeResumeWriting(
       temperature: 0.1,
       top_p: 0.9,
       max_tokens: 3000,
+      response_format: { type: "json_object" },
     });
 
     const responseText = completion.choices[0]?.message?.content;
