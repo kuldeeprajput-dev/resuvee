@@ -1,3 +1,6 @@
+
+
+
 <div align="center">
   <img src="./public/resuvee-mark.webp" alt="Resuvee Logo" width="80" height="80" style="border-radius: 18px;" />
 
@@ -26,8 +29,9 @@ Designed for job seekers and professionals, Resuvee enables users to build ATS-o
 
 ## Application Video Walkthrough
 
-<!-- UPLOAD YOUR VIDEO ASSET ON GITHUB AND REPLACE THE URL BELOW -->
-https://github.com/user-attachments/assets/your-video-walkthrough-id-here
+
+https://github.com/user-attachments/assets/4c557fdb-a85d-45d2-b6a7-a83df48e1239
+
 
 <p align="center">
   <em>Demonstration of interactive resume building, ATS compatibility scoring, AI text refinement, multi-page canvas pagination, and vector export.</em>
