@@ -1,176 +1,163 @@
+<div align="center">
+  <img src="./public/resuvee-mark.webp" alt="Resuvee Logo" width="80" height="80" style="border-radius: 18px;" />
+
 # Resuvee
 
-Resuvee is a resume product that combines a guided resume builder with the
-existing AI-powered ATS analyzer. Users can create a resume, switch between
-original templates, export to PDF, and review an existing resume from the same
-product.
+**AI-Powered ATS Resume Builder, Smart Analyzer & Career Studio**
 
-This version intentionally uses local browser storage. Authentication and
-database persistence can be added later without changing the resume document
-model or editor structure.
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-000000?style=flat&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2-20232A?style=flat&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Auth_%26_DB-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Groq AI](https://img.shields.io/badge/Groq-Fast_LLM_Inference-F55036?style=flat&logo=fastapi&logoColor=white)](https://groq.com/)
+[![License](https://img.shields.io/badge/License-MIT-red?style=flat)](./LICENSE)
+</div>
 
-## Product features
+---
 
-### Resume builder
+## System Overview
 
-- Six original, copyright-safe resume templates
-- Guided editing for personal details, summary, work, education, projects, and
-  skills
-- Live document preview while editing
-- Template switching without losing content
-- Resume strength indicator
-- Undo and redo history
-- Local draft autosave
-- Start-fresh flow for a blank resume
-- Responsive editing and preview experience
-- A4 print and save-as-PDF export
+**Resuvee** is a modern, privacy-first career document studio that brings together an interactive resume builder, deep AI-powered ATS resume analyzer, smart cover letter generator, and document conversion engine. 
 
-### ATS analyzer
+Designed for job seekers and professionals, Resuvee enables users to build ATS-optimized resumes with 16 original templates, perform granular on-canvas edits, analyze resume-to-job keyword alignment with actionable scoring, and export clean vector PDFs alongside native Microsoft Word DOCX files with embedded structured metadata.
 
-- Drag-and-drop PDF and DOCX upload
-- Client-side PDF text extraction
-- Server-side DOCX extraction
-- AI-powered ATS scoring
-- Keyword gap identification
-- Strengths and weaknesses
-- Prioritized improvement suggestions
-- Direct route back into the resume builder
+---
 
-### Product experience
+## Application Video Walkthrough
 
-- Product landing page with clear builder and analyzer entry points
-- Shared brand, navigation, and footer
-- Responsive layouts for desktop and mobile
-- Route-specific metadata
-- Copyright-safe template messaging
+<!-- UPLOAD YOUR VIDEO ASSET ON GITHUB AND REPLACE THE URL BELOW -->
+https://github.com/user-attachments/assets/your-video-walkthrough-id-here
 
-## Templates
+<p align="center">
+  <em>Demonstration of interactive resume building, ATS compatibility scoring, AI text refinement, multi-page canvas pagination, and vector export.</em>
+</p>
 
-All templates were designed specifically for this project. They use common
-resume structures and typography conventions rather than copying third-party
-template artwork.
+---
 
-| Template  | Style                        | Best suited for                   |
-| --------- | ---------------------------- | --------------------------------- |
-| Meridian  | Fresh portrait layout        | Product, people, and operations   |
-| Editorial | Timeless single column       | Academia, law, and consulting     |
-| Summit    | Executive profile panel      | Leadership and management         |
-| Column    | Minimal information layout   | ATS-first applications            |
-| Horizon   | Contemporary portrait layout | Education, research, and creative |
-| Blueprint | Technical grid sidebar       | Software and data roles           |
+## Technology Stack
 
-## Application routes
+### Frontend Architecture
 
-| Route                    | Purpose                                   |
-| ------------------------ | ----------------------------------------- |
-| `/`                      | Product landing page and template gallery |
-| `/builder`               | Interactive resume builder                |
-| `/builder?template=nova` | Builder with a selected template          |
-| `/analyzer`              | Existing ATS analyzer                     |
-| `/api/analyze`           | Resume analysis API                       |
+- **Framework**: Next.js 16.2.4 (App Router, Turbopack, Server Actions)
+- **UI Library**: React 19.2.4
+- **Language**: TypeScript 5.0 (Strict Mode Enabled)
+- **Styling**: Tailwind CSS 4.3.3 (`@theme` design tokens, responsive typography, glassmorphic UI)
+- **State Management**: Zustand 5.0 (Reactive multi-step stores with IndexedDB hydration)
+- **Icons & Fonts**: Lucide React, Plus Jakarta Sans, Inter, Outfit, Merriweather, Playfair
 
-## Tech stack
+### AI & Document Processing Engine
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Lucide icons
-- OpenAI SDK with Groq
-- PDF.js and Mammoth document extraction
-- Browser `localStorage` for temporary draft persistence
+- **LLM Inference**: Groq Cloud SDK (`openai/gpt-oss-120b`, Llama 3.3) for ultra-low latency text refinement and ATS scoring
+- **Client-Side PDF Extraction**: `pdfjs-dist` (In-browser text layer extraction with zero external upload latency)
+- **DOCX Processing**: `mammoth` (Word document text extraction), `jszip` (ZIP archive parsing)
+- **DOCX Generation**: `docx` 9.7 (Native Word document XML generator with custom structured resume metadata)
+- **Vector PDF Engine**: Precision print stylesheets with automated multi-page sheet pagination
 
-## Getting started
+### Cloud & Persistence Layer
+
+- **Authentication & Database**: Supabase (`@supabase/supabase-js`, `@supabase/ssr`, PostgreSQL with Row Level Security)
+- **Offline Storage**: Custom IndexedDB Key-Value Stores (`resuvee_resume_db`, `resuvee_cover_letter_db`) for zero-loss offline draft recovery
+- **Deployment**: Vercel Edge & Serverless Runtime
+
+### Quality Assurance & Tooling
+
+- **Code Quality**: ESLint 9 (Flat Config), Prettier 3.9
+- **Git Hooks**: Husky (Automated pre-commit linting & pre-push build verification)
+- **Package Manager**: Bun 1.1+ / npm
+
+---
+
+## Key Features
+
+- **16 Original Copyright-Safe Templates** — Built from the ground up to guarantee high visual appeal and 100% compliance with modern ATS parsers.
+- **Interactive Studio Canvas** — Direct on-page element selection, font sizing (`A-`/`A+`), bold/italic formatting, text alignment, and custom color wheel swatches.
+- **AI Smart Writing Refiner** — Highlight any bullet point or summary and instantly enhance it with AI for clarity, impact, and action-driven metrics.
+- **Deep ATS Compatibility Analyzer** — Upload existing PDF/DOCX resumes to receive an ATS score, keyword gap analysis, strengths, weaknesses, and step-by-step improvement fixes.
+- **Smart Cover Letter Studio** — Generate targeted, role-matched cover letters with customizable sections, live formatting, and cloud synchronization.
+- **Dual Persistence Architecture** — Work seamlessly offline with IndexedDB local backups and synchronize instantly to your Supabase account upon save.
+- **Multi-Page Smart Pagination** — Automatic section overflow calculation and multi-page canvas rendering to eliminate layout overlap.
+- **Structured DOCX & PDF Export** — Export clean vector PDFs for applications and Microsoft Word DOCX files with embedded structured XML data for seamless re-importing.
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18 or newer
-- A Groq API key for analyzer requests
+- **Bun**: `v1.1.0`+ (Recommended) or **Node.js**: `v20.9.0`+
+- **Supabase Account**: Free project from [Supabase](https://supabase.com)
+- **Groq API Key**: Free API key from [Groq Console](https://console.groq.com)
 
-### Install
+### Installation & Setup
 
-```bash
-npm install
-```
+1. **Clone the Repository**:
 
-### Environment
+   ```bash
+   git clone https://github.com/kuldeeprajput-dev/resuvee.git
+   cd resuvee
+   ```
 
-Create `.env.local` in the project root:
+2. **Install Dependencies**:
+
+   ```bash
+   bun install
+   # or npm install
+   ```
+
+3. **Configure Environment Variables**:
+   Create a `.env.local` file from the example:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. **Launch Development Server**:
+
+   ```bash
+   bun run dev
+   # or npm run dev
+   ```
+
+   Open your browser at `http://localhost:3000`.
+
+---
+
+## Environment Configuration
+
+Configure your environment variables inside `.env.local`:
 
 ```env
+# Groq API Key for ATS Resume Analysis, Writing Checks & AI Cover Letter (https://console.groq.com/keys)
 GROQ_API_KEY=your_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-120b
+
+# Supabase Project URL & Publishable Key (https://supabase.com/dashboard/project/_/settings/api)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key_here
+
+# Public App URL for SEO & OpenGraph Metadata
+NEXT_PUBLIC_APP_URL=https://resuvee.vercel.app
 ```
 
-The builder and all template features run without an API key. The key is only
-required when using the ATS analyzer.
+### Key Resolution Matrix
 
-### Development
+| Variable | Scope | Primary Purpose | Required |
+| :--- | :--- | :--- | :--- |
+| `GROQ_API_KEY` | Server-only | API key for high-speed AI text refinement, writing checks, and ATS analysis. | Yes |
+| `GROQ_MODEL` | Server-only | Model identifier for Groq LLM inference (defaults to `openai/gpt-oss-120b`). | Optional |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public / Client | Supabase project API endpoint for authentication and database queries. | Yes |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public / Client | Anon/Publishable API key for client-side Supabase authentication. | Yes |
+| `NEXT_PUBLIC_APP_URL` | Public / Client | Canonical base URL used for sitemap, robots, and OpenGraph preview images. | Optional |
 
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Verification
-
-```bash
-npm run lint
-npm run build
-```
-
-### Production
-
-```bash
-npm start
-```
-
-## Project structure
-
-```text
-src/
-├── app/
-│   ├── analyzer/page.tsx
-│   ├── api/analyze/route.ts
-│   ├── builder/page.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── home/
-│   │   ├── ATSDashboard.tsx
-│   │   ├── ErrorState.tsx
-│   │   ├── LoadingState.tsx
-│   │   └── ResumeAnalyzer.tsx
-│   ├── layout/
-│   │   ├── SiteFooter.tsx
-│   │   └── SiteHeader.tsx
-│   ├── resume/
-│   │   ├── EditorFields.tsx
-│   │   ├── ResumeBuilder.tsx
-│   │   ├── ResumeEditor.tsx
-│   │   ├── ResumePreview.tsx
-│   │   └── TemplateThumbnail.tsx
-│   └── ui/
-├── lib/
-│   ├── extractors/
-│   ├── services/
-│   └── resume-data.ts
-└── types/
-    ├── index.ts
-    └── resume.ts
-```
-
-## Persistence upgrade path
-
-The builder reads and writes a single versioned local draft under
-`resuvee-draft-v1`. Existing drafts stored under former product keys are
-migrated automatically. When database and authentication work begins, the
-`ResumeData` type in `src/types/resume.ts` can be used as the stored document
-shape. Replace the local save/load effects in `ResumeBuilder.tsx` with
-authenticated API calls while preserving the editor and preview components.
+---
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](./LICENSE) - see the [`LICENSE`](./LICENSE) file for details.
+
+---
+
+## Support & Feedback
+
+If you find this project helpful, please consider giving it a ⭐ star on [GitHub](https://github.com/kuldeeprajput-dev/resuvee)!
