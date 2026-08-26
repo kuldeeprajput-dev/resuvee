@@ -1,19 +1,21 @@
-
-
-
 <div align="center">
-  <img src="./public/resuvee-mark.webp" alt="Resuvee Logo" width="80" height="80" style="border-radius: 18px;" />
+  <img src="./public/readme-mark.png" alt="Resuvee Logo" width="80" height="80" />
 
 # Resuvee
 
 **AI-Powered ATS Resume Builder, Smart Analyzer & Career Studio**
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2-000000?style=flat&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-20232A?style=flat&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2-20232A?style=flat&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-5.0-443e38?style=flat&logo=react&logoColor=white)](https://zustand.docs.pmnd.rs/)
+[![Bun](https://img.shields.io/badge/Bun-1.1+-20232A?style=flat&logo=bun&logoColor=white)](https://bun.sh/)
+<br/>
 [![Supabase](https://img.shields.io/badge/Supabase-Auth_%26_DB-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Groq AI](https://img.shields.io/badge/Groq-Fast_LLM_Inference-F55036?style=flat&logo=fastapi&logoColor=white)](https://groq.com/)
+[![Groq AI](https://img.shields.io/badge/Groq_AI-Fast_Inference-F55036?style=flat&logo=fastapi&logoColor=white)](https://groq.com/)
+[![PDF.js](https://img.shields.io/badge/PDF.js-Client_Parsing-E53E3E?style=flat&logo=adobeacrobatreader&logoColor=white)](https://mozilla.github.io/pdf.js/)
+[![DOCX](https://img.shields.io/badge/DOCX-XML_Export-2B579A?style=flat&logo=microsoftword&logoColor=white)](https://docx.js.org/)
 [![License](https://img.shields.io/badge/License-MIT-red?style=flat)](./LICENSE)
 </div>
 
@@ -132,15 +134,17 @@ https://github.com/user-attachments/assets/4c557fdb-a85d-45d2-b6a7-a83df48e1239
 Configure your environment variables inside `.env.local`:
 
 ```env
-# Groq API Key for ATS Resume Analysis, Writing Checks & AI Cover Letter (https://console.groq.com/keys)
+# Groq API Key (https://console.groq.com/keys)
+# For ATS Analysis, Writing Checks & AI Cover Letter
 GROQ_API_KEY=your_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-120b
 
-# Supabase Project URL & Publishable Key (https://supabase.com/dashboard/project/_/settings/api)
+# Supabase Project URL & Publishable Key
+# Settings: https://supabase.com/dashboard
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key_here
 
-# Public App URL for SEO & OpenGraph Metadata
+# Public App URL for SEO & Metadata
 NEXT_PUBLIC_APP_URL=https://resuvee.vercel.app
 ```
 
