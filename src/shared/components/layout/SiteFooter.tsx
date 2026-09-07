@@ -38,7 +38,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         blendWithPage ? "bg-(--brand-canvas)" : "bg-[#e9e7df]"
       )}
     >
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-10 sm:px-8 md:grid-cols-[0.75fr_1.25fr] md:gap-16 md:py-12 lg:px-12">
+      <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-5 py-10 sm:px-8 md:grid-cols-[0.75fr_1.25fr] md:gap-16 md:py-12 lg:px-12">
         <div className="min-w-0 max-w-md">
           <Brand />
           <p className="mt-4 max-w-sm text-sm leading-6 text-(--brand-muted)">
@@ -94,7 +94,7 @@ export function SiteFooter({ blendWithPage = false }: { blendWithPage?: boolean 
         </nav>
       </div>
       <div className="border-t border-black/[0.07]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-5 py-6 text-xs text-(--brand-muted) sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6 lg:px-12">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-5 py-6 text-xs text-(--brand-muted) sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6 lg:px-12">
           <p>© 2026 Resuvee. Built for better applications.</p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>Original, copyright-safe template designs</span>
