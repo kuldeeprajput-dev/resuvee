@@ -66,26 +66,22 @@ export function ResumeBuilderHeader({
   const cn = (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(" ");
 
   return (
-    <header className="no-print flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-(--brand-paper) px-3 sm:px-5">
-      <div className="flex h-full items-center min-w-0">
-        {/* Logo / Back Button */}
-        <div
-          className={cn(
-            "flex h-full items-center px-1 sm:px-5",
-            !hideLeftSidebar ? "lg:w-[220px] lg:shrink-0 lg:justify-center" : "w-auto"
-          )}
+    <header className="no-print sticky top-0 z-60 flex h-14 sm:h-16 items-center justify-between border-b border-black/10 bg-(--brand-paper) px-3 sm:px-5">
+      <div className="flex h-full items-center min-w-0 gap-1.5 sm:gap-3">
+        {/* Back Button on Mobile */}
+        <Link
+          href="/"
+          aria-label="Back to home"
+          className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-(--brand-muted) transition hover:bg-black/5 hover:text-(--brand-ink) lg:hidden shrink-0"
         >
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="flex size-8 sm:size-9 items-center justify-center rounded-xl border border-black/10 bg-white shadow-2xs text-(--brand-muted) transition hover:bg-black/5 hover:text-(--brand-ink) lg:hidden shrink-0"
-          >
-            <ArrowLeft className="size-4" />
-          </Link>
-          <div className="hidden lg:block">
-            <Brand />
-          </div>
+          <ArrowLeft className="size-4" />
+        </Link>
+
+        {/* Brand Logo on Desktop */}
+        <div className="hidden lg:block">
+          <Brand />
         </div>
+        <span className="hidden h-6 w-px bg-black/10 lg:block" />
 
         {/* Document Title */}
         <div className="min-w-0 pl-1.5 sm:pl-1">
